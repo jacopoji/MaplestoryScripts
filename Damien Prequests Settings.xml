@@ -1,0 +1,3473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<terminal>
+    <autosp/>
+    <items>
+        <item>
+            <id>1142484</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1142485</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1003316</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1050196</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1072579</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1082361</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1402177</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1052712</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1082296</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1372084</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1472122</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1052668</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1003279</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1050337</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1702535</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1702550</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2002023</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2030000</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2030004</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2022799</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2022796</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3060090</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3061325</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3060122</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3061360</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4001832</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000291</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2436527</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4030012</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000292</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1052795</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4021032</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1512000</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1332242</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1004057</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1003609</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1052648</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1082376</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1003624</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1082239</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1142619</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1122264</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1142659</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1132243</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1122265</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1113112</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1113101</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1113124</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1442055</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1412158</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1132244</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1442054</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1162032</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2433591</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2431894</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2030009</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2030010</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2432461</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2000001</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2000005</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2437097</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3010297</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3010615</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3010307</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3062381</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3010535</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3010676</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3010850</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3060170</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3060081</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3061260</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3061335</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3061021</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4031061</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4001695</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310126</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310060</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4021016</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310209</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4033605</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310153</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4033602</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000458</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4170034</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310029</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000462</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000443</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000447</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000448</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000459</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4009059</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4009054</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4009056</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4009058</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000524</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4034671</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000067</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310098</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310097</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310189</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000352</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000350</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310099</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310064</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310163</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310195</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000008</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4032321</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4033981</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4033982</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310210</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1802354</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>1122266</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2120000</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2615000</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2440016</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2023118</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2001505</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2430610</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2431893</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2023138</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2436274</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2023124</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2048217</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2210125</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2210126</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2210129</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2210124</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2431657</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2048216</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2431658</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2431963</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2049301</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2000004</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2210128</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2210127</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2431709</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2431655</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2431659</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2590005</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2431895</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2001531</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2450130</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2003049</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2003048</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2003567</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2433592</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2436885</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>2436245</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3010001</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>3015440</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4001393</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4033585</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310102</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4033582</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4033583</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310059</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310188</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4021036</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4021034</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4021033</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4000175</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4001085</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4001017</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4032922</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310224</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4021014</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310206</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310232</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4009057</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4009055</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4009053</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4001836</id>
+            <state>0</state>
+        </item>
+        <item>
+            <id>4310080</id>
+            <state>0</state>
+        </item>
+    </items>
+    <maps>
+        <maprusher/>
+        <spawnpoint>
+            <item>
+                <id>350140600</id>
+                <x>-394</x>
+                <y>-669</y>
+            </item>
+            <item>
+                <id>350140700</id>
+                <x>-386</x>
+                <y>-513</y>
+            </item>
+            <item>
+                <id>350140800</id>
+                <x>-495</x>
+                <y>-650</y>
+            </item>
+            <item>
+                <id>350141100</id>
+                <x>-678</x>
+                <y>-860</y>
+            </item>
+            <item>
+                <id>350141200</id>
+                <x>222</x>
+                <y>-273</y>
+            </item>
+            <item>
+                <id>350141300</id>
+                <x>-20</x>
+                <y>-767</y>
+            </item>
+        </spawnpoint>
+        <mobvac/>
+    </maps>
+    <opcodes>
+        <item opcode="1">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="2">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="3">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="5">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="6">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="7">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="8">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="17">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="18">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="21">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="23">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="24">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="26">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="36">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="39">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="41">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="46">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="49">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="50">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="52">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="55">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="56">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="57">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="59">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="60">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="72">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="74">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="75">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="76">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="77">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="78">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="79">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="80">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="81">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="88">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="90">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="91">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="93">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="100">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="101">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="102">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="103">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="104">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="106">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="107">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="108">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="110">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="114">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="115">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="118">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="124">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="126">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="127">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="130">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="132">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="133">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="145">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="147">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="148">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="151">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="152">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="155">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="160">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="163">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="164">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="168">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="171">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="178">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="179">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="181">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="182">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="184">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="185">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="186">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="187">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="190">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="193">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="195">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="198">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="200">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="202">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="205">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="207">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="210">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="215">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="224">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="226">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="229">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="232">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="233">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="239">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="254">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="261">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="272">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="274">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="275">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="276">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="291">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="293">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="300">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="307">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="310">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="313">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="316">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="325">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="326">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="329">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="336">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="338">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="341">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="347">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="356">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="358">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="365">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="371">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="385">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="396">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="397">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="399">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="401">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="403">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="408">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="412">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="416">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="424">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="427">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="439">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="446">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="449">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="451">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="452">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="454">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="455">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="456">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="457">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="462">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="465">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="466">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="468">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="471">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="478">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="481">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="482">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="490">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="503">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="504">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="507">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="508">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="519">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="520">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="522">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="523">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="530">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="531">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="543">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="546">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="547">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="560">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="569">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="570">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="574">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="581">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="582">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="594">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="595">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="596">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="597">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="598">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="601">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="608">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="612">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="619">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="620">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="624">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="628">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="631">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="649">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="660">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="727">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="728">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="745">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="746">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="751">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="754">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="774">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="799">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="830">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="838">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="841">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="853">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="855">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="859">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="863">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="874">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="897">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="898">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="916">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="922">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="923">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="926">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="930">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="936">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="963">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="966">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="977">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="978">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="979">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="984">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="987">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="988">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="989">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="994">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="995">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="997">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1005">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1007">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1059">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1060">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1062">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1066">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1071">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1072">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1074">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1078">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1083">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1095">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1122">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1135">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1148">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1370">
+            <alias></alias>
+            <comment></comment>
+            <ignore>1</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1377">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1402">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1409">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1440">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1475">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1476">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1500">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1523">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1524">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1585">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1586">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1587">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+        <item opcode="1588">
+            <alias></alias>
+            <comment></comment>
+            <ignore>0</ignore>
+            <block>0</block>
+            <color>0</color>
+        </item>
+    </opcodes>
+    <settings>
+        <action>
+            <name>DROP</name>
+            <state>0</state>
+        </action>
+        <action>
+            <name>FILTER</name>
+            <state>0</state>
+        </action>
+        <action>
+            <name>KEEP</name>
+            <state>0</state>
+        </action>
+        <action>
+            <name>SELL</name>
+            <state>0</state>
+        </action>
+        <action>
+            <name>TRADE</name>
+            <state>0</state>
+        </action>
+        <action>
+            <name>USE</name>
+            <state>0</state>
+        </action>
+        <checkbox>
+            <name>30 Sec God Mode</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto AP</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Aggro</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Attack</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Buff</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Die</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Equip</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Exceed</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Feed</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto HP</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Login</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Loot</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto MP</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Mission</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto NPC</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Revive</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto Rune</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Auto SP</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Buy Arrows</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Buy HP Pot</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Buy MP Pot</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Buy Pet Food</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Buy Return Scroll</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Current location</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Do not open Maple Guide on enter game</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Do not open Mileage on enter game</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Drop item at max per slot</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>EQUIP Rush</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>ETC Rush</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Familiar 0</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Familiar 1</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Familiar 2</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Flame Orb Hack</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Full God Mode</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Full Map Attack</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>General FMA</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Grenade Kami</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Guard God Mode</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>HP Pot Rush</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Ignore Elite Monster</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Ignore Skill Cooldown</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Infinite Bullets</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Instant Enchantment Scroll</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Instant Enchantment Star</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Instant Extraction</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Instant Final Smash</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Jump Down Anywhere</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Kami Collision Items</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Kami Loot</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Kami Vac</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>La Mancha Spear Hack</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Legit Vac</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Lemmings</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Logo Skipper</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>MP Pot Rush</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Melee No Delay</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Mob Disarm</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Mob Falldown</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Mob No Death Animation</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Mob No Spawn Animation</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Mob Speed Up</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Mob Vac</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>MonkeySpiritsNDcheck</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>No Air Check</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Background</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Blazing Extinction Effect</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Blue Boxes</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Boss Map Effect</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Damage Info</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Delay Blazing Extinction</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>No Delay Flash Jump</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Fade Animation</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>No Fade Stages</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Knock Back</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Letter Box</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>No Login Error</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Loot Animation</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>No Map Object</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>No Rush</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>No Skill Effect</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>No Tile</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>No Weather</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Npc Teleport [Tab]</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Offline Mode</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Pet Item Teleport</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Portal Teleport [Back Space]</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Remove Screen Clutter</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Respond to GM Whisper</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Rush By Level</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Sell filter item</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Sell hp/mp pots</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Set item state as sell on first drop</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Skill Injection</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Skip Launcher</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Slide And Attack</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Spawn Control</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Summon Kishin</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Throw Blazing Extinction</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>USE Rush</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Unlimited Vitality</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Unlimtd Arrow Platter</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>Unlimtd Attack</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>Vellum Freeze</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>beastTamerModeCheck</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>bot/auto_die/bymob</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>bot/kanna_kami</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>bot/kishin_fma</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>bot/kishin_nd</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>bot/mercedes_hack</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>bot/meso_transfer/enable</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>bot/portal_kami</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>bot/puffram</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>bot/si_no_wait</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>charm_fma</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>dragon_kami</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>filter_all</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>filter_card</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>filter_equip</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>filter_etc</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>filter_familiar</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>filter_recipe</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>filter_setup</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>filter_use</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>flacc</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>infinite_snail</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>macro1_check</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>macro2_check</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>macro3_check</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>macro4_check</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>macro5_check</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>main/boss_freeze</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>main/memory_reducer</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>main/mobnojump</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>main/nolag</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>map/maprusher/hypertelerock</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>mobvac_limit_check</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>ndmp</name>
+            <state>1</state>
+        </checkbox>
+        <checkbox>
+            <name>node_check</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>reset_inner</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>scanner/show_tooltip</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>settings/autochar</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>settings/block_quest_helper</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>settings/expcrash</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>settings/loginwait</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>settings/mesocrash</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>settings/traveling_merchant</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>special/neb</name>
+            <state>0</state>
+        </checkbox>
+        <checkbox>
+            <name>timedCCCheck</name>
+            <state>0</state>
+        </checkbox>
+        <combobox>
+            <name>AttackKey</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>Familiar0</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>Familiar1</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>Familiar2</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>HPKey</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>HackingOpt</name>
+            <index>1</index>
+        </combobox>
+        <combobox>
+            <name>LoginChannel</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>LoginServer</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>LoginWorld</name>
+            <index>-1</index>
+        </combobox>
+        <combobox>
+            <name>MPKey</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>beastTamerModeCombo</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>eva_cmb</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>macro1_combo</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>macro2_combo</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>macro3_combo</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>macro4_combo</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>macro5_combo</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>resolution</name>
+            <index>0</index>
+        </combobox>
+        <combobox>
+            <name>settings/autochar_job</name>
+            <index>0</index>
+        </combobox>
+        <lineedit>
+            <name>GMWhisperReset</name>
+            <text></text>
+        </lineedit>
+        <lineedit>
+            <name>LoginChar</name>
+            <text></text>
+        </lineedit>
+        <lineedit>
+            <name>LoginID</name>
+            <text></text>
+        </lineedit>
+        <lineedit>
+            <name>LoginPW</name>
+            <text></text>
+        </lineedit>
+        <lineedit>
+            <name>LoginSPW</name>
+            <text></text>
+        </lineedit>
+        <lineedit>
+            <name>MobVacX</name>
+            <text>1</text>
+        </lineedit>
+        <lineedit>
+            <name>MobVacY</name>
+            <text>1</text>
+        </lineedit>
+        <lineedit>
+            <name>SISkillID</name>
+            <text>80001945</text>
+        </lineedit>
+        <lineedit>
+            <name>ShopTitle</name>
+            <text></text>
+        </lineedit>
+        <lineedit>
+            <name>allowedChannels</name>
+            <text>1-20</text>
+        </lineedit>
+        <lineedit>
+            <name>bot/meso_transfer/charid</name>
+            <text>12345678</text>
+        </lineedit>
+        <lineedit>
+            <name>nextmapccportal</name>
+            <text></text>
+        </lineedit>
+        <lineedit>
+            <name>special/neb_exceptions</name>
+            <text>3061390;</text>
+        </lineedit>
+        <pushbutton>
+            <name>Buy item</name>
+            <state>0</state>
+        </pushbutton>
+        <pushbutton>
+            <name>Drop item</name>
+            <state>0</state>
+        </pushbutton>
+        <pushbutton>
+            <name>Item filter</name>
+            <state>1</state>
+        </pushbutton>
+        <pushbutton>
+            <name>Leave shop</name>
+            <state>0</state>
+        </pushbutton>
+        <pushbutton>
+            <name>Recharge</name>
+            <state>0</state>
+        </pushbutton>
+        <pushbutton>
+            <name>Sell item</name>
+            <state>0</state>
+        </pushbutton>
+        <pushbutton>
+            <name>Use item</name>
+            <state>0</state>
+        </pushbutton>
+        <radiobutton>
+            <name>MobVacChar</name>
+            <state>1</state>
+        </radiobutton>
+        <radiobutton>
+            <name>MobVacPos</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>SIRadioDragon</name>
+            <state>1</state>
+        </radiobutton>
+        <radiobutton>
+            <name>SIRadioMagic</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>SIRadioMelee</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>SIRadioShoot</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>SkillInjection1</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>SkillInjection2</name>
+            <state>1</state>
+        </radiobutton>
+        <radiobutton>
+            <name>bot/mobvac/new</name>
+            <state>1</state>
+        </radiobutton>
+        <radiobutton>
+            <name>bot/mobvac/old</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>bot/si_cadena</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>special/buy_cube_black</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>special/buy_cube_red</name>
+            <state>1</state>
+        </radiobutton>
+        <radiobutton>
+            <name>special/cube_black</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>special/cube_epic</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>special/cube_legendary</name>
+            <state>1</state>
+        </radiobutton>
+        <radiobutton>
+            <name>special/cube_red</name>
+            <state>1</state>
+        </radiobutton>
+        <radiobutton>
+            <name>special/cube_unique</name>
+            <state>0</state>
+        </radiobutton>
+        <radiobutton>
+            <name>special/inner_legendary</name>
+            <state>1</state>
+        </radiobutton>
+        <radiobutton>
+            <name>special/inner_unique</name>
+            <state>0</state>
+        </radiobutton>
+        <spinbox>
+            <name>Arrow</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>AutoDieExp</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>AutoDieLevel</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>CPacketSpammer::IntervalPerLine</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>CPacketSpammer::IntervalPerLoop</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>CPacketSpammer::Repeat</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>Familiar0</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>Familiar1</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>Familiar2</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>FilterMeso</name>
+            <val>49999</val>
+        </spinbox>
+        <spinbox>
+            <name>FlameBall</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>GMWhisper</name>
+            <val>60</val>
+        </spinbox>
+        <spinbox>
+            <name>HPPot</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>KamiLoot</name>
+            <val>100</val>
+        </spinbox>
+        <spinbox>
+            <name>MPPot</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>MonkeySpiritsNDdelay</name>
+            <val>200</val>
+        </spinbox>
+        <spinbox>
+            <name>PetFood</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>SkillInjection</name>
+            <val>1000</val>
+        </spinbox>
+        <spinbox>
+            <name>autoattack_spin</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>autoloot_spin</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>bot/ballcount</name>
+            <val>1</val>
+        </spinbox>
+        <spinbox>
+            <name>bot/kami_delay</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>bot/kanna_kami_delay</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>bot/kishin_delay</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>bot/meso_transfer/ch</name>
+            <val>1</val>
+        </spinbox>
+        <spinbox>
+            <name>bot/meso_transfer/meso</name>
+            <val>5000000</val>
+        </spinbox>
+        <spinbox>
+            <name>bot/meso_transfer/room</name>
+            <val>22</val>
+        </spinbox>
+        <spinbox>
+            <name>charm_delay</name>
+            <val>200</val>
+        </spinbox>
+        <spinbox>
+            <name>inner_delay</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>macro1_spin</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>macro2_spin</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>macro3_spin</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>macro4_spin</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>macro5_spin</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>node_delay</name>
+            <val>0</val>
+        </spinbox>
+        <spinbox>
+            <name>settings/expcrash</name>
+            <val>5</val>
+        </spinbox>
+        <spinbox>
+            <name>settings/loginwait1</name>
+            <val>5</val>
+        </spinbox>
+        <spinbox>
+            <name>settings/loginwait2</name>
+            <val>1</val>
+        </spinbox>
+        <spinbox>
+            <name>settings/loginwait3</name>
+            <val>10</val>
+        </spinbox>
+        <spinbox>
+            <name>settings/mesocrash</name>
+            <val>5</val>
+        </spinbox>
+        <spinbox>
+            <name>special/buy_cubes</name>
+            <val>50</val>
+        </spinbox>
+        <spinbox>
+            <name>timedCCSpin</name>
+            <val>0</val>
+        </spinbox>
+        <slider>
+            <name>sliderHP</name>
+            <val>0</val>
+        </slider>
+        <slider>
+            <name>sliderMP</name>
+            <val>0</val>
+        </slider>
+    </settings>
+    <rushbylevel/>
+    <scripts/>
+</terminal>
