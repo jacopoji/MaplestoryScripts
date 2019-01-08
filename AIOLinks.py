@@ -14,7 +14,7 @@ Cadena
 Ark             
 Evan            
 '''
-
+curbrockhideout = [600050000,600050010,600050020]
 #do Monster park how many times?
 do_MP = True
 do_MP_count = 2
@@ -93,7 +93,7 @@ necklace_list = [greed_pendant,blackgate_necklace,chaos_horntail_necklace,hornta
 blackgate_eqp = [1004549, 1012535, 1052952, 1082658, 1102840, 1113185, 1122312, 1132289, 1152191]
 
 MP_Coin = 4310020
-import Character,Context,DataType,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party,json,math,Login,datetime
+import Character,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party,json,Login,datetime
 
 if not any("SunCat" in s for s in sys.path):
     sys.path.append(os.getcwd() + "/SunCat")
@@ -310,6 +310,7 @@ def kannaFirst():
             Quest.CompleteQuest(57402, 9130083)
             print("Returning control to rush by level")
             toggle_rush_by_level(True)
+            toggle_kami(True)
     else:
         time.sleep(1)
         fan = Inventory.FindItemByID(1552000)
@@ -862,10 +863,44 @@ def toggleAttack(on):
         else:
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
+    elif job == 4200: #kanna first job
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key, 1, 42001000)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+    elif job == 4210:
+        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetSpinBox("charm_delay",100)
+        Terminal.SetCheckBox("charm_fma",on)
+        Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
+        Terminal.SetSpinBox("SkillInjection", 100)
+        Terminal.SetLineEdit("SISkillID","42001006")
+        Terminal.SetCheckBox("Skill Injection",True)
+    elif job == 4211 or job ==4212:
+        Terminal.SetSpinBox("charm_delay",100)
+        Terminal.SetCheckBox("charm_fma",on)
+        Terminal.SetCheckBox("Summon Kishin",True)
+        Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
+        Terminal.SetCheckBox("Auto Attack",on)
+        Terminal.SetSpinBox("autoattack_spin",7500)
+        Terminal.SetComboBox("AttackKey",36)
+        Terminal.SetCheckBox("Skill Injection",False)
+        Key.Set(0x47,1,42111003)
     elif job == 2700: #lumi first job
         # 20040217 Dark Mode Buff
         # 20040216 Light Mode
         # 20040220 20040219 Equi Mode
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,27001201)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+    elif job in LuminousJobs and field_id in curbrockhideout:
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,27001201)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -918,7 +953,15 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job == 3120: #DA second job
+    elif job in DemonAvengerJobs and field_id in curbrockhideout:
+        Key.Set(pgup_key, 1, 31011001)
+        Key.Set(attack_key,1,31011000)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+    elif job == 3120:
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31201000)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -957,7 +1000,15 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job ==2310: #Mercedes 2nd
+    elif job in MercedesJobs and field_id in curbrockhideout:
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,23001000)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+    elif job ==2310:
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23101000)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -1172,6 +1223,7 @@ safety_setting()
 
 if GameState.IsInGame():
     toggleAttack(True)
+    #print("Toggling attack")
 
 ############################Job Advancements###############################
 if job == 4200 and level < 13:
@@ -1183,6 +1235,8 @@ if job == 4200 and level >= 30:
     second_job_quest = Quest.GetQuestState(57458)
     if second_job_quest == 0:
         Quest.StartQuest(57458, 000000)
+    toggle_rush_by_level(True)
+    toggle_kami(True)
 
 if job == 2700 and level == 10:
     print("Completing Lumi first job")
@@ -1594,10 +1648,37 @@ if DoBlackGate and Character.GetHP() > 0 and level >= 145 and not SCLib.GetVar("
         else:
             print("Still has ring")
         # BACK TO STARTING POINT
+curbrock1 = Quest.GetQuestState(5499)
 curbrock2 = Quest.GetQuestState(5500)
 curbrock3 = Quest.GetQuestState(5501)
 sabitrama = 1061005
-curbrockhideout = 600050020
+
+curbrockescaperoute1 = 600050030
+curbrockescaperoute2 = 600050040
+curbrockescaperoute3 = 600050050
+escaperoutes = [curbrockescaperoute1,curbrockescaperoute2,curbrockescaperoute3]
+if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <= 29 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+    pos = Character.GetPos()
+    if curbrock1 !=2:
+        if curbrock1 ==0:
+            toggle_rush_by_level(False)
+            Quest.StartQuest(5499, sabitrama)
+        elif curbrock1 ==1:
+            if Quest.CheckCompleteDemand(5499, sabitrama) ==0:
+                if pos.x != -425 and field_id == curbrockhideout:
+                    toggle_kami(False)
+                    teleport_enter(-425,-195)
+                    toggle_kami(True)
+                elif pos.x != -549 and field_id == curbrockescaperoute2:
+                    toggle_kami(False)
+                    teleport_enter(-549,-195)
+                    toggle_kami(True)
+                    toggle_rush_by_level(True)
+                else:
+                    Quest.CompleteQuest(5499,sabitrama)
+            else:
+                toggle_kami(True)
+                toggleAttack(True)
 if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level < 60 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if curbrock2 !=2:
@@ -1610,7 +1691,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level <
                     toggle_kami(False)
                     teleport_enter(-425,-195)
                     toggle_kami(True)
-                elif pos.x != -549 and field_id == 600050040:
+                elif pos.x != -549 and field_id == curbrockescaperoute2:
                     toggle_kami(False)
                     teleport_enter(-549,-195)
                     toggle_kami(True)
@@ -1632,7 +1713,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 60 and level <
                     toggle_kami(False)
                     teleport_enter(-425,-195)
                     toggle_kami(True)
-                elif pos.x != -549 and field_id == 600050040:
+                elif pos.x != -549 and field_id == curbrockescaperoute3:
                     toggle_kami(False)
                     teleport_enter(-549,-195)
                     toggle_kami(True)
@@ -1642,6 +1723,14 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 60 and level <
             else:
                 toggle_kami(True)
                 toggleAttack(True)
+
+if pos.x != -549 and field_id in escaperoutes:
+    pos = Character.GetPos()
+    toggle_kami(False)
+    teleport_enter(-549,-195)
+    toggle_kami(True)
+    toggle_rush_by_level(True)
+    toggleAttack(True)
 
 quest26 = Quest.GetQuestState(2976)
 if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >= 35 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
@@ -1747,6 +1836,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         if quest27 ==0:
             toggle_kami(False)
             Quest.StartQuest(GoldBeachGoldenOppertunity, 1082100)
+            toggle_kami(True)
     #Complete quest1 (Flying blind)
     elif quest1 !=2:
         if quest1 ==0:
@@ -2322,6 +2412,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Inventory.SendChangeSlotPositionRequest(1,Inventory.FindItemByID(1032254).pos,earring_slot,-1)
                 time.sleep(2)
                 toggle_rush_by_level(True)
+                toggle_kami(True)
     #All quest for Gold Beach Complete!
 elif quest26 == 2 and Inventory.FindItemByID(1032254).valid:
     print("Equiping earring and enabling rush by level")
