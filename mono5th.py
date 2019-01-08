@@ -266,7 +266,7 @@ if GameState.IsInGame():
 							Npc.RegisterSelection("Everyone ")
 							time.sleep(1)
 							Quest.CompleteQuest(1462, 1540942)
-						elif jobid == 3512:
+						elif jobid == 3512 or jobid == 3612 or jobid == 6412:
 							Npc.ClearSelection()
 							Npc.RegisterSelection("My ")
 							time.sleep(1)
@@ -496,7 +496,9 @@ if GameState.IsInGame():
 							Character.EnterPortal()
 							time.sleep(2)
 						else:
+							time.sleep(1)
 							Quest.CompleteQuest(1464, 1540944)
+							
 						 
 						
 			elif Quest.CheckCompleteDemand(1461, 2140001) == 0:
