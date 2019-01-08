@@ -441,7 +441,31 @@ def MercedesSecond():
                 Quest.CompleteQuest(24011, 1033210)
 
 ############################################
-
+def id2str(jobid):
+    if jobid in LuminousJobs:
+        return "Luminous"
+    elif jobid in DemonAvengerJobs:
+        return "Demon Avenger"
+    elif jobid in DemonSlayerJobs:
+        return "Demon Slayer"
+    elif jobid in MercedesJobs:
+        return "Mercedes"
+    elif jobid in HayatoJobs:
+        return "Hayato"
+    elif jobid in XenonJobs:
+        return "Xenon"
+    elif jobid in PhantomJobs:
+        return "Phantom"
+    elif jobid in ArkJobs:
+        return "Ark"
+    elif jobid in EvanJobs:
+        return "Evan"
+    elif jobid in IlliumJobs:
+        return "Illium"
+    elif jobid in CadenaJobs:
+        return "Cadena"
+    else:
+        return "Unknown Job"
 
 
 
@@ -684,6 +708,8 @@ def handleReady(data):
         data['phase_one'] = False
     if 'done_char' not in data:
         data['done_char'] = []
+    if 'training_done' not in data:
+        data['training_done'] = False
 def writeJson(data,accountId):
     split_id = accountId.split("@")[0]
     with open('info/{}.json'.format(split_id), 'w') as outfile:
@@ -799,6 +825,22 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     accountData["changing_mule"] = False
     accountData["cur_pos"] = str(int(accountData["cur_pos"]) + 1)
     writeJson(accountData,accountId)
+
+if accountData['training_done'] and GameState.GetLoginStep() == 2:
+    Terminal.SetCheckBox("Auto Login",False)
+    chars = Login.GetChars()
+    with open('{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
+        for char in chars:
+            charInfo.write("{} {}\n".format(id2str(char.id),char.level))
+        charInfo.close()
+    Terminal.ChangeStatus("#################Training Done##############")
+
+if len(accountData["done_char"]) == 12 and GameState.IsInGame():
+    accountData['training_done'] = True
+    Terminal.ChangeStatus("#################Training Done##############")
+    writeJson(accountData,accountId)
+    Terminal.Logout()
+
 
 def safety_setting():
     #Turn off dangerous settings
