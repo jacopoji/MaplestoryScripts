@@ -1658,7 +1658,7 @@ def print_info():
 	with open('info/output/{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as f:
 		f.write("[Premade Meso Account] Lv149 Kanna with {}b+ and meso gear \n".format(int(accountData['total_meso'])))
 		f.write("\nComes with:\n{}b+ Mesos(Spread out among meso mules and Kanna) \n".format(int(accountData['total_meso'])))
-		f.write("110% + Meso Obtain (check screenshots below)\n")
+		f.write("110%+ Meso Obtain (check screenshots below)\n")
 		f.write("{} Monster Park coins (Use them to buy extreme potions)\n".format(Inventory.FindItemByID(4310020).count))
 		f.write("{} Epic Potential Scrolls".format(Inventory.FindItemByID(2049705).count))
 		f.write("Reboot Box Stage 1 (untouched)")
