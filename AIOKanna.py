@@ -1654,6 +1654,23 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 #StartQuest(62390, 9130010) emblem quest
 #CompleteQuest(62390, 9130010)
 #1191103 gold emblem
+def print_info():
+	with open('info/output/{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as f:
+		f.write("[Premade Meso Account] Lv149 Kanna with {}b+ and meso gear \n".format(int(accountData['total_meso'])))
+		f.write("\nComes with:\n{}b+ Mesos(Spread out among meso mules and Kanna) \n".format(int(accountData['total_meso'])))
+		f.write("110% + Meso Obtain (check screenshots below)\n")
+		f.write("{} Monster Park coins (Use them to buy extreme potions)\n".format(Inventory.FindItemByID(4310020).count))
+		f.write("{} Epic Potential Scrolls".format(Inventory.FindItemByID(2049705).count))
+		f.write("Reboot Box Stage 1 (untouched)")
+		f.write(
+'''\nOriginal Email that was used to create this account
+If you think the price is too high or you want to buy multiple accounts, please send me your offer, it is negotiable.
+Please do not hesitate to message me if you have any questions, I will be as responsive as possible. 
+Will provide all information that was used to create the accounts including the original email.
+I'm in the EST time zone.
+''')
+		f.close()
+
 if accountData['pet_expire']:
 	general_store = 240000002
 	
@@ -1676,6 +1693,7 @@ if accountData['pet_expire']:
 			CPU_hack(False)
 			Terminal.ChangeChannel(0)
 		Terminal.SetCheckBox("settings/mesologout",False)
+		print_info()
 		time.sleep(60)
 
 

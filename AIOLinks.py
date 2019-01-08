@@ -3,8 +3,8 @@ Links skills
 TODO:
 Kanna           DONE
 Luminous        DONE
-Demon Avenger   
-Demon Slayer    
+Demon Avenger   DONE
+Demon Slayer    DONE
 Mercedes        
 Hayato          
 Xenon           
@@ -181,15 +181,16 @@ EncryptedSlateOfTheSquad = 2083000
 #mob ids
 NormalZakum = 8800002
 NormalZakumv1 = 8800000
-NormalZakumv2 = 8800001	
+NormalZakumv2 = 8800001    
 blackgate_boss = [9480235, 9480236, 9480237, 9480238, 9480239]
 
 padding = 20
-
+map1 = 101050010
+map2 = 910150100
 try:
-	SCHotkey.StartHotkeys(100)
+    SCHotkey.StartHotkeys(100)
 except:
-	SCHotkey.StopHotkeys()
+    SCHotkey.StopHotkeys()
 def KillPersistVarThred():
     print("Restarting SCLib variables")
     SCLib.StopVars()
@@ -204,6 +205,37 @@ def toggle_rush_by_level(indicator):
 def toggle_kami(indicator):
     Terminal.SetCheckBox("Kami Vac",indicator)
 
+def toggle_HTR(indicator):
+    Terminal.SetCheckBox("map/maprusher/hypertelerock",indicator)
+
+def acceptQuest(quest, startnpc, startmap, currentmap):
+    toggle_kami(False)
+    if currentmap != startmap:
+        Terminal.Rush(startmap)
+    questnpc = Field.FindNpc(startnpc)
+    if questnpc.valid:
+        if pos.x != questnpc.x:
+            time.sleep(0.5)
+            Character.Teleport(questnpc.x, questnpc.y)
+        else:
+            Quest.StartQuest(quest, startnpc)
+def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
+    toggle_kami(False)
+    if Quest.CheckCompleteDemand(quest, endnpc) ==0:
+        if currentmap != endmap:
+            Terminal.Rush(endmap)
+            time.sleep(2)
+        questnpc = Field.FindNpc(endnpc)
+        if questnpc.valid:
+            if pos.x != questnpc.x:
+                time.sleep(0.5)
+                Character.Teleport(questnpc.x, questnpc.y)
+            else:
+                Quest.CompleteQuest(quest, endnpc)
+    else:
+        toggle_kami(True)
+        if currentmap != grindmap:
+            Terminal.Rush(grindmap)
 def mapID(id):
     if type(id) is int:
         return Field.GetID() == id
@@ -220,6 +252,23 @@ def rush(mapid):
 
 def toHex(val, nbits):
     return ((val + (1 << nbits)) % (1 << nbits))
+
+
+def teleport_enter(x,y):
+    time.sleep(1)
+    Character.Teleport(x,y)
+    time.sleep(1)
+    Character.EnterPortal()
+    time.sleep(1)
+
+def gotoGreatSpirit():
+    while Field.GetID() != map2:
+        if (Field.GetID() != map1) and (Field.GetID() != map2):
+            Terminal.Rush(map1)
+            time.sleep(1)
+        if Field.GetID() == map1:
+            Character.TalkToNpc(1033211)
+            time.sleep(1)
 
 #########Job specific advancements##########
 def kannaFirst():
@@ -273,12 +322,6 @@ def kannaFirst():
         Key.Set(0x44, 1, 42001000)
         time.sleep(1)
 
-def teleport_enter(x,y):
-    Character.Teleport(x,y)
-    time.sleep(1)
-    Character.EnterPortal()
-    time.sleep(1)
-
 def LumiFirst():
     Quest.StartQuest(25560, 0)
 
@@ -296,9 +339,13 @@ def DAFirst():
     toggleAttack(False)
     if Quest.GetQuestState(23210) !=2:
         if Quest.GetQuestState(23210) == 0:
-            StartQuest(23210, 2151000)
-        elif Quest.CheckCompleteDemand(23210, 2151000) != 0:
+            Quest.StartQuest(23210, 2151000)
+        elif Quest.GetQuestState(23210) == 1:
+            print("Done fighting")
+            Quest.CompleteQuest(23210, 2153006)
+        elif Quest.CheckCompleteDemand(23210, 2153006) != 0:
             #need to fight the cat
+            print("Entering cat fighting map")
             if field_id != 931050100:
                 if field_id != 310020100:
                     Terminal.Rush(310020100)
@@ -307,12 +354,10 @@ def DAFirst():
             else:
                 Terminal.SetCheckBox("Kami Vac",True)
                 toggleAttack(True)
-        elif Quest.CheckCompleteDemand(23210, 2153006) == 0:
-            print("Done fighting")
-            Quest.CompleteQuest(23210, 2153006)
     elif Quest.GetQuestState(23211) !=2:
-        if Quest.GetQuestState(23210) == 0:
-            StartQuest(23211, 2153006)
+        print("Second quest")
+        if Quest.GetQuestState(23211) == 0:
+            Quest.StartQuest(23211, 2153006)
         elif Quest.CheckCompleteDemand(23211, 2153006) == 0:
             Npc.ClearSelection()
             Npc.RegisterSelection("Move ")
@@ -320,17 +365,80 @@ def DAFirst():
     elif Quest.GetQuestState(23212) !=2:
         print("third quest")
         if Quest.GetQuestState(23212) == 0:
-            StartQuest(23212, 2151009)
+            print("Start third quest")
+            Quest.StartQuest(23212, 2151009)
         elif Quest.GetQuestState(23212) == 1:
-            if field_id == 931050100:
+            if field_id == 931050110:
                 teleport_enter(111,-14)
+                print("Rush out of instanced map")
             elif field_id != 310010000:
                 Terminal.Rush(310010000)
+                print("Rush to hide")
             else:
                 Quest.CompleteQuest(23212, 2151009)
                 toggle_rush_by_level(True)
                 Terminal.SetCheckBox("Kami Vac",True)
-            
+
+def DASecond():
+    Terminal.SetCheckBox("Kami Vac",False)
+    toggleAttack(False)
+    if Quest.GetQuestState(23213) !=2:
+        if Quest.GetQuestState(23213) == 0:
+            Quest.StartQuest(23213, 2151009)
+        elif Quest.GetQuestState(23213) == 1:
+            if field_id != 931050110:
+                if field_id != 310020100:
+                    Terminal.Rush(310020100)
+                else:
+                    teleport_enter(515,-14)
+            else:
+                Quest.CompleteQuest(23213, 2153006)
+    elif Quest.GetQuestState(23218) != 2:
+        if Quest.GetQuestState(23218) == 0:
+            Quest.StartQuest(23218, 2153006)
+        elif Quest.GetQuestState(23218) == 1:
+            if Field.FindMob(9001037).valid:
+                Terminal.StopRush()
+                toggleAttack(True)
+                toggle_kami(True)
+            elif field_id == 931050120:
+                toggle_kami(False)
+                teleport_enter(109,-14)
+            else:
+                Quest.CompleteQuest(23218, 2153006)
+        
+def MercedesFirst():
+    Quest.StartQuest(29952, 1033210)
+
+def MercedesSecond():
+    map1 = 101050010
+    toggle_rush_by_level(False)
+    #get an complete the first quest
+    quest1 = Quest.GetQuestState(24010)
+    #get an complete the second quest
+    quest2 = Quest.GetQuestState(24011)
+    if quest1 != 2:
+        if quest1 == 0:
+            Quest.StartQuest(24010, 0)
+            time.sleep(2)
+        elif quest1 == 1:
+            if Field.GetID() != map2:
+                gotoGreatSpirit()
+            else:
+                Quest.CompleteQuest(24010, 1033210)
+    elif quest2 != 2:
+        if quest2 == 0:
+            if Field.GetID() != map2:
+                gotoGreatSpirit()
+            else:
+                Quest.StartQuest(24011, 1033210)
+                time.sleep(1)
+        elif quest2 == 1:
+            if Field.GetID() != map2:
+                gotoGreatSpirit()
+            else:
+                Quest.CompleteQuest(24011, 1033210)
+
 ############################################
 def id2str(jobid):
     if jobid in LuminousJobs:
@@ -636,7 +744,7 @@ def reveal_all_potential():
     for item in item_list:
         if item.grade > 0 and item.option1 == 0 and GameState.IsInGame():
             #if item.sn not in accountData['equips']:
-            #	accountData['equips'].append(item.sn)
+            #    accountData['equips'].append(item.sn)
             reveal_potential(item.pos)
             time.sleep(0.5)
 
@@ -669,7 +777,7 @@ def BossCheck():
             Terminal.SetCheckBox("Kami Vac",False)
             print("item found with id:" + str(item) + ", waiting until item looted")
             time.sleep(9)
-    for mob in blackgate_boss:	
+    for mob in blackgate_boss:    
         print("Checking for boss: " + str(mob) + "...")
         while Field.FindMob(mob).valid and GameState.IsInGame():
             print("Boss found: " + str(mob) + ", killing boss...")
@@ -826,6 +934,38 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+    elif job == 3100 or job == 3110 or job == 3111:
+        #Key.Set(attack_key,1,31000004)31001008
+        Terminal.SetLineEdit("SISkillID","31001008")
+        Terminal.SetCheckBox("Skill Injection", on)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 2300:
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,23001000)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+    elif job ==2310:
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,23101000)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+    elif job ==2311 or job == 2312:
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,23111000)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
     elif job == 3112:
         Terminal.SetLineEdit("SISkillID","31121010")
         Terminal.SetCheckBox("Auto Attack", False)
@@ -838,6 +978,7 @@ def toggleAttack(on):
         else:
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
+    
     elif job == 6500:
         Terminal.SetLineEdit("SISkillID","65001100")
         Terminal.SetCheckBox("Auto Attack", False)
@@ -1003,14 +1144,7 @@ def toggleAttack(on):
     elif job not in KannaJobs:
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
-        if on:
-            if not Terminal.GetCheckBox("Auto Attack"):
-                print("Toggle Skill Injection "+str(on))
-                Terminal.SetCheckBox("Auto Attack", on)
-        else:
-            if Terminal.GetCheckBox("Auto Attack"):
-                print("Toggle Skill Injection "+str(on))
-                Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetCheckBox("Auto Attack", on)
     Terminal.SetCheckBox("MonkeySpiritsNDcheck", False)
     '''
     elif job == 3612: #xenon
@@ -1069,21 +1203,41 @@ elif job == 2711 and level ==100:
     if Quest.GetQuestState(25676) !=2 and Character.GetLevel() >= 100:
         print("Getting Gold Emblem")
         Quest.StartQuest(25676, 1032209)
-elif job == 3101 and level >= 30:
-    print("Completing Demon Avenger first job")
+elif job == 3101 or job ==3100 and level >= 30:
+    #print("Completing Demon Avenger first job")
     toggle_rush_by_level(False)
     DAFirst()
-
-
+elif job == 3120 or job == 3110 and level >= 60:
+    #print("Completing Demon Avenger second job")
+    toggle_rush_by_level(False)
+    DASecond()
+elif job == 3121 or job == 3111 and field_id == 931050110 and level == 60:
+    teleport_enter(111,-14)
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+elif job == 2300 and level <= 13:
+    quest = Quest.GetQuestState(29952)
+    if quest == 0:
+        MercedesFirst()
+elif job == 2300 and level >= 30:
+    toggle_kami(False)
+    MercedesSecond()
+elif job == 2310 and field_id == 910150100:
+    teleport_enter(9,-250)
+    toggle_rush_by_level(True)
+    toggle_kami(True)
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
-    print("Getting hyper rock")
-    Npc.ClearSelection()
-    Npc.RegisterSelection("Familiar")
-    Npc.RegisterSelection("Teleport Rock")
-    Npc.RegisterSelection("You get")
-    Quest.StartQuest(61589, 9201253)
+    #print("Getting hyper rock")
+    #Npc.ClearSelection()
+    #Npc.RegisterSelection("Familiar")
+    #Npc.RegisterSelection("Teleport Rock")
+    #Npc.RegisterSelection("You get")
+    #Quest.StartQuest(61589, 9201253)
+    #time.sleep(3)
+    Terminal.SetCheckBox("bot/htr",True)
     time.sleep(3)
+    Terminal.SetCheckBox("bot/htr",False)
 elif Quest.GetQuestState(61589) ==2:
     if Inventory.FindItemByID(2430450).valid:
         print("Using equip box lvl50")
@@ -1194,7 +1348,7 @@ if Character.GetLevel() >= 83 and GameState.IsInGame():
                 Terminal.Rush(310050600)
 
 #auto star force pensalir gear and accessories
-if level >= 60 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and Character.GetMeso()>= 5000000 and not SCLib.GetVar("cube_lock"):
+if level >= 60 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and Character.GetMeso()>= 5000000:
     if level >= 140:
         for equips in equip_slot_list:
             item = Inventory.GetItem(1,equips)
@@ -1362,10 +1516,10 @@ if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
         writeJson(accountData,accountId)
         Terminal.Logout()
 
-#####Black gate	
+#####Black gate    
 
 #print(SCLib.GetVar("cube_lock"))
-if DoBlackGate and not SCLib.GetVar("cube_lock") and SCLib.GetVar("checked_equip") and Character.GetHP() > 0 and level >= 145 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("GettingEarring") and not SCLib.GetVar("GettingLep"):
+if DoBlackGate and Character.GetHP() > 0 and level >= 145 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     toggle_rush_by_level(False)
     map = Field.GetID()
     channel = GameState.GetChannel()
@@ -1433,3 +1587,1046 @@ if DoBlackGate and not SCLib.GetVar("cube_lock") and SCLib.GetVar("checked_equip
         else:
             print("Still has ring")
         # BACK TO STARTING POINT
+curbrock2 = Quest.GetQuestState(5500)
+curbrock3 = Quest.GetQuestState(5501)
+sabitrama = 1061005
+curbrockhideout = 600050020
+if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level < 60 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+    pos = Character.GetPos()
+    if curbrock2 !=2:
+        if curbrock2 ==0:
+            toggle_rush_by_level(False)
+            Quest.StartQuest(5500, sabitrama)
+        elif curbrock2 ==1:
+            if Quest.CheckCompleteDemand(5500, sabitrama) ==0:
+                if pos.x != -425 and field_id == curbrockhideout:
+                    toggle_kami(False)
+                    teleport_enter(-425,-195)
+                    toggle_kami(True)
+                elif pos.x != -549 and field_id == 600050040:
+                    toggle_kami(False)
+                    teleport_enter(-549,-195)
+                    toggle_kami(True)
+                    toggle_rush_by_level(True)
+                else:
+                    Quest.CompleteQuest(5500,sabitrama)
+            else:
+                toggle_kami(True)
+                toggleAttack(True)
+if GameState.IsInGame() and not Terminal.IsRushing() and level >= 60 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+    pos = Character.GetPos()
+    if curbrock3 !=2:
+        if curbrock3 ==0:
+            toggle_rush_by_level(False)
+            Quest.StartQuest(5501, sabitrama)
+        elif curbrock3 ==1:
+            if Quest.CheckCompleteDemand(5501, sabitrama) ==0:
+                if pos.x != -425 and field_id == curbrockhideout:
+                    toggle_kami(False)
+                    teleport_enter(-425,-195)
+                    toggle_kami(True)
+                elif pos.x != -549 and field_id == 600050040:
+                    toggle_kami(False)
+                    teleport_enter(-549,-195)
+                    toggle_kami(True)
+                    toggle_rush_by_level(True)
+                else:
+                    Quest.CompleteQuest(5501,sabitrama)
+            else:
+                toggle_kami(True)
+                toggleAttack(True)
+
+quest26 = Quest.GetQuestState(2976)
+if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >= 35 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+    time.sleep(1)
+
+    fieldID = Field.GetID()
+    pos = Character.GetPos()
+    
+    #FieldID to Field Name
+    BeachGrassDunes1 = (120040100)
+    BeachGrassDunes2 = (120040200)
+    BeachGrassDunes3 = (120040300)
+    GoldBeachResort = (120040000)
+    GoldBeachSeaSide1 = (120041000)
+    GoldBeachSeaSide2 = (120041100)
+    GoldBeachSeaSide3 = (120041200)
+    ShallowSea1 = (120041300)
+    ShallowSea2 = (120041400)
+    ShallowSea3 = (120041500)
+    SoftWaveBeach1 = (120041600)
+    GentleWaves2 = (120041700)
+    HardWaveBeach = (120041800)
+    ShadyBeach = (120041900)
+
+    #NPCID to Npc Name
+    PilotIrvin = (1082101)
+    SwansonBGD2 = (1082201)
+    LittleRichieResort = (1082002)
+    SwansonResort = (1082000)
+    RalphioGBSS2 = (1082202)
+    TofuBGSS2 = (1082203)
+    SwansonGBSS2 = (1082204)
+    RalphioGBSS3 = (1082205)
+    SwansonSS1 = (1082206)
+    InnerTubeCaddy = (1082005)
+    LittleRichieSS2 = (1082207)
+    LittleRichieSS3 = (1082208)
+    SwansonSS3 = (1082209)
+    TofuHWB = (1082210)
+    
+    #QuestID to Quest Name
+    FlyingBlind = (2951)
+    AMissionOfGratImportance = (2952)
+    FunWithTheSon = (2953)
+    GoldenFruit = (2954)
+    HouseKeeping = (2955)
+    DangerOnTheCoast = (2956)
+    LittleTroubleMaker = (2957)
+    StatusReport = (2958)
+    TheDayTheLightsWentOut = (2959)
+    ShineALight = (2960)
+    LocalsAndYokels = (2961)
+    SubMarineDreams = (2962) 
+    PrivateBeach = (2963)
+    PutARingOnIt = (2964)
+    TheHuntForBlackNovemner = (2965)
+    BlackWave = (2966)
+    FloatingAway = (2967)
+    FreshFlavours = (2968)
+    ShrimpySitiuation = (2969)
+    TheSadTaleOfLilWilly = (2970)
+    FerryFrustrations = (2971)
+    TheOriginalSlimeStar = (2972)
+    GoingTribal = (2973)
+    ChefsSpecial = (2974)
+    TerrorFromTheDeep = (2975)
+    GoldBeachGoldenOppertunity = (2950)
+    
+    
+    
+    #Gets Queststate on Quests
+    quest1 = Quest.GetQuestState(FlyingBlind)
+    quest2 = Quest.GetQuestState(AMissionOfGratImportance)
+    quest3 = Quest.GetQuestState(FunWithTheSon)
+    quest4 = Quest.GetQuestState(GoldenFruit)
+    quest5 = Quest.GetQuestState(HouseKeeping)
+    quest6 = Quest.GetQuestState(DangerOnTheCoast)
+    quest7 = Quest.GetQuestState(LittleTroubleMaker)
+    quest8 = Quest.GetQuestState(StatusReport)
+    quest9 = Quest.GetQuestState(TheDayTheLightsWentOut)
+    quest10 = Quest.GetQuestState(ShineALight)
+    quest11 = Quest.GetQuestState(LocalsAndYokels)
+    quest12 = Quest.GetQuestState(SubMarineDreams)
+    quest13 = Quest.GetQuestState(PrivateBeach)
+    quest14 = Quest.GetQuestState(PutARingOnIt)
+    quest15 = Quest.GetQuestState(TheHuntForBlackNovemner)
+    quest16 = Quest.GetQuestState(BlackWave)
+    quest17 = Quest.GetQuestState(FloatingAway)
+    quest18 = Quest.GetQuestState(FreshFlavours)
+    quest19 = Quest.GetQuestState(ShrimpySitiuation)
+    quest20 = Quest.GetQuestState(TheSadTaleOfLilWilly)
+    quest21 = Quest.GetQuestState(FerryFrustrations)
+    quest22 = Quest.GetQuestState(TheOriginalSlimeStar)
+    quest23 = Quest.GetQuestState(GoingTribal)
+    quest24 = Quest.GetQuestState(ChefsSpecial)
+    quest25 = Quest.GetQuestState(TerrorFromTheDeep)
+    quest26 = Quest.GetQuestState(2976)
+    quest27 = Quest.GetQuestState (GoldBeachGoldenOppertunity)
+    
+    #Complete quest27 (GoldBeachGoldenOppertunity)
+    if quest27 !=2:
+        toggle_rush_by_level(False)
+        if quest27 ==0:
+            toggle_kami(False)
+            Quest.StartQuest(GoldBeachGoldenOppertunity, 1082100)
+    #Complete quest1 (Flying blind)
+    elif quest1 !=2:
+        if quest1 ==0:
+            toggle_kami(False)
+            if fieldID != BeachGrassDunes3:
+                Terminal.Rush(BeachGrassDunes3)
+            if pos.x != -822:
+                Character.Teleport(-822, -85)
+            else:
+                Quest.StartQuest(FlyingBlind, PilotIrvin)
+        elif quest1 ==1:
+            if Quest.CheckCompleteDemand(FlyingBlind, PilotIrvin) ==0:
+                toggle_kami(False)
+                if fieldID != BeachGrassDunes3:
+                    Terminal.Rush(BeachGrassDunes3)
+                if pos.x != -822:
+                    Character.Teleport(-822, -85)
+                else:
+                    Quest.CompleteQuest(FlyingBlind, PilotIrvin)
+            else:
+                toggle_kami(True)
+                if fieldID != BeachGrassDunes3:
+                    Terminal.Rush(BeachGrassDunes3)
+    #Complete quest2 (A Mission of great importance)
+    elif quest2 !=2:
+        if quest2 ==0:
+            toggle_kami(False)
+            if fieldID != BeachGrassDunes2:
+                Terminal.Rush(BeachGrassDunes2)
+            if pos.x != -769:
+                Character.Teleport(-769, -85)
+            else:
+                Quest.StartQuest(AMissionOfGratImportance, SwansonBGD2)
+        elif quest2 ==1:
+            if Quest.CheckCompleteDemand(AMissionOfGratImportance, LittleRichieResort)==0:
+                toggle_kami(False)
+                if fieldID != GoldBeachResort:
+                    Terminal.Rush(GoldBeachResort)
+                if pos.x != -331:
+                    Character.Teleport(-331, 116)
+                else:
+                    Quest.CompleteQuest(AMissionOfGratImportance, LittleRichieResort)
+            else:
+                toggle_kami(True)
+                if fieldID != BeachGrassDunes2:
+                    Terminal.Rush(BeachGrassDunes2)
+    #Complete quest3 (Fun With the son)
+    elif quest3 !=2:
+        if quest3 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -331:
+                Character.Teleport(-331, 116)
+            else:
+                Quest.StartQuest(FunWithTheSon, LittleRichieResort)
+        elif quest3 ==1:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.CompleteQuest(FunWithTheSon, SwansonResort)
+    #Complete quest4 (GoldenFruit)
+    elif quest4 !=2:
+        if quest4 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.StartQuest(GoldenFruit, SwansonResort)
+        elif quest4 ==1:
+            if Quest.CheckCompleteDemand(GoldenFruit, SwansonResort)==0:
+                toggle_kami(False)
+                if fieldID != GoldBeachResort:
+                    Terminal.Rush(GoldBeachResort)
+                if pos.x != -7:
+                    Character.Teleport(-7, 116)
+                else:
+                    Quest.CompleteQuest(GoldenFruit, SwansonResort)
+            else:
+                toggle_kami(True)
+                if fieldID != BeachGrassDunes1:
+                    Terminal.Rush(BeachGrassDunes1)
+    #Complete quest5 (HouseKeeping)
+    elif quest5 !=2:
+        if quest5 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.StartQuest(HouseKeeping, SwansonResort)
+        elif quest5 ==1:
+            if Quest.CheckCompleteDemand(HouseKeeping, SwansonResort)==0:
+                toggle_kami(False)
+                if fieldID != GoldBeachResort:
+                    Terminal.Rush(GoldBeachResort)
+                if pos.x != -7:
+                    Character.Teleport(-7, 116)
+                else:
+                    Quest.CompleteQuest(HouseKeeping, SwansonResort)
+            else:
+                toggle_kami(True)
+                if fieldID != GoldBeachSeaSide1:
+                    Terminal.Rush(GoldBeachSeaSide1)
+    #Complete quest6 (danger on the coast)
+    elif quest6 !=2:
+        if quest6 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.StartQuest(DangerOnTheCoast, SwansonResort)
+        elif quest6 ==1:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.CompleteQuest(DangerOnTheCoast, SwansonResort)
+    #Complete quest7 (LittleTroubleMaker)
+    elif quest7 !=2:
+        if quest7 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -331:
+                Character.Teleport(-331, 116)
+            else:
+                Quest.StartQuest(LittleTroubleMaker, LittleRichieResort)
+        elif quest7 ==1:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.CompleteQuest(LittleTroubleMaker, SwansonResort)
+    #Complete quest8 (StatusReport)
+    elif quest8 !=2:
+        if quest8 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.StartQuest(StatusReport, SwansonResort)
+        elif quest8 ==1:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -331:
+                Character.Teleport(-331, 116)
+            else:
+                Quest.CompleteQuest(StatusReport, LittleRichieResort)
+    #complete quest9 (TheDayTheLightsWentOut)
+    elif quest9 !=2:
+        if quest9 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.StartQuest(TheDayTheLightsWentOut, SwansonResort)
+        elif quest9 ==1:
+            toggle_kami(False)
+            if fieldID != GoldBeachSeaSide2:
+                Terminal.Rush(GoldBeachSeaSide2)
+            if pos.x != -727:
+                Character.Teleport(-727, -85)
+            else:
+                Quest.CompleteQuest(TheDayTheLightsWentOut, RalphioGBSS2)
+    #Complete quest10 (ShineALight)
+    elif quest10 !=2:
+        if quest10 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachSeaSide2:
+                Terminal.Rush(GoldBeachSeaSide2)
+            if pos.x != -727:
+                Character.Teleport(-727, -85)
+            else:
+                Quest.StartQuest(ShineALight, RalphioGBSS2)
+        elif quest10 ==1:
+            if Quest.CheckCompleteDemand(ShineALight, RalphioGBSS2)==0:
+                toggle_kami(False)
+                if fieldID != GoldBeachSeaSide2:
+                    Terminal.Rush(GoldBeachSeaSide2)
+                if pos.x != -727:
+                    Character.Teleport(-727, -85)
+                else:
+                    Quest.CompleteQuest(ShineALight, RalphioGBSS2)
+            else:
+                toggle_kami(True)
+                if fieldID != GoldBeachSeaSide2:
+                    Terminal.Rush(GoldBeachSeaSide2)
+    #Complete quest11 (LocalsAndYokels)
+    elif quest11 !=2:
+        if quest11 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachSeaSide2:
+                Terminal.Rush(GoldBeachSeaSide2)
+            if pos.x != -549:
+                Character.Teleport(-549, -85)
+            else:
+                Quest.StartQuest(LocalsAndYokels, TofuBGSS2)
+        elif quest11 ==1:
+            if Quest.CheckCompleteDemand(LocalsAndYokels, TofuBGSS2)==0:
+                toggle_kami(False)
+                if fieldID != GoldBeachSeaSide2:
+                    Terminal.Rush(GoldBeachSeaSide2)
+                if pos.x != -549:
+                    Character.Teleport(-549, -85)
+                else:
+                    Quest.CompleteQuest(LocalsAndYokels, TofuBGSS2)
+            else:
+                toggle_kami(True)
+                if fieldID != GoldBeachSeaSide2:
+                    Terminal.Rush(GoldBeachSeaSide2)
+    #Complete quest12 (SubMarineDreams)
+    elif quest12 !=2:
+        if quest12 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachSeaSide2:
+                Terminal.Rush(GoldBeachSeaSide2)
+            if pos.x != -549:
+                Character.Teleport(-549, -85)
+            else:
+                Quest.StartQuest(SubMarineDreams, TofuBGSS2)
+                time.sleep(5)
+        elif quest12 ==1:
+            toggle_kami(False)
+            if fieldID != GoldBeachSeaSide2:
+                Terminal.Rush(GoldBeachSeaSide2)
+            if pos.x != -549:
+                Character.Teleport(-549, -85)
+            else:
+                Quest.CompleteQuest(SubMarineDreams, TofuBGSS2)
+    #Complete quest13 (PrivateBeach)
+    elif quest13 !=2:
+        if quest13 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachSeaSide2:
+                Terminal.Rush(GoldBeachSeaSide2)
+            if pos.x != -408:
+                Character.Teleport(-408, -25)
+            else:
+                Quest.StartQuest(PrivateBeach, SwansonGBSS2)
+        elif quest13 ==1:
+            if Quest.CheckCompleteDemand(PrivateBeach, SwansonGBSS2)==0:
+                toggle_kami(False)
+                if fieldID != GoldBeachSeaSide2:
+                    Terminal.Rush(GoldBeachSeaSide2)
+                if pos.x != -408:
+                    Character.Teleport(-408, -25)
+                else:
+                    Quest.CompleteQuest(PrivateBeach, SwansonGBSS2)
+            else:
+                toggle_kami(True)
+                if fieldID != GoldBeachSeaSide3:
+                    Terminal.Rush(GoldBeachSeaSide3)
+    #Complete quest14 (PutARingOnIt)
+    elif quest14 !=2:
+        if quest14 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachSeaSide3:
+                Terminal.Rush(GoldBeachSeaSide3)
+            if pos.x != 825:
+                Character.Teleport(825, -205)
+            else:
+                Quest.StartQuest(PutARingOnIt, RalphioGBSS3)
+        elif quest14 ==1:
+            if Quest.CheckCompleteDemand(PutARingOnIt, RalphioGBSS3)==0:
+                toggle_kami(False)
+                if fieldID != GoldBeachSeaSide2:
+                    Terminal.Rush(GoldBeachSeaSide2)
+                if pos.x != 825:
+                    Character.Teleport(825, -205)
+                else:
+                    Quest.CompleteQuest(PutARingOnIt, RalphioGBSS3)
+            else:
+                toggle_kami(True)
+                if fieldID != GoldBeachSeaSide3:
+                    Terminal.Rush(GoldBeachSeaSide3)
+    #Complete quest15 (TheHuntForBlackNovemner)
+    elif quest15 !=2:
+        if quest15 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachSeaSide3:
+                Terminal.Rush(GoldBeachSeaSide3)
+            if pos.x != 825:
+                Character.Teleport(825, -205)
+            else:
+                Quest.StartQuest(TheHuntForBlackNovemner, RalphioGBSS3)
+        elif quest15 ==1:
+            toggle_kami(False)
+            if fieldID != ShallowSea1:
+                Terminal.Rush(ShallowSea1)
+            if pos.x != -168:
+                Character.Teleport(-168, -325)
+            else:
+                Quest.CompleteQuest(TheHuntForBlackNovemner, SwansonSS1)
+    #Complete quest16 (BlackWave)
+    elif quest16 !=2:
+        if quest16 ==0:
+            toggle_kami(False)
+            if fieldID != ShallowSea1:
+                Terminal.Rush(ShallowSea1)
+            if pos.x != -168:
+                Character.Teleport(-168, -325)
+            else:
+                Quest.StartQuest(BlackWave, SwansonSS1)
+        elif quest16 ==1:
+            if Quest.CheckCompleteDemand(BlackWave, SwansonResort)==0:
+                toggle_kami(False)
+                if fieldID != GoldBeachResort:
+                    Terminal.Rush(GoldBeachResort)
+                if pos.x != -7:
+                    Character.Teleport(-7, 116)
+                else:
+                    Quest.CompleteQuest(BlackWave, SwansonResort)
+            else:
+                toggle_kami(True)
+                if fieldID != ShallowSea1:
+                    Terminal.Rush(ShallowSea1)
+    #Complete quest17 (FloatingAway)
+    elif quest17 !=2:
+        if quest17 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.StartQuest(FloatingAway, SwansonResort)
+        elif quest17 ==1:
+            if Quest.CheckCompleteDemand(FloatingAway, InnerTubeCaddy)==0:
+                toggle_kami(False)
+                if fieldID != ShallowSea2:
+                    Terminal.Rush(ShallowSea2)
+                elif pos.x != -627:
+                    Character.Teleport(-627, 116)
+                else:
+                    Quest.CompleteQuest(FloatingAway, InnerTubeCaddy)
+            else:
+                toggle_kami(True)
+                if fieldID != ShallowSea2 and Inventory.FindItemByID(4000759).count < 30:
+                    Terminal.Rush(ShallowSea2)
+                elif Inventory.FindItemByID(4000759).count >= 30:
+                    Terminal.Rush(ShallowSea1)
+    #Complete quest18 (FreshFlavours)
+    elif quest18 !=2:
+        if quest18 ==0:
+            toggle_kami(False)
+            if fieldID != ShallowSea2:
+                Terminal.Rush(ShallowSea2)
+            if pos.x != -352:
+                Character.Teleport(-352, -145)
+            else:
+                Quest.StartQuest(FreshFlavours, LittleRichieSS2)
+        elif quest18 ==1:
+            if Quest.CheckCompleteDemand(FreshFlavours, LittleRichieSS3)==0:
+                toggle_kami(False)
+                if fieldID != ShallowSea3:
+                    Terminal.Rush(ShallowSea3)
+                if pos.x != -1131:
+                    Character.Teleport(-1131, -325)
+                else:
+                    Quest.CompleteQuest(FreshFlavours, LittleRichieSS3)
+            else:
+                toggle_kami(True)
+                if fieldID != ShallowSea3:
+                    Terminal.Rush(ShallowSea3)
+    #COmplete quest 19 (ShrimpySitiuation)
+    elif quest19 !=2:
+        if quest19 ==0:
+            toggle_kami(False)
+            if fieldID != ShallowSea3:
+                Terminal.Rush(ShallowSea3)
+            if pos.x != -1131:
+                Character.Teleport(-1131, -325)
+            else:
+                Quest.StartQuest(ShrimpySitiuation, LittleRichieSS3)
+        elif quest19 ==1:
+            if Quest.CheckCompleteDemand(ShrimpySitiuation, LittleRichieSS3)==0:
+                toggle_kami(False)
+                if fieldID != ShallowSea3:
+                    Terminal.Rush(ShallowSea3)
+                if pos.x != -1131:
+                    Character.Teleport(-1131, -325)
+                else:
+                    Quest.CompleteQuest(ShrimpySitiuation, LittleRichieSS3)
+            else:
+                toggle_kami(True)
+                if fieldID != ShallowSea3:
+                    Terminal.Rush(ShallowSea3)
+    #COmplete quest20 (TheSadTaleOfLilWilly)
+    elif quest20 !=2:
+        if quest20 ==0:
+            toggle_kami(False)
+            if fieldID != ShallowSea3:
+                Terminal.Rush(ShallowSea3)
+            if pos.x != -637:
+                Character.Teleport(-637, 116)
+            else:
+                Quest.StartQuest(TheSadTaleOfLilWilly, SwansonSS3)
+        elif quest20 ==1:
+            if Quest.CheckCompleteDemand(TheSadTaleOfLilWilly, SwansonSS3)==0:
+                toggle_kami(False)
+                if fieldID != ShallowSea3:
+                    Terminal.Rush(ShallowSea3)
+                if pos.x != -637:
+                    Character.Teleport(-637, 116)
+                else:
+                    Quest.CompleteQuest(TheSadTaleOfLilWilly, SwansonSS3)
+            else:
+                toggle_kami(True)
+                if fieldID != SoftWaveBeach1:
+                    Terminal.Rush(SoftWaveBeach1)
+    #Complete quest21 (FerryFrustrations)
+    elif quest21 !=2:
+        if quest21 ==0:
+            toggle_kami(False)
+            if fieldID != ShallowSea3:
+                Terminal.Rush(ShallowSea3)
+            if pos.x != -637:
+                Character.Teleport(-637, 116)
+            else:
+                Quest.StartQuest(FerryFrustrations, SwansonSS3)
+        elif quest21 ==1:
+            if Quest.CheckCompleteDemand(FerryFrustrations, SwansonSS3)==0:
+                toggle_kami(False)
+                if fieldID != ShallowSea3:
+                    Terminal.Rush(ShallowSea3)
+                if pos.x != -637:
+                    Character.Teleport(-637, 116)
+                else:
+                    Quest.CompleteQuest(FerryFrustrations, SwansonSS3)
+            else:
+                toggle_kami(True)
+                Terminal.Rush(GentleWaves2)
+                time.sleep(30)
+                Terminal.Rush(HardWaveBeach)
+                time.sleep(30)
+    #Complete quest22 (TheOriginalSlimeStar)
+    elif quest22 !=2:
+        if quest22 ==0:
+            toggle_kami(False)
+            if fieldID != ShallowSea3:
+                Terminal.Rush(ShallowSea3)
+            if pos.x != -637:
+                Character.Teleport(-637, 116)
+            else:
+                Quest.StartQuest(TheOriginalSlimeStar, SwansonSS3)
+        elif quest22 ==1:
+            toggle_kami(False)
+            if fieldID != HardWaveBeach:
+                Terminal.Rush(HardWaveBeach)
+            if pos.x != -211:
+                Character.Teleport(-211, -145)
+            else:
+                Quest.CompleteQuest(TheOriginalSlimeStar, TofuHWB)
+    #Complete quest23 (GoingTribal)
+    elif quest23 !=2:
+        if quest23 ==0:
+            toggle_kami(False)
+            if fieldID != HardWaveBeach:
+                Terminal.Rush(HardWaveBeach)
+            if pos.x != -211:
+                Character.Teleport(-211, -145)
+            else:
+                Quest.StartQuest(GoingTribal, TofuHWB)
+        elif quest23 ==1:
+            if Quest.CheckCompleteDemand(GoingTribal, TofuHWB)==0:
+                toggle_kami(False)
+                if fieldID != HardWaveBeach:
+                    Terminal.Rush(HardWaveBeach)
+                if pos.x != -211:
+                    Character.Teleport(-211, -145)
+                else:
+                    Quest.CompleteQuest(GoingTribal, TofuHWB)
+            else:
+                toggle_kami(True)
+                if fieldID != HardWaveBeach:
+                    Terminal.Rush(HardWaveBeach)
+    #Complete quest24 (ChefsSpecial)
+    elif quest24 !=2:
+        if quest24 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.StartQuest(ChefsSpecial, SwansonResort)
+        elif quest24 ==1:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -7:
+                Character.Teleport(-7, 116)
+            else:
+                Quest.CompleteQuest(ChefsSpecial, SwansonResort)
+    #Complete quest 25 (TerrorFromTheDeep)
+    elif quest25 !=2:
+        print("quest 25")
+        if Party.IsInParty():
+            Party.LeaveParty()
+        if quest25 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -331:
+                Character.Teleport(-331, 116)
+            else:
+                Quest.StartQuest(TerrorFromTheDeep, LittleRichieResort)
+        elif quest25 ==1:
+            if Quest.CheckCompleteDemand(TerrorFromTheDeep, LittleRichieResort)==0:
+                time.sleep(2)
+                toggle_kami(False)
+                if fieldID == ShadyBeach:
+                    Character.Teleport(381, 125)
+                    time.sleep(1)
+                    Character.EnterPortal()
+                if fieldID != GoldBeachResort:
+                    Terminal.Rush(GoldBeachResort)
+                if pos.x != -331:
+                    Character.Teleport(-331, 116)
+                else:
+                    Quest.CompleteQuest(TerrorFromTheDeep, LittleRichieResort)
+            else:
+                toggle_kami(False)
+                if fieldID != ShadyBeach:
+                    Terminal.Rush(HardWaveBeach)
+                    if pos.x != 797:
+                        Character.Teleport(797, -385)
+                    else:
+                        toggleAttack(False)
+                        time.sleep(2)
+                        Character.EnterPortal()
+                        toggleAttack(True)
+                else:
+                    toggle_kami(True)
+    #Complete quest 26 for beachbum medal
+    elif quest26 !=2:
+        print("quest 26")
+        if quest26 ==0:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -331:
+                Character.Teleport(-331, 116)
+            else:
+                Quest.StartQuest(2976, LittleRichieResort)
+        elif quest25 ==1:
+            toggle_kami(False)
+            if fieldID != GoldBeachResort:
+                Terminal.Rush(GoldBeachResort)
+            if pos.x != -331:
+                Character.Teleport(-331, 116)
+            else:
+                Quest.CompleteQuest(2976, LittleRichieResort)
+                time.sleep(2)
+                Inventory.SendChangeSlotPositionRequest(1,Inventory.FindItemByID(1032254).pos,earring_slot,-1)
+                time.sleep(2)
+                toggle_rush_by_level(True)
+    #All quest for Gold Beach Complete!
+elif quest26 == 2 and Inventory.FindItemByID(1032254).valid:
+    print("Equiping earring and enabling rush by level")
+    time.sleep(2)
+    Inventory.SendChangeSlotPositionRequest(1,Inventory.FindItemByID(1032254).pos,earring_slot,-1)
+    time.sleep(2)
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+quest17 = Quest.GetQuestState(2054)
+if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level < 90 and quest17!=2:
+    #print("Doing")
+    toggle_rush_by_level(False)
+    time.sleep(1)
+    fieldID = Field.GetID()
+    pos = Character.GetPos()
+    #NPC ID TO NPC NAME
+
+    Ilji = (1061019)
+    Gwin = (1061013)
+    Ronnie = (1061004)
+    TheNote = (1063014)
+    MuYoung = (1061014)
+    TristansSpirit = (1061015)
+    InsignificantBeing = (1061012)
+    John = (20000)
+    ChunJi = (1061020)
+    Chrisharama =(1061000)
+    #MAPID TO MAPNAME
+
+    SleepyWood = (105000000)
+    SilentSwamp = (105010000)
+    HumidSwamp = (105010100)
+    SunlessArea = (105020000)
+    CaveCliff = (105020100)
+    ColdWind = (105020200)
+    ChillyCave = (105020300)
+    CaveExit = (105020400)
+    AnotherDoor = (105030000)
+    TempleEntrance = (105030100)
+    CollapsedTemple = (105030200)
+    EndlessHallway = (105030300)
+    GloomyTemple = (105030400)
+    ForbiddenAltar = (105030500)
+    BottomoftheTemple = (105100100)
+    HerosMemory = (910520000)
+
+    #QUESTID TO QUEST NAME
+    DrakeAttack1 = (2581)
+    DrakeAttack2 = (2582)
+    DrakeAttack3 = (2583)
+    DrakeAttack4 = (2584)
+    DrakeAttack5 = (2585)
+    InjuredAdventurer = (2265)
+    InjuredAdventurer2 = (2266)
+    InjuredAdventurer3 = (2267)
+    InjuredAdventurer4 = (2268)
+    RonniesMarble = (2586)
+    MysteriousNote = (2237)
+    MysteriousNote2 = (2238)
+    ASpellThatSealsUpACriticalDanger = (2096)
+    ASpellThatSealsUpACriticalDanger2 = (2097)
+    ForestOfTenacity1 = (2052)
+    ForestOfTenacity2 = (2053)
+    ForestOfTenacity3 = (2054)
+    HerosGladius = (2047)
+    HerosGladiusChis = (2048)
+
+    quest1 = Quest.GetQuestState(DrakeAttack1)
+    quest2 = Quest.GetQuestState(DrakeAttack2)
+    quest3 = Quest.GetQuestState(DrakeAttack3)
+    quest4 = Quest.GetQuestState(DrakeAttack4)
+    quest5 = Quest.GetQuestState(DrakeAttack5)
+    quest6 = Quest.GetQuestState(InjuredAdventurer)
+    quest7 = Quest.GetQuestState(InjuredAdventurer2)
+    quest8 = Quest.GetQuestState(InjuredAdventurer3)
+    quest9 = Quest.GetQuestState(InjuredAdventurer4)
+    quest10 = Quest.GetQuestState(RonniesMarble)
+    quest11 = Quest.GetQuestState(MysteriousNote)
+    quest12 = Quest.GetQuestState(MysteriousNote2)
+    quest13 = Quest.GetQuestState(ASpellThatSealsUpACriticalDanger)
+    quest14 = Quest.GetQuestState(ASpellThatSealsUpACriticalDanger2)
+    quest15 = Quest.GetQuestState(ForestOfTenacity1)
+    quest16 = Quest.GetQuestState(ForestOfTenacity2)
+    quest17 = Quest.GetQuestState(ForestOfTenacity3)
+    
+    #Complete quest1 (DrakeAttack1)
+    if quest1 != 2:
+        if quest1 ==0:
+            acceptQuest(DrakeAttack1, Ilji, SleepyWood, fieldID)
+        elif quest1 ==1:
+            completeQuest(DrakeAttack1, Ilji, SleepyWood, HumidSwamp, fieldID)
+        elif quest1 ==1:
+            Terminal.Rush(SleepyWood)
+    #complete quest2 (DrakeAttack2)
+    elif quest2 != 2:
+        if quest2 ==0:
+            acceptQuest(DrakeAttack2, Ilji, SleepyWood, fieldID)
+        elif quest2 ==1:
+            completeQuest(DrakeAttack2, Ilji, SleepyWood, SunlessArea, fieldID)
+    #complete quest3 (DrakeAttack3)
+    elif quest3 != 2:
+        if quest3 ==0:
+            acceptQuest(DrakeAttack3, Ilji, SleepyWood, fieldID)
+        elif quest3 ==1:
+            completeQuest(DrakeAttack3, Ilji, SleepyWood, CaveCliff, fieldID)
+    #complete quest4 (DrakeAttack4)
+    elif quest4 != 2:
+        if quest4 ==0:
+            acceptQuest(DrakeAttack4, Ilji, SleepyWood, fieldID)
+        elif quest4 ==1:
+            completeQuest(DrakeAttack4, Ilji, SleepyWood, ChillyCave, fieldID)
+    #complete quest5 (DrakeAttack5)
+    elif quest5 != 2:
+        if quest5 ==0:
+            acceptQuest(DrakeAttack5, Ilji, SleepyWood, fieldID)
+        elif quest5 ==1:
+            completeQuest(DrakeAttack5, Ilji, SleepyWood, CaveExit, fieldID)
+    #complete quest6 (InjuredAdventurer)
+    elif quest6 != 2:
+        if quest6 ==0:
+            acceptQuest(InjuredAdventurer, Ilji, SleepyWood, fieldID)
+        elif quest6 ==1:
+            completeQuest(InjuredAdventurer, Gwin, AnotherDoor, SleepyWood, fieldID)
+    #complete quest7 (InjuredAdventurer2)
+    elif quest7 != 2:
+        toggle_HTR(False)
+        if quest7 ==0:
+            acceptQuest(InjuredAdventurer2, Gwin, AnotherDoor, fieldID)
+        elif quest7 ==1:
+            completeQuest(InjuredAdventurer2, Gwin, AnotherDoor, TempleEntrance, fieldID)
+    #complete quest8 (InjuredAdventurer3)
+    elif quest8 != 2:
+        toggle_HTR(False)
+        if quest8 ==0:
+            acceptQuest(InjuredAdventurer3, Gwin, AnotherDoor, fieldID)
+        elif quest8 ==1:
+            completeQuest(InjuredAdventurer3, Gwin, AnotherDoor, CollapsedTemple, fieldID)
+    #complete quest9 (InjuredAdventurer4)
+    elif quest9 != 2:
+        toggle_HTR(True)
+        if quest9 ==0:
+            acceptQuest(InjuredAdventurer4, Gwin, AnotherDoor, fieldID)
+        elif quest9 ==1:
+            if pos.x != -542:
+                Character.Teleport(-525, 1028)
+                time.sleep(1)
+                Character.EnterPortal()
+                time.sleep(1)
+                completeQuest(InjuredAdventurer4, Ilji, SleepyWood, SleepyWood, fieldID)
+    #complete quyest10 (RonniesMarble)
+    elif quest10 != 2:
+        if quest10 ==0:
+            acceptQuest(RonniesMarble, Ronnie, SilentSwamp, fieldID)
+        elif quest10 ==1:
+            completeQuest(RonniesMarble, Ronnie, SilentSwamp, SunlessArea, fieldID)
+    #complete quest11 (MysteriousNote)
+    elif quest11 != 2:
+        toggle_HTR(False)
+        if quest11 ==0:
+            acceptQuest(MysteriousNote, TheNote, SunlessArea, fieldID)
+        elif quest11 ==1:
+            completeQuest(MysteriousNote, MuYoung, BottomoftheTemple, BottomoftheTemple, fieldID)
+    #complete quest12 (Mysteriousnote2)
+    elif quest12 != 2:
+        if quest12 ==0:
+            toggle_kami(False)
+            acceptQuest(MysteriousNote2, MuYoung, BottomoftheTemple, fieldID)
+        elif quest12 ==1:
+            Character.TalkToNpc(TristansSpirit)
+            toggle_kami(True)
+            completeQuest(MysteriousNote2, TristansSpirit, HerosMemory, HerosMemory, fieldID)
+    #complete quest13 (ASpellThatSealsUpACriticalDanger)
+    elif quest13 !=2:
+        toggle_HTR(False)
+        if fieldID == HerosMemory:
+            if pos.x != -343:
+                toggle_kami(False)
+                Character.Teleport(-343, 190)
+            else:
+                Character.EnterPortal()
+        elif quest13 ==0:
+            acceptQuest(ASpellThatSealsUpACriticalDanger, InsignificantBeing, AnotherDoor, fieldID)
+        elif quest13 ==1:
+            completeQuest(ASpellThatSealsUpACriticalDanger, InsignificantBeing, AnotherDoor, ChillyCave, fieldID)
+    #complete quest14 (ASpellThatSealsUpACriticalDanger2)
+    elif quest14 !=2: 
+        toggle_HTR(False)
+        if quest14 ==0:
+            acceptQuest(ASpellThatSealsUpACriticalDanger2, InsignificantBeing, AnotherDoor, fieldID)
+        elif quest14 ==1:
+            if Quest.CheckCompleteDemand(ASpellThatSealsUpACriticalDanger2, InsignificantBeing) ==0:
+                completeQuest(ASpellThatSealsUpACriticalDanger2, InsignificantBeing, AnotherDoor, AnotherDoor, fieldID)
+            else:
+                toggle_kami(True)
+                if Inventory.GetItemCount(4031213) < 10:
+                    if fieldID != TempleEntrance:
+                        Terminal.Rush(TempleEntrance)
+                elif Inventory.GetItemCount(4031214) < 10:
+                    if fieldID != CollapsedTemple:
+                        Terminal.Rush(CollapsedTemple)
+                elif Inventory.GetItemCount(4031215) < 10:
+                    if fieldID != ForbiddenAltar:
+                        Terminal.Rush(ForbiddenAltar)
+    #complete quest15 (ForestOfTenacity1)
+    elif quest15 !=2:
+        #print("here")
+        if fieldID == AnotherDoor:
+            if pos.x != -523:
+                Character.Teleport(-523, 1028)
+                time.sleep(1)
+            Character.EnterPortal()
+            time.sleep(1)
+        if quest15 ==0:
+            #print("trying to accept quest")
+            if fieldID == BottomoftheTemple or fieldID == 105100000:
+                toggle_HTR(False)
+                rush(AnotherDoor)
+                time.sleep(2)
+            toggle_HTR(True)
+            acceptQuest(ForestOfTenacity1, John, SleepyWood, fieldID)
+        elif quest15 ==1:
+            if Quest.CheckCompleteDemand(ForestOfTenacity1, John)==0:
+                completeQuest(ForestOfTenacity1, John, SleepyWood,SleepyWood, fieldID)
+            else:
+                if fieldID != 910530001:
+                    if fieldID != 910530000:
+                        if fieldID != SleepyWood:
+                            Terminal.Rush(SleepyWood)
+                        if pos.x != 1038:
+                            Character.Teleport(1038, 255)
+                            time.sleep(3)
+                            Character.TalkToNpc(1061006)
+                            time.sleep(2)
+                    elif fieldID == 910530000:
+                        if pos.x != -75:
+                            Character.Teleport(-75, -2685)
+                        else:
+                            Character.EnterPortal()
+                if fieldID == 910530001:
+                    if pos.x != 762:
+                        Character.Teleport(762, -2325)
+                    else:
+                        Character.TalkToNpc(1063000)
+    #complete quest16 (ForestOfTenacity2)
+    elif quest16 != 2:
+        if quest16 ==0:
+            acceptQuest(ForestOfTenacity2, John, SleepyWood, fieldID)
+        if quest16 ==1:
+            if Quest.CheckCompleteDemand(ForestOfTenacity2, John) ==0:
+                completeQuest(ForestOfTenacity2, John, SleepyWood,SleepyWood, fieldID)
+            else:
+                if fieldID != 910530101:
+                    if fieldID != 910530100:
+                        if fieldID != SleepyWood:
+                            Terminal.Rush(SleepyWood)
+                        if pos.x != 887:
+                            Character.Teleport(887, 255)
+                        else:
+                            Character.TalkToNpc(1061006)
+                    if fieldID == 910530100:
+                        if pos.x != 1259:
+                            Character.Teleport(1259, -2565)
+                            time.sleep(1)
+                        else:
+                            Character.EnterPortal()
+                if fieldID == 910530101:
+                    if pos.x != -434:
+                        Character.Teleport(-434, -1935)
+                        time.sleep(1)
+                    else:
+                        Character.TalkToNpc(1063001)
+    #complete quest17 (ForestOfTenacity3)
+    elif quest17 != 2:
+        if quest17 ==0:
+            acceptQuest(ForestOfTenacity3, John, SleepyWood, fieldID)
+        elif quest17 ==1:
+            if Quest.CheckCompleteDemand(ForestOfTenacity3, John)==0:
+                completeQuest(ForestOfTenacity3, John, SleepyWood, SleepyWood, fieldID)
+                if quest17 == 2:
+                    toggle_HTR(True)
+                    toggle_rush_by_level(True)
+                    toggle_kami(True)
+            else:
+                if fieldID != 910530202:
+                    if fieldID != 910530201:
+                        if fieldID != 910530200:
+                            if fieldID != SleepyWood:
+                                Terminal.Rush(SleepyWood)
+                            if pos.x != 887:
+                                Character.Teleport(887, 255)
+                                time.sleep(2)
+                            else:
+                                Character.TalkToNpc(1061006)
+                                time.sleep(2)
+                        if fieldID == 910530200:
+                            if pos.x != 1523:
+                                Character.Teleport(1523, -1905)
+                                time.sleep(1)
+                            else:
+                                Character.EnterPortal()
+                                time.sleep(1)
+                    if fieldID == 910530201:
+                        if pos.x != 255:
+                            Character.Teleport(255, -1545)
+                            time.sleep(1)
+                        else:
+                            Character.EnterPortal()
+                            time.sleep(1)
+                if fieldID == 910530202:
+                    if pos.x != 1009:
+                        Character.Teleport(1009, -3345)
+                        time.sleep(1)
+                    else:
+                        Character.TalkToNpc(1063002)
+                        time.sleep(1)
