@@ -5,7 +5,7 @@ Kanna           DONE
 Luminous        DONE
 Demon Avenger   DONE
 Demon Slayer    DONE
-Mercedes        
+Mercedes        DONE
 Hayato          
 Xenon           
 Phantom         
@@ -828,7 +828,7 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
 if accountData['training_done'] and GameState.GetLoginStep() == 2:
     Terminal.SetCheckBox("Auto Login",False)
     chars = Login.GetChars()
-    with open('{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
+    with open('info/{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
         for char in chars:
             charInfo.write("{} {}\n".format(id2str(char.id),char.level))
         charInfo.close()
@@ -910,7 +910,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job == 3101:
+    elif job == 3101: #DA first job
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31011000)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -918,7 +918,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job == 3120:
+    elif job == 3120: #DA second job
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31201000)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -926,7 +926,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job == 3121:
+    elif job == 3121 and job == 3122: #DA third job and fourth job
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31211000)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -938,11 +938,18 @@ def toggleAttack(on):
         #Key.Set(attack_key,1,31000004)31001008
         Terminal.SetLineEdit("SISkillID","31001008")
         Terminal.SetCheckBox("Skill Injection", on)
-        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
-    elif job == 2300:
+    elif job == 3112:
+        Terminal.SetLineEdit("SISkillID","31121000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",0)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 2300: #Mercedes 1st 
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23001000)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -950,7 +957,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job ==2310:
+    elif job ==2310: #Mercedes 2nd
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23101000)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -958,7 +965,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job ==2311 or job == 2312:
+    elif job ==2311 or job == 2312: #Mercedes 3rd + 4th
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23111000)
         Terminal.SetCheckBox("Skill Injection", False)
