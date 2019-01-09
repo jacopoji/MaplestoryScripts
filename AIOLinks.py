@@ -440,7 +440,59 @@ def MercedesSecond():
                 gotoGreatSpirit()
             else:
                 Quest.CompleteQuest(24011, 1033210)
-
+def HayatoFirst():
+    if field_id == 807040000:
+        if Terminal.IsRushing():
+            print("Stopping terminal rush")
+            Terminal.StopRush()
+        print("Doing First Job")
+        Terminal.SetCheckBox("Kami Vac",False)
+        toggle_rush_by_level(False)
+        quest_state = Quest.GetQuestState(57102)
+        quest_state1 = Quest.GetQuestState(57103)
+        quest_state2 = Quest.GetQuestState(57104)
+        print("Doing quests")
+        if quest_state != 2:
+            print("Quest 0")
+            if quest_state == 0:
+                Quest.StartQuest(57102, 000000)
+            elif quest_state == 1:
+                Quest.CompleteQuest(57102, 9130031)
+        elif quest_state1 != 2:
+            print("Quest 1")
+            if quest_state1 == 0:
+                Quest.StartQuest(57103, 9130031)
+            elif quest_state1 == 1:
+                Quest.CompleteQuest(57103, 9130031)
+        elif quest_state2 != 2:
+            print("Quest 3")
+            if quest_state2 == 0:
+                Quest.StartQuest(57104, 9130031)
+            elif quest_state2 ==1:
+                portal = Field.FindPortal("east00")
+                if portal.valid:
+                    print("Found portal at x={} y={}".format(portal.x,portal.y))
+                    Character.Teleport(portal.x, portal.y-10)
+                    time.sleep(1)
+                    Character.EnterPortal()
+    elif field_id == 807040100:
+        quest = Quest.GetQuestState(57104)
+        if quest == 1:
+            Quest.CompleteQuest(57104, 9130032)
+            print("Returning control to rush by level")
+            toggle_rush_by_level(True)
+            toggle_kami(True)
+    else:
+        time.sleep(1)
+        fan = Inventory.FindItemByID(1552000)
+        time.sleep(1)
+        if fan.valid:
+            print("Equipping fan")
+            Inventory.SendChangeSlotPositionRequest(1, fan.pos, -11, -1)
+            time.sleep(1)
+        print("Setting up first job settings")
+        Key.Set(0x44, 1, 42001000)
+        time.sleep(1)
 ############################################
 def id2str(jobid):
     if jobid in LuminousJobs:
@@ -1382,6 +1434,8 @@ elif job == 2310 and field_id == 910150100:
     teleport_enter(9,-250)
     toggle_rush_by_level(True)
     toggle_kami(True)
+elif job == 4100 and level <13:
+    HayatoFirst()
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
     #print("Getting hyper rock")
