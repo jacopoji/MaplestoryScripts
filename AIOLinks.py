@@ -478,21 +478,13 @@ def HayatoFirst():
     elif field_id == 807040100:
         quest = Quest.GetQuestState(57104)
         if quest == 1:
-            Quest.CompleteQuest(57104, 9130032)
+            Quest.CompleteQuest(57104, 9130024)
             print("Returning control to rush by level")
             toggle_rush_by_level(True)
             toggle_kami(True)
     else:
-        time.sleep(1)
-        fan = Inventory.FindItemByID(1552000)
-        time.sleep(1)
-        if fan.valid:
-            print("Equipping fan")
-            Inventory.SendChangeSlotPositionRequest(1, fan.pos, -11, -1)
-            time.sleep(1)
-        print("Setting up first job settings")
-        Key.Set(0x44, 1, 42001000)
-        time.sleep(1)
+        toggle_rush_by_level(True)
+        toggle_kami(True)
 ############################################
 def id2str(jobid):
     if jobid in LuminousJobs:
