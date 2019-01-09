@@ -3075,6 +3075,10 @@ elif quest26 == 2 and Inventory.FindItemByID(1032254).valid:
     time.sleep(2)
     toggle_rush_by_level(True)
     toggle_kami(True)
+elif quest26 == 2 and field_id == GoldBeachResort:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    print("Just in case stuck in gold beach, return control to rush by level")
 quest17 = Quest.GetQuestState(2054)
 if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level < 90 and quest17!=2:
     #print("Doing")
