@@ -1428,6 +1428,14 @@ elif job == 2310 and field_id == 910150100:
     toggle_kami(True)
 elif job == 4100 and level <13:
     HayatoFirst()
+elif job == 4100 and level >=30:
+    print("Completing Hayato Second job")
+    second_job_quest = Quest.GetQuestState(57162)
+    if second_job_quest == 0:
+        Quest.StartQuest(57162, 000000)
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
     #print("Getting hyper rock")
