@@ -171,6 +171,7 @@ AngelicBusterJobs = [6500, 6510, 6511, 6512]
 XenonJobs = [3600, 3610, 3611, 3612]
 PhantomJobs = [2400, 2410, 2411, 2412]
 EvanJobs = [2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218]
+IlliumJobs = [15200,15210,15211,15212]
 
 NpcTylusWarriorInstructor = 2020008
 NpcRobeiraMagicianInstructor = 2020009
