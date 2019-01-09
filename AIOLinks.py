@@ -1098,6 +1098,7 @@ def toggleAttack(on):
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 4100: #Hayato 1st 41001004
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41001004")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",100)
@@ -1105,6 +1106,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job in HayatoJobs and field_id in curbrockhideout:
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41001004")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1112,6 +1114,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 4110: #Hayato 2nd 41101000
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41101000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1119,6 +1122,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 4111: #Hayato 3rd 41111011
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41111011")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1126,6 +1130,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 4112: #Hayato 4th 41121011
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41121011")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1133,6 +1138,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 3600:#Xenon 1st 36001000
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36001000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1140,6 +1146,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job in XenonJobs and field_id in curbrockhideout:
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36001000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1147,6 +1154,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 3610:#Xenon 2nd 36101000
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36101000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1154,6 +1162,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 3611:#Xenon 3rd 36111000
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36111000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1161,6 +1170,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 3612:#Xenon 4th 36121000
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36121000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",100)
@@ -1168,6 +1178,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 2400: #Phantom 1st 24001000
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24001000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1175,6 +1186,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job in PhantomJobs and field_id in curbrockhideout:
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24001000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1182,6 +1194,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 2410: #Phantom 2nd 24101000
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24101000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1189,6 +1202,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 2411: #Phantom 3rd 24111000
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24111000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1196,6 +1210,7 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 2412: #Phantom 4th 24121000
+        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24121000")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",100)
