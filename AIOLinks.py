@@ -977,7 +977,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job == 3100 or job == 3110 or job == 3111:
+    elif job == 3100 or job == 3110 or job == 3111: #DS first - third job
         #Key.Set(attack_key,1,31000004)31001008
         Terminal.SetLineEdit("SISkillID","31001008")
         Terminal.SetCheckBox("Skill Injection", on)
@@ -985,8 +985,8 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
-    elif job == 3112:
-        Terminal.SetLineEdit("SISkillID","31121000")
+    elif job == 3112: #DS fourth job
+        Terminal.SetLineEdit("SISkillID","31121010")
         Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",0)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -1008,7 +1008,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job ==2310:
+    elif job ==2310: #Mercedes 2nd
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23101000)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -1024,19 +1024,6 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job == 3112:
-        Terminal.SetLineEdit("SISkillID","31121010")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",0)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-    
     elif job == 6500:
         Terminal.SetLineEdit("SISkillID","65001100")
         Terminal.SetCheckBox("Auto Attack", False)
@@ -1410,17 +1397,17 @@ if Character.GetLevel() >= 83 and GameState.IsInGame():
 
 #auto star force pensalir gear and accessories
 if level >= 60 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and Character.GetMeso()>= 5000000:
-    if level >= 140:
-        for equips in equip_slot_list:
-            item = Inventory.GetItem(1,equips)
-            if item.valid and item.currentStar != star_force_level:
-                #print("Starforcing item {}".format(item.id))
-                starItem(equips, item.currentStar, item.maxStar, star_force_level, item.id)
-        for accessories in accessory_slot_list:
-            item = Inventory.GetItem(1,accessories)
-            if item.valid and item.id in accessory_list and item.currentStar != star_force_level:
-                #print("Starforcing item {}".format(item.id))
-                starItem(accessories, item.currentStar, item.maxStar, star_force_level, item.id)
+    #if level >= 140:
+    #    for equips in equip_slot_list:
+    #        item = Inventory.GetItem(1,equips)
+    #        if item.valid and item.currentStar != star_force_level:
+    #            #print("Starforcing item {}".format(item.id))
+    #            starItem(equips, item.currentStar, item.maxStar, star_force_level, item.id)
+    #    for accessories in accessory_slot_list:
+    #        item = Inventory.GetItem(1,accessories)
+    #        if item.valid and item.id in accessory_list and item.currentStar != star_force_level:
+    #            #print("Starforcing item {}".format(item.id))
+    #            starItem(accessories, item.currentStar, item.maxStar, star_force_level, item.id)
     for x in range(-100, 0):
         item = Inventory.GetItem(1, x)
         if item.valid and item.currentStar != star_force_level and item.currentStar != item.maxStar:
@@ -1577,6 +1564,11 @@ if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
         writeJson(accountData,accountId)
         Terminal.Logout()
 
+if level >= 140 and not SCLib.GetVar("DoingZakum"):
+    print("Current character done, moving to next one")
+    accountData['changing_mule'] = True
+    writeJson(accountData,accountId)
+    Terminal.Logout()
 #####Black gate    
 
 #print(SCLib.GetVar("cube_lock"))
