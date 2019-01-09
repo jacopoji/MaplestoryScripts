@@ -129,6 +129,7 @@ KillZakumDaily = SCLib.GetVar("KillZakumDaily")
 job = Character.GetJob()
 level = Character.GetLevel()
 field_id = Field.GetID()
+pos = Character.GetPos()
 
 #DEFINE MP DUNGEON OPTIONS
 mapSleep = 2.0 #Delay in between entering and exiting map
