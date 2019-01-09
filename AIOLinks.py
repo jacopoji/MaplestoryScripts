@@ -551,21 +551,19 @@ def starItem(pos, currStar, itemMaxStar, userMaxStar, itemid):
 #57.19% -> 91.23%
 def dungeonSelector():
     #charLvl = Character.GetLevel()
-    ''' 
-    if charLvl in range(115,125):
+    if level in range(115,125):
         return (leopard_portal,mossy_tree_forest)
-    elif charLvl in range(125,135):
+    elif level in range(125,135):
         return (leopard_portal,secret_pirate)
-    elif charLvl in range(135,145):
+    elif level in range(135,145):
         return (leopard_portal,other_world)
-    elif charLvl in range(145,155):
+    elif level in range(145,155):
         return (leopard_portal,forbidden_time)
-    elif charLvl in range(155,160):
+    elif level in range(155,160):
         return (leopard_portal,clandestine_ruins)
-    '''
-    return (leopard_portal,mossy_tree_forest)
+    #return (leopard_portal,mossy_tree_forest)
 def rushToMP():
-    #fieldid = Field.GetID()
+    #field_id = Field.GetID()
     rushToMPFlag = True
     while rushToMPFlag:
         field_id_check = Field.GetID()
@@ -581,7 +579,7 @@ def rushToMP():
             rushToMPFlag = False
 
 def enterDungeon():
-    #fieldid = Field.GetID()
+    #field_id = Field.GetID()
     enterDungeonFlag = True
     try_count = 0
     while enterDungeonFlag and try_count < 6:
@@ -871,7 +869,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job == 4210:
+    elif job == 4210: #kanna 2nd
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetSpinBox("charm_delay",100)
         Terminal.SetCheckBox("charm_fma",on)
@@ -879,7 +877,7 @@ def toggleAttack(on):
         Terminal.SetSpinBox("SkillInjection", 100)
         Terminal.SetLineEdit("SISkillID","42001006")
         Terminal.SetCheckBox("Skill Injection",True)
-    elif job == 4211 or job ==4212:
+    elif job == 4211 or job ==4212: #kanna 3rd + 4th
         Terminal.SetSpinBox("charm_delay",100)
         Terminal.SetCheckBox("charm_fma",on)
         Terminal.SetCheckBox("Summon Kishin",True)
@@ -961,7 +959,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job == 3120:
+    elif job == 3120: #DA 2nd
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31201000)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -1024,7 +1022,112 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
-    elif job == 6500:
+    elif job == 4100: #Hayato 1st 41001004
+        Terminal.SetLineEdit("SISkillID","41001004")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job in HayatoJobs and field_id in curbrockhideout:
+        Terminal.SetLineEdit("SISkillID","41001004")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 4110: #Hayato 2nd 41101000
+        Terminal.SetLineEdit("SISkillID","41101000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 4111: #Hayato 3rd 41111011
+        Terminal.SetLineEdit("SISkillID","41111011")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 4112: #Hayato 4th 41121011
+        Terminal.SetLineEdit("SISkillID","41121011")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 3600:#Xenon 1st 36001000
+        Terminal.SetLineEdit("SISkillID","36001000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job in XenonJobs and field_id in curbrockhideout:
+        Terminal.SetLineEdit("SISkillID","36001000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 3610:#Xenon 2nd 36101000
+        Terminal.SetLineEdit("SISkillID","36101000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 3611:#Xenon 3rd 36111000
+        Terminal.SetLineEdit("SISkillID","36111000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 3612:#Xenon 4th 36121000
+        Terminal.SetLineEdit("SISkillID","36121000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 2400: #Phantom 1st 24001000
+        Terminal.SetLineEdit("SISkillID","24001000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job in PhantomJobs and field_id in curbrockhideout:
+        Terminal.SetLineEdit("SISkillID","24001000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 2410: #Phantom 2nd 24101000
+        Terminal.SetLineEdit("SISkillID","24101000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 2411: #Phantom 3rd 24111000
+        Terminal.SetLineEdit("SISkillID","24111000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 2412: #Phantom 4th 24121000
+        Terminal.SetLineEdit("SISkillID","24121000")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+    elif job == 6500: #AB 1st
         Terminal.SetLineEdit("SISkillID","65001100")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",100)
@@ -1036,7 +1139,7 @@ def toggleAttack(on):
         else:
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 6510 or job == 6511:
+    elif job == 6510 or job == 6511: #AB 2nd + 3rd
         Terminal.SetLineEdit("SISkillID","65101100")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",100)
@@ -1048,7 +1151,7 @@ def toggleAttack(on):
         else:
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 6512:
+    elif job == 6512: #AB 4th
         Terminal.SetLineEdit("SISkillID","65121100")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",100)
@@ -1060,14 +1163,14 @@ def toggleAttack(on):
         else:
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 3512:
-        mech_att(on)
+    elif job == 3512: #mechanic 4th
+        #mech_att(on)
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",1)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection",False)
-    elif job == 2512:
+    elif job == 2512: #Shade 4th
         Terminal.SetLineEdit("SISkillID","25120003")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",100)
@@ -1079,19 +1182,7 @@ def toggleAttack(on):
         else:
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 4112:
-        Terminal.SetLineEdit("SISkillID","41121011")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 11212: #beast tamer
+    elif job == 11212: #beast tamer 4th
         Terminal.SetLineEdit("SISkillID","112000002")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",200)
@@ -1107,7 +1198,7 @@ def toggleAttack(on):
                 time.sleep(0.1)
                 Key.Press(0x44)
                 count += 1
-    elif job == 15212:
+    elif job == 15212: #Illium 4th Hyper is patched need to change
         Terminal.SetLineEdit("SISkillID","152121041")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",30)
@@ -1120,7 +1211,7 @@ def toggleAttack(on):
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
                 Terminal.SetCheckBox("Melee No Delay",on)
-    elif job == 1212:
+    elif job == 1212: #BW 4th
         Terminal.SetLineEdit("SISkillID","12121055")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",0)
@@ -1133,7 +1224,7 @@ def toggleAttack(on):
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
                 Terminal.SetCheckBox("Melee No Delay",on)
-    elif job == 572:
+    elif job == 572: #Jett 4th
         Terminal.SetLineEdit("SISkillID","5710020")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",100)
@@ -1159,7 +1250,7 @@ def toggleAttack(on):
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
                 Terminal.SetCheckBox("Melee No Delay",on)
-    elif job == 15512: #ark
+    elif job == 15512: #ark 4th change this to safer method
         Terminal.SetLineEdit("SISkillID","155121007")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",30)
@@ -1172,7 +1263,7 @@ def toggleAttack(on):
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
                 Terminal.SetCheckBox("Melee No Delay",on)
-    elif job == 6412: #Cadena
+    elif job == 6412: #Cadena 4th
         Terminal.SetLineEdit("SISkillID","64121011")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",150)
@@ -1191,20 +1282,6 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetCheckBox("Auto Attack", on)
     Terminal.SetCheckBox("MonkeySpiritsNDcheck", False)
-    '''
-    elif job == 3612: #xenon
-        Terminal.SetLineEdit("SISkillID","36121000")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-    '''
 
 safety_setting()
 
@@ -1727,11 +1804,9 @@ if pos.x != -549 and field_id in escaperoutes:
 quest26 = Quest.GetQuestState(2976)
 if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >= 35 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     time.sleep(1)
-
-    fieldID = Field.GetID()
     pos = Character.GetPos()
     
-    #FieldID to Field Name
+    #field_id to Field Name
     BeachGrassDunes1 = (120040100)
     BeachGrassDunes2 = (120040200)
     BeachGrassDunes3 = (120040300)
@@ -1833,7 +1908,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest1 !=2:
         if quest1 ==0:
             toggle_kami(False)
-            if fieldID != BeachGrassDunes3:
+            if field_id != BeachGrassDunes3:
                 Terminal.Rush(BeachGrassDunes3)
             if pos.x != -822:
                 Character.Teleport(-822, -85)
@@ -1842,7 +1917,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest1 ==1:
             if Quest.CheckCompleteDemand(FlyingBlind, PilotIrvin) ==0:
                 toggle_kami(False)
-                if fieldID != BeachGrassDunes3:
+                if field_id != BeachGrassDunes3:
                     Terminal.Rush(BeachGrassDunes3)
                 if pos.x != -822:
                     Character.Teleport(-822, -85)
@@ -1850,13 +1925,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(FlyingBlind, PilotIrvin)
             else:
                 toggle_kami(True)
-                if fieldID != BeachGrassDunes3:
+                if field_id != BeachGrassDunes3:
                     Terminal.Rush(BeachGrassDunes3)
     #Complete quest2 (A Mission of great importance)
     elif quest2 !=2:
         if quest2 ==0:
             toggle_kami(False)
-            if fieldID != BeachGrassDunes2:
+            if field_id != BeachGrassDunes2:
                 Terminal.Rush(BeachGrassDunes2)
             if pos.x != -769:
                 Character.Teleport(-769, -85)
@@ -1865,7 +1940,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest2 ==1:
             if Quest.CheckCompleteDemand(AMissionOfGratImportance, LittleRichieResort)==0:
                 toggle_kami(False)
-                if fieldID != GoldBeachResort:
+                if field_id != GoldBeachResort:
                     Terminal.Rush(GoldBeachResort)
                 if pos.x != -331:
                     Character.Teleport(-331, 116)
@@ -1873,13 +1948,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(AMissionOfGratImportance, LittleRichieResort)
             else:
                 toggle_kami(True)
-                if fieldID != BeachGrassDunes2:
+                if field_id != BeachGrassDunes2:
                     Terminal.Rush(BeachGrassDunes2)
     #Complete quest3 (Fun With the son)
     elif quest3 !=2:
         if quest3 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -331:
                 Character.Teleport(-331, 116)
@@ -1887,7 +1962,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Quest.StartQuest(FunWithTheSon, LittleRichieResort)
         elif quest3 ==1:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -1897,7 +1972,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest4 !=2:
         if quest4 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -1906,7 +1981,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest4 ==1:
             if Quest.CheckCompleteDemand(GoldenFruit, SwansonResort)==0:
                 toggle_kami(False)
-                if fieldID != GoldBeachResort:
+                if field_id != GoldBeachResort:
                     Terminal.Rush(GoldBeachResort)
                 if pos.x != -7:
                     Character.Teleport(-7, 116)
@@ -1914,13 +1989,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(GoldenFruit, SwansonResort)
             else:
                 toggle_kami(True)
-                if fieldID != BeachGrassDunes1:
+                if field_id != BeachGrassDunes1:
                     Terminal.Rush(BeachGrassDunes1)
     #Complete quest5 (HouseKeeping)
     elif quest5 !=2:
         if quest5 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -1929,7 +2004,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest5 ==1:
             if Quest.CheckCompleteDemand(HouseKeeping, SwansonResort)==0:
                 toggle_kami(False)
-                if fieldID != GoldBeachResort:
+                if field_id != GoldBeachResort:
                     Terminal.Rush(GoldBeachResort)
                 if pos.x != -7:
                     Character.Teleport(-7, 116)
@@ -1937,13 +2012,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(HouseKeeping, SwansonResort)
             else:
                 toggle_kami(True)
-                if fieldID != GoldBeachSeaSide1:
+                if field_id != GoldBeachSeaSide1:
                     Terminal.Rush(GoldBeachSeaSide1)
     #Complete quest6 (danger on the coast)
     elif quest6 !=2:
         if quest6 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -1951,7 +2026,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Quest.StartQuest(DangerOnTheCoast, SwansonResort)
         elif quest6 ==1:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -1961,7 +2036,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest7 !=2:
         if quest7 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -331:
                 Character.Teleport(-331, 116)
@@ -1969,7 +2044,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Quest.StartQuest(LittleTroubleMaker, LittleRichieResort)
         elif quest7 ==1:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -1979,7 +2054,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest8 !=2:
         if quest8 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -1987,7 +2062,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Quest.StartQuest(StatusReport, SwansonResort)
         elif quest8 ==1:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -331:
                 Character.Teleport(-331, 116)
@@ -1997,7 +2072,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest9 !=2:
         if quest9 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -2005,7 +2080,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Quest.StartQuest(TheDayTheLightsWentOut, SwansonResort)
         elif quest9 ==1:
             toggle_kami(False)
-            if fieldID != GoldBeachSeaSide2:
+            if field_id != GoldBeachSeaSide2:
                 Terminal.Rush(GoldBeachSeaSide2)
             if pos.x != -727:
                 Character.Teleport(-727, -85)
@@ -2015,7 +2090,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest10 !=2:
         if quest10 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachSeaSide2:
+            if field_id != GoldBeachSeaSide2:
                 Terminal.Rush(GoldBeachSeaSide2)
             if pos.x != -727:
                 Character.Teleport(-727, -85)
@@ -2024,7 +2099,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest10 ==1:
             if Quest.CheckCompleteDemand(ShineALight, RalphioGBSS2)==0:
                 toggle_kami(False)
-                if fieldID != GoldBeachSeaSide2:
+                if field_id != GoldBeachSeaSide2:
                     Terminal.Rush(GoldBeachSeaSide2)
                 if pos.x != -727:
                     Character.Teleport(-727, -85)
@@ -2032,13 +2107,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(ShineALight, RalphioGBSS2)
             else:
                 toggle_kami(True)
-                if fieldID != GoldBeachSeaSide2:
+                if field_id != GoldBeachSeaSide2:
                     Terminal.Rush(GoldBeachSeaSide2)
     #Complete quest11 (LocalsAndYokels)
     elif quest11 !=2:
         if quest11 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachSeaSide2:
+            if field_id != GoldBeachSeaSide2:
                 Terminal.Rush(GoldBeachSeaSide2)
             if pos.x != -549:
                 Character.Teleport(-549, -85)
@@ -2047,7 +2122,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest11 ==1:
             if Quest.CheckCompleteDemand(LocalsAndYokels, TofuBGSS2)==0:
                 toggle_kami(False)
-                if fieldID != GoldBeachSeaSide2:
+                if field_id != GoldBeachSeaSide2:
                     Terminal.Rush(GoldBeachSeaSide2)
                 if pos.x != -549:
                     Character.Teleport(-549, -85)
@@ -2055,13 +2130,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(LocalsAndYokels, TofuBGSS2)
             else:
                 toggle_kami(True)
-                if fieldID != GoldBeachSeaSide2:
+                if field_id != GoldBeachSeaSide2:
                     Terminal.Rush(GoldBeachSeaSide2)
     #Complete quest12 (SubMarineDreams)
     elif quest12 !=2:
         if quest12 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachSeaSide2:
+            if field_id != GoldBeachSeaSide2:
                 Terminal.Rush(GoldBeachSeaSide2)
             if pos.x != -549:
                 Character.Teleport(-549, -85)
@@ -2070,7 +2145,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 time.sleep(5)
         elif quest12 ==1:
             toggle_kami(False)
-            if fieldID != GoldBeachSeaSide2:
+            if field_id != GoldBeachSeaSide2:
                 Terminal.Rush(GoldBeachSeaSide2)
             if pos.x != -549:
                 Character.Teleport(-549, -85)
@@ -2080,7 +2155,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest13 !=2:
         if quest13 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachSeaSide2:
+            if field_id != GoldBeachSeaSide2:
                 Terminal.Rush(GoldBeachSeaSide2)
             if pos.x != -408:
                 Character.Teleport(-408, -25)
@@ -2089,7 +2164,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest13 ==1:
             if Quest.CheckCompleteDemand(PrivateBeach, SwansonGBSS2)==0:
                 toggle_kami(False)
-                if fieldID != GoldBeachSeaSide2:
+                if field_id != GoldBeachSeaSide2:
                     Terminal.Rush(GoldBeachSeaSide2)
                 if pos.x != -408:
                     Character.Teleport(-408, -25)
@@ -2097,13 +2172,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(PrivateBeach, SwansonGBSS2)
             else:
                 toggle_kami(True)
-                if fieldID != GoldBeachSeaSide3:
+                if field_id != GoldBeachSeaSide3:
                     Terminal.Rush(GoldBeachSeaSide3)
     #Complete quest14 (PutARingOnIt)
     elif quest14 !=2:
         if quest14 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachSeaSide3:
+            if field_id != GoldBeachSeaSide3:
                 Terminal.Rush(GoldBeachSeaSide3)
             if pos.x != 825:
                 Character.Teleport(825, -205)
@@ -2112,7 +2187,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest14 ==1:
             if Quest.CheckCompleteDemand(PutARingOnIt, RalphioGBSS3)==0:
                 toggle_kami(False)
-                if fieldID != GoldBeachSeaSide2:
+                if field_id != GoldBeachSeaSide2:
                     Terminal.Rush(GoldBeachSeaSide2)
                 if pos.x != 825:
                     Character.Teleport(825, -205)
@@ -2120,13 +2195,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(PutARingOnIt, RalphioGBSS3)
             else:
                 toggle_kami(True)
-                if fieldID != GoldBeachSeaSide3:
+                if field_id != GoldBeachSeaSide3:
                     Terminal.Rush(GoldBeachSeaSide3)
     #Complete quest15 (TheHuntForBlackNovemner)
     elif quest15 !=2:
         if quest15 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachSeaSide3:
+            if field_id != GoldBeachSeaSide3:
                 Terminal.Rush(GoldBeachSeaSide3)
             if pos.x != 825:
                 Character.Teleport(825, -205)
@@ -2134,7 +2209,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Quest.StartQuest(TheHuntForBlackNovemner, RalphioGBSS3)
         elif quest15 ==1:
             toggle_kami(False)
-            if fieldID != ShallowSea1:
+            if field_id != ShallowSea1:
                 Terminal.Rush(ShallowSea1)
             if pos.x != -168:
                 Character.Teleport(-168, -325)
@@ -2144,7 +2219,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest16 !=2:
         if quest16 ==0:
             toggle_kami(False)
-            if fieldID != ShallowSea1:
+            if field_id != ShallowSea1:
                 Terminal.Rush(ShallowSea1)
             if pos.x != -168:
                 Character.Teleport(-168, -325)
@@ -2153,7 +2228,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest16 ==1:
             if Quest.CheckCompleteDemand(BlackWave, SwansonResort)==0:
                 toggle_kami(False)
-                if fieldID != GoldBeachResort:
+                if field_id != GoldBeachResort:
                     Terminal.Rush(GoldBeachResort)
                 if pos.x != -7:
                     Character.Teleport(-7, 116)
@@ -2161,13 +2236,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(BlackWave, SwansonResort)
             else:
                 toggle_kami(True)
-                if fieldID != ShallowSea1:
+                if field_id != ShallowSea1:
                     Terminal.Rush(ShallowSea1)
     #Complete quest17 (FloatingAway)
     elif quest17 !=2:
         if quest17 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -2176,7 +2251,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest17 ==1:
             if Quest.CheckCompleteDemand(FloatingAway, InnerTubeCaddy)==0:
                 toggle_kami(False)
-                if fieldID != ShallowSea2:
+                if field_id != ShallowSea2:
                     Terminal.Rush(ShallowSea2)
                 elif pos.x != -627:
                     Character.Teleport(-627, 116)
@@ -2184,7 +2259,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(FloatingAway, InnerTubeCaddy)
             else:
                 toggle_kami(True)
-                if fieldID != ShallowSea2 and Inventory.FindItemByID(4000759).count < 30:
+                if field_id != ShallowSea2 and Inventory.FindItemByID(4000759).count < 30:
                     Terminal.Rush(ShallowSea2)
                 elif Inventory.FindItemByID(4000759).count >= 30:
                     Terminal.Rush(ShallowSea1)
@@ -2192,7 +2267,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest18 !=2:
         if quest18 ==0:
             toggle_kami(False)
-            if fieldID != ShallowSea2:
+            if field_id != ShallowSea2:
                 Terminal.Rush(ShallowSea2)
             if pos.x != -352:
                 Character.Teleport(-352, -145)
@@ -2201,7 +2276,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest18 ==1:
             if Quest.CheckCompleteDemand(FreshFlavours, LittleRichieSS3)==0:
                 toggle_kami(False)
-                if fieldID != ShallowSea3:
+                if field_id != ShallowSea3:
                     Terminal.Rush(ShallowSea3)
                 if pos.x != -1131:
                     Character.Teleport(-1131, -325)
@@ -2209,13 +2284,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(FreshFlavours, LittleRichieSS3)
             else:
                 toggle_kami(True)
-                if fieldID != ShallowSea3:
+                if field_id != ShallowSea3:
                     Terminal.Rush(ShallowSea3)
     #COmplete quest 19 (ShrimpySitiuation)
     elif quest19 !=2:
         if quest19 ==0:
             toggle_kami(False)
-            if fieldID != ShallowSea3:
+            if field_id != ShallowSea3:
                 Terminal.Rush(ShallowSea3)
             if pos.x != -1131:
                 Character.Teleport(-1131, -325)
@@ -2224,7 +2299,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest19 ==1:
             if Quest.CheckCompleteDemand(ShrimpySitiuation, LittleRichieSS3)==0:
                 toggle_kami(False)
-                if fieldID != ShallowSea3:
+                if field_id != ShallowSea3:
                     Terminal.Rush(ShallowSea3)
                 if pos.x != -1131:
                     Character.Teleport(-1131, -325)
@@ -2232,13 +2307,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(ShrimpySitiuation, LittleRichieSS3)
             else:
                 toggle_kami(True)
-                if fieldID != ShallowSea3:
+                if field_id != ShallowSea3:
                     Terminal.Rush(ShallowSea3)
     #COmplete quest20 (TheSadTaleOfLilWilly)
     elif quest20 !=2:
         if quest20 ==0:
             toggle_kami(False)
-            if fieldID != ShallowSea3:
+            if field_id != ShallowSea3:
                 Terminal.Rush(ShallowSea3)
             if pos.x != -637:
                 Character.Teleport(-637, 116)
@@ -2247,7 +2322,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest20 ==1:
             if Quest.CheckCompleteDemand(TheSadTaleOfLilWilly, SwansonSS3)==0:
                 toggle_kami(False)
-                if fieldID != ShallowSea3:
+                if field_id != ShallowSea3:
                     Terminal.Rush(ShallowSea3)
                 if pos.x != -637:
                     Character.Teleport(-637, 116)
@@ -2255,13 +2330,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(TheSadTaleOfLilWilly, SwansonSS3)
             else:
                 toggle_kami(True)
-                if fieldID != SoftWaveBeach1:
+                if field_id != SoftWaveBeach1:
                     Terminal.Rush(SoftWaveBeach1)
     #Complete quest21 (FerryFrustrations)
     elif quest21 !=2:
         if quest21 ==0:
             toggle_kami(False)
-            if fieldID != ShallowSea3:
+            if field_id != ShallowSea3:
                 Terminal.Rush(ShallowSea3)
             if pos.x != -637:
                 Character.Teleport(-637, 116)
@@ -2270,7 +2345,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest21 ==1:
             if Quest.CheckCompleteDemand(FerryFrustrations, SwansonSS3)==0:
                 toggle_kami(False)
-                if fieldID != ShallowSea3:
+                if field_id != ShallowSea3:
                     Terminal.Rush(ShallowSea3)
                 if pos.x != -637:
                     Character.Teleport(-637, 116)
@@ -2286,7 +2361,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest22 !=2:
         if quest22 ==0:
             toggle_kami(False)
-            if fieldID != ShallowSea3:
+            if field_id != ShallowSea3:
                 Terminal.Rush(ShallowSea3)
             if pos.x != -637:
                 Character.Teleport(-637, 116)
@@ -2294,7 +2369,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Quest.StartQuest(TheOriginalSlimeStar, SwansonSS3)
         elif quest22 ==1:
             toggle_kami(False)
-            if fieldID != HardWaveBeach:
+            if field_id != HardWaveBeach:
                 Terminal.Rush(HardWaveBeach)
             if pos.x != -211:
                 Character.Teleport(-211, -145)
@@ -2304,7 +2379,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
     elif quest23 !=2:
         if quest23 ==0:
             toggle_kami(False)
-            if fieldID != HardWaveBeach:
+            if field_id != HardWaveBeach:
                 Terminal.Rush(HardWaveBeach)
             if pos.x != -211:
                 Character.Teleport(-211, -145)
@@ -2313,7 +2388,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         elif quest23 ==1:
             if Quest.CheckCompleteDemand(GoingTribal, TofuHWB)==0:
                 toggle_kami(False)
-                if fieldID != HardWaveBeach:
+                if field_id != HardWaveBeach:
                     Terminal.Rush(HardWaveBeach)
                 if pos.x != -211:
                     Character.Teleport(-211, -145)
@@ -2321,13 +2396,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(GoingTribal, TofuHWB)
             else:
                 toggle_kami(True)
-                if fieldID != HardWaveBeach:
+                if field_id != HardWaveBeach:
                     Terminal.Rush(HardWaveBeach)
     #Complete quest24 (ChefsSpecial)
     elif quest24 !=2:
         if quest24 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -2335,7 +2410,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Quest.StartQuest(ChefsSpecial, SwansonResort)
         elif quest24 ==1:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -7:
                 Character.Teleport(-7, 116)
@@ -2348,7 +2423,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
             Party.LeaveParty()
         if quest25 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -331:
                 Character.Teleport(-331, 116)
@@ -2358,11 +2433,11 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
             if Quest.CheckCompleteDemand(TerrorFromTheDeep, LittleRichieResort)==0:
                 time.sleep(2)
                 toggle_kami(False)
-                if fieldID == ShadyBeach:
+                if field_id == ShadyBeach:
                     Character.Teleport(381, 125)
                     time.sleep(1)
                     Character.EnterPortal()
-                if fieldID != GoldBeachResort:
+                if field_id != GoldBeachResort:
                     Terminal.Rush(GoldBeachResort)
                 if pos.x != -331:
                     Character.Teleport(-331, 116)
@@ -2370,7 +2445,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                     Quest.CompleteQuest(TerrorFromTheDeep, LittleRichieResort)
             else:
                 toggle_kami(False)
-                if fieldID != ShadyBeach:
+                if field_id != ShadyBeach:
                     Terminal.Rush(HardWaveBeach)
                     if pos.x != 797:
                         Character.Teleport(797, -385)
@@ -2386,7 +2461,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
         print("quest 26")
         if quest26 ==0:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -331:
                 Character.Teleport(-331, 116)
@@ -2394,7 +2469,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 Quest.StartQuest(2976, LittleRichieResort)
         elif quest25 ==1:
             toggle_kami(False)
-            if fieldID != GoldBeachResort:
+            if field_id != GoldBeachResort:
                 Terminal.Rush(GoldBeachResort)
             if pos.x != -331:
                 Character.Teleport(-331, 116)
@@ -2418,7 +2493,6 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level <
     #print("Doing")
     toggle_rush_by_level(False)
     time.sleep(1)
-    fieldID = Field.GetID()
     pos = Character.GetPos()
     #NPC ID TO NPC NAME
 
@@ -2493,125 +2567,125 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level <
     #Complete quest1 (DrakeAttack1)
     if quest1 != 2:
         if quest1 ==0:
-            acceptQuest(DrakeAttack1, Ilji, SleepyWood, fieldID)
+            acceptQuest(DrakeAttack1, Ilji, SleepyWood, field_id)
         elif quest1 ==1:
-            completeQuest(DrakeAttack1, Ilji, SleepyWood, HumidSwamp, fieldID)
+            completeQuest(DrakeAttack1, Ilji, SleepyWood, HumidSwamp, field_id)
         elif quest1 ==1:
             Terminal.Rush(SleepyWood)
     #complete quest2 (DrakeAttack2)
     elif quest2 != 2:
         if quest2 ==0:
-            acceptQuest(DrakeAttack2, Ilji, SleepyWood, fieldID)
+            acceptQuest(DrakeAttack2, Ilji, SleepyWood, field_id)
         elif quest2 ==1:
-            completeQuest(DrakeAttack2, Ilji, SleepyWood, SunlessArea, fieldID)
+            completeQuest(DrakeAttack2, Ilji, SleepyWood, SunlessArea, field_id)
     #complete quest3 (DrakeAttack3)
     elif quest3 != 2:
         if quest3 ==0:
-            acceptQuest(DrakeAttack3, Ilji, SleepyWood, fieldID)
+            acceptQuest(DrakeAttack3, Ilji, SleepyWood, field_id)
         elif quest3 ==1:
-            completeQuest(DrakeAttack3, Ilji, SleepyWood, CaveCliff, fieldID)
+            completeQuest(DrakeAttack3, Ilji, SleepyWood, CaveCliff, field_id)
     #complete quest4 (DrakeAttack4)
     elif quest4 != 2:
         if quest4 ==0:
-            acceptQuest(DrakeAttack4, Ilji, SleepyWood, fieldID)
+            acceptQuest(DrakeAttack4, Ilji, SleepyWood, field_id)
         elif quest4 ==1:
-            completeQuest(DrakeAttack4, Ilji, SleepyWood, ChillyCave, fieldID)
+            completeQuest(DrakeAttack4, Ilji, SleepyWood, ChillyCave, field_id)
     #complete quest5 (DrakeAttack5)
     elif quest5 != 2:
         if quest5 ==0:
-            acceptQuest(DrakeAttack5, Ilji, SleepyWood, fieldID)
+            acceptQuest(DrakeAttack5, Ilji, SleepyWood, field_id)
         elif quest5 ==1:
-            completeQuest(DrakeAttack5, Ilji, SleepyWood, CaveExit, fieldID)
+            completeQuest(DrakeAttack5, Ilji, SleepyWood, CaveExit, field_id)
     #complete quest6 (InjuredAdventurer)
     elif quest6 != 2:
         if quest6 ==0:
-            acceptQuest(InjuredAdventurer, Ilji, SleepyWood, fieldID)
+            acceptQuest(InjuredAdventurer, Ilji, SleepyWood, field_id)
         elif quest6 ==1:
-            completeQuest(InjuredAdventurer, Gwin, AnotherDoor, SleepyWood, fieldID)
+            completeQuest(InjuredAdventurer, Gwin, AnotherDoor, SleepyWood, field_id)
     #complete quest7 (InjuredAdventurer2)
     elif quest7 != 2:
         toggle_HTR(False)
         if quest7 ==0:
-            acceptQuest(InjuredAdventurer2, Gwin, AnotherDoor, fieldID)
+            acceptQuest(InjuredAdventurer2, Gwin, AnotherDoor, field_id)
         elif quest7 ==1:
-            completeQuest(InjuredAdventurer2, Gwin, AnotherDoor, TempleEntrance, fieldID)
+            completeQuest(InjuredAdventurer2, Gwin, AnotherDoor, TempleEntrance, field_id)
     #complete quest8 (InjuredAdventurer3)
     elif quest8 != 2:
         toggle_HTR(False)
         if quest8 ==0:
-            acceptQuest(InjuredAdventurer3, Gwin, AnotherDoor, fieldID)
+            acceptQuest(InjuredAdventurer3, Gwin, AnotherDoor, field_id)
         elif quest8 ==1:
-            completeQuest(InjuredAdventurer3, Gwin, AnotherDoor, CollapsedTemple, fieldID)
+            completeQuest(InjuredAdventurer3, Gwin, AnotherDoor, CollapsedTemple, field_id)
     #complete quest9 (InjuredAdventurer4)
     elif quest9 != 2:
         toggle_HTR(True)
         if quest9 ==0:
-            acceptQuest(InjuredAdventurer4, Gwin, AnotherDoor, fieldID)
+            acceptQuest(InjuredAdventurer4, Gwin, AnotherDoor, field_id)
         elif quest9 ==1:
             if pos.x != -542:
                 Character.Teleport(-525, 1028)
                 time.sleep(1)
                 Character.EnterPortal()
                 time.sleep(1)
-                completeQuest(InjuredAdventurer4, Ilji, SleepyWood, SleepyWood, fieldID)
+                completeQuest(InjuredAdventurer4, Ilji, SleepyWood, SleepyWood, field_id)
     #complete quyest10 (RonniesMarble)
     elif quest10 != 2:
         if quest10 ==0:
-            acceptQuest(RonniesMarble, Ronnie, SilentSwamp, fieldID)
+            acceptQuest(RonniesMarble, Ronnie, SilentSwamp, field_id)
         elif quest10 ==1:
-            completeQuest(RonniesMarble, Ronnie, SilentSwamp, SunlessArea, fieldID)
+            completeQuest(RonniesMarble, Ronnie, SilentSwamp, SunlessArea, field_id)
     #complete quest11 (MysteriousNote)
     elif quest11 != 2:
         toggle_HTR(False)
         if quest11 ==0:
-            acceptQuest(MysteriousNote, TheNote, SunlessArea, fieldID)
+            acceptQuest(MysteriousNote, TheNote, SunlessArea, field_id)
         elif quest11 ==1:
-            completeQuest(MysteriousNote, MuYoung, BottomoftheTemple, BottomoftheTemple, fieldID)
+            completeQuest(MysteriousNote, MuYoung, BottomoftheTemple, BottomoftheTemple, field_id)
     #complete quest12 (Mysteriousnote2)
     elif quest12 != 2:
         if quest12 ==0:
             toggle_kami(False)
-            acceptQuest(MysteriousNote2, MuYoung, BottomoftheTemple, fieldID)
+            acceptQuest(MysteriousNote2, MuYoung, BottomoftheTemple, field_id)
         elif quest12 ==1:
             Character.TalkToNpc(TristansSpirit)
             toggle_kami(True)
-            completeQuest(MysteriousNote2, TristansSpirit, HerosMemory, HerosMemory, fieldID)
+            completeQuest(MysteriousNote2, TristansSpirit, HerosMemory, HerosMemory, field_id)
     #complete quest13 (ASpellThatSealsUpACriticalDanger)
     elif quest13 !=2:
         toggle_HTR(False)
-        if fieldID == HerosMemory:
+        if field_id == HerosMemory:
             if pos.x != -343:
                 toggle_kami(False)
                 Character.Teleport(-343, 190)
             else:
                 Character.EnterPortal()
         elif quest13 ==0:
-            acceptQuest(ASpellThatSealsUpACriticalDanger, InsignificantBeing, AnotherDoor, fieldID)
+            acceptQuest(ASpellThatSealsUpACriticalDanger, InsignificantBeing, AnotherDoor, field_id)
         elif quest13 ==1:
-            completeQuest(ASpellThatSealsUpACriticalDanger, InsignificantBeing, AnotherDoor, ChillyCave, fieldID)
+            completeQuest(ASpellThatSealsUpACriticalDanger, InsignificantBeing, AnotherDoor, ChillyCave, field_id)
     #complete quest14 (ASpellThatSealsUpACriticalDanger2)
     elif quest14 !=2: 
         toggle_HTR(False)
         if quest14 ==0:
-            acceptQuest(ASpellThatSealsUpACriticalDanger2, InsignificantBeing, AnotherDoor, fieldID)
+            acceptQuest(ASpellThatSealsUpACriticalDanger2, InsignificantBeing, AnotherDoor, field_id)
         elif quest14 ==1:
             if Quest.CheckCompleteDemand(ASpellThatSealsUpACriticalDanger2, InsignificantBeing) ==0:
-                completeQuest(ASpellThatSealsUpACriticalDanger2, InsignificantBeing, AnotherDoor, AnotherDoor, fieldID)
+                completeQuest(ASpellThatSealsUpACriticalDanger2, InsignificantBeing, AnotherDoor, AnotherDoor, field_id)
             else:
                 toggle_kami(True)
                 if Inventory.GetItemCount(4031213) < 10:
-                    if fieldID != TempleEntrance:
+                    if field_id != TempleEntrance:
                         Terminal.Rush(TempleEntrance)
                 elif Inventory.GetItemCount(4031214) < 10:
-                    if fieldID != CollapsedTemple:
+                    if field_id != CollapsedTemple:
                         Terminal.Rush(CollapsedTemple)
                 elif Inventory.GetItemCount(4031215) < 10:
-                    if fieldID != ForbiddenAltar:
+                    if field_id != ForbiddenAltar:
                         Terminal.Rush(ForbiddenAltar)
     #complete quest15 (ForestOfTenacity1)
     elif quest15 !=2:
         #print("here")
-        if fieldID == AnotherDoor:
+        if field_id == AnotherDoor:
             if pos.x != -523:
                 Character.Teleport(-523, 1028)
                 time.sleep(1)
@@ -2619,31 +2693,31 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level <
             time.sleep(1)
         if quest15 ==0:
             #print("trying to accept quest")
-            if fieldID == BottomoftheTemple or fieldID == 105100000:
+            if field_id == BottomoftheTemple or field_id == 105100000:
                 toggle_HTR(False)
                 rush(AnotherDoor)
                 time.sleep(2)
             toggle_HTR(True)
-            acceptQuest(ForestOfTenacity1, John, SleepyWood, fieldID)
+            acceptQuest(ForestOfTenacity1, John, SleepyWood, field_id)
         elif quest15 ==1:
             if Quest.CheckCompleteDemand(ForestOfTenacity1, John)==0:
-                completeQuest(ForestOfTenacity1, John, SleepyWood,SleepyWood, fieldID)
+                completeQuest(ForestOfTenacity1, John, SleepyWood,SleepyWood, field_id)
             else:
-                if fieldID != 910530001:
-                    if fieldID != 910530000:
-                        if fieldID != SleepyWood:
+                if field_id != 910530001:
+                    if field_id != 910530000:
+                        if field_id != SleepyWood:
                             Terminal.Rush(SleepyWood)
                         if pos.x != 1038:
                             Character.Teleport(1038, 255)
                             time.sleep(3)
                             Character.TalkToNpc(1061006)
                             time.sleep(2)
-                    elif fieldID == 910530000:
+                    elif field_id == 910530000:
                         if pos.x != -75:
                             Character.Teleport(-75, -2685)
                         else:
                             Character.EnterPortal()
-                if fieldID == 910530001:
+                if field_id == 910530001:
                     if pos.x != 762:
                         Character.Teleport(762, -2325)
                     else:
@@ -2651,26 +2725,26 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level <
     #complete quest16 (ForestOfTenacity2)
     elif quest16 != 2:
         if quest16 ==0:
-            acceptQuest(ForestOfTenacity2, John, SleepyWood, fieldID)
+            acceptQuest(ForestOfTenacity2, John, SleepyWood, field_id)
         if quest16 ==1:
             if Quest.CheckCompleteDemand(ForestOfTenacity2, John) ==0:
-                completeQuest(ForestOfTenacity2, John, SleepyWood,SleepyWood, fieldID)
+                completeQuest(ForestOfTenacity2, John, SleepyWood,SleepyWood, field_id)
             else:
-                if fieldID != 910530101:
-                    if fieldID != 910530100:
-                        if fieldID != SleepyWood:
+                if field_id != 910530101:
+                    if field_id != 910530100:
+                        if field_id != SleepyWood:
                             Terminal.Rush(SleepyWood)
                         if pos.x != 887:
                             Character.Teleport(887, 255)
                         else:
                             Character.TalkToNpc(1061006)
-                    if fieldID == 910530100:
+                    if field_id == 910530100:
                         if pos.x != 1259:
                             Character.Teleport(1259, -2565)
                             time.sleep(1)
                         else:
                             Character.EnterPortal()
-                if fieldID == 910530101:
+                if field_id == 910530101:
                     if pos.x != -434:
                         Character.Teleport(-434, -1935)
                         time.sleep(1)
@@ -2679,19 +2753,19 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level <
     #complete quest17 (ForestOfTenacity3)
     elif quest17 != 2:
         if quest17 ==0:
-            acceptQuest(ForestOfTenacity3, John, SleepyWood, fieldID)
+            acceptQuest(ForestOfTenacity3, John, SleepyWood, field_id)
         elif quest17 ==1:
             if Quest.CheckCompleteDemand(ForestOfTenacity3, John)==0:
-                completeQuest(ForestOfTenacity3, John, SleepyWood, SleepyWood, fieldID)
+                completeQuest(ForestOfTenacity3, John, SleepyWood, SleepyWood, field_id)
                 if quest17 == 2:
                     toggle_HTR(True)
                     toggle_rush_by_level(True)
                     toggle_kami(True)
             else:
-                if fieldID != 910530202:
-                    if fieldID != 910530201:
-                        if fieldID != 910530200:
-                            if fieldID != SleepyWood:
+                if field_id != 910530202:
+                    if field_id != 910530201:
+                        if field_id != 910530200:
+                            if field_id != SleepyWood:
                                 Terminal.Rush(SleepyWood)
                             if pos.x != 887:
                                 Character.Teleport(887, 255)
@@ -2699,21 +2773,21 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level <
                             else:
                                 Character.TalkToNpc(1061006)
                                 time.sleep(2)
-                        if fieldID == 910530200:
+                        if field_id == 910530200:
                             if pos.x != 1523:
                                 Character.Teleport(1523, -1905)
                                 time.sleep(1)
                             else:
                                 Character.EnterPortal()
                                 time.sleep(1)
-                    if fieldID == 910530201:
+                    if field_id == 910530201:
                         if pos.x != 255:
                             Character.Teleport(255, -1545)
                             time.sleep(1)
                         else:
                             Character.EnterPortal()
                             time.sleep(1)
-                if fieldID == 910530202:
+                if field_id == 910530202:
                     if pos.x != 1009:
                         Character.Teleport(1009, -3345)
                         time.sleep(1)
