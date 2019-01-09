@@ -1507,7 +1507,7 @@ if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == Entran
             time.sleep(0.5)
             Character.EnterPortal()
 
-if KillZakumDaily and level >= 110 and not SCLib.GetVar("DoingMP") and not accountData["cubing_done"] and accountData['phase_one']:
+if KillZakumDaily and level >= 110 and not SCLib.GetVar("DoingMP") and accountData['phase_one']:
     print("Doing Zakum")
     Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
     if Terminal.GetCheckBox("Kami Vac"):
