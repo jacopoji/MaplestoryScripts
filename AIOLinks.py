@@ -869,6 +869,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 4210: #kanna 2nd
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetSpinBox("charm_delay",100)
@@ -877,6 +878,7 @@ def toggleAttack(on):
         Terminal.SetSpinBox("SkillInjection", 100)
         Terminal.SetLineEdit("SISkillID","42001006")
         Terminal.SetCheckBox("Skill Injection",True)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 4211 or job ==4212: #kanna 3rd + 4th
         Terminal.SetSpinBox("charm_delay",100)
         Terminal.SetCheckBox("charm_fma",on)
@@ -884,7 +886,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
         Terminal.SetCheckBox("Auto Attack",on)
         Terminal.SetSpinBox("autoattack_spin",7500)
-        Terminal.SetComboBox("AttackKey",36)
+        Terminal.SetComboBox("AttackKey",33)
         Terminal.SetCheckBox("Skill Injection",False)
         Key.Set(0x47,1,42111003)
     elif job == 2700: #lumi first job
@@ -898,6 +900,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job in LuminousJobs and field_id in curbrockhideout:
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,27001201)
@@ -906,6 +909,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 2710: #lumi second job
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         if Character.HasBuff(2,20040217): #use dark magic
@@ -917,6 +921,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 2711: #lumi third job
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         if Character.HasBuff(2,20040216): #Light Mode
@@ -930,6 +935,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 2712: #lumi fourth job
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         if Character.HasBuff(2,20040216): #Light Mode
@@ -943,6 +949,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 3101: #DA first job
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31011000)
@@ -951,6 +958,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job in DemonAvengerJobs and field_id in curbrockhideout:
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31011000)
@@ -959,6 +967,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 3120: #DA 2nd
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31201000)
@@ -967,6 +976,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 3121 and job == 3122: #DA third job and fourth job
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31211000)
@@ -975,6 +985,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 3100 or job == 3110 or job == 3111: #DS first - third job
         #Key.Set(attack_key,1,31000004)31001008
         Terminal.SetLineEdit("SISkillID","31001008")
@@ -998,6 +1009,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job in MercedesJobs and field_id in curbrockhideout:
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23001000)
@@ -1006,6 +1018,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job ==2310: #Mercedes 2nd
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23101000)
@@ -1014,6 +1027,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job ==2311 or job == 2312: #Mercedes 3rd + 4th
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23111000)
@@ -1022,6 +1036,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
     elif job == 4100: #Hayato 1st 41001004
         Terminal.SetLineEdit("SISkillID","41001004")
         Terminal.SetCheckBox("Skill Injection", on)
