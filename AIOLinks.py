@@ -465,7 +465,23 @@ def DASecond():
                 teleport_enter(109,-14)
             else:
                 Quest.CompleteQuest(23218, 2153006)
-        
+def DAThird():
+    CalmBeforeTheStorm = 23221
+    quest = Quest.GetQuestState(CalmBeforeTheStorm)
+    if quest != 2:
+        if quest == 0:
+            Quest.StartQuest(CalmBeforeTheStorm,2151009)
+        elif quest == 1:
+            if Quest.CheckCompleteDemand(CalmBeforeTheStorm,2151009) == 0:
+                if field_id != 310010000:
+                    Terminal.Rush(310010000)
+                    print("Rush to hide")
+                else:
+                    Quest.CompleteQuest(CalmBeforeTheStorm,2151009)
+                    toggle_rush_by_level(True)
+            else:
+                toggle_kami(True)
+                toggleAttack(True)
 def MercedesFirst():
     Quest.StartQuest(29952, 1033210)
 
@@ -2742,6 +2758,9 @@ elif (job == 3121 or job == 3111) and field_id == 931050110 and level == 60:
     teleport_enter(111,-14)
     toggle_rush_by_level(True)
     toggle_kami(True)
+elif (job == 3121 or job == 3111) and level >= 100:
+    toggle_rush_by_level(False)
+    DAThird()
 elif job == 2300 and level <= 13:
     quest = Quest.GetQuestState(29952)
     if quest == 0:
