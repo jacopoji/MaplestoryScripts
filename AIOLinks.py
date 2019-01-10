@@ -354,9 +354,6 @@ def DAFirst():
     if Quest.GetQuestState(23210) !=2:
         if Quest.GetQuestState(23210) == 0:
             Quest.StartQuest(23210, 2151000)
-        elif Quest.GetQuestState(23210) == 1:
-            print("Done fighting")
-            Quest.CompleteQuest(23210, 2153006)
         elif Quest.CheckCompleteDemand(23210, 2153006) != 0:
             #need to fight the cat
             print("Entering cat fighting map")
@@ -368,6 +365,9 @@ def DAFirst():
             else:
                 Terminal.SetCheckBox("Kami Vac",True)
                 toggleAttack(True)
+        else:
+            print("Done fighting")
+            Quest.CompleteQuest(23210, 2153006)
     elif Quest.GetQuestState(23211) !=2:
         print("Second quest")
         if Quest.GetQuestState(23211) == 0:
@@ -2135,6 +2135,14 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection", on)
+    elif job == 15500 or job == 15510 or job == 15511: #Ark 1st + 2nd + 3rd 155001100
+        Terminal.SetCheckBox("Skill Injection", True)
+        Terminal.SetCheckBox("General FMA", False)
+        Terminal.SetLineEdit("SISkillID", "155001100")
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetSlider("sliderMP", 10)
+        Terminal.SetSpinBox("KamiLoot", 10)
+        Key.Set(0x22, 2, 2001506)
     elif job == 6500: #AB 1st
         Terminal.SetLineEdit("SISkillID","65001100")
         Terminal.SetCheckBox("Auto Attack", False)
