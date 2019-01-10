@@ -2323,15 +2323,15 @@ elif job == 2711 and level ==100:
     if Quest.GetQuestState(25676) !=2 and Character.GetLevel() >= 100:
         print("Getting Gold Emblem")
         Quest.StartQuest(25676, 1032209)
-elif job == 3101 or job ==3100 and level >= 30:
+elif (job == 3101 or job ==3100) and level >= 30:
     #print("Completing Demon Avenger first job")
     toggle_rush_by_level(False)
     DAFirst()
-elif job == 3120 or job == 3110 and level >= 60:
+elif (job == 3120 or job == 3110) and level >= 60:
     #print("Completing Demon Avenger second job")
     toggle_rush_by_level(False)
     DASecond()
-elif job == 3121 or job == 3111 and field_id == 931050110 and level == 60:
+elif (job == 3121 or job == 3111) and field_id == 931050110 and level == 60:
     teleport_enter(111,-14)
     toggle_rush_by_level(True)
     toggle_kami(True)
