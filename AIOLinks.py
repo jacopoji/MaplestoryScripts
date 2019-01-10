@@ -2296,7 +2296,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 3121 and job == 3122: #DA third job and fourth job
+    elif job == 3121 or job == 3122: #DA third job and fourth job
         Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31211000)
         Terminal.SetCheckBox("Skill Injection", False)
