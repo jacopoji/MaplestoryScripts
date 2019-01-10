@@ -668,7 +668,7 @@ def IlliumFirst():
     festival4 = Quest.GetQuestState(34816)
     jobadv = Quest.GetQuestState(34817)
     escape = Quest.GetQuestState(34718)
-    while Terminal.IsRushing() 
+    while Terminal.IsRushing():
         if field_id == 402000521 or field_id == 402000524:
             Character.EnterPortal()
             Key.Press(0x26) #up key
