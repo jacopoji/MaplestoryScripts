@@ -866,7 +866,7 @@ def IlliumFirst():
         if festival2 == 0:
             rush(402000529)
             Quest.StartQuest(34814, 3001339)
-            toggle_kami(True)
+            toggle_kami(False)
             time.sleep(3)
          
         elif Quest.CheckCompleteDemand(34814, 3001339) != 0:
@@ -974,6 +974,7 @@ def IlliumSecond():
     lookback = Quest.GetQuestState(34820)
     if escape != 2:
         rush(940202032)
+        toggle_kami(False)
         Character.MoveX(332, 10000)
         Quest.CompleteQuest(34818, 3001344)
         time.sleep(10)
@@ -1015,6 +1016,7 @@ def IlliumSecond():
             print("Completed all Illium Quests and now returning control to rush by level")
             time.sleep(1)
             toggle_rush_by_level(True)
+            
 def CadenaFirst():
     quest1 = Quest.GetQuestState(34600)
     quest2 = Quest.GetQuestState(34601)
