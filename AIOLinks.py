@@ -565,12 +565,12 @@ def IlliumZero():
 
     if level == 1 and field_id == 940202011:
         Character.Teleport(-3400, 79)
-        Character.MoveX(-3000, 5000)
+        Character.Teleport(-3000, 5000)
      
     if field_id == 940202013 or field_id == 940202014 or field_id == 940202015:
         mob = Field.FindMob(2400418)
         if mob.valid:
-            Character.MoveX(mob.x, 20000)
+            Character.Teleport(mob.x, 20000)
             Character.BasicAttack()
         else:
             time.sleep(1)
@@ -610,7 +610,7 @@ def IlliumZero():
             if field_id == 940202015:
                 mob = Field.FindMob(2400418)
                 if mob.valid:
-                    Character.MoveX(mob.x, 10000)
+                    Character.Teleport(mob.x, 10000)
                     Character.BasicAttack()
                 else:
                     Character.Teleport(832,813)
@@ -622,10 +622,10 @@ def IlliumZero():
                 item = Field.FindItem(4036162)
                 if item.valid:
                     if item.y in range(pos.y - 50, pos.y + 50):
-                        Character.MoveX(item.x, 20000)
+                        Character.Teleport(item.x, 20000)
                         Character.LootItem()
                     elif item.y < 600:
-                        Character.MoveX(-146, 20000)
+                        Character.Teleport(-146, 20000)
                         time.sleep(2)
                         Character.Jump()
                         Character.MoveY(584, 3000)
@@ -634,10 +634,10 @@ def IlliumZero():
                         Character.JumpDown()
                 elif mob.valid:
                     if mob.y in range(pos.y - 50, pos.y + 50):
-                        Character.MoveX(mob.x, 10000)
+                        Character.Teleport(mob.x, 10000)
                         Character.BasicAttack()
                     elif mob.y < 600:
-                        Character.MoveX(-146, 20000)
+                        Character.Teleport(-146, 20000)
                         time.sleep(2)
                         Character.Jump()
                         Character.MoveY(584, 1000)
@@ -647,7 +647,7 @@ def IlliumZero():
  
         else:
             Quest.CompleteQuest(34801, 3001330)
-            Character.MoveX(803, 50000)
+            Character.Teleport(803, 50000)
             Character.EnterPortal()
             toggle_kami(True)
 
@@ -700,7 +700,7 @@ def IlliumFirst():
             rush(402000531)
             if pos.x not in range(440,470):
                 toggle_kami(False)
-                Character.MoveX(461, 20000)
+                Character.Teleport(461, 20000)
      
         else:
             rush(402000527)
@@ -738,7 +738,7 @@ def IlliumFirst():
             else:
                 time.sleep(1)
                 # remove these lines if you're using mob vac
-                Character.MoveX(1500, 50000)
+                Character.Teleport(1500, 50000)
              
         else:
             rush(402000530)
@@ -763,7 +763,7 @@ def IlliumFirst():
          
         elif Quest.CheckCompleteDemand(34807, 3001337) != 0:
             rush(402000534)
-            Character.MoveX(500, 10000)
+            Character.Teleport(500, 10000)
          
         else:
             rush(402000532)
@@ -815,7 +815,7 @@ def IlliumFirst():
          
         elif Quest.CheckCompleteDemand(34811, 3001334) != 0:
             toggle_kami(False)
-            Character.MoveX(0, 10000)
+            Character.Teleport(0, 10000)
             rush(402000535)
          
         else:
@@ -852,7 +852,7 @@ def IlliumFirst():
          
         elif Quest.CheckCompleteDemand(34813, 3001336) != 0:
             rush(402000502)
-            Character.MoveX(1309, 10000)
+            Character.Teleport(1309, 10000)
          
         else:
             rush(402000501)
@@ -922,7 +922,7 @@ def IlliumFirst():
                 mob = Field.FindMob(2400420)
                 if mob.valid:
                     time.sleep(20)
-                    Character.MoveX(-500, 20000)
+                    Character.Teleport(-500, 20000)
                     time.sleep(1)
                 else:
                     Character.Teleport(1, -683)
@@ -947,7 +947,7 @@ def IlliumFirst():
                     Character.EnterPortal()
                     Character.EnterPortal()
             elif field_id in range(940202300, 940202399):
-                Character.MoveX(35, 10000)
+                Character.Teleport(35, 10000)
                 Character.JumpDown()
                 time.sleep(1)
                 mob = Field.FindMob(2400421)
@@ -965,7 +965,7 @@ def IlliumFirst():
             time.sleep(1)
     elif escape != 2:
         rush(940202032)
-        Character.MoveX(915, 10000)
+        Character.Teleport(915, 10000)
         Quest.CompleteQuest(34718, 3001344)
         time.sleep(10)
 
@@ -975,29 +975,29 @@ def IlliumSecond():
     if escape != 2:
         rush(940202032)
         toggle_kami(False)
-        Character.MoveX(332, 10000)
+        Character.Teleport(332, 10000)
         Quest.CompleteQuest(34818, 3001344)
         time.sleep(10)
      
     elif field_id == 940202032 and escape == 2:
         Quest.StartQuest(34860, 0)
-        Character.MoveX(332, 10000)
+        Character.Teleport(332, 10000)
         Character.EnterPortal()
 
     elif field_id in range(940202500, 940202599):
-        Character.MoveX(25, 10000)
+        Character.Teleport(25, 10000)
         Character.EnterPortal()
 
     elif field_id in range(940202600, 940202699): 
-        Character.MoveX(25, 10000)
+        Character.Teleport(25, 10000)
         Character.EnterPortal()
          
     elif field_id in range(940202700, 940202799):
-        Character.MoveX(25, 10000)
+        Character.Teleport(25, 10000)
         Character.EnterPortal()
      
     elif field_id == 940202036:
-        Character.MoveX(0, 200)
+        Character.Teleport(0, 200)
  
     elif field_id == 940202037:
         time.sleep(4)
