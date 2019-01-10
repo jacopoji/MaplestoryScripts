@@ -2753,7 +2753,9 @@ elif job == 15210:
 elif job == 6400:
     print("Completing Cadena First Job and Second Job")
     CadenaFirst()
-elif job == :
+elif job == 15001:
+    if field_id == 402000615:
+        Quest.StartQuest(34901, 0)
     print("Starting Ark job")
 elif job == 15500:
     print("Completing Ark First Job")
