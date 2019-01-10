@@ -674,8 +674,6 @@ def IlliumFirst():
             Key.Press(0x26) #up key
             Character.EnterPortal()
             Key.Press(0x26) #up key
-        else:
-            time.sleep(1)
     if field_id == 402000526 and specialActivity != 2:
         Quest.StartQuest(34806, 0)
  
@@ -934,6 +932,7 @@ def IlliumFirst():
                     Character.Teleport(-500, 20000)
                     time.sleep(1)
                 else:
+                    toggle_kami(False)
                     Character.Teleport(1, -683)
                     time.sleep(2)
                     Character.EnterPortal()
@@ -951,11 +950,13 @@ def IlliumFirst():
                 if mob.valid or mob2.valid:
                     time.sleep(1)
                 else:
+                    toggle_kami(False)
                     Character.Teleport(-583, -31)
                     time.sleep(2)
                     Character.EnterPortal()
                     Character.EnterPortal()
             elif field_id in range(940202300, 940202399):
+                toggle_kami(False)
                 Character.Teleport(35, 10000)
                 Character.JumpDown()
                 time.sleep(1)
@@ -963,10 +964,12 @@ def IlliumFirst():
                 if mob.valid:
                     time.sleep(1)
                 else:
+                    toggle_kami(False)
                     Character.Teleport(1,-638)
                     time.sleep(1)
                     Character.EnterPortal()
             elif field_id in range(940202400, 940202499):
+                toggle_kami(False)
                 Character.Teleport(-1, -638)
                 time.sleep(1)
                 Character.EnterPortal()
