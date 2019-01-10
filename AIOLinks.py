@@ -668,7 +668,9 @@ def IlliumFirst():
     festival4 = Quest.GetQuestState(34816)
     jobadv = Quest.GetQuestState(34817)
     escape = Quest.GetQuestState(34718)
- 
+    if Terminal.IsRushing():
+        Character.EnterPortal()
+        Key.Press(0x26) #up key
     if field_id == 402000526 and specialActivity != 2:
         Quest.StartQuest(34806, 0)
  
@@ -781,6 +783,7 @@ def IlliumFirst():
             Quest.StartQuest(34809, 0)
             while True:
                 if GameState.IsInGame():
+                    toggle_kami(True)
                     rush(402000513)
                     cries = Quest.GetQuestState(34809)
                     after = Quest.GetQuestState(34810)
@@ -806,6 +809,7 @@ def IlliumFirst():
              
         else:
             rush(402000526)
+            toggle_kami(False)
             Quest.CompleteQuest(34808, 3001335)
             rush(402000530)
  
