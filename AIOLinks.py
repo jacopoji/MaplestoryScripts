@@ -555,6 +555,7 @@ def IlliumZero():
         time.sleep(1)
 
     if level == 1 and field_id == 940202009:
+        toggle_kami(False)
         Character.Teleport(-3319, 79)
         time.sleep(2)
      
@@ -576,6 +577,7 @@ def IlliumZero():
             Character.Teleport(832,813)
             time.sleep(1)
             Character.EnterPortal()
+            toggle_kami(True)
          
     # some questing begins here
     preparations = Quest.GetQuestState(34800)
@@ -600,6 +602,7 @@ def IlliumZero():
             time.sleep(1)
         elif Quest.CheckCompleteDemand(34801, 3001330) != 0:
             if field_id == 940202012:
+                toggle_kami(False)
                 Character.Teleport(13,813)
                 time.sleep(1)
                 Character.EnterPortal()
@@ -646,6 +649,7 @@ def IlliumZero():
             Quest.CompleteQuest(34801, 3001330)
             Character.MoveX(803, 50000)
             Character.EnterPortal()
+            toggle_kami(True)
 
 def IlliumFirst():
     grossular = Quest.GetQuestState(34802)
@@ -695,6 +699,7 @@ def IlliumFirst():
         elif Quest.CheckCompleteDemand(34803, 3001333) != 0:
             rush(402000531)
             if pos.x not in range(440,470):
+                toggle_kami(False)
                 Character.MoveX(461, 20000)
      
         else:
@@ -809,6 +814,7 @@ def IlliumFirst():
             rush(402000530)
          
         elif Quest.CheckCompleteDemand(34811, 3001334) != 0:
+            toggle_kami(False)
             Character.MoveX(0, 10000)
             rush(402000535)
          
@@ -860,6 +866,7 @@ def IlliumFirst():
         if festival2 == 0:
             rush(402000529)
             Quest.StartQuest(34814, 3001339)
+            toggle_kami(True)
             time.sleep(3)
          
         elif Quest.CheckCompleteDemand(34814, 3001339) != 0:
