@@ -123,6 +123,8 @@ if SCLib.GetVar("zakum_retry_count") is None:
     SCLib.PersistVar("zakum_retry_count",0)
 if SCLib.GetVar("DoingBG") is None:
     SCLib.PersistVar("DoingBG",False)
+if SCLib.GetVar("DoingCurbrock") is None:
+    SCLib.PersistVar("DoingCurbrock",False)
 HasSpawned = SCLib.GetVar("HasSpawned")
 NowLockedVar = SCLib.GetVar("NowLockedVar")
 KillZakumDaily = SCLib.GetVar("KillZakumDaily")
@@ -201,12 +203,24 @@ def KillPersistVarThred():
 
 SCHotkey.RegisterKeyEvent(HotKey, KillPersistVarThred) #F11
 
+
+def teleport_enter(x,y):
+    time.sleep(1)
+    Character.Teleport(x,y)
+    time.sleep(1)
+    Character.EnterPortal()
+    time.sleep(1)
+
 def toggle_rush_by_level(indicator):
     Terminal.SetCheckBox("Rush By Level",indicator)
     Terminal.SetRushByLevel(indicator)
 
 def toggle_kami(indicator):
     Terminal.SetCheckBox("Kami Vac",indicator)
+
+def toggle_loot(indicator):
+    Terminal.SetCheckBox("Kami Loot",indicator)
+    Terminal.SetCheckBox("Auto Loot",indicator)
 
 def toggle_HTR(indicator):
     Terminal.SetCheckBox("map/maprusher/hypertelerock",indicator)
@@ -215,7 +229,38 @@ def acceptQuest(quest, startnpc, startmap, currentmap):
     toggle_kami(False)
     print("Accepting quest:{} from NPC:{}".format(quest,startnpc))
     if currentmap != startmap:
-        Terminal.Rush(startmap)
+        field_id = Field.GetID()
+        if startmap == 100030300:
+            print("Rushing to Farm Center")
+            while field_id != 100030300:
+                field_id = Field.GetID()
+                if field_id == 100030320: #-117 35
+                    Terminal.StopRush()
+                    toggleAttack(False)
+                    teleport_enter(-117,35)
+                elif field_id == 100030310:
+                    Terminal.StopRush()
+                    toggleAttack(False)
+                    teleport_enter(1062,-25)
+                else:
+                    Terminal.Rush(startmap)
+        elif startmap == 100030101:
+            print("Rushing to living room")
+            while field_id != 100030101:
+                Terminal.Rush(100030102)
+                time.sleep(2)
+                field_id = Field.GetID()
+                if pos.x != -1006 and field_id == 100030102:
+                    toggleAttack(False)
+                    teleport_enter(-1006,-32)
+                    break
+                elif pos.x == -1006:
+                    toggleAttack(False)
+                    teleport_enter(-1006,-32)
+                    break
+        else:
+            Terminal.Rush(startmap)
+            time.sleep(2)
     questnpc = Field.FindNpc(startnpc)
     if questnpc.valid:
         if pos.x != questnpc.x:
@@ -223,12 +268,42 @@ def acceptQuest(quest, startnpc, startmap, currentmap):
             Character.Teleport(questnpc.x, questnpc.y)
         else:
             Quest.StartQuest(quest, startnpc)
+    elif startnpc == 1013000:
+        Quest.StartQuest(quest, startnpc)
 def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
     print("Completing quest:{} at NPC:{} in map:{}".format(quest,endnpc,endmap))
     if Quest.CheckCompleteDemand(quest, endnpc) ==0:
         if currentmap != endmap:
-            Terminal.Rush(endmap)
-            time.sleep(2)
+            field_id = Field.GetID()
+            if endmap == 100030101 or grindmap == 100030101:
+                print("Rushing to living room")
+                while field_id != 100030101:
+                    Terminal.Rush(100030102)
+                    time.sleep(2)
+                    field_id = Field.GetID()
+                    if pos.x != -1006 and field_id == 100030102:
+                        toggleAttack(False)
+                        teleport_enter(-1006,-32)
+                        break
+                    elif pos.x == -1006:
+                        toggleAttack(False)
+                        teleport_enter(-1006,-32)
+                        break
+            elif endmap == 100030300:
+                print("Rushing to Farm Center")
+                while field_id != 100030300:
+                    field_id = Field.GetID()
+                    if field_id == 100030320: #-117 35
+                        toggleAttack(False)
+                        teleport_enter(-117,35)
+                    elif field_id == 100030310:
+                        toggleAttack(False)
+                        teleport_enter(1062,-25)
+                    else:
+                        Terminal.Rush(endmap)
+            else:
+                Terminal.Rush(endmap)
+                time.sleep(2)
         questnpc = Field.FindNpc(endnpc)
         if questnpc.valid:
             if pos.x != questnpc.x:
@@ -237,9 +312,13 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
                 Character.Teleport(questnpc.x, questnpc.y)
             else:
                 Quest.CompleteQuest(quest, endnpc)
+        elif endnpc == 1013000:
+            print("Quest npc is Mir")
+            Quest.CompleteQuest(quest, endnpc)
     else:
         toggle_kami(True)
         if currentmap != grindmap:
+            print("Rushing to grindmap")
             Terminal.Rush(grindmap)
 def mapID(id):
     if type(id) is int:
@@ -258,13 +337,6 @@ def rush(mapid):
 def toHex(val, nbits):
     return ((val + (1 << nbits)) % (1 << nbits))
 
-
-def teleport_enter(x,y):
-    time.sleep(1)
-    Character.Teleport(x,y)
-    time.sleep(1)
-    Character.EnterPortal()
-    time.sleep(1)
 
 def EnterPortal(name):
     portal = Field.FindPortal(name)
@@ -805,6 +877,7 @@ def IlliumFirst():
             while True:
                 if GameState.IsInGame():
                     toggle_kami(True)
+                    print("Turning Kami on")
                     rush(402000513)
                     cries = Quest.GetQuestState(34809)
                     after = Quest.GetQuestState(34810)
@@ -1003,33 +1076,51 @@ def IlliumSecond():
     escape = Quest.GetQuestState(34818)
     lookback = Quest.GetQuestState(34820)
     if escape != 2:
+        print("Escape")
         rush(940202032)
         toggle_kami(False)
         Character.Teleport(332, 10000)
         Quest.CompleteQuest(34818, 3001344)
+        toggle_kami(True)
         time.sleep(10)
      
     elif field_id == 940202032 and escape == 2:
+        print("2")
+        toggle_kami(False)
         Quest.StartQuest(34860, 0)
-        Character.Teleport(332, 10000)
+        time.sleep(1)
+        Key.Press(0x08)
+        time.sleep(1)
         Character.EnterPortal()
 
     elif field_id in range(940202500, 940202599):
-        Character.Teleport(25, 10000)
+        print("3")
+        toggle_kami(False)
+        Key.Press(0x08)
+        time.sleep(1)
         Character.EnterPortal()
 
     elif field_id in range(940202600, 940202699): 
-        Character.Teleport(25, 10000)
+        toggle_kami(False)
+        print("4")
+        Key.Press(0x08)
+        time.sleep(1)
         Character.EnterPortal()
          
     elif field_id in range(940202700, 940202799):
-        Character.Teleport(25, 10000)
+        print("5")
+        toggle_kami(False)
+        Key.Press(0x08)
+        time.sleep(1)
         Character.EnterPortal()
      
     elif field_id == 940202036:
-        Character.Teleport(0, 200)
+        print("6")
+        toggle_kami(False)
+        Character.Teleport(-1016, 813)
  
     elif field_id == 940202037:
+        toggle_kami(False)
         time.sleep(4)
         Character.Teleport(803,813)
         time.sleep(1)
@@ -1782,6 +1873,7 @@ def ArkFourth():
             time.sleep(5)
 
 def EvanFirst():
+    toggle_rush_by_level(False)
     StrangeDream = 22000
     FeedingBullDog = 22001
     SandwichForBreakfast = 22002
@@ -1844,10 +1936,25 @@ def EvanFirst():
     largeforesttrail2= 100030320
     lushforest = 900020100
     lostforest = 900020220
+    if field_id == 900010000:
+        toggle_kami(False)
+        Key.Press(0x08)
+        time.sleep(1)
+        Character.EnterPortal()
+    elif field_id == 900010100:
+        toggle_kami(False)
+        Key.Press(0x08)
+        time.sleep(1)
+        Character.EnterPortal()
+    elif field_id == 900010200:
+        toggle_kami(False)
+        Character.Teleport(-455,35)
+        time.sleep(1)
+        Character.TalkToNpc(1013001)
     if quest1 != 2:
         if quest1 == 0:
             toggle_kami(False)
-            acceptQuest(StrangeDream,Utah,frontyard,field_id)
+            acceptQuest(StrangeDream,Mom,livingroom,field_id)
         elif quest1 == 1:
             completeQuest(StrangeDream,Utah,frontyard,frontyard,field_id)
     elif quest2 != 2:
@@ -1863,6 +1970,7 @@ def EvanFirst():
             sandwich = Inventory.FindItemByID(2022620)
             if sandwich.valid:
                 Inventory.UseItem(2022620)
+            print("Doing sandwich quest")
             completeQuest(SandwichForBreakfast,Mom,livingroom,livingroom,field_id)
     elif quest4 != 2:
         if quest4 == 0:
@@ -1885,16 +1993,31 @@ def EvanFirst():
                         Character.Teleport(piglet.x,piglet.y)
                         time.sleep(1)
                         Character.TalkToNpc(1013200)
-                elif field_id == lostforest:
-                    dragnest = Field.FindNpc(DragonNest)
-                    if piglet.valid:
-                        toggle_kami(False)
-                        Character.Teleport(dragnest.x,dragnest.y)
                         time.sleep(1)
-                        Character.TalkToNpc(DragonNest)
-                else:
-                    Terminal.Rush(lushforest)
+                        Character.Teleport(piglet.x - 200,piglet.y + 200)
+                elif field_id == farmcentre:
+                    #Terminal.Rush(lushforest)
+                    teleport_enter(181,-865)
                     print("This part needs to be changed") #
+            if field_id == lostforest:
+                dragnest = Field.FindNpc(DragonNest)
+                if dragnest.valid:
+                    toggle_kami(False)
+                    Character.Teleport(dragnest.x,dragnest.y)
+                    time.sleep(1)
+                    Character.TalkToNpc(DragonNest)
+            elif field_id == 900020200 or field_id == 900020210:
+                toggle_kami(False)
+                Key.Press(0x08)
+                time.sleep(1)
+                Character.EnterPortal()
+            elif field_id == lushforest:
+                toggle_kami(False)
+                Key.Press(0x08)
+                time.sleep(1)
+                Character.EnterPortal()
+            else:
+                completeQuest(RescuingThePiglet,Dad,farmcentre,farmcentre,field_id)
     elif quest7 != 2:
         if quest7 == 0:
             acceptQuest(ReturningTheEmptyLunchBox,Dad,farmcentre,field_id)
@@ -1908,7 +2031,7 @@ def EvanFirst():
                 Terminal.Rush(frontyard)
             elif field_id == frontyard:
                 npc_hen = Field.FindNpc(Hen)
-                if npc_hen.valid:
+                if npc_hen.valid and Quest.CheckCompleteDemand(CollectingEggs,Utah) != 0:
                     toggle_kami(False)
                     Character.Teleport(npc_hen.x,npc_hen.y)
                     time.sleep(1)
@@ -1936,7 +2059,7 @@ def EvanFirst():
             completeQuest(BabyDragonAwakens,Mir,farmcentre,largeforesttrail,field_id)
     elif quest13 != 2:
         if quest13 == 0:
-            acceptQuest(HungryBabyDragon,Mir,farmcentre,field_id)
+            acceptQuest(HungryBabyDragon,Mir,field_id,field_id)
         elif quest13 == 1:
             completeQuest(HungryBabyDragon,Dad,farmcentre,farmcentre,field_id)
     elif quest14 != 2:
@@ -1944,6 +2067,7 @@ def EvanFirst():
             acceptQuest(ABiteOfHay,Dad,farmcentre,field_id)
         elif quest14 == 1:
             toggle_kami(False)
+            toggle_loot(True)
             haystacks = Field.GetReactors()
             for haystack in haystacks:
                 pos = Character.GetPos()
@@ -2008,9 +2132,20 @@ def EvanFirst():
             acceptQuest(LetterDelivery,Dad,farmcentre,field_id)
         elif quest22 == 1:
             completeQuest(LetterDelivery,ChiefStan,henesys,henesys,field_id)
+            if field_id == henesys:
+                Character.Teleport(3350,124)
+                time.sleep(1)
         if Quest.GetQuestState(LetterDelivery) == 2:
             toggle_rush_by_level(True)
             toggle_kami(True)
+    magicwand = Inventory.FindItemByID(1372043)
+    if magicwand.valid:
+        Inventory.SendChangeSlotPositionRequest(1,magicwand.pos,weapon_slot,-1)
+    if Quest.GetQuestState(LetterDelivery) == 2:
+        toggle_rush_by_level(True)
+        toggle_kami(True)
+        toggle_loot(False)
+
 ################################################################
 def id2str(jobid):
     if jobid in LuminousJobs:
@@ -2760,8 +2895,9 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
-        Terminal.SetCheckBox("General FMA",True)
+        Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",on)
+        Terminal.SetCheckBox("bot/illium/summon_control",on)
+        Terminal.SetCheckBox("General FMA",on)
     elif job == 6400 or job == 6410 or job == 6411: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","64001006")
@@ -2793,6 +2929,16 @@ def toggleAttack(on):
         Terminal.SetSpinBox("SkillInjection",50)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", on)
+    elif job == 2001: #Evan pre 1st job
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,22001010)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",1)
+        Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 2200: #Evan 1st 22001010 AA
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,22001010)
@@ -2965,7 +3111,7 @@ if job == 4200 and level < 13:
     print("Completing Kanna First job")
     kannaFirst()
 
-if job == 4200 and level >= 30:
+elif job == 4200 and level >= 30:
     print("Completing Kanna Second job")
     second_job_quest = Quest.GetQuestState(57458)
     if second_job_quest == 0:
@@ -2973,7 +3119,7 @@ if job == 4200 and level >= 30:
     toggle_rush_by_level(True)
     toggle_kami(True)
 
-if job == 2700 and level == 10:
+elif job == 2700 and level == 10:
     print("Completing Lumi first job")
     LumiFirst()
     toggle_rush_by_level(True)
@@ -3040,7 +3186,7 @@ elif job == 15000:
 elif job == 15200:
     print("Completing Illium First Job")
     IlliumFirst()
-elif job == 15210:
+elif job == 15210 and Quest.GetQuestState(34820) != 2:
     print("Completing Illium Second Job")
     IlliumSecond()
 elif job == 6400:
@@ -3059,6 +3205,9 @@ elif job == 15510:
 elif job == 15511 and level >= 100:
     print("Completing Ark Fourth Job")
     ArkFourth()
+elif (job == 2001 or job == 2200) and Quest.GetQuestState(22510) != 2:
+    print("Completing Evan prequests")
+    EvanFirst()
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
     #print("Getting hyper rock")
@@ -3095,6 +3244,7 @@ elif Quest.GetQuestState(61590) ==2:
 def getBoogie():
     if Character.IsOwnFamiliar(9960098) == False:
         # sleep 1 second every loop
+        print("Getting Boogie")
         time.sleep(1)
         toggle_rush_by_level(False)
         item = Inventory.FindItemByID(2870098)
@@ -3121,12 +3271,13 @@ def getBoogie():
             if not Terminal.GetCheckBox("Familiar 0"):
                 Terminal.SetComboBox("Familiar0",1)
                 Terminal.SetCheckBox("Familiar 0",True)
-                Terminal.SetCheckBox("Auto Loot",False)
+                toggle_loot(False)
         else:
             if Field.GetID() == 102010000:
                 # Perion Southern Ridge
                 # let bot kill mobs and pickup?
                 toggleAttack(True)
+                toggle_kami(True)
                 time.sleep(3)
             elif Terminal.IsRushing():
                 time.sleep(3)
@@ -3147,7 +3298,7 @@ if Character.GetLevel() >= 13 and GameState.IsInGame():
         if job == 15511:
             getBoogie()
     elif job in EvanJobs:
-        if Quest.GetQuestState(LetterDelivery) == 2:
+        if Quest.GetQuestState(22510) == 2:
             getBoogie()
     else:
         getBoogie()
@@ -3455,6 +3606,8 @@ escaperoutes = [curbrockescaperoute1,curbrockescaperoute2,curbrockescaperoute3]
 if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <= 29 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if curbrock1 !=2:
+        print("Doing first Curbrock")
+        SCLib.UpdateVar("DoingCurbrock",True)
         if curbrock1 ==0:
             toggle_rush_by_level(False)
             Quest.StartQuest(5499, sabitrama)
@@ -3462,8 +3615,10 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
             if Quest.CheckCompleteDemand(5499, sabitrama) ==0:
                 if pos.x != -425 and field_id == curbrockhideout:
                     toggle_kami(False)
+                    time.sleep(3)
                     teleport_enter(-425,-195)
                     toggle_kami(True)
+                    print("Resume Kami")
                 elif pos.x != -549 and field_id == curbrockescaperoute2:
                     toggle_kami(False)
                     teleport_enter(-549,-195)
@@ -3471,12 +3626,18 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
                     toggle_rush_by_level(True)
                 else:
                     Quest.CompleteQuest(5499,sabitrama)
+                    SCLib.UpdateVar("DoingCurbrock",False)
             else:
+                print("Enable kami to kill curbrock")
                 toggle_kami(True)
                 toggleAttack(True)
 if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level < 60 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
-    if curbrock2 !=2:
+    if job == 15210 and Quest.GetQuestState(34820) !=2:
+        print("Illium undone quest")
+    elif curbrock2 !=2:
+        print("Doing second curbrock")
+        SCLib.UpdateVar("DoingCurbrock",True)
         if curbrock2 ==0:
             toggle_rush_by_level(False)
             Quest.StartQuest(5500, sabitrama)
@@ -3484,21 +3645,28 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level <
             if Quest.CheckCompleteDemand(5500, sabitrama) ==0:
                 if pos.x != -425 and field_id == curbrockhideout:
                     toggle_kami(False)
+                    time.sleep(3)
                     teleport_enter(-425,-195)
                     toggle_kami(True)
+                    print("Resume Kami")
                 elif pos.x != -549 and field_id == curbrockescaperoute2:
                     toggle_kami(False)
                     teleport_enter(-549,-195)
                     toggle_kami(True)
+                    print("Resume Kami")
                     toggle_rush_by_level(True)
                 else:
                     Quest.CompleteQuest(5500,sabitrama)
+                    SCLib.UpdateVar("DoingCurbrock",False)
             else:
+                print("Enable kami to kill curbrock")
                 toggle_kami(True)
                 toggleAttack(True)
 if GameState.IsInGame() and not Terminal.IsRushing() and level >= 60 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if curbrock3 !=2:
+        print("Doing third curbrock")
+        SCLib.UpdateVar("DoingCurbrock",True)
         if curbrock3 ==0:
             toggle_rush_by_level(False)
             Quest.StartQuest(5501, sabitrama)
@@ -3506,6 +3674,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 60 and level <
             if Quest.CheckCompleteDemand(5501, sabitrama) ==0:
                 if pos.x != -425 and field_id == curbrockhideout:
                     toggle_kami(False)
+                    time.sleep(3)
                     teleport_enter(-425,-195)
                     toggle_kami(True)
                 elif pos.x != -549 and field_id == curbrockescaperoute3:
@@ -3515,6 +3684,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 60 and level <
                     toggle_rush_by_level(True)
                 else:
                     Quest.CompleteQuest(5501,sabitrama)
+                    SCLib.UpdateVar("DoingCurbrock",False)
             else:
                 toggle_kami(True)
                 toggleAttack(True)
@@ -3528,10 +3698,9 @@ if pos.x != -549 and field_id in escaperoutes:
     toggleAttack(True)
 
 quest26 = Quest.GetQuestState(2976)
-if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >= 35 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >= 35 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock"):
     time.sleep(1)
-    pos = Character.GetPos()
-    
+    toggle_rush_by_level(False)
     #field_id to Field Name
     BeachGrassDunes1 = (120040100)
     BeachGrassDunes2 = (120040200)
@@ -4160,18 +4329,17 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                 time.sleep(2)
                 toggle_kami(False)
                 if field_id in range(ShadyBeach,ShadyBeach+20):
-                    Character.Teleport(381, 125)
-                    time.sleep(1)
-                    Character.EnterPortal()
-                if field_id != GoldBeachResort:
+                    teleport_enter(381,125)
+                elif field_id != GoldBeachResort:
                     Terminal.Rush(GoldBeachResort)
-                if pos.x != -331:
+                elif pos.x != -331:
                     Character.Teleport(-331, 116)
                 else:
                     Quest.CompleteQuest(TerrorFromTheDeep, LittleRichieResort)
             else:
                 if field_id not in range(ShadyBeach,ShadyBeach+20):
                     Terminal.Rush(HardWaveBeach)
+                    print("Not in range")
                     toggle_kami(False)
                     if pos.x != 797:
                         Character.Teleport(797, -385)
@@ -4182,6 +4350,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >=
                         toggleAttack(True)
                 else:
                     toggle_kami(True)
+                    Terminal.StopRush()
     #Complete quest 26 for beachbum medal
     elif quest26 !=2:
         print("quest 26")
@@ -4219,7 +4388,7 @@ elif quest26 == 2 and field_id == GoldBeachResort:
     toggle_kami(True)
     print("Just in case stuck in gold beach, return control to rush by level")
 quest17 = Quest.GetQuestState(2054)
-if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level < 90 and quest17!=2:
+if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level < 90 and quest17!=2 and not SCLib.GetVar("DoingCurbrock"):
     #print("Doing")
     toggle_rush_by_level(False)
     time.sleep(1)
