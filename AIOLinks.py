@@ -12,7 +12,7 @@ Phantom
 Illium          DONE(untested)
 Cadena          DONE(untested)
 Ark             DONE(untested)
-Evan            
+Evan            DONE(untested)
 '''
 curbrockhideout = [600050000,600050010,600050020]
 #do Monster park how many times?
@@ -213,6 +213,7 @@ def toggle_HTR(indicator):
 
 def acceptQuest(quest, startnpc, startmap, currentmap):
     toggle_kami(False)
+    print("Accepting quest:{} from NPC:{}".format(quest,startnpc))
     if currentmap != startmap:
         Terminal.Rush(startmap)
     questnpc = Field.FindNpc(startnpc)
@@ -223,7 +224,7 @@ def acceptQuest(quest, startnpc, startmap, currentmap):
         else:
             Quest.StartQuest(quest, startnpc)
 def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
-    toggle_kami(False)
+    print("Completing quest:{} at NPC:{} in map:{}".format(quest,endnpc,endmap))
     if Quest.CheckCompleteDemand(quest, endnpc) ==0:
         if currentmap != endmap:
             Terminal.Rush(endmap)
@@ -231,6 +232,7 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
         questnpc = Field.FindNpc(endnpc)
         if questnpc.valid:
             if pos.x != questnpc.x:
+                toggle_kami(False)
                 time.sleep(0.5)
                 Character.Teleport(questnpc.x, questnpc.y)
             else:
@@ -1778,6 +1780,237 @@ def ArkFourth():
         elif jobQuest == 1:
             Quest.CompleteQuest(34904, 0)
             time.sleep(5)
+
+def EvanFirst():
+    StrangeDream = 22000
+    FeedingBullDog = 22001
+    SandwichForBreakfast = 22002
+    DeliveringTheLunchBox = 22003
+    FixingTheFence = 22004
+    RescuingThePiglet = 22005
+    ReturningTheEmptyLunchBox = 22006
+    CollectingEggs = 22007
+    ChasingAwayTheFoxes = 22008
+    VerifyingTheFarmSituation = 22009
+    StrangeFarm = 22010
+    BabyDragonAwakens = 22500
+    HungryBabyDragon = 22501
+    ABiteOfHay = 22502
+    ABiteOfPork = 22503
+    TastyMilk1 = 22504
+    TastyMilk2 = 22505
+    TastyMilk3 = 22506
+    WhatIsADragonMaster = 22507
+    StrangePigs1 = 22508
+    StrangePigs2 = 22509
+    LetterDelivery = 22510
+    DragonMaster1stJobAdvancement = 22100
+    quest1 = Quest.GetQuestState(StrangeDream)
+    quest2 = Quest.GetQuestState(FeedingBullDog)
+    quest3 = Quest.GetQuestState(SandwichForBreakfast)
+    quest4 = Quest.GetQuestState(DeliveringTheLunchBox)
+    quest5 = Quest.GetQuestState(FixingTheFence)
+    quest6 = Quest.GetQuestState(RescuingThePiglet)
+    quest7 = Quest.GetQuestState(ReturningTheEmptyLunchBox)
+    quest8 = Quest.GetQuestState(CollectingEggs)
+    quest9 = Quest.GetQuestState(ChasingAwayTheFoxes)
+    quest10= Quest.GetQuestState(VerifyingTheFarmSituation)
+    quest11= Quest.GetQuestState(StrangeFarm)
+    quest12= Quest.GetQuestState(BabyDragonAwakens)
+    quest13= Quest.GetQuestState(HungryBabyDragon)
+    quest14= Quest.GetQuestState(ABiteOfHay)
+    quest15= Quest.GetQuestState(ABiteOfPork)
+    quest16= Quest.GetQuestState(TastyMilk1)
+    quest17= Quest.GetQuestState(TastyMilk2)
+    quest18= Quest.GetQuestState(TastyMilk3)
+    quest19= Quest.GetQuestState(WhatIsADragonMaster)
+    quest20= Quest.GetQuestState(StrangePigs1)
+    quest21= Quest.GetQuestState(StrangePigs2)
+    quest22= Quest.GetQuestState(LetterDelivery)
+    DragonNest = 1013002
+    Mir = 1013000
+    Mom = 1013100
+    Utah = 1013101
+    BullDog = 1013102
+    Dad = 1013103
+    Hen = 1013104
+    DairyCow = 1013105
+    ChiefStan= 1012003
+    livingroom = 100030101
+    frontyard = 100030102
+    backyard = 100030103
+    farmcentre = 100030300
+    largeforesttrail = 100030310
+    largeforesttrail2= 100030320
+    lushforest = 900020100
+    lostforest = 900020220
+    if quest1 != 2:
+        if quest1 == 0:
+            toggle_kami(False)
+            acceptQuest(StrangeDream,Utah,frontyard,field_id)
+        elif quest1 == 1:
+            completeQuest(StrangeDream,Utah,frontyard,frontyard,field_id)
+    elif quest2 != 2:
+        if quest2 == 0:
+            toggle_kami(False)
+            acceptQuest(FeedingBullDog,Utah,frontyard,field_id)
+        elif quest2 == 1:
+            completeQuest(FeedingBullDog,BullDog,frontyard,frontyard,field_id)
+    elif quest3 != 2:
+        if quest3 == 0:
+            acceptQuest(SandwichForBreakfast,Utah,frontyard,field_id)
+        elif quest3 == 1:
+            sandwich = Inventory.FindItemByID(2022620)
+            if sandwich.valid:
+                Inventory.UseItem(2022620)
+            completeQuest(SandwichForBreakfast,Mom,livingroom,livingroom,field_id)
+    elif quest4 != 2:
+        if quest4 == 0:
+            acceptQuest(DeliveringTheLunchBox,Mom,livingroom,field_id)
+        elif quest4 == 1:
+            completeQuest(DeliveringTheLunchBox,Dad,farmcentre,farmcentre,field_id)
+    elif quest5 != 2:
+        if quest5 == 0:
+            acceptQuest(FixingTheFence,Dad,farmcentre,field_id)
+        elif quest5 == 1:
+            completeQuest(FixingTheFence,Dad,farmcentre,farmcentre,field_id)
+    elif quest6 != 2:
+        if quest6 == 0:
+            acceptQuest(RescuingThePiglet,Dad,farmcentre,field_id)
+        elif quest6 == 1:
+            if Quest.CheckCompleteDemand(RescuingThePiglet,Dad) != 0:
+                if field_id == lushforest:
+                    piglet = Field.FindNpc(1013200)
+                    if piglet.valid:
+                        Character.Teleport(piglet.x,piglet.y)
+                        time.sleep(1)
+                        Character.TalkToNpc(1013200)
+                elif field_id == lostforest:
+                    dragnest = Field.FindNpc(DragonNest)
+                    if piglet.valid:
+                        toggle_kami(False)
+                        Character.Teleport(dragnest.x,dragnest.y)
+                        time.sleep(1)
+                        Character.TalkToNpc(DragonNest)
+                else:
+                    Terminal.Rush(lushforest)
+                    print("This part needs to be changed") #
+    elif quest7 != 2:
+        if quest7 == 0:
+            acceptQuest(ReturningTheEmptyLunchBox,Dad,farmcentre,field_id)
+        elif quest7 == 1:
+            completeQuest(ReturningTheEmptyLunchBox,Mom,livingroom,livingroom,field_id)
+    elif quest8 != 2:
+        if quest8 == 0:
+            acceptQuest(CollectingEggs,Utah,frontyard,field_id)
+        elif quest8 == 1:
+            if field_id != frontyard:
+                Terminal.Rush(frontyard)
+            elif field_id == frontyard:
+                npc_hen = Field.FindNpc(Hen)
+                if npc_hen.valid:
+                    toggle_kami(False)
+                    Character.Teleport(npc_hen.x,npc_hen.y)
+                    time.sleep(1)
+                    Character.TalkToNpc(Hen)
+            completeQuest(CollectingEggs,Utah,frontyard,frontyard,field_id)
+    elif quest9 != 2:
+        if quest9 == 0:
+            acceptQuest(ChasingAwayTheFoxes,Utah,frontyard,field_id)
+        elif quest9 == 1:
+            completeQuest(ChasingAwayTheFoxes,Utah,frontyard,backyard,field_id)
+    elif quest10 != 2:
+        if quest10 == 0:
+            acceptQuest(VerifyingTheFarmSituation,Utah,frontyard,field_id)
+        elif quest10 == 1:
+            completeQuest(VerifyingTheFarmSituation,Dad,farmcentre,farmcentre,field_id)
+    elif quest11 != 2:
+        if quest11 == 0:
+            acceptQuest(StrangeFarm,Dad,farmcentre,field_id)
+        elif quest11 == 1:
+            completeQuest(StrangeFarm,Dad,farmcentre,largeforesttrail,field_id)
+    elif quest12 != 2:
+        if quest12 == 0: #not sure with npc here 2411021
+            acceptQuest(BabyDragonAwakens,Mir,farmcentre,field_id)
+        elif quest12 == 1:
+            completeQuest(BabyDragonAwakens,Mir,farmcentre,largeforesttrail,field_id)
+    elif quest13 != 2:
+        if quest13 == 0:
+            acceptQuest(HungryBabyDragon,Mir,farmcentre,field_id)
+        elif quest13 == 1:
+            completeQuest(HungryBabyDragon,Dad,farmcentre,farmcentre,field_id)
+    elif quest14 != 2:
+        if quest14 == 0:
+            acceptQuest(ABiteOfHay,Dad,farmcentre,field_id)
+        elif quest14 == 1:
+            toggle_kami(False)
+            haystacks = Field.GetReactors()
+            for haystack in haystacks:
+                pos = Character.GetPos()
+                if Quest.CheckCompleteDemand(ABiteOfHay,Mir) == 0:
+                    break
+                else:
+                    if pos.x != haystack.x:
+                        Character.Teleport(haystack.x,haystack.y)
+                        toggleAttack(False)
+                        time.sleep(2)
+                        Character.BasicAttack()
+                        time.sleep(2)
+                        Character.BasicAttack()
+                        time.sleep(2)
+                        Character.BasicAttack()
+                        time.sleep(2)
+                        Character.BasicAttack()
+                    else:
+                        time.sleep(2)
+                        Character.BasicAttack()
+                        time.sleep(2)
+                        Character.BasicAttack()
+                        time.sleep(2)
+                        Character.BasicAttack()
+                        time.sleep(2)
+                        Character.BasicAttack()
+            completeQuest(ABiteOfHay,Mir,farmcentre,farmcentre,field_id)
+    elif quest15 != 2:
+        if quest15 == 0:
+            acceptQuest(ABiteOfPork,Mir,farmcentre,field_id)
+        elif quest15 ==1:
+            completeQuest(ABiteOfPork,Mir,largeforesttrail,largeforesttrail,field_id)
+    elif quest16 != 2:
+        if quest16 == 0:
+            acceptQuest(TastyMilk1,Mir,farmcentre,field_id)
+        elif quest16 == 1:
+            completeQuest(TastyMilk1,Dad,farmcentre,farmcentre,field_id)
+    elif quest17 != 2:
+        if quest17 == 0:
+            acceptQuest(TastyMilk2,Dad,farmcentre,field_id)
+        elif quest17 == 1:
+            completeQuest(TastyMilk2,DairyCow,largeforesttrail,largeforesttrail,field_id)
+    elif quest18 != 2:
+        if quest18 == 0:
+            acceptQuest(TastyMilk3,DairyCow,largeforesttrail,field_id)
+        elif quest18 == 1:
+            completeQuest(TastyMilk3,Mir,largeforesttrail,largeforesttrail,field_id)
+    elif quest19 != 2:
+        Quest.StartQuest(WhatIsADragonMaster,Mir)
+    elif quest20 != 2:
+        if quest20 == 0:
+            acceptQuest(StrangePigs1,Dad,farmcentre,field_id)
+        elif quest20 == 1:
+            completeQuest(StrangePigs1,Mir,farmcentre,farmcentre,field_id)
+    elif quest21 != 2:
+        if quest21 == 0:
+            acceptQuest(StrangePigs2,Mir,farmcentre,field_id)
+        elif quest21 == 1:
+            completeQuest(StrangePigs2,Mir,largeforesttrail2,largeforesttrail2,field_id)
+    elif quest22 != 2:
+        if quest22 == 0:
+            acceptQuest(LetterDelivery,Dad,farmcentre,field_id)
+        elif quest22 == 1:
+            completeQuest(LetterDelivery,ChiefStan,henesys,henesys,field_id)
+        if Quest.GetQuestState(LetterDelivery) == 2:
+            toggle_rush_by_level(True)
+            toggle_kami(True)
 ################################################################
 def id2str(jobid):
     if jobid in LuminousJobs:
@@ -2346,18 +2579,18 @@ def toggleAttack(on):
     elif job == 3100 or job == 3110 or job == 3111: #DS first - third job
         #Key.Set(attack_key,1,31000004)31001008
         Terminal.SetLineEdit("SISkillID","31001008")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 3112: #DS fourth job
         Terminal.SetLineEdit("SISkillID","31121010")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",0)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 2300: #Mercedes 1st 
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23001000)
@@ -2401,123 +2634,123 @@ def toggleAttack(on):
     elif job == 4100: #Hayato 1st 41001004
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41001004")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job in HayatoJobs and field_id in curbrockhideout:
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41001004")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 4110: #Hayato 2nd 41101000
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41101000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 4111: #Hayato 3rd 41111011
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41111011")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 4112: #Hayato 4th 41121011
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","41121011")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 3600:#Xenon 1st 36001000
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36001000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job in XenonJobs and field_id in curbrockhideout:
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36001000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 3610:#Xenon 2nd 36101000
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36101000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 3611:#Xenon 3rd 36111000
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36111000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 3612:#Xenon 4th 36121000
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36121000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 2400: #Phantom 1st 24001000
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24001000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job in PhantomJobs and field_id in curbrockhideout:
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24001000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 2410: #Phantom 2nd 24101000
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24101000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 2411: #Phantom 3rd 24111000
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24111000")
-        Terminal.SetCheckBox("Skill Injection", on)
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 2412: #Phantom 4th 24121000
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24121000")
-        Terminal.SetCheckBox("Skill Injection", on)
-        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",100)
     elif job == 15000: #Illium Pre 1st
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -2548,16 +2781,49 @@ def toggleAttack(on):
     elif job == 15500 or job == 15510 or job == 15511: #Ark 1st + 2nd + 3rd 155001100
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID", "155001100")
-        Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetSpinBox("SkillInjection",700)
         Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 15512: #Ark 4th 155121007 @50
         Terminal.SetLineEdit("SISkillID", "155121007")
-        Terminal.SetCheckBox("Skill Injection", True)
+        Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetSpinBox("SkillInjection",50)
         Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Skill Injection", on)
+    elif job == 2200: #Evan 1st 22001010 AA
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,22001010)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 2211: #Evan 2nd 22110010 SI/ND
+        Terminal.SetLineEdit("SISkillID", "22110010")
+        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Melee No Delay",True)
+        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Skill Injection", on)
+    elif job == 2214: #Evan 3rd 22140010 SI/ND
+        Terminal.SetLineEdit("SISkillID", "22140010")
+        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Melee No Delay",True)
+        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Skill Injection", on)
+    elif job == 2217: #Evan 4th 22170061 SI/ND
+        Terminal.SetLineEdit("SISkillID", "22170061")
+        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Melee No Delay",True)
+        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 6500: #AB 1st
         Terminal.SetLineEdit("SISkillID","65001100")
         Terminal.SetCheckBox("Auto Attack", False)
@@ -2668,37 +2934,14 @@ def toggleAttack(on):
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
                 Terminal.SetCheckBox("Melee No Delay",on)
-    elif job == 15512: #ark 4th change this to safer method
-        Terminal.SetLineEdit("SISkillID","155121007")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",30)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-                Terminal.SetCheckBox("Melee No Delay",on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-                Terminal.SetCheckBox("Melee No Delay",on)
-    elif job == 6412: #Cadena 4th
-        Terminal.SetLineEdit("SISkillID","64121011")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetRadioButton("bot/si_cadena",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-                Terminal.SetCheckBox("Melee No Delay",on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-                Terminal.SetCheckBox("Melee No Delay",on)
-
-    elif job not in KannaJobs:
-        Terminal.SetCheckBox("Skill Injection", False)
+    else:
+        Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetCheckBox("Skill Injection", False)
+        print("Not any of the listed jobs, not going to attack for safety")
+    if job not in KannaJobs:
+        Terminal.SetCheckBox("charm_fma",False)
+        Terminal.SetCheckBox("Summon Kishin",False)
     Terminal.SetCheckBox("MonkeySpiritsNDcheck", False)
 
 safety_setting()
