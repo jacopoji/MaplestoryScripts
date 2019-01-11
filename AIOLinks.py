@@ -2803,6 +2803,16 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
+    elif job in EvanJobs and field_id in curbrockhideout:
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,22001010)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 2211: #Evan 2nd 22110010 SI/ND
         Terminal.SetLineEdit("SISkillID", "22110010")
         Terminal.SetCheckBox("Auto Attack",False)
@@ -3135,6 +3145,9 @@ if Character.GetLevel() >= 13 and GameState.IsInGame():
             getBoogie()
     elif job in ArkJobs:
         if job == 15511:
+            getBoogie()
+    elif job in EvanJobs:
+        if Quest.GetQuestState(LetterDelivery) == 2:
             getBoogie()
     else:
         getBoogie()
