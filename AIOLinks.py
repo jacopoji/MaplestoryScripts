@@ -464,7 +464,7 @@ def use_expansion_packet():
         usePacket = Packet.COutPacket(useExpansionHeader)
         usePacket.EncodeBuffer("[{}00B3DB2300]".format(hex(item.pos).split('x')[1].zfill(2)))
         Packet.SendPacket(usePacket)
-    SCLib.UpdateVar("BuyExpansion",False)
+        SCLib.UpdateVar("BuyExpansion",False)
 
 def buy_expansion():
     if Character.GetMeso() > 20000000:
@@ -2652,11 +2652,11 @@ def GetToTheDoorToZakum():
         #Wild Hunter, Wind Archer, Mercedes
         Bowman = [3300, 3310, 3311, 3312, 1300, 1310, 1311, 1312, 2300, 2310, 2311, 2312]
         #Phantom, Xenon, Dual Blade
-        Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434]
+        Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6411,6412,6410]
         #Kanna, Battle Mage, Beast Tamer, Blaze Wizard, Evan, Luminous
         Magician = [4200, 4210, 4211, 4212, 3200, 3210, 3211, 3212, 11000, 11200, 11210, 11211, 11212, 1200, 1210, 1211, 1212, 2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2700, 2710, 2711, 2712, ]
         #Aran, Blaster, Demon Avenger, Demon Slayer, Hayato, Kaiser, Mihile, Zero, Dawn Warrior
-        Warrior = [3700, 3710, 3711, 3712, 2100, 2110, 2111, 2112, 3101, 3120, 1321, 3122, 3100, 3110, 3111, 3112, 4100, 4110, 4111, 4112, 6100, 6110, 6111, 6112, 5100, 5110, 5111, 5112, 10100, 10110, 10111, 10112, 1100, 1110, 1111, 1112]
+        Warrior = [3700, 3710, 3711, 3712, 2100, 2110, 2111, 2112, 3101, 3120, 1321, 3122,3121, 3100, 3110, 3111, 3112, 4100, 4110, 4111, 4112, 6100, 6110, 6111, 6112, 5100, 5110, 5111, 5112, 10100, 10110, 10111, 10112, 1100, 1110, 1111, 1112]
         if job in Bowman:
             TalkNPC = NpcReneBowmanInstructor
         elif job in Thief:
@@ -2825,8 +2825,10 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
                 accountData["done_char"].append(str(char.id))
     Terminal.SetCheckBox("Auto Login",True)
     accountData["changing_mule"] = False
-    accountData["cur_pos"] = str(int(accountData["cur_pos"]) + 1)
+    time.sleep(1)
+    accountData["cur_pos"] = Terminal.GetLineEdit("LoginChar")
     writeJson(accountData,accountId)
+    KillPersistVarThred()
 
 if accountData['training_done'] and GameState.GetLoginStep() == 2:
     Terminal.SetCheckBox("Auto Login",False)
@@ -3416,10 +3418,39 @@ def toggleAttack(on):
         Terminal.SetCheckBox("bot/illium/summon_control",False)
     Terminal.SetCheckBox("MonkeySpiritsNDcheck", False)
 
+def GetEmblem():
+    if job == 2311 and Quest.GetQuestState(24105) !=2: #Mercedes
+        print("Getting Silver Emblem")
+        Quest.StartQuest(24105, 1033210)
+    elif job == 2312 and Quest.GetQuestState(24106) !=2:
+        print("Getting Gold Emblem")
+        Quest.StartQuest(24106, 1033210)
+    elif job == 2711 and Quest.GetQuestState(25675) !=2: #Lumi
+        print("Getting Silver Emblem")
+        Quest.StartQuest(25675, 1032209)
+    elif job == 2712 and Quest.GetQuestState(25676) !=2:
+        print("Getting Gold Emblem")
+        Quest.StartQuest(25676, 1032209)
+    elif job == 2214 and Quest.GetQuestState(22617) !=2: #Evan
+        print("Getting Silver Emblem")
+        Quest.StartQuest(22617, 1013208)
+    elif job == 2217 and Quest.GetQuestState(22618) !=2:
+        print("Getting Gold Emblem")
+        Quest.StartQuest(22618, 1013208)
+    elif job == 4111 and Quest.GetQuestState(62387) !=2: #hayato
+        print("Getting Silver Emblem")
+        Quest.StartQuest(62387, 9130000)
+    elif job == 4112 and Quest.GetQuestState(62388) !=2:
+        print("Getting Gold Emblem")
+        Quest.StartQuest(62388, 9130000)
+    elif job == 4212 and  Quest.GetQuestState(62390) !=2:
+        print("Getting Gold Emblem")
+        Quest.StartQuest(62390, 9130010)
 safety_setting()
 
 if GameState.IsInGame():
     toggleAttack(True)
+    GetEmblem()
     #print("Toggling attack")
 
 ############################Job Advancements###############################
@@ -3450,17 +3481,13 @@ elif job ==2710 and level == 60 and not SCLib.GetVar("DoingCurbrock"):
     LumiThird()
     toggle_rush_by_level(True)
     toggle_kami(True)
-    if Quest.GetQuestState(25675) !=2 and Character.GetLevel() >= 60:
-        print("Getting Silver Emblem")
-        Quest.StartQuest(25675, 1032209)
 elif job == 2711 and level ==100 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Lumi fourth job")
     LumiFourth()
     toggle_rush_by_level(True)
     toggle_kami(True)
-    if Quest.GetQuestState(25676) !=2 and Character.GetLevel() >= 100:
-        print("Getting Gold Emblem")
-        Quest.StartQuest(25676, 1032209)
+    time.sleep(2)
+    
 elif (job == 3101 or job ==3100) and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
     #print("Completing Demon Avenger first job")
     toggle_rush_by_level(False)
@@ -3730,7 +3757,7 @@ if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == Entran
             time.sleep(0.5)
             Character.EnterPortal()
 
-if KillZakumDaily and level >= 110 and not SCLib.GetVar("DoingMP") and accountData['phase_one']:
+if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
     print("Doing Zakum")
     Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
     if Terminal.GetCheckBox("Kami Vac"):
@@ -3837,7 +3864,7 @@ if KillZakumDaily and level >= 110 and not SCLib.GetVar("DoingMP") and accountDa
                         print("Dropping stone to spawn Zakum")
                         Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
 
-if level >= 120 and not accountData['phase_one']:
+if level >= 120 and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
     if accountData['cur_pos'] == "11": #finished training all link to level 110
         print("Phase one end")
         accountData['phase_one'] = True

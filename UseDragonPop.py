@@ -11,13 +11,9 @@ import Character, Context, DataType, Field, Inventory, Key, Npc, Packet, Quest, 
 #buffs = Character.GetBuffs()
 #for buff in buffs:
 #	print("Current Buff Id: {}; Remaining Time: {}".format(buff.id,buff.timeLeft))
-useExpansionHeader = 0x0121
-item = Inventory.FindItemByID(2350003)
-if item.valid:
-    usePacket = Packet.COutPacket(useExpansionHeader)
-    usePacket.EncodeBuffer("[{}00B3DB2300]".format(hex(item.pos).split('x')[1].zfill(2)))
-    Packet.SendPacket(usePacket)
-
+users = Terminal.GetLocalUsers()
+for user in users:
+	print(user.clientid,":",user.mapid)
 #Terminal.LeaveCashShop()
 #oPacket = Packet.COutPacket(herb_header)
 #oPacket.EncodeBuffer("2F F8 04 00")
