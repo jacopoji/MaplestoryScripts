@@ -12,7 +12,7 @@ Phantom
 Illium          DONE(untested)
 Cadena          DONE(untested)
 Ark             DONE(untested)
-Evan            DONE(untested)
+Evan            DONE
 '''
 curbrockhideout = [600050000,600050010,600050020]
 #do Monster park how many times?
@@ -207,7 +207,17 @@ def KillPersistVarThred():
 SCHotkey.RegisterKeyEvent(HotKey, KillPersistVarThred) #F11
 
 
-
+def dungeonTeleport():
+    if len(Field.GetMobs()) == 0:
+        toggle_kami(False)
+        time.sleep(1)
+        Key.Press(0x08)
+        time.sleep(1)
+        Character.EnterPortal()
+        time.sleep(1)
+        toggle_kami(True)
+    else:
+        toggle_kami(True)
 
 def toggle_rush_by_level(indicator):
     Terminal.SetCheckBox("Rush By Level",indicator)
@@ -430,8 +440,9 @@ def KillMobAndLoot(map):
 
 def buy_expansion_packet():
     if Character.GetMeso() > 19900000:
+        time.sleep(1)
         Character.TalkToNpc(2080001)
-        time.sleep(0.5)
+        time.sleep(1)
         print("Buying expansion via packet")
         Packet.BlockRecvHeader(BlockBuyHeader)
         time.sleep(0.5)
@@ -444,6 +455,8 @@ def buy_expansion_packet():
         Packet.SendPacket(CloseShop)
         time.sleep(0.5)
         Packet.UnBlockRecvHeader(BlockBuyHeader)
+        toggle_rush_by_level(True)
+        toggle_kami(True)
 
 def use_expansion_packet():
     item = Inventory.FindItemByID(2350003)
@@ -462,10 +475,16 @@ def buy_expansion():
             if field_id != 240000002:
                 rush(240000002)
             elif field_id == 240000002:
+                Terminal.SetPushButton("Use item",False)
                 print("Buy item packet")
                 buy_expansion_packet()
+                Terminal.SetPushButton("Leave shop",True)
                 time.sleep(1)
                 use_expansion_packet()
+                Terminal.SetPushButton("Leave shop",False)
+                Terminal.SetPushButton("Use item",True)
+                toggle_rush_by_level(True)
+                toggle_kami(True)
 
 #########Job specific advancements##########
 def kannaFirst():
@@ -581,6 +600,7 @@ def DASecond():
     Terminal.SetCheckBox("Kami Vac",False)
     toggleAttack(False)
     if Quest.GetQuestState(23213) !=2:
+        print("1")
         if Quest.GetQuestState(23213) == 0:
             Quest.StartQuest(23213, 2151009)
         elif Quest.GetQuestState(23213) == 1:
@@ -592,24 +612,53 @@ def DASecond():
             else:
                 Quest.CompleteQuest(23213, 2153006)
     elif Quest.GetQuestState(23218) != 2:
-        if Quest.GetQuestState(23218) == 0:
-            Quest.StartQuest(23218, 2153006)
-        elif Quest.GetQuestState(23218) == 1:
-            if Field.FindMob(9001037).valid:
-                Terminal.StopRush()
-                toggleAttack(True)
-                toggle_kami(True)
-            elif field_id == 931050120:
-                toggle_kami(False)
-                teleport_enter(109,-14)
-            else:
-                Quest.CompleteQuest(23218, 2153006)
+        print("2")
+        if job == 3110:
+            if Quest.GetQuestState(23214) == 0:
+                Quest.StartQuest(23214, 2153006)
+            elif Quest.GetQuestState(23214) == 1:
+                if Quest.CheckCompleteDemand(23214,2153006) != 0:
+                    if len(Field.GetMobs()) > 0:
+                        Terminal.StopRush()
+                        toggleAttack(True)
+                        toggle_kami(True)
+                    elif field_id == 931050120:
+                        toggle_kami(False)
+                        teleport_enter(109,-14)
+                else:
+                    time.sleep(1)
+                    Quest.CompleteQuest(23214, 2153006)
+                    toggleAttack(True)
+                    toggle_kami(True)
+        else:
+            if Quest.GetQuestState(23218) == 0:
+                Quest.StartQuest(23218, 2153006)
+            elif Quest.GetQuestState(23218) == 1:
+                if len(Field.GetMobs()) > 0:
+                    Terminal.StopRush()
+                    toggleAttack(True)
+                    toggle_kami(True)
+                elif field_id == 931050120:
+                    toggle_kami(False)
+                    teleport_enter(109,-14)
+                else:
+                    Quest.CompleteQuest(23218, 2153006)
+                    toggleAttack(True)
+                    toggle_kami(True)
 def DAThird():
     CalmBeforeTheStorm = 23221
     quest = Quest.GetQuestState(CalmBeforeTheStorm)
     if quest != 2:
         if quest == 0:
+            #Terminal.SetCheckBox("Auto NPC",False)
+            #time.sleep(1)
             Quest.StartQuest(CalmBeforeTheStorm,2151009)
+            #time.sleep(1)
+            #NoPacket = Packet.COutPacket(0x00F3)
+            #NoPacket.EncodeBuffer("[0300]")
+            #Terminal.SetCheckBox("Auto NPC",True)
+            time.sleep(1)
+            #Packet.SendPacket(NoPacket)
         elif quest == 1:
             if Quest.CheckCompleteDemand(CalmBeforeTheStorm,2151009) == 0:
                 if field_id != 310010000:
@@ -619,8 +668,38 @@ def DAThird():
                     Quest.CompleteQuest(CalmBeforeTheStorm,2151009)
                     toggle_rush_by_level(True)
             else:
+
                 toggle_kami(True)
                 toggleAttack(True)
+
+def DSThird():
+    TrueAwakening = 23219
+    quest = Quest.GetQuestState(TrueAwakening)
+    if quest != 2:
+        if quest == 0:
+            #Terminal.SetCheckBox("Auto NPC",False)
+            #time.sleep(1)
+            Quest.StartQuest(TrueAwakening,2151009)
+            #time.sleep(1)
+            #NoPacket = Packet.COutPacket(0x00F3)
+            #NoPacket.EncodeBuffer("[0300]")
+            #Terminal.SetCheckBox("Auto NPC",True)
+            time.sleep(1)
+            #Packet.SendPacket(NoPacket)
+        elif quest == 1:
+            if Quest.CheckCompleteDemand(TrueAwakening,2151009) == 0:
+                if field_id != 310010000:
+                    Terminal.Rush(310010000)
+                    print("Rush to hide")
+                else:
+                    Quest.CompleteQuest(TrueAwakening,2151009)
+                    toggle_rush_by_level(True)
+            else:
+                if field_id == 220050300:
+                    Character.TalkToNpc(2159331)
+                else:
+                    toggle_kami(True)
+                    toggleAttack(True)
 def MercedesFirst():
     Quest.StartQuest(29952, 1033210)
 
@@ -1278,6 +1357,7 @@ def CadenaFirst():
     quest25 = Quest.GetQuestState(34623)
     quest26 = Quest.GetQuestState(34624)
     quest27 = Quest.GetQuestState(34625)
+    toggle_rush_by_level(False)
     if quest1 != 2:
         if quest1 == 0:
             Quest.StartQuest(34600, 0)
@@ -1425,34 +1505,32 @@ def CadenaFirst():
             Quest.CompleteQuest(34610, 3001218)
             Terminal.Sleep(3)
     elif quest13 != 2:
+        print("13")
+        print(quest13)
         if quest13 == 0:
-            if field_id == 940200700:
-                time.sleep(8)
-                EnterPortal("next00")
-                time.sleep(3)
-            elif field_id == 940200800:
-                time.sleep(8)
-                EnterPortal("next00")
-                time.sleep(3)
-            elif field_id == 940200900:
-                time.sleep(8)
-                EnterPortal("next00")
-                time.sleep(3)
+            print("quest unstarted")
+            pos = Character.GetPos()
+            if pos.x != -506:
+                toggle_kami(False)
+                Character.Teleport(-506, 45)
+                time.sleep(2)
             else:
-                pos = Character.GetPos()
-                if pos.x != -506:
-                    toggle_kami(False)
-                    Character.Teleport(-506, 45)
-                    time.sleep(2)
-                else:
-                    Quest.StartQuest(34611, 3001218)
-                    toggle_kami(True)
+                Quest.StartQuest(34611, 3001218)
+                toggle_kami(True)
         elif quest13 == 1:
+            print("quest ongoing")
             if field_id == 940200900:
                 EnterPortal("next00")
                 time.sleep(5)
             if field_id == 402000210:
                 Quest.CompleteQuest(34611, 3001214)
+        if field_id == 940200700:
+            print("first field")
+            dungeonTeleport()
+        elif field_id == 940200800:
+            dungeonTeleport()
+        elif field_id == 940200900:
+            dungeonTeleport()
     elif quest14 != 2:
         if quest14 == 0:
             Quest.StartQuest(34612, 3001214)
@@ -1654,11 +1732,19 @@ def CadenaFirst():
                 Terminal.Rush(402000400)
             else:
                 Quest.CompleteQuest(34625, 3001205)
+                toggle_kami(True)
+                toggle_rush_by_level(True)
                 
     if job == 6400 and level >= 30:
         Quest.StartQuest(34657, 3001250)
         toggle_kami(True)
         toggle_rush_by_level(True)
+
+def CadenaThird():
+    Quest.StartQuest(34658, 3001250)
+
+def CadenaFourth():
+    Quest.StartQuest(34659,0)
 
 def ArkFirst():
     quest1 = Quest.GetQuestState(34915)
@@ -2621,6 +2707,8 @@ def handleReady(data):
         data['link_end'] = 11
     if 'storing_meso' not in data:
         data['storing_meso'] = False
+    if 'storage_number' not in data:
+        data['storage_number'] = 0
     if 'cur_pos' not in data:
         data['cur_pos'] = Terminal.GetLineEdit("LoginChar")
     if 'changing_mule' not in data:
@@ -3118,8 +3206,8 @@ def toggleAttack(on):
     elif job == 6400 or job == 6410 or job == 6411: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","64001006")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetRadioButton("SIRadioCadena",True)
+        Terminal.SetSpinBox("SkillInjection",200)
+        Terminal.SetRadioButton("si_cadena",True)
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection", on)
@@ -3127,7 +3215,7 @@ def toggleAttack(on):
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","64121016")
         Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetRadioButton("SIRadioCadena",True)
+        Terminal.SetRadioButton("si_cadena",True)
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection", on)
@@ -3167,15 +3255,23 @@ def toggleAttack(on):
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job in EvanJobs and field_id in curbrockhideout:
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,22001010)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        if field_id == 600050020:
+            Terminal.SetLineEdit("SISkillID", "22110010")
+            Terminal.SetCheckBox("Auto Attack",False)
+            Terminal.SetCheckBox("Melee No Delay",True)
+            Terminal.SetSpinBox("SkillInjection",100)
+            Terminal.SetRadioButton("SIRadioMelee",True)
+            Terminal.SetCheckBox("Skill Injection", on)
+        else:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+            Key.Set(attack_key,1,22001010)
+            Terminal.SetCheckBox("Skill Injection", False)
+            #Terminal.SetSpinBox("SkillInjection",100)
+            Terminal.SetCheckBox("Melee No Delay",False)
+            #Terminal.SetRadioButton("SIRadioMagic",True)
+            Terminal.SetCheckBox("Auto Attack", on)
+            Terminal.SetComboBox("AttackKey",33)
+            Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 2211: #Evan 2nd 22110010 SI/ND
         Terminal.SetLineEdit("SISkillID", "22110010")
         Terminal.SetCheckBox("Auto Attack",False)
@@ -3377,9 +3473,12 @@ elif (job == 3121 or job == 3111) and field_id == 931050110 and level == 60 and 
     teleport_enter(111,-14)
     toggle_rush_by_level(True)
     toggle_kami(True)
-elif (job == 3121 or job == 3111) and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
+elif job == 3121 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
     toggle_rush_by_level(False)
     DAThird()
+elif job == 3111 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
+    toggle_rush_by_level(False)
+    DSThird()
 elif job == 2300 and level <= 13:
     quest = Quest.GetQuestState(29952)
     if quest == 0:
@@ -3425,9 +3524,15 @@ elif job == 15212 and field_id == 940202000:
 elif field_id == 102040200 and job == 15211: #Still in relicExcavation Camp
     toggle_rush_by_level(True)
     toggle_kami(True)
-elif job == 6400:
+elif (job == 6400 or job == 6002 or job == 6410) and Quest.GetQuestState(34625) != 2:
     print("Completing Cadena First Job and Second Job")
     CadenaFirst()
+elif job == 6410 and level >= 60:
+    print("Completing Cadena Third job")
+    CadenaThird()
+elif job == 6411 and level >= 100:
+    print("Completing Cadena Fourth job")
+    CadenaFourth()
 elif job == 15001:
     if field_id == 402000615:
         Quest.StartQuest(34901, 0)
@@ -3533,7 +3638,7 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
         if lookback == 2:
             getBoogie()
     elif job in CadenaJobs:
-        if job != 6400:
+        if Quest.GetQuestState(34625) == 2:
             getBoogie()
     elif job in ArkJobs:
         if job != 15500 and Quest.GetQuestState(34940) == 2:
@@ -3883,6 +3988,9 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level <
         print("Illium undone quest")
     elif job in ArkJobs and Quest.GetQuestState(34902) !=2 and Quest.GetQuestState(34940) != 2:
         print("Ark undone quest")
+    elif job in CadenaJobs:
+        if Quest.GetQuestState(34625) != 2:
+            print("Cadena undone quest")
     elif curbrock2 !=2:
         print("Doing second curbrock")
         toggle_rush_by_level(False)
@@ -3952,7 +4060,7 @@ if field_id in escaperoutes:
     toggleAttack(True)
 
 quest26 = Quest.GetQuestState(2976)
-if GameState.IsInGame() and not Terminal.IsRushing() and Character.GetLevel() >= 35 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock"):
+if GameState.IsInGame() and not Terminal.IsRushing() and level >= 35 and level < 55 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock"):
     time.sleep(1)
     toggle_rush_by_level(False)
     #field_id to Field Name
@@ -4638,7 +4746,7 @@ elif quest26 == 2 and Inventory.FindItemByID(1032254).valid:
     time.sleep(2)
     toggle_rush_by_level(True)
     toggle_kami(True)
-elif quest26 == 2 and field_id == GoldBeachResort:
+elif quest26 == 2 and field_id == 120040000:
     toggle_rush_by_level(True)
     toggle_kami(True)
     print("Just in case stuck in gold beach, return control to rush by level")
@@ -4717,14 +4825,13 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level <
     quest15 = Quest.GetQuestState(ForestOfTenacity1)
     quest16 = Quest.GetQuestState(ForestOfTenacity2)
     quest17 = Quest.GetQuestState(ForestOfTenacity3)
-    
     #Complete quest1 (DrakeAttack1)
     if quest1 != 2:
         if quest1 ==0:
             acceptQuest(DrakeAttack1, Ilji, SleepyWood, field_id)
         elif quest1 ==1:
             completeQuest(DrakeAttack1, Ilji, SleepyWood, HumidSwamp, field_id)
-        elif quest1 ==1:
+        elif quest1 ==-1:
             Terminal.Rush(SleepyWood)
     #complete quest2 (DrakeAttack2)
     elif quest2 != 2:
@@ -4911,6 +5018,10 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level <
         elif quest17 ==1:
             if Quest.CheckCompleteDemand(ForestOfTenacity3, John)==0:
                 completeQuest(ForestOfTenacity3, John, SleepyWood, SleepyWood, field_id)
+                toggle_HTR(True)
+                toggle_rush_by_level(True)
+                toggle_kami(True)
+                quest17 = Quest.GetQuestState(ForestOfTenacity3)
                 if quest17 == 2:
                     toggle_HTR(True)
                     toggle_rush_by_level(True)
@@ -4952,3 +5063,6 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level <
 if SCLib.GetVar("BuyExpansion") and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock"):
     buy_expansion()
 
+if not SCLib.GetVar("BuyExpansion") and field_id == 240000002 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock"):
+    toggle_rush_by_level(True)
+    toggle_kami(True)

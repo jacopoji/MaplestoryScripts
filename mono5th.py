@@ -271,9 +271,14 @@ if GameState.IsInGame():
 							Npc.RegisterSelection("My ")
 							time.sleep(1)
 							Quest.CompleteQuest(1462, 1540942)
+						elif jobid == 2712:
+							Npc.ClearSelection()
+							Npc.RegisterSelection(" ")
+							time.sleep(1)
+							Quest.CompleteQuest(1462, 1540942)
 						else:
 							Npc.ClearSelection()
-							Npc.RegisterSelection("The ")
+							Npc.RegisterSelection(" ")
 							time.sleep(1)
 							Quest.CompleteQuest(1462, 1540942)
 					
@@ -284,6 +289,7 @@ if GameState.IsInGame():
 						# if we are still stuck in the maple goddess room
 						if currentMap == 450000000:
 							# now get out of the room
+							Terminal.SetCheckBox("Kami Vac",False)
 							time.sleep(2)
 							Character.Teleport(-487, 95)
 							time.sleep(2)
