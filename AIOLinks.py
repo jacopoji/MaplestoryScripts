@@ -4739,7 +4739,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 35 and level <
                 toggle_rush_by_level(True)
                 toggle_kami(True)
     #All quest for Gold Beach Complete!
-elif quest26 == 2 and Inventory.FindItemByID(1032254).valid:
+elif quest26 == 2 and Inventory.FindItemByID(1032254).valid and level < 100:
     print("Equiping earring and enabling rush by level")
     time.sleep(2)
     Inventory.SendChangeSlotPositionRequest(1,Inventory.FindItemByID(1032254).pos,earring_slot,-1)
