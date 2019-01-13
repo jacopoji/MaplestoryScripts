@@ -1581,7 +1581,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			check_meso_equip()
 			SCLib.UpdateVar("EquipMesoDone",True)
 			Terminal.SetCheckBox('MonkeySpiritsNDcheck',True)
-		if int(SCLib.GetVar("farm_counter")) >= 3:
+		if int(SCLib.GetVar("farm_counter")) >= 4:
 			new_meso = int(accountData['storage_number']) * 30 + Character.GetMeso() / 1000000000
 			print("Updating total mesos from {} to {}b".format(accountData['total_meso'],new_meso))
 			if accountData['total_meso'] == new_meso:
@@ -1592,10 +1592,11 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			accountData['total_meso'] = new_meso
 			writeJson_cube(accountData,accountId)
 			SCLib.UpdateVar("farm_counter",0)
-		if not Terminal.IsAutoDying():
+		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103":
 			SCLib.UpdateVar("farm_counter",int(SCLib.GetVar("farm_counter"))+1)
-		print("Sleeping for 90 seconds to farm")
-		time.sleep(90)
+			Terminal.ChangeStatus("Still farming in ByeBye: {}b".format(accountData['total_meso']))
+		print("Sleeping for 60 seconds to farm")
+		time.sleep(60)
 	elif not SCLib.GetVar("cube_lock") and not accountData['ready_for_cube'] and level >= 149:
 		print("not ready for cube and farming equip")
 		settings_fourth_job()
@@ -1609,6 +1610,23 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			Terminal.SetSpinBox("AutoDieExp",70)
 			Terminal.SetComboBox("Familiar0",2)
 
+#1191103 gold emblem
+def print_info():
+	with open('info/output/{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as f:
+		f.write("[Premade Meso Account] Lv149 Kanna with {}b+ and meso gear \n".format(int(accountData['total_meso'])))
+		f.write("\nComes with:\n{}b+ Mesos(Spread out among meso mules and Kanna) \n".format(int(accountData['total_meso'])))
+		f.write("110%+ Meso Obtain (check screenshots below)\n")
+		f.write("{} Monster Park coins (Use them to buy extreme potions)\n".format(Inventory.FindItemByID(4310020).count))
+		f.write("{} Epic Potential Scrolls".format(Inventory.FindItemByID(2049705).count))
+		f.write("Reboot Box Stage 1 (untouched)")
+		f.write(
+'''\nOriginal Email that was used to create this account
+If you think the price is too high or you want to buy multiple accounts, please send me your offer, it is negotiable.
+Please do not hesitate to message me if you have any questions, I will be as responsive as possible. 
+Will provide all information that was used to create the accounts including the original email.
+I'm in the EST time zone.
+''')
+		f.close()
 
 if accountData['pet_expire']:
 	general_store = 240000002
@@ -1632,6 +1650,7 @@ if accountData['pet_expire']:
 			CPU_hack(False)
 			Terminal.ChangeChannel(0)
 		Terminal.SetCheckBox("settings/mesologout",False)
+		print_info()
 		time.sleep(60)
 
 ###### lvl 50 hyper rock #######

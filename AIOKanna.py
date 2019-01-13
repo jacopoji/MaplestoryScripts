@@ -1635,7 +1635,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			SCLib.UpdateVar("farm_counter",0)
 		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103":
 			SCLib.UpdateVar("farm_counter",int(SCLib.GetVar("farm_counter"))+1)
-			Terminal.ChangeStatus("Still farming in ByeBye")
+			Terminal.ChangeStatus("Still farming in ByeBye: {}b".format(accountData['total_meso']))
 		print("Sleeping for 60 seconds to farm")
 		time.sleep(60)
 	elif not SCLib.GetVar("cube_lock") and not accountData['ready_for_cube'] and level >= 149:
