@@ -8,11 +8,14 @@ Demon Slayer    DONE
 Mercedes        DONE
 Hayato          DONE
 Xenon           DONE
-Phantom         
+Phantom         DONE
 Illium          DONE(untested)
 Cadena          DONE(untested)
 Ark             DONE(untested)
 Evan            DONE
+Kinesis         DONE
+Aran            DONE
+Beast Tamer     DONE
 '''
 curbrockhideout = [600050000,600050010,600050020]
 #do Monster park how many times?
@@ -31,7 +34,8 @@ DoZakumDaily=True
 
 
 DoBlackGate = True
-
+doSleepyWood = False
+doBeach = False
 #Key to restart pers. variables
 HotKey = 0x7A
 
@@ -207,6 +211,13 @@ def KillPersistVarThred():
 SCHotkey.RegisterKeyEvent(HotKey, KillPersistVarThred) #F11
 
 
+def AlishanRushing():
+    if level > 30:
+        if field_id != 749080900:
+            Quest.StartQuest(55234,9330458)
+        else:
+            teleport_enter(-822,-537)
+
 def dungeonTeleport():
     if len(Field.GetMobs()) == 0:
         toggle_kami(False)
@@ -224,7 +235,10 @@ def toggle_rush_by_level(indicator):
     Terminal.SetRushByLevel(indicator)
 
 def toggle_kami(indicator):
-    Terminal.SetCheckBox("Kami Vac",indicator)
+    if job == 11212 and level > 17 and level < 104:
+        Terminal.SetCheckBox("Kami Vac",False)
+    else:
+        Terminal.SetCheckBox("Kami Vac",indicator)
 
 def toggle_loot(indicator):
     Terminal.SetCheckBox("Kami Loot",indicator)
@@ -238,9 +252,9 @@ def teleport_enter(x,y):
     Character.Teleport(x,y)
     time.sleep(1)
     Character.EnterPortal()
-    time.sleep(1)
     Character.EnterPortal()
-    time.sleep(1)
+    Character.EnterPortal()
+    Character.EnterPortal()
     newfield = Field.GetID()
     if newfield != prefield:
         print("Successfully entered portal")
@@ -300,6 +314,8 @@ def acceptQuest(quest, startnpc, startmap, currentmap):
             Quest.StartQuest(quest, startnpc)
     elif startnpc == 1013000 or startnpc == 0:
         Quest.StartQuest(quest, startnpc)
+    else:
+        Quest.StartQuest(quest, startnpc)
 def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
     print("Completing quest:{} at NPC:{} in map:{}".format(quest,endnpc,endmap))
     if Quest.CheckCompleteDemand(quest, endnpc) ==0:
@@ -333,6 +349,7 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
                     elif field_id != 100030300:
                         Terminal.Rush(endmap)
             else:
+                toggleAttack(False)
                 Terminal.Rush(endmap)
                 time.sleep(2)
         questnpc = Field.FindNpc(endnpc)
@@ -358,12 +375,25 @@ def mapID(id):
         return Field.GetID() in id
 
 def rush(mapid):
-    if not Terminal.IsRushing():
-        print("Rushing to map ID: {0}".format(mapid))
-        Terminal.Rush(mapid)
-        time.sleep(2)
+    if mapid == 331001000:
+        if field_id == 331002100:
+            teleport_enter(-464,207)
+        elif field_id == 331002000:
+            teleport_enter(-480,207)
+        elif field_id == 331000000:
+            teleport_enter(-250,255)
+    elif mapid == 331002000:
+        if field_id == 331001000:
+            teleport_enter(-93,-209)
+        elif field_id == 331000000:
+            teleport_enter(1042,199)
     else:
-        time.sleep(1)
+        if not Terminal.IsRushing():
+            print("Rushing to map ID: {0}".format(mapid))
+            Terminal.Rush(mapid)
+            time.sleep(2)
+        else:
+            time.sleep(1)
 
 def toHex(val, nbits):
     return ((val + (1 << nbits)) % (1 << nbits))
@@ -2577,7 +2607,592 @@ def PhantomSecond():
         toggleAttack(False)
         dungeonTeleport()
 
-def ExplorerFirst():
+def PhantomThird():
+    toggle_rush_by_level(False)
+    ThePoorTheRich = 25110
+    TheLowdown = 25111
+    quest1 = Quest.GetQuestState(ThePoorTheRich)
+    quest2 = Quest.GetQuestState(TheLowdown)
+
+    overlookedarea=260010601
+    arianttreasure = 915010100
+    arianttreasurevault = 915010101
+    TreasureChest = 1403001
+    if quest1 != 2:
+        if quest1 == 0:
+            Quest.StartQuest(ThePoorTheRich,0)
+        elif quest1 == 1:
+            if Quest.CheckCompleteDemand(ThePoorTheRich,0) == 0:
+                Quest.CompleteQuest(ThePoorTheRich,0)
+    elif quest2 != 2:
+        if quest2 == 0:
+            Quest.StartQuest(TheLowdown,0)
+        elif quest2 == 1:
+            if Quest.CheckCompleteDemand(TheLowdown,0) == 0:
+                Quest.CompleteQuest(TheLowdown,0)
+                print("complete q2")
+            elif field_id == overlookedarea:
+                teleport_enter(866,275)
+            elif field_id == arianttreasure:
+                mobs = Field.GetMobs()
+                print("Killing mobs")
+                for mob in mobs:
+                    mobs = Field.GetMobs()
+                    if mob.valid:
+                        Character.Teleport(mob.x-20,mob.y)
+                        Character.UseSkill(24001000)
+                        time.sleep(1)
+                        Character.UseSkill(24001000)
+                        time.sleep(1)
+                        Character.UseSkill(24001000)
+                        time.sleep(1)
+                        Character.UseSkill(24001000)
+                        time.sleep(1)
+                        Character.UseSkill(24001000)
+                        time.sleep(1)
+                        Character.UseSkill(24001000)
+                        time.sleep(1)
+                if len(mobs) == 0:
+                    teleport_enter(166,182)
+            elif field_id == arianttreasurevault:
+                Character.TalkToNpc(TreasureChest)
+
+def PhantomFourth():
+    toggle_rush_by_level(False)
+    WhatsInAPhantom = 25120
+    AnExpensiveAcquisition = 25121
+    TheEmpressAndTheThief = 25122
+    quest1 = Quest.GetQuestState(WhatsInAPhantom)
+    quest2 = Quest.GetQuestState(AnExpensiveAcquisition)
+    quest3 = Quest.GetQuestState(TheEmpressAndTheThief)
+    lushforest = 240010102
+    leafretreasurevaultentrance = 915010200
+    leafretreasurevault = 915010201
+
+    portrait = 1403003
+    if quest1 != 2:
+        if quest1 == 0:
+            Quest.StartQuest(WhatsInAPhantom,0)
+        elif quest1 == 1:
+            if Quest.CheckCompleteDemand(WhatsInAPhantom,0) == 0:
+                Quest.CompleteQuest(WhatsInAPhantom,0)
+    elif quest2 != 2:
+        if quest2 == 0:
+            Quest.StartQuest(AnExpensiveAcquisition,0)
+        elif quest2 == 1:
+            if Quest.CheckCompleteDemand(AnExpensiveAcquisition,0) == 0:
+                Quest.CompleteQuest(AnExpensiveAcquisition,0)
+                print("complete q2")
+            elif field_id == lushforest:
+                teleport_enter(476,332)
+            elif field_id == leafretreasurevaultentrance:
+                mobs = Field.GetMobs()
+                if len(mobs) == 0:
+                    teleport_enter(165,182)
+                else:
+                    toggle_kami(True)
+    elif quest3 != 2:
+        if quest3 == 0:
+            Quest.StartQuest(TheEmpressAndTheThief,0)
+        elif quest3 ==1:
+            if field_id == leafretreasurevaultentrance:
+                mobs = Field.GetMobs()
+                if len(mobs) == 0:
+                    teleport_enter(165,182)
+                else:
+                    toggle_kami(True)
+            elif field_id == leafretreasurevault:
+                Character.TalkToNpc(portrait)
+
+def BeastTamerFirst():
+    ReadingMap = 59019
+    ToStumpTown = 59020
+    TheBoyWhoCried = 59036
+    BluffingTom = 59037
+    TheKoboldThreat1 = 59038
+    TheKoboldThreat2 = 59039
+    TheKoboldThreat3 = 59040
+    SavingTheTownsPeople1 = 59041
+    SavingTheTownsPeople2 = 59042
+    SavingTheTownsPeople3 = 59043
+    DiscoveringTheDen = 59044
+    quest1 = Quest.GetQuestState(ReadingMap)
+    quest2 = Quest.GetQuestState(ToStumpTown)
+    quest3 = Quest.GetQuestState(TheBoyWhoCried)
+    quest4 = Quest.GetQuestState(BluffingTom)
+    quest5 = Quest.GetQuestState(TheKoboldThreat1)
+    quest6 = Quest.GetQuestState(TheKoboldThreat2)
+    quest7 = Quest.GetQuestState(TheKoboldThreat3)
+    quest8 = Quest.GetQuestState(SavingTheTownsPeople1)
+    quest9 = Quest.GetQuestState(SavingTheTownsPeople2)
+    quest10= Quest.GetQuestState(SavingTheTownsPeople3)
+    quest11= Quest.GetQuestState(DiscoveringTheDen)
+    StumpTown = 866000000
+    DarkForestRoad1 = 866000100
+    DarkForestRoad2 = 866000105
+    CreepyForestPath1 = 866000110
+    CreepyForestPath2 = 866000115
+    GloomyForestPath = 866000120
+    KoboldPit1 = 866000130
+    woodrock = 9390312
+    bluffingtomnpc = 9390313
+    grandmatom = 9390451
+    papatom = 9390450
+    bluffingtomnpc2 = 9390314
+    pet = Inventory.FindItemByID(2434265)
+    if pet.valid:
+        Key.Set(0x41, 2, 2001582)
+        time.sleep(2)
+        Inventory.UseItem(2434265)
+        time.sleep(2)
+    if quest1 != 2:
+        print("1")
+        if quest1 == 0:
+            Quest.StartQuest(ReadingMap,0)
+        elif quest1 == 1:
+            Quest.CompleteQuest(ReadingMap,0)
+    elif quest2 != 2:
+        print("2")
+        if quest2 == 0:
+            acceptQuest(ToStumpTown,0,field_id,field_id)
+        elif quest2 == 1:
+            completeQuest(ToStumpTown,woodrock,StumpTown,StumpTown,field_id)
+    elif quest3 != 2:
+        print("3")
+        if quest3 == 0:
+            acceptQuest(TheBoyWhoCried,woodrock,StumpTown,field_id)
+        elif quest3 == 1:
+            completeQuest(TheBoyWhoCried,woodrock,StumpTown,DarkForestRoad1,field_id)
+    elif quest4 != 2:
+        print("4")
+        if quest4 == 0:
+            acceptQuest(BluffingTom,bluffingtomnpc,StumpTown,field_id)
+        elif quest4 == 1:
+            completeQuest(BluffingTom,bluffingtomnpc,StumpTown,DarkForestRoad2,field_id)
+    elif quest5 != 2:
+        print("5")
+        if quest5 == 0:
+            acceptQuest(TheKoboldThreat1,bluffingtomnpc,StumpTown,field_id)
+        elif quest5 == 1:
+            completeQuest(TheKoboldThreat1,bluffingtomnpc,StumpTown,CreepyForestPath1,field_id)
+    elif quest6 != 2:
+        print("6")
+        if quest6 == 0:
+            acceptQuest(TheKoboldThreat2,woodrock,StumpTown,field_id)
+        elif quest6 == 1:
+            completeQuest(TheKoboldThreat2,woodrock,StumpTown,CreepyForestPath2,field_id)
+    elif quest7 != 2:
+        print("7")
+        if quest7 == 0:
+            acceptQuest(TheKoboldThreat3,bluffingtomnpc,StumpTown,field_id)
+        elif quest7 == 1:
+            completeQuest(TheKoboldThreat3,bluffingtomnpc,StumpTown,GloomyForestPath,field_id)
+    elif quest8 != 2:
+        print("8")
+        if quest8 == 0:
+            acceptQuest(SavingTheTownsPeople1,woodrock,StumpTown,field_id)
+        elif quest8 == 1:
+            completeQuest(SavingTheTownsPeople1,grandmatom,DarkForestRoad2,DarkForestRoad2,field_id)
+    elif quest9 != 2:
+        print("9")
+        if quest9 == 0:
+            acceptQuest(SavingTheTownsPeople2,grandmatom,DarkForestRoad2,field_id)
+        elif quest9 == 1:
+            completeQuest(SavingTheTownsPeople2,papatom,CreepyForestPath2,CreepyForestPath2,field_id)
+    elif quest10 != 2:
+        print("10")
+        if quest10 == 0:
+            acceptQuest(SavingTheTownsPeople3,papatom,CreepyForestPath2,field_id)
+        elif quest10 == 1:
+            completeQuest(SavingTheTownsPeople3,bluffingtomnpc2,GloomyForestPath,GloomyForestPath,field_id)
+    elif quest11 != 2:
+        print("11")
+        if quest11 == 0:
+            acceptQuest(DiscoveringTheDen,bluffingtomnpc,StumpTown,field_id)
+        elif quest11 == 1:
+            completeQuest(DiscoveringTheDen,woodrock,StumpTown,StumpTown,field_id)
+    elif quest11 == 2 and level < 33:
+        rush(KoboldPit1)
+        toggle_kami(False)
+    else:
+        AlishanRushing()
+    
+def AranFirst():
+    def next_map(quest, npc, rushmap, delay):
+        toggle_kami(False)
+        time.sleep(delay)                          
+        Quest.StartQuest(quest, npc)
+        time.sleep(delay)
+        rush(rushmap)
+            
+    def to_npc(npc, delay):
+        fnpc = Field.FindNpc(npc)           
+        if fnpc.valid:
+            time.sleep(delay)                        
+            Character.Teleport(fnpc.x, fnpc.y)
+            time.sleep(delay)         
+                
+            
+    def mov_hunt(quest, npc, mob, rushmap):
+        if Quest.CheckCompleteDemand(quest, npc) != 0:
+            toggle_kami(True)
+            Character.BasicAttack()
+            time.sleep(0.5)
+        else:
+            toggle_kami(False)
+            time.sleep(2)
+            rush(rushmap)
+            Quest.CompleteQuest(quest, npc)
+    # Map
+    black_road                = 914000000
+    snow_island               = 140090000
+
+    # Quest
+    find_the_lost_kid         = 21000
+    return_of_the_hero        = 21010
+    the_missing_weapon        = 21011
+    abilities_lost            = 21012
+    gift_for_the_hero         = 21013
+    lilins_account            = 21014
+    basic_fitness_training_1  = 21015
+    basic_fitness_training_2  = 21016
+    basic_fitness_training_3  = 21017
+    basic_fitness_test        = 21018
+    the_five_heroes           = 21100
+    thePolearmWieldingHero    = 21101
+    newBegginings             = 21700
+    quest7 = Quest.GetQuestState(basic_fitness_training_1)
+    quest8 = Quest.GetQuestState(basic_fitness_training_2)
+    quest9 = Quest.GetQuestState(basic_fitness_training_3)
+    quest10= Quest.GetQuestState(basic_fitness_test)
+    quest11= Quest.GetQuestState(the_five_heroes)
+    quest12= Quest.GetQuestState(thePolearmWieldingHero)
+    quest13= Quest.GetQuestState(newBegginings)
+    # NPC
+    athena_id                 = 1209000
+    lost_kid_id               = athena_id + 6
+    lilin_id                  = 1202000
+    puka_id                   = lilin_id + 1
+    puen_id                   = lilin_id + 2
+    puir_id                   = lilin_id + 3
+    purun_id                  = lilin_id + 4
+    putzki_id                 = lilin_id + 5
+    polearm_id                = 1201001
+
+    toggle_rush_by_level(False)
+    if field_id == black_road:
+
+        rush(field_id + 100)
+        time.sleep(1)
+
+    elif field_id == black_road + 100:
+        toggle_kami(False)
+        to_npc(athena_id, 1)
+        Character.TalkToNpc(athena_id)
+        time.sleep(1)
+        Quest.StartQuest(find_the_lost_kid, athena_id)
+        time.sleep(1)
+        toggle_kami(True)
+        rush(field_id + 200)
+
+    elif field_id == black_road + 300:
+
+        Quest.StartQuest(find_the_lost_kid, lost_kid_id)
+        time.sleep(1)
+
+    elif field_id == black_road + 500:
+        toggle_kami(False)
+        to_npc(athena_id + 7, 1)
+        Quest.CompleteQuest(find_the_lost_kid + 1, athena_id + 7)
+        toggle_kami(True)
+
+    elif field_id == snow_island:
+        toggle_kami(False)
+        to_npc(lilin_id, 1)
+        Character.TalkToNpc(lilin_id)
+        toggle_kami(True)
+
+    elif field_id == snow_island + 100:
+        Quest.StartQuest(return_of_the_hero, puka_id)
+        if Quest.CheckCompleteDemand(return_of_the_hero, puka_id) != 0:
+            Inventory.UseItem(2000022)
+            time.sleep(2)
+            Quest.CompleteQuest(return_of_the_hero, puka_id)
+            time.sleep(2)
+            rush(field_id + 100)
+
+    elif field_id == snow_island + 200:
+        Quest.StartQuest(the_missing_weapon, puen_id)
+        time.sleep(1)
+        if Quest.CheckCompleteDemand(the_missing_weapon, puir_id) == 0:
+            Quest.CompleteQuest(the_missing_weapon, puir_id)
+            time.sleep(1)
+            rush(field_id + 100)
+
+    elif field_id == snow_island + 300:
+        Quest.StartQuest(abilities_lost, purun_id)
+        time.sleep(1)
+        Inventory.SendChangeSlotPositionRequest(1, 1, -11, -1)
+        if Quest.GetQuestState(abilities_lost) != 2:
+            mob = Field.FindMob(9300383)
+            if mob.valid:
+                toggle_kami(True)
+            else:
+                toggle_kami(False)
+
+        elif Quest.GetQuestState(abilities_lost) == 2:
+            time.sleep(1)
+            rush(field_id + 100)
+
+    elif field_id == snow_island + 400:
+        if Quest.GetQuestState(gift_for_the_hero) == 0:
+            putzki = Field.FindNpc(putzki_id)
+            time.sleep(1)
+            if pos.x != putzki.x:
+                toggle_kami(False)
+                Character.Teleport(putzki.x, putzki.y)
+            time.sleep(1)
+            Quest.StartQuest(gift_for_the_hero, putzki_id)
+
+        else:
+            box = Field.FindReactor(1402000)
+            toggle_kami(False)
+            if box.valid and Quest.CheckCompleteDemand(gift_for_the_hero, putzki_id) != 0:
+                time.sleep(1)
+                if pos.x != box.x:
+                    Character.Teleport(box.x, box.y)
+                time.sleep(1)
+                Character.BasicAttack()
+                bamboo = Field.FindItem(4032309)
+                wood   = Field.FindItem(4032310)
+                if bamboo.valid or wood.valid:
+                    Character.Teleport(bamboo.x, bamboo.y)
+                    time.sleep(2)            
+                    Character.LootItem()    
+                    time.sleep(2)            
+                    Character.Teleport(wood.x, wood.y)    
+                    time.sleep(2)
+                    Character.LootItem()
+
+            if Quest.CheckCompleteDemand(gift_for_the_hero, putzki_id) == 0:
+                putzki = Field.FindNpc(putzki_id)
+                time.sleep(1)
+                if pos.x != putzki.x:
+                    Character.Teleport(putzki.x, putzki.y)
+                time.sleep(1)
+                Quest.CompleteQuest(gift_for_the_hero, putzki_id)
+                time.sleep(1)
+                rush(snow_island - 90000)
+
+    elif field_id == snow_island - 90000:
+        #if pos.x != -208:
+        #    toggle_kami(False)
+        #    Character.Teleport(-208, 86)
+        if Quest.GetQuestState(lilins_account) == 0:
+            time.sleep(1)          
+            Quest.StartQuest(lilins_account, lilin_id - 1000)
+        if Quest.GetQuestState(lilins_account) == 1:
+            time.sleep(1)
+            Npc.ClearSelection()
+            time.sleep(1)
+            Npc.RegisterSelection("Black Mage")
+            time.sleep(1)
+            Npc.RegisterSelection("Sealed away the Black Mage")
+            time.sleep(1)
+            Quest.CompleteQuest(lilins_account, lilin_id - 1000)
+    if quest7 != 2:
+        if quest7 == 0:
+            acceptQuest(basic_fitness_training_1, lilin_id - 1000, field_id + 20000, field_id)
+        elif quest7 == 1:
+            completeQuest(basic_fitness_training_1, lilin_id - 1000, field_id - 20000,snow_island - 70000,field_id)
+    elif quest8 != 2:
+        if quest8 == 0:
+            acceptQuest(basic_fitness_training_2, lilin_id - 1000, field_id + 20100, field_id)
+        elif quest8 == 1:
+            completeQuest(basic_fitness_training_2, lilin_id - 1000, snow_island - 69900,140020100,field_id)
+    elif quest9 != 2:
+        print("9")
+        if quest9 == 0:
+            acceptQuest(basic_fitness_training_3, lilin_id - 1000, field_id + 20200, field_id)
+        elif quest9 == 1:
+            completeQuest(basic_fitness_training_3, lilin_id - 1000, 140000000,snow_island - 69800,field_id)
+    elif quest10 != 2:
+        print("10")
+        if quest10 == 0:
+            acceptQuest(basic_fitness_test, lilin_id - 1000, field_id + 10200, field_id)
+        elif quest10 == 1:
+            completeQuest(basic_fitness_test, lilin_id - 1000, snow_island - 90000,snow_island - 79800,field_id)
+    elif quest11 != 2:
+        if quest11 == 0:
+            acceptQuest(the_five_heroes,lilin_id - 1000,snow_island - 90000,field_id)
+    elif quest12 != 2:
+        if quest12 == 0:
+            acceptQuest(thePolearmWieldingHero,polearm_id,snow_island - 90000,field_id)
+    elif quest13 != 2:
+        if quest13 == 0:
+            acceptQuest(newBegginings,lilin_id-1000,snow_island - 90000,field_id)
+    
+def AranSecond():
+    toggle_rush_by_level(False)
+    InSearchOfIts = 21200
+    MirrorOfDesire = 21201
+    BlackSmith = 21202
+    Lilin   = 1201000
+    polearm = 1201001
+    Maha = 1201002
+    sirBlackSmith = 1203000
+    quest1 = Quest.GetQuestState(InSearchOfIts)
+    quest2 = Quest.GetQuestState(MirrorOfDesire)
+    quest3 = Quest.GetQuestState(BlackSmith)
+    Rien = 140000000
+    mirrorcave = 140030000
+    headblacksmithshop = 914021000
+    outside = 914021010
+    if quest1 != 2:
+        if quest1 == 0:
+            acceptQuest(InSearchOfIts,Lilin,Rien,field_id)
+        elif quest1 == 1:
+            completeQuest(InSearchOfIts,Maha,Rien,Rien,field_id)
+    elif quest2 !=2:
+        if quest2 == 0:
+            acceptQuest(MirrorOfDesire,Lilin,Rien,field_id)
+        elif quest2 == 1:
+            if Quest.CheckCompleteDemand(MirrorOfDesire,Maha) != 0:
+                if field_id != mirrorcave and field_id != headblacksmithshop and field_id != outside:
+                    rush(mirrorcave)
+                elif field_id == mirrorcave:
+                    teleport_enter(-7,122)
+                elif quest3 != 2:
+                    if quest3 == 0:
+                        acceptQuest(BlackSmith,sirBlackSmith,headblacksmithshop,field_id)
+                    elif quest3 ==1:
+                        if Quest.CheckCompleteDemand(BlackSmith,sirBlackSmith) != 0:
+                            if field_id == headblacksmithshop:
+                                teleport_enter(-1301,363)
+                            else:
+                                toggle_kami(True)
+                                toggleAttack(True)
+                        elif Quest.CheckCompleteDemand(BlackSmith,sirBlackSmith) == 0:
+                            if field_id != headblacksmithshop:
+                                dungeonTeleport()
+                            else:
+                                completeQuest(BlackSmith,sirBlackSmith,headblacksmithshop,headblacksmithshop,field_id)
+            elif Quest.CheckCompleteDemand(MirrorOfDesire,Maha) == 0:
+                if field_id in range(headblacksmithshop,headblacksmithshop+10):
+                    teleport_enter(839,543)
+                else:
+                    completeQuest(MirrorOfDesire,Maha,Rien,Rien,field_id)
+
+def AranThird():
+    toggle_rush_by_level(False)
+    WeaponNeverLeavesItsOwner = 21300
+    CatchThatThief = 21301
+    MakingRedJade = 21302
+    FriendshipWithYeti = 21303
+
+    Lilin   = 1201000
+    polearm = 1201001
+    Maha = 1201002
+    sirBlackSmith = 1203000
+    Tititi = 1203001
+
+    quest1 = Quest.GetQuestState(WeaponNeverLeavesItsOwner)
+    quest2 = Quest.GetQuestState(CatchThatThief)
+    quest3 = Quest.GetQuestState(MakingRedJade)
+    quest4 = Quest.GetQuestState(FriendshipWithYeti)
+    Rien = 140000000
+    PenguinPort = 140020300
+    crowmap = 914022000
+    mirrorcave = 140030000
+    razorsharpcliff = 914022100
+    headblacksmithshop = 914021000
+    outside = 914022200
+    if quest1 != 2:
+        if quest1 == 0:
+            acceptQuest(WeaponNeverLeavesItsOwner,Lilin,Rien,field_id)
+        elif quest1 == 1:
+            completeQuest(WeaponNeverLeavesItsOwner,Maha,Rien,Rien,field_id)
+    elif quest2 != 2:
+        if quest2 == 0:
+            acceptQuest(CatchThatThief,Maha,Rien,field_id)
+        elif quest2 == 1:
+            toggle_HTR(False)
+            completeQuest(CatchThatThief,Maha,Rien,PenguinPort,field_id)
+            if field_id == crowmap and len(Field.GetMobs()) == 0:
+                dungeonTeleport()
+                toggle_HTR(True)
+    elif quest3 != 2:
+        if quest3 == 0:
+            acceptQuest(MakingRedJade,Lilin,Rien,field_id)
+        elif quest3 == 1:
+            if Quest.CheckCompleteDemand(MakingRedJade,Maha) != 0:
+                if field_id != mirrorcave and field_id != razorsharpcliff and field_id != outside:
+                    rush(mirrorcave)
+                elif field_id == mirrorcave:
+                    teleport_enter(-7,122)
+                elif quest4 != 2:
+                    print("4")
+                    if quest4 == 0:
+                        print("accept")
+                        acceptQuest(FriendshipWithYeti,Tititi,razorsharpcliff,field_id)
+                    elif quest4 ==1:
+                        print("Do")
+                        if Quest.CheckCompleteDemand(FriendshipWithYeti,Tititi) != 0:
+                            if field_id == razorsharpcliff:
+                                teleport_enter(-211,454)
+                            else:
+                                toggle_kami(True)
+                                toggleAttack(True)
+                        elif Quest.CheckCompleteDemand(FriendshipWithYeti,Tititi) == 0:
+                            if field_id != razorsharpcliff:
+                                dungeonTeleport()
+                            else:
+                                completeQuest(FriendshipWithYeti,Tititi,razorsharpcliff,razorsharpcliff,field_id)
+            elif Quest.CheckCompleteDemand(MakingRedJade,Maha) == 0:
+                print("Done")
+                if field_id in range(razorsharpcliff,razorsharpcliff+10):
+                    teleport_enter(-271,-197)
+                else:
+                    completeQuest(MakingRedJade,Maha,Rien,Rien,field_id)
+
+def AranFourth():
+    toggle_rush_by_level(False)
+    AWeaponFightsOwner = 21400
+    TrainingThePolearm = 21401
+    Lilin   = 1201000
+    polearm = 1201001
+    Maha = 1201002
+    sirBlackSmith = 1203000
+    Tititi = 1203001
+
+    quest1 = Quest.GetQuestState(AWeaponFightsOwner)
+    quest2 = Quest.GetQuestState(TrainingThePolearm)
+
+    Rien = 140000000
+    PenguinPort = 140020300
+    crowmap = 914022000
+    mirrorcave = 140030000
+    
+    if quest1 != 2:
+        print("1")
+        if quest1 == 0:
+            acceptQuest(AWeaponFightsOwner,Lilin,Rien,field_id)
+        elif quest1 == 1:
+            completeQuest(AWeaponFightsOwner,Maha,Rien,Rien,field_id)
+    elif quest2 !=2:
+        print('2')
+        if quest2 == 0:
+            acceptQuest(TrainingThePolearm,Maha,Rien,field_id)
+        elif quest2 == 1:
+            if len(Field.GetMobs())>0:
+                toggle_kami(True)
+            elif field_id != Rien:
+                dungeonTeleport()
+            else:
+                completeQuest(TrainingThePolearm,Maha,Rien,Rien,field_id)
+
+def ExplorerFirst(desired_job):
+    toggle_kami(False)
     if Field.GetID() == 4000011:
         Character.Teleport(1106 ,545)
         time.sleep(3)
@@ -2630,8 +3245,9 @@ def ExplorerFirst():
                 Character.EnterPortal()
         if Field.GetID() == 4000030:
             if not Inventory.FindItemByID(4033914).valid:
-                Character.Teleport(1895 ,407)
-                time.sleep(5)
+                if pos.x != 1895:
+                    Character.Teleport(1895 ,407)
+                time.sleep(2)
                 Character.BasicAttack()
                 item = Field.FindItem(4033914)
                 if item.valid:
@@ -2640,9 +3256,7 @@ def ExplorerFirst():
             if Inventory.FindItemByID(4033914).valid:
                 if Field.GetID() == 4000030:
                     Terminal.SetCheckBox("Auto Loot", False)
-                    Character.Teleport(2506, 287)
-                    time.sleep(3)
-                    Character.EnterPortal()      
+                    teleport_enter(2506,287)  
         
     if Character.GetLevel() == 6:
         if Field.GetID() == 4000030:
@@ -2655,6 +3269,23 @@ def ExplorerFirst():
                 Character.EnterPortal()
         mano()
     if Character.GetLevel() == 7:
+        Warrior = 0
+        Magician = 1
+        Bowman = 2
+        Thief = 3
+        Pirate = 4
+        if desired_job == 0:
+            desired_job_text = "powerful"
+        elif desired_job == 1:
+            desired_job_text = "intelligent"
+        elif desired_job == 2:
+            desired_job_text = "long-ranged"
+        elif desired_job == 3:
+            desired_job_text = "speedy"
+        elif desired_job == 4:
+            desired_job_text = "fancy"
+        Npc.ClearSelection()
+        Npc.RegisterSelection(desired_job_text)
         Character.TalkToNpc(10307)
         time.sleep(5)
         Quest.StartQuest(32216, 10306)
@@ -2670,6 +3301,383 @@ def ExplorerFirst():
             Quest.StartQuest(1404, 1052001)
         if Field.GetID() == 101000003:
             Quest.StartQuest(1402, 1032001)
+        time.sleep(1)
+        toggle_rush_by_level(True)
+        toggle_kami(True)
+
+def ExplorerSecond():
+    print("Explorer 2")
+    toggle_rush_by_level(False)
+    thiefQuest = 1421
+    assassinQuest = 1422
+    banditQuest = 1423
+    thiefInstructor = 1052001
+    thiefMap = 103000003
+
+    toDoQuest = thiefQuest
+    targetJob = assassinQuest
+    Instructor = thiefInstructor
+    toGoMap = thiefMap
+    quest = Quest.GetQuestState(toDoQuest)
+    quest2= Quest.GetQuestState(targetJob)
+
+    if job == 400:
+        if quest != 2:
+            if quest == 0:
+                acceptQuest(toDoQuest,Instructor,toGoMap,field_id)
+            elif quest == 1:
+                completeQuest(toDoQuest,Instructor,toGoMap,toGoMap,field_id)
+        elif quest2 !=2:
+            print("2")
+            if quest2 == 0:
+                acceptQuest(targetJob,Instructor,toGoMap,field_id)
+            elif quest2 == 1:
+                print(Inventory.FindItemByID(4031013).count)
+                if Quest.CheckCompleteDemand(targetJob,Instructor) == 0:
+                    if field_id != toGoMap:
+                        dungeonTeleport()
+                    elif field_id == toGoMap:
+                        completeQuest(targetJob,Instructor,toGoMap,toGoMap,field_id)
+                else:
+                    toggle_kami(True)
+
+def ExplorerThird():
+    print("Explorer 3")
+    CheifsResidence = 211000001
+    WarriorChief = 2020008
+    MagicianChief = 2020009
+    BowmanChief = 2020010
+    ThiefChief = 2020011
+    PirateChief = 2020013
+    thiefQuest = 1441
+    thiefQuest2= 1442
+    thiefInstructor = 1052001
+    thiefMap = 103000003
+
+    el_nath_map = 211040401
+    HolyStone = 2030006
+    SparklingCrystal = 1061010
+    RadiantCrystalPassageway = 910540000
+    DimensionalWorld = 910540400
+
+    toDoQuest = thiefQuest
+    toDoQuest2 = thiefQuest2
+    Instructor = thiefInstructor
+    Chief = ThiefChief
+    toGoMap = thiefMap
+    quest = Quest.GetQuestState(toDoQuest)
+    quest2= Quest.GetQuestState(toDoQuest2)
+    if quest != 2:
+        if quest == 0:
+            acceptQuest(toDoQuest,Instructor,toGoMap,field_id)
+        elif quest == 1:
+            completeQuest(toDoQuest,Chief,CheifsResidence,CheifsResidence,field_id)
+    elif quest2 != 2:
+        if quest2 == 0:
+            acceptQuest(toDoQuest2,Chief,CheifsResidence,field_id)
+        elif quest2 == 1:
+            if Quest.CheckCompleteDemand(toDoQuest2,Chief) == 0:
+                if field_id == DimensionalWorld:
+                    mobs = Field.GetMobs()
+                    if len(mobs) == 0:
+                        if pos.x != 692:
+                            toggle_kami(False)
+                            Character.Teleport(692,-456)
+                        else:
+                            Character.TalkToNpc(SparklingCrystal)
+                else:
+                    completeQuest(toDoQuest2,Chief,CheifsResidence,CheifsResidence,field_id)
+            elif field_id == el_nath_map:
+                if pos.x != 27:
+                    toggle_kami(False)
+                    Character.Teleport(27,454)
+                else:
+                    Character.TalkToNpc(HolyStone)
+            elif field_id == RadiantCrystalPassageway:
+                dungeonTeleport()
+            elif field_id == DimensionalWorld:
+                mobs = Field.GetMobs()
+                if len(mobs) == 0:
+                    if pos.x != 692:
+                        toggle_kami(False)
+                        Character.Teleport(692,-456)
+                    else:
+                        Character.TalkToNpc(SparklingCrystal)
+
+def KinesisFirst():
+    print("Kinis")
+
+    CheckYourself = 22712
+    JaysGripe = 22720
+    VicePresidents = 22721
+    petition1 = 22722
+    petition2 = 22723
+    petition3 = 22724
+    JaysOnTheCase = 22725
+    CodeBreakerJay1=22726
+    HeroOnTheScene =22727
+    GatheringEvidence = 22728
+    AreBlackCatsUnlucky=22729
+    CodeBreakerJay2=22730
+    AherosDuty1 = 22731
+    AherosDuty2 = 22732
+    APaleThreat = 22733
+    quest1 = Quest.GetQuestState(CheckYourself)
+    quest2 = Quest.GetQuestState(JaysGripe)
+    quest3 = Quest.GetQuestState(VicePresidents)
+    quest4 = Quest.GetQuestState(petition1)
+    quest5 = Quest.GetQuestState(petition2)
+    quest6 = Quest.GetQuestState(petition3)
+    quest7 = Quest.GetQuestState(JaysOnTheCase)
+    quest8 = Quest.GetQuestState(CodeBreakerJay1)
+    quest9 = Quest.GetQuestState(HeroOnTheScene)
+    quest10= Quest.GetQuestState(GatheringEvidence)
+    quest11= Quest.GetQuestState(AreBlackCatsUnlucky)
+    quest12 = Quest.GetQuestState(CodeBreakerJay2)
+    quest13 = Quest.GetQuestState(AherosDuty1)
+    quest14 = Quest.GetQuestState(AherosDuty2)
+    quest15 = Quest.GetQuestState(APaleThreat)
+    Jay = 1531007
+    Yuna = 1531008
+    Jin = 1531061
+    Young = 1531046
+    Joon = 1531047
+    Min = 1531042
+    Hyuk = 1531043
+    Nero = 1531010
+    BlueShirtGuy = 1531064
+    BlondeLady = 1531065
+    TshirtBoy = 1531066
+    StraightHairGirl = 1531067
+    trainingroom1 = 331001110
+    trainingroom2 = 331001122
+    trainingroom3 = 331001130
+    HQ = 331001000
+    citycentre = 331000000
+    firstfloor = 331002000
+    secondfloor=331002100
+    classroom1 =331002300
+    classroom2 = 331002500
+    subwaycar1 =331003000
+    pet = Inventory.FindItemByID(2434265)
+    if pet.valid:
+        Key.Set(0x41, 2, 2001582)
+        time.sleep(2)
+        Inventory.UseItem(2434265)
+        time.sleep(2)
+
+    if field_id == trainingroom1:
+        print("1")
+        dungeonTeleport()
+    elif field_id == trainingroom2:
+        print("2")
+        teleport_enter(-285,63)
+    elif field_id == trainingroom3:
+        mobs = Field.GetMobs()
+        if len(mobs) == 0:
+            dungeonTeleport()
+    elif quest1 != 2:
+        if quest1 == 0:
+            acceptQuest(CheckYourself,Jay,HQ,field_id)
+        elif quest1 == 1:
+            drink = Inventory.FindItemByID(2000040)
+            if drink.valid:
+                Inventory.UseItem(2000040)
+            completeQuest(CheckYourself,Jay,HQ,HQ,field_id)
+    elif quest2 != 2:
+        if quest2 == 0:
+            Npc.ClearSelection()
+            Npc.RegisterSelection(" ")
+            acceptQuest(JaysGripe,Jay,HQ,field_id)
+        elif quest2 == 1:
+            if field_id == HQ:
+                rush(firstfloor)
+            elif field_id == firstfloor:
+                completeQuest(JaysGripe,Yuna,firstfloor,firstfloor,field_id)
+    elif quest3 != 2:
+        toggle_kami(False)
+        if quest3 == 0:
+            acceptQuest(VicePresidents,Yuna,firstfloor,field_id)
+        elif quest3 == 1:
+            if Quest.CheckCompleteDemand(VicePresidents,Yuna) != 0:
+                if quest4 != 2:
+                    acceptQuest(petition1,Jin,firstfloor,field_id)
+                elif quest5 != 2:
+                    acceptQuest(petition2,Young,firstfloor,field_id)
+                elif quest6 != 2:
+                    acceptQuest(petition3,Joon,firstfloor,field_id)
+            else:
+                Npc.ClearSelection()
+                Npc.RegisterSelection(" ")
+                completeQuest(VicePresidents,Yuna,firstfloor,firstfloor,field_id)
+    elif quest7 != 2:
+        if quest7 == 0:
+            acceptQuest(JaysOnTheCase,Jay,HQ,field_id)
+        elif quest7 == 1:
+            if field_id != HQ:
+                rush(HQ)
+            else:
+                completeQuest(JaysOnTheCase,Jay,HQ,HQ,field_id)
+    elif quest8 != 2:
+        if quest8 == 0:
+            Npc.ClearSelection()
+            Npc.RegisterSelection(" ")
+            acceptQuest(CodeBreakerJay1,Jay,HQ,field_id)
+        elif quest8 == 1:
+            if field_id != firstfloor:
+                rush(firstfloor)
+            else:
+                completeQuest(CodeBreakerJay1,Min,firstfloor,firstfloor,field_id)
+    elif quest9 != 2:
+        if quest9 == 0:
+            acceptQuest(HeroOnTheScene,Min,firstfloor,field_id)
+        elif quest9 == 1:
+            if field_id == firstfloor:
+                teleport_enter(122,207)
+            elif field_id in range(331002300,331002310) and len(Field.GetMobs()) > 0:
+                toggle_kami(True)
+            else:
+                completeQuest(HeroOnTheScene,Hyuk,classroom1,classroom1,field_id)
+    elif quest10 != 2:
+        if quest10 == 0:
+            acceptQuest(GatheringEvidence,0,classroom1,classroom1)
+        elif quest10 == 1:
+            if Quest.CheckCompleteDemand(GatheringEvidence,0) != 0:
+                if field_id == classroom1:
+                    dungeonTeleport()
+                elif field_id == firstfloor:
+                    EnterPortal("up_floor2")
+                elif field_id == secondfloor:
+                    EnterPortal("into_classroom")
+                elif field_id in range(331002400,331002410) and len(Field.GetMobs()) > 0:
+                    toggle_kami(True)
+            elif Quest.CheckCompleteDemand(GatheringEvidence,0) == 0:
+                Quest.CompleteQuest(GatheringEvidence,0)
+    elif quest11 != 2:
+        print('11')
+        if field_id == classroom2:
+            dungeonTeleport()
+        elif quest11 == 0:
+            print("0")
+            if field_id != citycentre:
+                rush(firstfloor)
+                if field_id == firstfloor:
+                    teleport_enter(-475,207)
+            else:
+                acceptQuest(AreBlackCatsUnlucky,Nero,citycentre,field_id)
+        elif quest11 == 1:
+            if field_id != HQ:
+                rush(HQ)
+            else:
+                completeQuest(AreBlackCatsUnlucky,Jay,HQ,HQ,field_id)
+    elif quest12 != 2:
+        print("12")
+        if quest12 == 0:
+            if field_id != HQ:
+                rush(HQ)
+            else:
+                Npc.ClearSelection()
+                Npc.RegisterSelection(" ")
+                acceptQuest(CodeBreakerJay2,Jay,HQ,field_id)
+        elif quest12 == 1:
+            if field_id == citycentre:
+                teleport_enter(-753,413)
+            elif field_id == HQ:
+                teleport_enter(-94,-209)
+            else:
+                completeQuest(CodeBreakerJay2,BlueShirtGuy,subwaycar1,subwaycar1,field_id)
+    elif quest13 != 2:
+        print("13")
+        if quest13 ==0:
+            acceptQuest(AherosDuty1,BlueShirtGuy,subwaycar1,field_id)
+        elif quest13 ==1:
+            if Quest.CheckCompleteDemand(AherosDuty1,BlueShirtGuy) != 0:
+                if field_id == subwaycar1:
+                    teleport_enter(813,57)
+                elif len(Field.GetMobs()) > 0:
+                    toggle_kami(True)
+                else:
+                    npcs = Field.GetNpcs()
+                    for npc in npcs:
+                        if npc.valid:
+                            Character.TalkToNpc(npc.id)
+                            time.sleep(2)
+    elif quest14 != 2:
+        print("14")
+        if quest14 ==0:
+            acceptQuest(AherosDuty2,TshirtBoy,field_id,field_id)
+        elif quest14 ==1:
+            if Quest.CheckCompleteDemand(AherosDuty2,StraightHairGirl) != 0:
+                if len(Field.GetMobs()) == 0:
+                    dungeonTeleport()
+                elif len(Field.GetMobs()) > 0:
+                    toggle_kami(True)
+                else:
+                    npcs = Field.GetNpcs()
+                    for npc in npcs:
+                        if npc.valid:
+                            Character.TalkToNpc(npc.id)
+                            time.sleep(2)
+            elif Quest.CheckCompleteDemand(AherosDuty2,StraightHairGirl) == 0:
+                npcs = Field.GetNpcs()
+                for npc in npcs:
+                    if npc.valid:
+                        Character.TalkToNpc(npc.id)
+                        time.sleep(2)
+    elif quest15 != 2:
+        print("15")
+        if quest15 ==0:
+            acceptQuest(APaleThreat,StraightHairGirl,field_id,field_id)
+        elif quest15 ==1:
+            if Quest.CheckCompleteDemand(APaleThreat,StraightHairGirl) != 0:
+                if len(Field.GetMobs()) == 0:
+                    dungeonTeleport()
+                elif len(Field.GetMobs()) > 0:
+                    toggle_kami(True)
+                else:
+                    npcs = Field.GetNpcs()
+                    for npc in npcs:
+                        if npc.valid:
+                            Character.TalkToNpc(npc.id)
+                            time.sleep(2)
+            elif Quest.CheckCompleteDemand(APaleThreat,StraightHairGirl) == 0:
+                npcs = Field.GetNpcs()
+                for npc in npcs:
+                    if npc.valid:
+                        Character.TalkToNpc(npc.id)
+                        time.sleep(2)
+
+def KinesisSecond():
+    TypeNDataUpgrade = 22770
+
+    quest1 = Quest.GetQuestState(TypeNDataUpgrade)
+
+    Jay = 1531007
+    Yuna = 1531008
+    Jin = 1531061
+    Young = 1531046
+    Joon = 1531047
+    Min = 1531042
+    Hyuk = 1531043
+    Nero = 1531010
+    BlueShirtGuy = 1531064
+    BlondeLady = 1531065
+    TshirtBoy = 1531066
+    StraightHairGirl = 1531067
+    trainingroom1 = 331001110
+    trainingroom2 = 331001122
+    trainingroom3 = 331001130
+    HQ = 331001000
+    citycentre = 331000000
+    firstfloor = 331002000
+    secondfloor=331002100
+    classroom1 =331002300
+    classroom2 = 331002500
+    subwaycar1 =331003000
+    if quest1 !=2 :
+        print("1")
+        if quest1 == 0:
+            Quest.StartQuest(TypeNDataUpgrade,Jay)
 
 ################################################################
 def id2str(jobid):
@@ -2898,7 +3906,7 @@ def GetToTheDoorToZakum():
                 questToDo = 6995
         if ZakumQuest:
             Npc.ClearSelection()
-            Npc.RegisterSelection("I want to challenge Zakum.")
+            Npc.RegisterSelection("I want to ")
             time.sleep(1)
             Character.TalkToNpc(TalkNPC)
             time.sleep(1)
@@ -2907,7 +3915,7 @@ def GetToTheDoorToZakum():
             time.sleep(1)
             Quest.CompleteQuest(questToDo,TalkNPC)
             Npc.ClearSelection()
-            Npc.RegisterSelection("I want to try the Zakum quest.")
+            Npc.RegisterSelection("I want to ")
             time.sleep(1)
             Character.TalkToNpc(TalkNPC)
             time.sleep(1)
@@ -3035,7 +4043,7 @@ def BossCheck():
 
 
 if job == -1 and not accountData['changing_mule']:
-    #print("Not logged in yet")
+    print("Not logged in yet")
     Terminal.SetLineEdit("LoginChar",accountData["cur_pos"])
     time.sleep(2)
 
@@ -3083,6 +4091,9 @@ def safety_setting():
     for settings in dangerous_settings:
         if settings == "General FMA":
             if job not in IlliumJobs:
+                Terminal.SetCheckBox(settings, False)
+        elif settings == "Full Map Attack":
+            if job != 11212 or level < 17 or level >= 104:
                 Terminal.SetCheckBox(settings, False)
         else:
             Terminal.SetCheckBox(settings, False)
@@ -3435,7 +4446,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", on)
-        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetSpinBox("SkillInjection",150)
     elif job == 15000: #Illium Pre 1st
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -3538,6 +4549,158 @@ def toggleAttack(on):
         Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", on)
+    elif job == 100: #Swordman
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,1001005)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 400: #Thief
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,4001344)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 410: #Assassin
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,4101008)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 411: #Hermit
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,4111015)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 11212: #Beast Tamer
+        if level <= 17:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+            Key.Set(attack_key,1,112000000)
+            Terminal.SetCheckBox("Skill Injection", False)
+            #Terminal.SetSpinBox("SkillInjection",100)
+            Terminal.SetCheckBox("Melee No Delay",False)
+            #Terminal.SetRadioButton("SIRadioMagic",True)
+            Terminal.SetCheckBox("Auto Attack", on)
+            Terminal.SetComboBox("AttackKey",33)
+            Terminal.SetSpinBox("autoattack_spin",100)
+            Terminal.SetCheckBox("Full Map Attack",False)
+        elif level >17 and level < 104:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+            Key.Set(attack_key,1,112000000)
+            Terminal.SetCheckBox("Auto SP",False)
+            Terminal.SetSpinBox("SkillInjection",17000)
+            Terminal.SetLineEdit("SISkillID", "112001006")
+            Terminal.SetCheckBox("Melee No Delay",False)
+            Terminal.SetRadioButton("SIRadioMelee",True)
+            Terminal.SetCheckBox("Auto Attack", False)
+            Terminal.SetComboBox("AttackKey",33)
+            Terminal.SetSpinBox("autoattack_spin",100)
+            Terminal.SetCheckBox("Skill Injection", on)
+            Terminal.SetCheckBox("Full Map Attack",on)
+            Terminal.SetCheckBox("Kami Vac",False)
+        elif level >= 104:
+            Key.Set(pgup_key, 2, 2001582)
+            Terminal.SetCheckBox("Auto SP",True)
+            Terminal.SetLineEdit("SISkillID","112000002")
+            Terminal.SetCheckBox("Auto Attack", False)
+            Terminal.SetSpinBox("SkillInjection",200)
+            Terminal.SetCheckBox("Skill Injection", False)
+            Terminal.SetCheckBox("Melee No Delay",False)
+            Terminal.SetRadioButton("SIRadioMelee",True)
+            count = 0
+            if on:
+                while count < 100 and len(Field.GetMobs())>0:
+                    Key.Down(0x11)
+                    time.sleep(0.1)
+                    Key.Up(0x11)
+                    time.sleep(0.1)
+                    count += 1
+    elif job == 2000:#Aran pre
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",1)
+        Terminal.SetSpinBox("autoattack_spin",100)
+        '''
+        elif job == 11212: #beast tamer 4th
+        Terminal.SetLineEdit("SISkillID","112000002")
+        Terminal.SetCheckBox("Auto Attack", False)
+        Terminal.SetSpinBox("SkillInjection",200)
+        Terminal.SetCheckBox("Skill Injection", False)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        count = 0
+        if on:
+            while count < 50 and Field.GetMobCount()>0:
+                Key.Down(0x44)
+                time.sleep(0.1)
+                Key.Up(0x44)
+                time.sleep(0.1)
+                Key.Press(0x44)
+                count += 1
+        '''
+    elif job == 2100: #Aran 1st 21000007
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,21001010)
+        Terminal.SetLineEdit("SISkillID","21000006")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",75)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", False)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 2110 or job == 2111 or job == 2112: #Aran 2nd+3rd+4th 21000007
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,21001010)
+        Terminal.SetLineEdit("SISkillID","21100018")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",30)
+        Terminal.SetCheckBox("Melee No Delay",on)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", False)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 14200:# Kinesis 1st
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,142001001)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 14210: #Kinesis 2nd 142101002
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,142101002)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 6500: #AB 1st
         Terminal.SetLineEdit("SISkillID","65001100")
         Terminal.SetCheckBox("Auto Attack", False)
@@ -3593,22 +4756,6 @@ def toggleAttack(on):
         else:
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 11212: #beast tamer 4th
-        Terminal.SetLineEdit("SISkillID","112000002")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",200)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        count = 0
-        if on:
-            while count < 50 and Field.GetMobCount()>0:
-                Key.Down(0x44)
-                time.sleep(0.1)
-                Key.Up(0x44)
-                time.sleep(0.1)
-                Key.Press(0x44)
-                count += 1
     elif job == 1212: #BW 4th
         Terminal.SetLineEdit("SISkillID","12121055")
         Terminal.SetCheckBox("Auto Attack", False)
@@ -3676,10 +4823,10 @@ def GetEmblem():
         Quest.StartQuest(25676, 1032209)
     elif job == 2214 and Quest.GetQuestState(22617) !=2: #Evan
         print("Getting Silver Emblem")
-        Quest.StartQuest(22617, 1013208)
+        Quest.StartQuest(22617, 1013000)
     elif job == 2217 and Quest.GetQuestState(22618) !=2:
         print("Getting Gold Emblem")
-        Quest.StartQuest(22618, 1013208)
+        Quest.StartQuest(22618, 1013000)
     elif job == 4111 and Quest.GetQuestState(62387) !=2: #hayato
         print("Getting Silver Emblem")
         Quest.StartQuest(62387, 9130000)
@@ -3859,7 +5006,7 @@ elif job == 2400 and field_id == 150000000:
 elif job == 2400 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
     print("Doing Phantom Second Job")
     PhantomSecond()
-elif job == 2410:
+elif job == 2410 and level <= 40:
     smallpark = 200020001
     TreasureVaultEntrance = 915010000
     TreasureVault = 915010001
@@ -3875,19 +5022,108 @@ elif job == 2410:
     elif field_id == cloudpark2:
         toggle_rush_by_level(True)
         toggle_kami(True)
-        
+elif job == 2410 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
+    print("Doing Phantom Third Job")
+    PhantomThird()
+elif job == 2411 and level < 100:
+    if Quest.CheckCompleteDemand(25111,0) == 0:
+        Quest.CompleteQuest(25111,0)
+    overlookedarea=260010601
+    arianttreasure = 915010100
+    arianttreasurevault = 915010101
+    if field_id == overlookedarea:
+        dungeonTeleport()
+        toggle_rush_by_level(True)
+        toggle_kami(True)
+    elif field_id == arianttreasure:
+        dungeonTeleport()
+    elif field_id == arianttreasurevault:
+        dungeonTeleport()
+elif job == 2411 and level >= 100:
+    print("Doing Phantom Fourth Job")
+    PhantomFourth()
+elif job == 2412:
+    lushforest = 240010102
+    leafretreasurevaultentrance = 915010200
+    leafretreasurevault = 915010201
+    if Quest.CheckCompleteDemand(25122,0) == 0:
+        Quest.CompleteQuest(25122,0)
+    if field_id == lushforest:
+        dungeonTeleport()
+        toggle_rush_by_level(True)
+        toggle_kami(True)
+    elif field_id == leafretreasurevaultentrance:
+        dungeonTeleport()
+    elif field_id == leafretreasurevault:
+        dungeonTeleport()
+elif job == 11212 and level < 35:
+    print("Doing Beast Tamer Prequests")
+    BeastTamerFirst()
+elif (job == 2000 or job == 2100) and Quest.GetQuestState(21700) != 2:
+    print("Doing Aran First Job")
+    AranFirst()
+elif job == 2100 and field_id == 140000000 and level < 30:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+elif job == 2100 and field_id == 100020400 and level < 30:
+    polearm = Inventory.FindItemByID(1442077)
+    if polearm.valid:
+        Inventory.SendChangeSlotPositionRequest(1,polearm.pos,weapon_slot,-1)
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+elif job == 2100 and level >= 30:
+    print("Doing Aran Second Job")
+    AranSecond()
+elif job == 2110 and field_id == 140000000 and level < 60:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+elif job == 2110 and level >=60:
+    print("Doing Aran Third Job")
+    AranThird()
+elif job == 2111 and field_id == 140000000 and level < 100:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+elif job == 2111 and level >= 100:
+    print("Doing Aran Fourth Job")
+    AranFourth()
+elif job == 2112 and field_id == 140000000:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+elif job == 0 and GameState.IsInGame():
+    Warrior = 0
+    Magician = 1
+    Bowman = 2
+    Thief = 3
+    Pirate = 4
+    ExplorerFirst(Thief)
+elif job == 400 and level >= 30:
+    print("Doing Explorer Second Job")
+    ExplorerSecond()
+elif job == 410 and level >= 60:
+    print("Doing Explorer Third Job")
+    ExplorerThird()
+elif job == 14000 or job == 14200 and field_id != 101020400 and Quest.GetQuestState(22733) != 2:
+    print("Doing Kinesis First Job")
+    KinesisFirst()
+elif job == 14200 and field_id == 101020400:
+    print("Kinesis prequests done")
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+elif job == 14200 and level >= 30:
+    print("Kinesis Second Job")
+    KinesisSecond()
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
-    #print("Getting hyper rock")
-    #Npc.ClearSelection()
-    #Npc.RegisterSelection("Familiar")
-    #Npc.RegisterSelection("Teleport Rock")
-    #Npc.RegisterSelection("You get")
-    #Quest.StartQuest(61589, 9201253)
-    #time.sleep(3)
-    Terminal.SetCheckBox("bot/htr",True)
+    print("Getting hyper rock")
+    Npc.ClearSelection()
+    Npc.RegisterSelection("Familiar")
+    Npc.RegisterSelection("Teleport Rock")
+    Npc.RegisterSelection("You get")
+    Quest.StartQuest(61589, 9201253)
     time.sleep(3)
-    Terminal.SetCheckBox("bot/htr",False)
+    #Terminal.SetCheckBox("bot/htr",True)
+    #time.sleep(5)
+    #Terminal.SetCheckBox("bot/htr",False)
 elif Quest.GetQuestState(61589) ==2:
     if Inventory.FindItemByID(2430450).valid:
         print("Using equip box lvl50")
@@ -3967,6 +5203,12 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
             getBoogie()
     elif job in EvanJobs:
         if Quest.GetQuestState(22510) == 2:
+            getBoogie()
+    elif job == 11212:
+        if level >= 33:
+            getBoogie()
+    elif job == 14200:
+        if Quest.GetQuestState(22733) == 2:
             getBoogie()
     else:
         getBoogie()
@@ -4161,7 +5403,7 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
                         Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
 
 if level >= 120 and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
-    if accountData['cur_pos'] == "11": #finished training all link to level 110
+    if accountData['cur_pos'] == "16": #finished training all link to level 110
         print("Phase one end")
         accountData['phase_one'] = True
         accountData['cur_pos'] = '-1'
@@ -4174,8 +5416,9 @@ if level >= 120 and not accountData['phase_one'] and not SCLib.GetVar("DoingZaku
         writeJson(accountData,accountId)
         Terminal.Logout()
 
+'''
 if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
-    if accountData['cur_pos'] == "11": #finished doing zakum for every undone links
+    if accountData['cur_pos'] == "16": #finished doing zakum for every undone links
         print("Daily done")
         accountData['cur_pos'] = '-1'
         accountData['changing_mule'] = True
@@ -4186,7 +5429,7 @@ if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
         accountData['changing_mule'] = True
         writeJson(accountData,accountId)
         Terminal.Logout()
-
+'''
 if level >= 140 and not SCLib.GetVar("DoingZakum"):
     print("Current character done, moving to next one")
     accountData['changing_mule'] = True
@@ -4286,6 +5529,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
                     toggle_kami(False)
                     time.sleep(2)
                     teleport_enter(-425,-195)
+                    time.sleep(2)
                     toggle_kami(True)
                     time.sleep(8)
                     print("Resume Kami")
@@ -4304,6 +5548,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
                     toggleAttack(False)
                     teleport_enter(-425,-195)
                     teleport_enter(-425,-195)
+                    time.sleep(2)
                     toggle_kami(True)
                     time.sleep(8)
 if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level < 60 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
@@ -4384,7 +5629,7 @@ if field_id in escaperoutes:
     toggleAttack(True)
 
 quest26 = Quest.GetQuestState(2976)
-if GameState.IsInGame() and not Terminal.IsRushing() and level >= 35 and level < 55 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and job not in XenonJobs:
+if doBeach and not Terminal.IsRushing() and level >= 35 and level < 55 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and job not in XenonJobs:
     time.sleep(1)
     toggle_rush_by_level(False)
     #field_id to Field Name
@@ -5068,7 +6313,7 @@ elif quest26 == 2 and field_id == 120040000:
     toggle_kami(True)
     print("Just in case stuck in gold beach, return control to rush by level")
 quest17 = Quest.GetQuestState(2054)
-if GameState.IsInGame() and not Terminal.IsRushing() and level >= 65 and level < 80 and quest17!=2 and not SCLib.GetVar("DoingCurbrock"):
+if doSleepyWood and not Terminal.IsRushing() and level >= 65 and level < 80 and quest17!=2 and not SCLib.GetVar("DoingCurbrock"):
     #print("Doing")
     toggle_rush_by_level(False)
     time.sleep(1)
