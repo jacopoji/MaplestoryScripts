@@ -105,7 +105,7 @@ blackhearted = 42121054
 snail_pet_box = 2434265
 #no potential, item.grade = 0
 #rare, item.grade = 1
-
+runebuff_id = 80002280
 ####TODO LIST:
 ####Auto buy ticket					done
 ####AUTO ZAKUM                      done

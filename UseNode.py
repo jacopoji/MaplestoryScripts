@@ -4,7 +4,7 @@ randumb = random.randint(0, 3050) * 1000
 
 
 #Change this number for the amount of nodes you want to use that are dropped from monsters (transferable within account)
-AmountDropped = 24
+AmountDropped = 200
 #Change this number for the amount of nodes you want to use that are crafted (tradable)
 AmountCrafted = 0
 

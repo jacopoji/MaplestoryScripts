@@ -8,12 +8,12 @@ import Character, Context, DataType, Field, Inventory, Key, Npc, Packet, Quest, 
 #except:
 #	print("Couldn't find SunCat module")
 
-#buffs = Character.GetBuffs()
-#for buff in buffs:
-#	print("Current Buff Id: {}; Remaining Time: {}".format(buff.id,buff.timeLeft))
-users = Terminal.GetLocalUsers()
-for user in users:
-	print(user.clientid,":",user.mapid)
+buffs = Character.GetBuffs()
+for buff in buffs:
+	print("Current Buff Id: {}; Remaining Time: {}".format(buff.id,buff.timeLeft))
+#users = Terminal.GetLocalUsers()
+#for user in users:
+#	print(user.clientid,":",user.mapid)
 #Terminal.LeaveCashShop()
 #oPacket = Packet.COutPacket(herb_header)
 #oPacket.EncodeBuffer("2F F8 04 00")

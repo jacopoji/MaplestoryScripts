@@ -2516,7 +2516,7 @@ def PhantomFirst():
     time.sleep(1)
     AProperIntroduction = 25000
     quest1 = Quest.GetQuestState(AProperIntroduction)
-
+    toggle_rush_by_level(False)
     Forecastle = 915000000
     WaistDeck = 915000100
     Outside = 915000200
@@ -2550,7 +2550,7 @@ def PhantomFirst():
     
 def PhantomSecond():
     #print("Needs to be implemented")
-
+    toggle_rush_by_level(False)
     TheErstWhileVault = 25100
     ThatsSoRaven = 25101
     quest1 = Quest.GetQuestState(TheErstWhileVault)
@@ -2571,10 +2571,10 @@ def PhantomSecond():
                 if field_id != smallpark:
                     if field_id != cloudpark2:
                         rush(cloudpark2)
-                        time.sleep(2)
+                        time.sleep(1)
                     elif field_id == cloudpark2:
                         teleport_enter(1116,-637)
-                        time.sleep(2)
+                        time.sleep(1)
                 elif field_id == smallpark:
                     teleport_enter(263,83)
                     time.sleep(2)
@@ -3702,6 +3702,16 @@ def KinesisThird():
         print("1")
         if quest1 == 0:
             Quest.StartQuest(TypeEDataUpgrade,Jay)
+
+def KinesisFourth():
+    TypeDDataUpgrade = 22850
+    Jay = 1531007
+    quest1 = Quest.GetQuestState(TypeDDataUpgrade)
+
+    if quest1 !=2 :
+        print("1")
+        if quest1 == 0:
+            Quest.StartQuest(TypeDDataUpgrade,Jay)
 ################################################################
 def id2str(jobid):
     if jobid in LuminousJobs:
@@ -4724,7 +4734,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 14211: #142111002
+    elif job == 14211 or job == 14212: #142111002
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,142111002)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -5148,6 +5158,9 @@ elif job == 14200 and level >= 30:
 elif job == 14210 and level >= 60:
     print("Kinesis Third Job")
     KinesisThird()
+elif job == 14211 and level >= 100:
+    print("Kinesis Fourth Job")
+    KinesisFourth()
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
     print("Getting hyper rock")
@@ -5565,9 +5578,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
                     toggle_kami(False)
                     time.sleep(2)
                     teleport_enter(-425,-195)
-                    time.sleep(2)
-                    toggle_kami(True)
-                    time.sleep(8)
+                    time.sleep(7)
                     print("Resume Kami")
                 elif pos.x != -549 and field_id == curbrockescaperoute1:
                     toggle_kami(False)
@@ -5583,10 +5594,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
                     time.sleep(2)
                     toggleAttack(False)
                     teleport_enter(-425,-195)
-                    teleport_enter(-425,-195)
-                    time.sleep(2)
-                    toggle_kami(True)
-                    time.sleep(8)
+                    time.sleep(7)
 if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level < 60 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if job == 15210 and Quest.GetQuestState(34820) !=2:
