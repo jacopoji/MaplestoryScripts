@@ -2216,21 +2216,28 @@ def EvanFirst():
         Inventory.UseItem(2434265)
         time.sleep(2)
     if field_id == 900010000:
+        print("1")
         toggle_kami(False)
         Key.Press(0x08)
         time.sleep(1)
         Character.EnterPortal()
+        time.sleep(2)
     elif field_id == 900010100:
+        print("2")
         toggle_kami(False)
         Key.Press(0x08)
         time.sleep(1)
         Character.EnterPortal()
+        time.sleep(10)
     elif field_id == 900010200:
+        print("3")
         toggle_kami(False)
         Character.Teleport(-455,35)
         time.sleep(1)
         Character.TalkToNpc(1013001)
+        time.sleep(2)
     elif quest1 != 2:
+        print("4")
         if quest1 == 0:
             toggle_kami(False)
             acceptQuest(StrangeDream,Mom,livingroom,field_id)
