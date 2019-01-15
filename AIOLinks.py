@@ -368,7 +368,37 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
         toggle_kami(True)
         if currentmap != grindmap:
             print("Rushing to grindmap")
-            Terminal.Rush(grindmap)
+            if grindmap == 100030300:
+                print("Rushing to Farm Center")
+                while field_id != 100030300:
+                    field_id = Field.GetID()
+                    if field_id == 100030320: #-117 35
+                        Terminal.StopRush()
+                        toggleAttack(False)
+                        teleport_enter(-117,35)
+                    elif field_id == 100030310:
+                        Terminal.StopRush()
+                        toggleAttack(False)
+                        teleport_enter(1062,-25)
+                    else:
+                        Terminal.Rush(startmap)
+            elif grindmap == 100030101:
+                print("Rushing to living room")
+                while field_id != 100030101:
+                    Terminal.Rush(100030102)
+                    time.sleep(2)
+                    field_id = Field.GetID()
+                    if pos.x != -1006 and field_id == 100030102:
+                        toggleAttack(False)
+                        teleport_enter(-1006,-32)
+                        break
+                    elif pos.x == -1006:
+                        toggleAttack(False)
+                        teleport_enter(-1006,-32)
+                        break
+            else:
+                Terminal.Rush(grindmap)
+                time.sleep(1)
 def mapID(id):
     if type(id) is int:
         return Field.GetID() == id
