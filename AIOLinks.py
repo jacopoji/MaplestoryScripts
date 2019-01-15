@@ -375,17 +375,21 @@ def mapID(id):
         return Field.GetID() in id
 
 def rush(mapid):
-    if mapid == 331001000:
-        if field_id == 331002100:
+    HQ = 331001000
+    citycentre = 331000000
+    firstfloor = 331002000
+    secondfloor=331002100
+    if mapid == HQ:
+        if field_id == secondfloor:
             teleport_enter(-464,207)
-        elif field_id == 331002000:
+        elif field_id == firstfloor:
             teleport_enter(-480,207)
-        elif field_id == 331000000:
+        elif field_id == citycentre:
             teleport_enter(-250,255)
-    elif mapid == 331002000:
-        if field_id == 331001000:
+    elif mapid == firstfloor:
+        if field_id == HQ:
             teleport_enter(-93,-209)
-        elif field_id == 331000000:
+        elif field_id == citycentre:
             teleport_enter(1042,199)
     else:
         if not Terminal.IsRushing():
@@ -3450,7 +3454,7 @@ def KinesisFirst():
     TshirtBoy = 1531066
     StraightHairGirl = 1531067
     trainingroom1 = 331001110
-    trainingroom2 = 331001122
+    trainingroom2 = 331001120
     trainingroom3 = 331001130
     HQ = 331001000
     citycentre = 331000000
@@ -3466,16 +3470,18 @@ def KinesisFirst():
         Inventory.UseItem(2434265)
         time.sleep(2)
 
-    if field_id == trainingroom1:
+    if field_id in range(trainingroom1,trainingroom1+10):
         print("1")
         dungeonTeleport()
-    elif field_id == trainingroom2:
+    elif field_id in range(trainingroom2,trainingroom2+10):
         print("2")
         teleport_enter(-285,63)
-    elif field_id == trainingroom3:
+    elif field_id in range(trainingroom3,trainingroom3+10):
         mobs = Field.GetMobs()
         if len(mobs) == 0:
             dungeonTeleport()
+        else:
+            toggle_kami(True)
     elif quest1 != 2:
         if quest1 == 0:
             acceptQuest(CheckYourself,Jay,HQ,field_id)
@@ -3490,7 +3496,7 @@ def KinesisFirst():
             Npc.RegisterSelection(" ")
             acceptQuest(JaysGripe,Jay,HQ,field_id)
         elif quest2 == 1:
-            if field_id == HQ:
+            if field_id != firstfloor:
                 rush(firstfloor)
             elif field_id == firstfloor:
                 completeQuest(JaysGripe,Yuna,firstfloor,firstfloor,field_id)
