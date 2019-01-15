@@ -15,7 +15,7 @@ except:
 dailyVJ = True
 dailyChuChu = True
 dailyDD = False
-dailySS = True
+dailySS = False
 
 kamiOffsetX = -100
 kamiOffsetY = -50

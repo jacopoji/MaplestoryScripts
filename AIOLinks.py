@@ -260,6 +260,7 @@ def teleport_enter(x,y):
         print("Successfully entered portal")
     else:
         print("Failed to enter portal")
+    time.sleep(1)
     toggle_kami(True)
     toggleAttack(True)
 
@@ -2078,6 +2079,9 @@ def ArkFirst():
                 print("{} Mobs remaining".format(len(Field.GetMobs())))
                 if len(Field.GetMobs()) == 0:
                     EnterPortal("next00")
+            elif field_id != 402000644:
+                rush(402000644)
+                    
     elif quest25 != 2:
         print("25")
         if quest25 == 0:
@@ -2642,6 +2646,7 @@ def PhantomThird():
             elif field_id == arianttreasure:
                 mobs = Field.GetMobs()
                 print("Killing mobs")
+                '''
                 for mob in mobs:
                     mobs = Field.GetMobs()
                     if mob.valid:
@@ -2658,10 +2663,17 @@ def PhantomThird():
                         time.sleep(1)
                         Character.UseSkill(24001000)
                         time.sleep(1)
+                '''
                 if len(mobs) == 0:
                     teleport_enter(166,182)
+                else:
+                    toggle_kami(True)
             elif field_id == arianttreasurevault:
                 Character.TalkToNpc(TreasureChest)
+            elif field_id != 260010600:
+                rush(260010600)
+            elif field_id == 260010600:
+                teleport_enter(134,275)
 
 def PhantomFourth():
     toggle_rush_by_level(False)
@@ -4452,7 +4464,7 @@ def toggleAttack(on):
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 2410: #Phantom 2nd 24101000
         Key.Set(pgup_key, 2, 2001582)
-        Key.Set(attack_key,1,24001000)
+        Key.Set(attack_key,1,24101000)
         Terminal.SetLineEdit("SISkillID","24101000")
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -4463,7 +4475,7 @@ def toggleAttack(on):
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 2411: #Phantom 3rd 24111000
         Key.Set(pgup_key, 2, 2001582)
-        Key.Set(attack_key,1,24001000)
+        Key.Set(attack_key,1,24111000)
         Terminal.SetLineEdit("SISkillID","24111000")
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
