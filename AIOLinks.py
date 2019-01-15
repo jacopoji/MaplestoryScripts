@@ -2241,7 +2241,7 @@ def EvanFirst():
     lushforest = 900020100
     lostforest = 900020220
     pet = Inventory.FindItemByID(2434265)
-    if pet.valid:
+    if pet.valid and quest5 == 2:
         Key.Set(0x41, 2, 2001582)
         time.sleep(2)
         Inventory.UseItem(2434265)
