@@ -368,6 +368,7 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
         toggle_kami(True)
         if currentmap != grindmap:
             print("Rushing to grindmap")
+            field_id = Field.GetID()
             if grindmap == 100030300:
                 print("Rushing to Farm Center")
                 while field_id != 100030300:
