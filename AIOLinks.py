@@ -391,6 +391,8 @@ def rush(mapid):
             teleport_enter(-93,-209)
         elif field_id == citycentre:
             teleport_enter(1042,199)
+        if field_id == secondfloor:
+            teleport_enter(-464,207)
     else:
         if not Terminal.IsRushing():
             print("Rushing to map ID: {0}".format(mapid))
@@ -3597,6 +3599,8 @@ def KinesisFirst():
         if quest13 ==0:
             acceptQuest(AherosDuty1,BlueShirtGuy,subwaycar1,field_id)
         elif quest13 ==1:
+            if field_id == citycentre:
+                teleport_enter(-753,413)
             if Quest.CheckCompleteDemand(AherosDuty1,BlueShirtGuy) != 0:
                 if field_id == subwaycar1:
                     teleport_enter(813,57)
@@ -3613,6 +3617,8 @@ def KinesisFirst():
         if quest14 ==0:
             acceptQuest(AherosDuty2,TshirtBoy,field_id,field_id)
         elif quest14 ==1:
+            if field_id == citycentre:
+                teleport_enter(-753,413)
             if Quest.CheckCompleteDemand(AherosDuty2,StraightHairGirl) != 0:
                 if len(Field.GetMobs()) == 0:
                     dungeonTeleport()
@@ -3635,6 +3641,8 @@ def KinesisFirst():
         if quest15 ==0:
             acceptQuest(APaleThreat,StraightHairGirl,field_id,field_id)
         elif quest15 ==1:
+            if field_id == citycentre:
+                teleport_enter(-753,413)
             if Quest.CheckCompleteDemand(APaleThreat,StraightHairGirl) != 0:
                 if len(Field.GetMobs()) == 0:
                     dungeonTeleport()
@@ -3685,6 +3693,15 @@ def KinesisSecond():
         if quest1 == 0:
             Quest.StartQuest(TypeNDataUpgrade,Jay)
 
+def KinesisThird():
+    TypeEDataUpgrade = 22800
+    Jay = 1531007
+    quest1 = Quest.GetQuestState(TypeEDataUpgrade)
+
+    if quest1 !=2 :
+        print("1")
+        if quest1 == 0:
+            Quest.StartQuest(TypeEDataUpgrade,Jay)
 ################################################################
 def id2str(jobid):
     if jobid in LuminousJobs:
@@ -4707,6 +4724,16 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 14211: #142111002
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,142111002)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 6500: #AB 1st
         Terminal.SetLineEdit("SISkillID","65001100")
         Terminal.SetCheckBox("Auto Attack", False)
@@ -5118,6 +5145,9 @@ elif job == 14200 and field_id == 101020400:
 elif job == 14200 and level >= 30:
     print("Kinesis Second Job")
     KinesisSecond()
+elif job == 14210 and level >= 60:
+    print("Kinesis Third Job")
+    KinesisThird()
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
     print("Getting hyper rock")
