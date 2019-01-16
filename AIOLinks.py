@@ -884,15 +884,16 @@ def IlliumZero():
 
     if level == 1 and field_id == 940202011:
         Character.Teleport(-3400, 79)
-        Character.Teleport(-3000, 5000)
+        Character.Teleport(-3000, -500)
      
     if field_id == 940202013 or field_id == 940202014 or field_id == 940202015:
         mob = Field.FindMob(2400418)
         if mob.valid:
-            Character.Teleport(mob.x, 20000)
+            toggle_kami(True)
             Character.BasicAttack()
         else:
             time.sleep(1)
+            toggle_kami(False)
             Character.Teleport(832,813)
             time.sleep(1)
             Character.EnterPortal()
