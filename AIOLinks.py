@@ -2902,7 +2902,7 @@ def AranFirst():
     # Map
     black_road                = 914000000
     snow_island               = 140090000
-
+    rien                      = 140000000
     # Quest
     find_the_lost_kid         = 21000
     return_of_the_hero        = 21010
@@ -3060,18 +3060,18 @@ def AranFirst():
         if quest7 == 0:
             acceptQuest(basic_fitness_training_1, lilin_id - 1000, field_id + 20000, field_id)
         elif quest7 == 1:
-            completeQuest(basic_fitness_training_1, lilin_id - 1000, field_id - 20000,snow_island - 70000,field_id)
+            completeQuest(basic_fitness_training_1, lilin_id - 1000, rien,snow_island - 70000,field_id)
     elif quest8 != 2:
         if quest8 == 0:
             acceptQuest(basic_fitness_training_2, lilin_id - 1000, field_id + 20100, field_id)
         elif quest8 == 1:
-            completeQuest(basic_fitness_training_2, lilin_id - 1000, snow_island - 69900,140020100,field_id)
+            completeQuest(basic_fitness_training_2, lilin_id - 1000, rien,140020100,field_id)
     elif quest9 != 2:
         print("9")
         if quest9 == 0:
             acceptQuest(basic_fitness_training_3, lilin_id - 1000, field_id + 20200, field_id)
         elif quest9 == 1:
-            completeQuest(basic_fitness_training_3, lilin_id - 1000, 140000000,snow_island - 69800,field_id)
+            completeQuest(basic_fitness_training_3, lilin_id - 1000, rien,snow_island - 69800,field_id)
     elif quest10 != 2:
         print("10")
         if quest10 == 0:
