@@ -132,6 +132,8 @@ if SCLib.GetVar("DoingCurbrock") is None:
     SCLib.PersistVar("DoingCurbrock",False)
 if SCLib.GetVar("BuyExpansion") is None:
     SCLib.PersistVar("BuyExpansion",False)
+if SCLib.GetVar("EvanLogout") is None:
+    SCLib.PersistVar("EvanLogout",False)
 HasSpawned = SCLib.GetVar("HasSpawned")
 NowLockedVar = SCLib.GetVar("NowLockedVar")
 KillZakumDaily = SCLib.GetVar("KillZakumDaily")
@@ -342,9 +344,11 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
                     field_id = Field.GetID()
                     time.sleep(2)
                     if field_id == 100030320: #-117 35
+                        Terminal.StopRush()
                         toggleAttack(False)
                         teleport_enter(-117,35)
                     elif field_id == 100030310:
+                        Terminal.StopRush()
                         toggleAttack(False)
                         teleport_enter(1062,-25)
                     elif field_id != 100030300:
@@ -2271,7 +2275,11 @@ def EvanFirst():
         if quest1 == 0:
             toggle_kami(False)
             acceptQuest(StrangeDream,Mom,livingroom,field_id)
+            SCLib.UpdateVar("EvanLogout",True)
         elif quest1 == 1:
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             completeQuest(StrangeDream,Utah,frontyard,frontyard,field_id) # leaving living room once completing the quest at Utah once
     elif quest2 != 2:
         print("2")
@@ -2285,31 +2293,51 @@ def EvanFirst():
         print("3")
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest3 == 0:
+            SCLib.UpdateVar("EvanLogout",True)
             acceptQuest(SandwichForBreakfast,Utah,frontyard,field_id) #Accepting the quest once
         elif quest3 == 1:
             sandwich = Inventory.FindItemByID(2022620)
+            if SCLib.GetVar("EvanLogout") and sandwich.valid:
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             if sandwich.valid:
                 Inventory.UseItem(2022620)
+                SCLib.UpdateVar("EvanLogout",True)
             print("Doing sandwich quest")
             completeQuest(SandwichForBreakfast,Mom,livingroom,livingroom,field_id) #completing quest once
     elif quest4 != 2:
+        if SCLib.GetVar("EvanLogout"):
+            Terminal.Logout()
+            SCLib.UpdateVar("EvanLogout",False)
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest4 == 0:
             acceptQuest(DeliveringTheLunchBox,Mom,livingroom,field_id) #lunch box once
+            SCLib.UpdateVar("EvanLogout",True)
         elif quest4 == 1:
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             completeQuest(DeliveringTheLunchBox,Dad,farmcentre,farmcentre,field_id)
     elif quest5 != 2:
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest5 == 0:
+            SCLib.UpdateVar("EvanLogout",True)
             acceptQuest(FixingTheFence,Dad,farmcentre,field_id) #attaking once
         elif quest5 == 1:
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             completeQuest(FixingTheFence,Dad,farmcentre,farmcentre,field_id)
     elif quest6 != 2:
         print("6")
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest6 == 0:
+            SCLib.UpdateVar("EvanLogout",True)
             acceptQuest(RescuingThePiglet,Dad,farmcentre,field_id) #sitting chair once
         elif quest6 == 1:
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             if Quest.CheckCompleteDemand(RescuingThePiglet,Dad) != 0:
                 if field_id == lushforest:
                     piglet = Field.FindNpc(1013200)
@@ -2335,7 +2363,11 @@ def EvanFirst():
                 Key.Press(0x08)
                 time.sleep(1)
                 Character.EnterPortal()
-            elif field_id == lushforest or field_id == 900020110:
+                SCLib.UpdateVar("EvanLogout",True)
+            elif field_id == lushforest or field_id == 900020110: #dragon egg once
+                if SCLib.GetVar("EvanLogout"):
+                    Terminal.Logout()
+                    SCLib.UpdateVar("EvanLogout",False)
                 toggle_kami(False)
                 Key.Press(0x08)
                 time.sleep(1)
@@ -2366,24 +2398,41 @@ def EvanFirst():
                     Character.TalkToNpc(Hen)
             completeQuest(CollectingEggs,Utah,frontyard,frontyard,field_id)
     elif quest9 != 2:
-        if quest9 == 0:
+        if quest9 == 0: #incubator once
+            SCLib.UpdateVar("EvanLogout",True)
             acceptQuest(ChasingAwayTheFoxes,Utah,frontyard,field_id)
-        elif quest9 == 1:
+        elif quest9 == 1: #setting up hot key once
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             completeQuest(ChasingAwayTheFoxes,Utah,frontyard,backyard,field_id)
+            if Quest.GetQuestState(ChasingAwayTheFoxes) == 2:
+                SCLib.UpdateVar("EvanLogout",True)
     elif quest10 != 2:
         if quest10 == 0:
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(VerifyingTheFarmSituation,Utah,frontyard,field_id)
         elif quest10 == 1:
             completeQuest(VerifyingTheFarmSituation,Dad,farmcentre,farmcentre,field_id)
     elif quest11 != 2:
         if quest11 == 0:
             acceptQuest(StrangeFarm,Dad,farmcentre,field_id)
-        elif quest11 == 1:
+            SCLib.UpdateVar("EvanLogout",True)
+        elif quest11 == 1: #dragon out once
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             completeQuest(StrangeFarm,Dad,farmcentre,largeforesttrail,field_id)
     elif quest12 != 2:
         if quest12 == 0: #not sure with npc here 2411021
             acceptQuest(BabyDragonAwakens,Mir,farmcentre,field_id)
-        elif quest12 == 1:
+            SCLib.UpdateVar("EvanLogout",True)
+        elif quest12 == 1: #stat window
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             completeQuest(BabyDragonAwakens,Mir,farmcentre,largeforesttrail,field_id)
     elif quest13 != 2:
         if quest13 == 0:
@@ -2395,7 +2444,7 @@ def EvanFirst():
             acceptQuest(ABiteOfHay,Dad,farmcentre,field_id)
         elif quest14 == 1:
             toggle_kami(False)
-            toggle_loot(True)
+            toggle_loot(False)
             haystacks = Field.GetReactors()
             for haystack in haystacks:
                 pos = Character.GetPos()
@@ -2423,8 +2472,12 @@ def EvanFirst():
                         time.sleep(2)
                         Character.BasicAttack()
             completeQuest(ABiteOfHay,Mir,farmcentre,farmcentre,field_id)
+            SCLib.UpdateVar("EvanLogout",True)
     elif quest15 != 2:
-        if quest15 == 0:
+        if quest15 == 0: #destroying object once
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(ABiteOfPork,Mir,farmcentre,field_id)
         elif quest15 ==1:
             completeQuest(ABiteOfPork,Mir,largeforesttrail,largeforesttrail,field_id)
@@ -2458,8 +2511,12 @@ def EvanFirst():
     elif quest22 != 2:
         if quest22 == 0:
             acceptQuest(LetterDelivery,Dad,farmcentre,field_id)
-        elif quest22 == 1:
+            SCLib.UpdateVar("EvanLogout",True)
+        elif quest22 == 1:#world map once
             completeQuest(LetterDelivery,ChiefStan,henesys,henesys,field_id)
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             if field_id == henesys:
                 Character.Teleport(3350,124)
                 time.sleep(1)
@@ -2473,6 +2530,7 @@ def EvanFirst():
         toggle_rush_by_level(True)
         toggle_kami(True)
         toggle_loot(False)
+        SCLib.UpdateVar("EvanLogout",False)
 
 def XenonSecond():
     #print("Needs to be implemented")
@@ -4195,7 +4253,7 @@ def safety_setting():
 def toggleAttack(on):
     attack_key = 0x44
     pgup_key = 0x21
-    if Character.IsOwnFamiliar(9960098):
+    if Character.IsOwnFamiliar(9960098) and level > 13:
         Terminal.SetSlider("sliderMP", 90)
         Terminal.SetComboBox("MPKey",4)
     else:
