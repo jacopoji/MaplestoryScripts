@@ -2301,17 +2301,18 @@ def EvanFirst():
             if sandwich.valid:
                 time.sleep(1)
                 Inventory.UseItem(2022620)
-                time.sleep(2)
-                SCLib.UpdateVar("EvanLogout",True)
-                time.sleep(2)
+                time.sleep(1)
             print("Doing sandwich quest")
             completeQuest(SandwichForBreakfast,Mom,livingroom,livingroom,field_id) #completing quest once
+            if Quest.GetQuestState(SandwichForBreakfast) == 2:
+                SCLib.UpdateVar("EvanLogout",True)
+                time.sleep(2)
     elif quest4 != 2:
-        if SCLib.GetVar("EvanLogout"):
-            Terminal.Logout()
-            SCLib.UpdateVar("EvanLogout",False)
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest4 == 0:
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(DeliveringTheLunchBox,Mom,livingroom,field_id) #lunch box once
             SCLib.UpdateVar("EvanLogout",True)
         elif quest4 == 1:
