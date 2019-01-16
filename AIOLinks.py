@@ -2340,13 +2340,14 @@ def EvanFirst():
         print("6")
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest6 == 0:
+            print("Toggling logout var")
             SCLib.UpdateVar("EvanLogout",True)
             acceptQuest(RescuingThePiglet,Dad,farmcentre,field_id) #sitting chair once
         elif quest6 == 1:
-            if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
-                SCLib.UpdateVar("EvanLogout",False)
             if Quest.CheckCompleteDemand(RescuingThePiglet,Dad) != 0:
+                if SCLib.GetVar("EvanLogout"):
+                    SCLib.UpdateVar("EvanLogout",False)
+                    Terminal.Logout()
                 if field_id == lushforest:
                     piglet = Field.FindNpc(1013200)
                     if piglet.valid:
