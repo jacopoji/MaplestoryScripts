@@ -969,7 +969,8 @@ def IlliumZero():
             Character.Teleport(803, 50000)
             Character.EnterPortal()
             toggle_kami(True)
-
+    if field_id == 940202012:
+        teleport_enter(13,813)
 def IlliumFirst():
     grossular = Quest.GetQuestState(34802)
     combat = Quest.GetQuestState(34803)
