@@ -873,9 +873,6 @@ def IlliumZero():
         Inventory.UseItem(2434265)
         time.sleep(2)
 
-    while Terminal.IsRushing():
-        time.sleep(1)
-
     if level == 1 and field_id == 940202009:
         toggle_kami(False)
         Character.Teleport(-3319, 79)
@@ -2269,13 +2266,15 @@ def EvanFirst():
         time.sleep(2)
     elif quest1 != 2:
         print("4")
+        Terminal.SetCheckBox("settings/loginwait",False)
         if quest1 == 0:
             toggle_kami(False)
             acceptQuest(StrangeDream,Mom,livingroom,field_id)
         elif quest1 == 1:
-            completeQuest(StrangeDream,Utah,frontyard,frontyard,field_id)
+            completeQuest(StrangeDream,Utah,frontyard,frontyard,field_id) # leaving living room once completing the quest at Utah once
     elif quest2 != 2:
         print("2")
+        Terminal.SetCheckBox("settings/loginwait",False)
         if quest2 == 0:
             toggle_kami(False)
             acceptQuest(FeedingBullDog,Utah,frontyard,field_id)
@@ -2283,26 +2282,30 @@ def EvanFirst():
             completeQuest(FeedingBullDog,BullDog,frontyard,frontyard,field_id)
     elif quest3 != 2:
         print("3")
+        Terminal.SetCheckBox("settings/loginwait",False)
         if quest3 == 0:
-            acceptQuest(SandwichForBreakfast,Utah,frontyard,field_id)
+            acceptQuest(SandwichForBreakfast,Utah,frontyard,field_id) #Accepting the quest once
         elif quest3 == 1:
             sandwich = Inventory.FindItemByID(2022620)
             if sandwich.valid:
                 Inventory.UseItem(2022620)
             print("Doing sandwich quest")
-            completeQuest(SandwichForBreakfast,Mom,livingroom,livingroom,field_id)
+            completeQuest(SandwichForBreakfast,Mom,livingroom,livingroom,field_id) #completing quest once
     elif quest4 != 2:
+        Terminal.SetCheckBox("settings/loginwait",False)
         if quest4 == 0:
             acceptQuest(DeliveringTheLunchBox,Mom,livingroom,field_id)
         elif quest4 == 1:
             completeQuest(DeliveringTheLunchBox,Dad,farmcentre,farmcentre,field_id)
     elif quest5 != 2:
+        Terminal.SetCheckBox("settings/loginwait",False)
         if quest5 == 0:
             acceptQuest(FixingTheFence,Dad,farmcentre,field_id)
         elif quest5 == 1:
             completeQuest(FixingTheFence,Dad,farmcentre,farmcentre,field_id)
     elif quest6 != 2:
         print("6")
+        Terminal.SetCheckBox("settings/loginwait",False)
         if quest6 == 0:
             acceptQuest(RescuingThePiglet,Dad,farmcentre,field_id)
         elif quest6 == 1:
@@ -2339,8 +2342,10 @@ def EvanFirst():
             if Quest.CheckCompleteDemand(RescuingThePiglet,Dad) == 0:
                 if field_id ==farmcentre:
                     completeQuest(RescuingThePiglet,Dad,farmcentre,farmcentre,field_id)
+                    Terminal.SetCheckBox("settings/loginwait",True)
     elif quest7 != 2:
         print("7")
+        Terminal.SetCheckBox("settings/loginwait",True)
         if quest7 == 0:
             acceptQuest(ReturningTheEmptyLunchBox,Dad,farmcentre,field_id)
         elif quest7 == 1:
