@@ -4267,6 +4267,8 @@ def toggleAttack(on):
     else:
         Terminal.SetSlider("sliderMP", 10)
         Terminal.SetComboBox("MPKey",6)
+    if not SCLib.GetVar("DoingZakum"):
+        Terminal.SetComboBox("Familiar0",1)
     if job in XenonJobs:
         if Character.GetAP() < 60:
             Terminal.SetCheckBox("Auto AP",False)
