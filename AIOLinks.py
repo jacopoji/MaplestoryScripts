@@ -921,6 +921,8 @@ def IlliumZero():
 
  
     if collecting != 2:
+        if field_id == 940202012:
+            teleport_enter(13,813)
         if collecting == 0:
             Quest.StartQuest(34801, 3001330)
             time.sleep(1)
