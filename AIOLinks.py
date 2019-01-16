@@ -2903,6 +2903,9 @@ def AranFirst():
     black_road                = 914000000
     snow_island               = 140090000
     rien                      = 140000000
+    snowcoveredfield1         = 140020000
+    snowcoveredfield2         = 140020210
+    snowcoveredfield3         = 140020200
     # Quest
     find_the_lost_kid         = 21000
     return_of_the_hero        = 21010
@@ -2928,6 +2931,7 @@ def AranFirst():
     athena_id                 = 1209000
     lost_kid_id               = athena_id + 6
     lilin_id                  = 1202000
+    lilin_town_id             = 1201000
     puka_id                   = lilin_id + 1
     puen_id                   = lilin_id + 2
     puir_id                   = lilin_id + 3
@@ -3046,7 +3050,7 @@ def AranFirst():
         #    Character.Teleport(-208, 86)
         if Quest.GetQuestState(lilins_account) == 0:
             time.sleep(1)          
-            Quest.StartQuest(lilins_account, lilin_id - 1000)
+            Quest.StartQuest(lilins_account, lilin_town_id)
         if Quest.GetQuestState(lilins_account) == 1:
             time.sleep(1)
             Npc.ClearSelection()
@@ -3055,38 +3059,38 @@ def AranFirst():
             time.sleep(1)
             Npc.RegisterSelection("Sealed away the Black Mage")
             time.sleep(1)
-            Quest.CompleteQuest(lilins_account, lilin_id - 1000)
+            Quest.CompleteQuest(lilins_account, lilin_town_id)
     if quest7 != 2:
         if quest7 == 0:
-            acceptQuest(basic_fitness_training_1, lilin_id - 1000, field_id + 20000, field_id)
+            acceptQuest(basic_fitness_training_1, lilin_town_id, field_id + 20000, field_id)
         elif quest7 == 1:
-            completeQuest(basic_fitness_training_1, lilin_id - 1000, rien,snow_island - 70000,field_id)
+            completeQuest(basic_fitness_training_1, lilin_town_id, rien,snowcoveredfield1,field_id)
     elif quest8 != 2:
         if quest8 == 0:
-            acceptQuest(basic_fitness_training_2, lilin_id - 1000, field_id + 20100, field_id)
+            acceptQuest(basic_fitness_training_2, lilin_town_id, field_id + 20100, field_id)
         elif quest8 == 1:
-            completeQuest(basic_fitness_training_2, lilin_id - 1000, rien,140020100,field_id)
+            completeQuest(basic_fitness_training_2, lilin_town_id, rien,snowcoveredfield2,field_id)
     elif quest9 != 2:
         print("9")
         if quest9 == 0:
-            acceptQuest(basic_fitness_training_3, lilin_id - 1000, field_id + 20200, field_id)
+            acceptQuest(basic_fitness_training_3, lilin_town_id, field_id + 20200, field_id)
         elif quest9 == 1:
-            completeQuest(basic_fitness_training_3, lilin_id - 1000, rien,snow_island - 69800,field_id)
+            completeQuest(basic_fitness_training_3, lilin_town_id, rien,snowcoveredfield3,field_id)
     elif quest10 != 2:
         print("10")
         if quest10 == 0:
-            acceptQuest(basic_fitness_test, lilin_id - 1000, field_id + 10200, field_id)
+            acceptQuest(basic_fitness_test, lilin_town_id, rien, field_id)
         elif quest10 == 1:
-            completeQuest(basic_fitness_test, lilin_id - 1000, snow_island - 90000,snow_island - 79800,field_id)
+            completeQuest(basic_fitness_test, lilin_town_id, rien,snow_island - 79800,field_id)
     elif quest11 != 2:
         if quest11 == 0:
-            acceptQuest(the_five_heroes,lilin_id - 1000,snow_island - 90000,field_id)
+            acceptQuest(the_five_heroes,lilin_town_id,rien,field_id)
     elif quest12 != 2:
         if quest12 == 0:
-            acceptQuest(thePolearmWieldingHero,polearm_id,snow_island - 90000,field_id)
+            acceptQuest(thePolearmWieldingHero,polearm_id,rien,field_id)
     elif quest13 != 2:
         if quest13 == 0:
-            acceptQuest(newBegginings,lilin_id-1000,snow_island - 90000,field_id)
+            acceptQuest(newBegginings,lilin_town_id,rien,field_id)
     
 def AranSecond():
     toggle_rush_by_level(False)
