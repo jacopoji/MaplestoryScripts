@@ -2404,10 +2404,15 @@ def EvanFirst():
                     time.sleep(1)
                     Character.TalkToNpc(Hen)
             completeQuest(CollectingEggs,Utah,frontyard,frontyard,field_id)
+            SCLib.UpdateVar("EvanLogout",True)
     elif quest9 != 2:
         if quest9 == 0: #incubator once
-            SCLib.UpdateVar("EvanLogout",True)
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(ChasingAwayTheFoxes,Utah,frontyard,field_id)
+            if Quest.GetQuestState(ChasingAwayTheFoxes) == 1:
+                SCLib.UpdateVar("EvanLogout",True)
         elif quest9 == 1: #setting up hot key once
             if SCLib.GetVar("EvanLogout"):
                 Terminal.Logout()
