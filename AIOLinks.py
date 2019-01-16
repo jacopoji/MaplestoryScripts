@@ -1018,21 +1018,8 @@ def IlliumFirst():
             print("Pressing Control Key")
             time.sleep(1)
             Key.Press(0x11)
-            time.sleep(2)
+            time.sleep(3)
             Key.Press(0x11)
-            time.sleep(1.5)
-            Key.Press(0x11)
-            time.sleep(2.5)
-            Key.Press(0x11)
-            time.sleep(1)
-            Key.Press(0xA2)
-            time.sleep(2)
-            Key.Press(0xA2)
-            time.sleep(1.5)
-            Key.Press(0xA2)
-            time.sleep(2.5)
-            Key.Press(0xA2)
-            
             Quest.StartQuest(34803, 3001333)
          
         elif Quest.CheckCompleteDemand(34803, 3001333) != 0:
