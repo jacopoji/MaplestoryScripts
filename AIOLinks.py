@@ -35,7 +35,7 @@ DoZakumDaily=True
 
 DoBlackGate = True
 doSleepyWood = False
-doBeach = False
+doBeach = True
 #Key to restart pers. variables
 HotKey = 0x7A
 
@@ -5653,7 +5653,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
                     toggleAttack(False)
                     teleport_enter(-425,-195)
                     time.sleep(7)
-if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level < 60 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level < 60 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if job == 15210 and Quest.GetQuestState(34820) !=2:
         print("Illium undone quest")
@@ -5691,7 +5691,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 30 and level <
                 print("Enable kami to kill curbrock")
                 toggle_kami(True)
                 toggleAttack(True)
-if GameState.IsInGame() and not Terminal.IsRushing() and level >= 60 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+if GameState.IsInGame() and not Terminal.IsRushing() and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if curbrock3 !=2:
         print("Doing third curbrock")
