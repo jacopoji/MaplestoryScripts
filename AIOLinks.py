@@ -2281,12 +2281,17 @@ def EvanFirst():
                 Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(StrangeDream,Utah,frontyard,frontyard,field_id) # leaving living room once completing the quest at Utah once
+            if Quest.GetQuestState(StrangeDream) == 2:
+                SCLib.UpdateVar("EvanLogout",True)
     elif quest2 != 2:
         print("2")
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest2 == 0:
             toggle_kami(False)
-            acceptQuest(FeedingBullDog,Utah,frontyard,field_id)
+            if SCLib.GetVar("EvanLogout"):
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
+            acceptQuest(FeedingBullDog,Utah,frontyard,field_id) #once before accepting quest
         elif quest2 == 1:
             completeQuest(FeedingBullDog,BullDog,frontyard,frontyard,field_id)
     elif quest3 != 2:
@@ -2301,8 +2306,10 @@ def EvanFirst():
                 Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             if sandwich.valid:
+                time.sleep(1)
                 Inventory.UseItem(2022620)
                 SCLib.UpdateVar("EvanLogout",True)
+                time.sleep(2)
             print("Doing sandwich quest")
             completeQuest(SandwichForBreakfast,Mom,livingroom,livingroom,field_id) #completing quest once
     elif quest4 != 2:
