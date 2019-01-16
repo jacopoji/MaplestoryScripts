@@ -2539,7 +2539,6 @@ def EvanFirst():
     if magicwand.valid:
         Inventory.SendChangeSlotPositionRequest(1,magicwand.pos,weapon_slot,-1)
         SCLib.UpdateVar("EvanLogout",False)
-        Terminal.SetCheckBox("settings/loginwait",True)
     if Quest.GetQuestState(LetterDelivery) == 2:
         toggle_rush_by_level(True)
         toggle_kami(True)
