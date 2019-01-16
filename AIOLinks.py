@@ -2433,7 +2433,7 @@ def EvanFirst():
             acceptQuest(StrangeFarm,Dad,farmcentre,field_id)
             SCLib.UpdateVar("EvanLogout",True)
         elif quest11 == 1: #dragon out once
-            if SCLib.GetVar("EvanLogout"):
+            if SCLib.GetVar("EvanLogout") and level == 10:
                 Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(StrangeFarm,Dad,farmcentre,largeforesttrail,field_id)
