@@ -926,21 +926,14 @@ def IlliumZero():
             time.sleep(1)
         elif Quest.CheckCompleteDemand(34801, 3001330) != 0:
             if field_id == 940202012:
-                toggle_kami(False)
-                Character.Teleport(13,813)
-                time.sleep(1)
-                Character.EnterPortal()
-                time.sleep(1)
+                teleport_enter(13,813)
             if field_id == 940202015:
                 mob = Field.FindMob(2400418)
                 if mob.valid:
                     Character.Teleport(mob.x, 10000)
                     Character.BasicAttack()
                 else:
-                    Character.Teleport(832,813)
-                    time.sleep(1)
-                    Character.EnterPortal()
-                    time.sleep(1)
+                    teleport_enter(832,813)
             if field_id in range(940203000, 940203010) :
                 mob = Field.FindMob(2400413)
                 item = Field.FindItem(4036162)
