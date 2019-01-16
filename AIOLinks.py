@@ -2906,6 +2906,7 @@ def AranFirst():
     snowcoveredfield1         = 140020000
     snowcoveredfield2         = 140020210
     snowcoveredfield3         = 140020200
+    dangerousforest           = 140010200
     # Quest
     find_the_lost_kid         = 21000
     return_of_the_hero        = 21010
@@ -3081,7 +3082,7 @@ def AranFirst():
         if quest10 == 0:
             acceptQuest(basic_fitness_test, lilin_town_id, rien, field_id)
         elif quest10 == 1:
-            completeQuest(basic_fitness_test, lilin_town_id, rien,snow_island - 79800,field_id)
+            completeQuest(basic_fitness_test, lilin_town_id, rien,dangerousforest,field_id)
     elif quest11 != 2:
         if quest11 == 0:
             acceptQuest(the_five_heroes,lilin_town_id,rien,field_id)
