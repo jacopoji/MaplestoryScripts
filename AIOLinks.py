@@ -2295,20 +2295,20 @@ def EvanFirst():
     elif quest4 != 2:
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest4 == 0:
-            acceptQuest(DeliveringTheLunchBox,Mom,livingroom,field_id)
+            acceptQuest(DeliveringTheLunchBox,Mom,livingroom,field_id) #lunch box once
         elif quest4 == 1:
             completeQuest(DeliveringTheLunchBox,Dad,farmcentre,farmcentre,field_id)
     elif quest5 != 2:
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest5 == 0:
-            acceptQuest(FixingTheFence,Dad,farmcentre,field_id)
+            acceptQuest(FixingTheFence,Dad,farmcentre,field_id) #attaking once
         elif quest5 == 1:
             completeQuest(FixingTheFence,Dad,farmcentre,farmcentre,field_id)
     elif quest6 != 2:
         print("6")
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest6 == 0:
-            acceptQuest(RescuingThePiglet,Dad,farmcentre,field_id)
+            acceptQuest(RescuingThePiglet,Dad,farmcentre,field_id) #sitting chair once
         elif quest6 == 1:
             if Quest.CheckCompleteDemand(RescuingThePiglet,Dad) != 0:
                 if field_id == lushforest:
@@ -5169,6 +5169,15 @@ elif (job == 2000 or job == 2100) and Quest.GetQuestState(21700) != 2:
 elif job == 2100 and field_id == 140000000 and level < 30:
     toggle_rush_by_level(True)
     toggle_kami(True)
+elif job == 2100 and level == 10 and field_id == 140020300 and Character.GetMeso() < 800:
+    while True:
+        if Character.GetMeso() < 800:
+            toggle_rush_by_level(False)
+            rush(140020200)
+            toggle_kami(True)
+        else:
+            toggle_rush_by_level(True)
+            break
 elif job == 2100 and field_id == 100020400 and level < 30:
     polearm = Inventory.FindItemByID(1442077)
     if polearm.valid:
