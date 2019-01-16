@@ -1016,8 +1016,13 @@ def IlliumFirst():
             if field_id != 402000527:
                 rush(402000527)
             print("Pressing Control Key")
+            time.sleep(1)
             Key.Press(0x11)
-            time.sleep(3)
+            time.sleep(2)
+            Key.Press(0x11)
+            time.sleep(1.5)
+            Key.Press(0x11)
+            time.sleep(2.5)
             Key.Press(0x11)
             Quest.StartQuest(34803, 3001333)
          
