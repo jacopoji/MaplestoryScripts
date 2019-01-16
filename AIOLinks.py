@@ -4612,7 +4612,9 @@ def toggleAttack(on):
     elif job == 15000: #Illium Pre 1st
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",1)
+        Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 15200 or job == 15210 or job == 15211 or job == 15212: #Illium 1st+2nd+3rd+4th
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetCheckBox("Skill Injection", False)
