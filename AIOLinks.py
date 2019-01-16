@@ -2301,6 +2301,7 @@ def EvanFirst():
             if sandwich.valid:
                 time.sleep(1)
                 Inventory.UseItem(2022620)
+                time.sleep(2)
                 SCLib.UpdateVar("EvanLogout",True)
                 time.sleep(2)
             print("Doing sandwich quest")
