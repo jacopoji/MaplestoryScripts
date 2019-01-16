@@ -2314,7 +2314,8 @@ def EvanFirst():
                 Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(DeliveringTheLunchBox,Mom,livingroom,field_id) #lunch box once
-            SCLib.UpdateVar("EvanLogout",True)
+            if Quest.GetQuestState(DeliveringTheLunchBox) == 1:
+                SCLib.UpdateVar("EvanLogout",True)
         elif quest4 == 1:
             if SCLib.GetVar("EvanLogout"):
                 Terminal.Logout()
