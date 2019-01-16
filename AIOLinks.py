@@ -2375,10 +2375,8 @@ def EvanFirst():
             if Quest.CheckCompleteDemand(RescuingThePiglet,Dad) == 0:
                 if field_id ==farmcentre:
                     completeQuest(RescuingThePiglet,Dad,farmcentre,farmcentre,field_id)
-                    Terminal.SetCheckBox("settings/loginwait",True)
     elif quest7 != 2:
         print("7")
-        Terminal.SetCheckBox("settings/loginwait",True)
         if quest7 == 0:
             acceptQuest(ReturningTheEmptyLunchBox,Dad,farmcentre,field_id)
         elif quest7 == 1:
@@ -2526,11 +2524,14 @@ def EvanFirst():
     magicwand = Inventory.FindItemByID(1372043)
     if magicwand.valid:
         Inventory.SendChangeSlotPositionRequest(1,magicwand.pos,weapon_slot,-1)
+        SCLib.UpdateVar("EvanLogout",False)
+        Terminal.SetCheckBox("settings/loginwait",True)
     if Quest.GetQuestState(LetterDelivery) == 2:
         toggle_rush_by_level(True)
         toggle_kami(True)
         toggle_loot(False)
         SCLib.UpdateVar("EvanLogout",False)
+        Terminal.SetCheckBox("settings/loginwait",True)
 
 def XenonSecond():
     #print("Needs to be implemented")
