@@ -5303,6 +5303,9 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
     elif job in EvanJobs:
         if Quest.GetQuestState(22510) == 2:
             getBoogie()
+    elif job in AranJobs:
+        if Quest.GetQuestState(21700) == 2:
+            getBoogie()
     elif job == 11212:
         if level >= 33:
             getBoogie()
