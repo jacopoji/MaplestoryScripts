@@ -887,6 +887,7 @@ def IlliumZero():
         time.sleep(4)
 
     if level == 1 and field_id == 940202011:
+        toggle_kami(False)
         Character.Teleport(-3400, 79)
         Character.Teleport(-3000, -500)
      
