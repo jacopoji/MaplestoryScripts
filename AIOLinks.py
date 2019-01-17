@@ -1348,7 +1348,7 @@ def IlliumSecond():
     elif field_id == 940202036:
         print("6")
         toggle_kami(False)
-        Character.Teleport(-1016, 813)
+        Character.Teleport(-739, 813)
  
     elif field_id == 940202037:
         toggle_kami(False)
