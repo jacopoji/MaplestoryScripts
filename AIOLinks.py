@@ -245,7 +245,6 @@ def toggle_kami(indicator):
 
 def toggle_loot(indicator):
     Terminal.SetCheckBox("Kami Loot",indicator)
-    Terminal.SetCheckBox("Auto Loot",indicator)
 
 def teleport_enter(x,y):
     prefield = field_id
