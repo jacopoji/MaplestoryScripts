@@ -5403,7 +5403,7 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
         if Quest.GetQuestState(21700) == 2:
             getBoogie()
     elif job == 11212:
-        if level >= 33:
+        if level >= 35:
             getBoogie()
     elif job == 14200:
         if Quest.GetQuestState(22733) == 2:
@@ -5822,7 +5822,7 @@ if field_id in escaperoutes:
     toggleAttack(True)
 
 quest26 = Quest.GetQuestState(2976)
-if doBeach and not Terminal.IsRushing() and level >= 35 and level < 55 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and job not in XenonJobs:
+if doBeach and not Terminal.IsRushing() and level >= 36 and level < 55 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and job not in XenonJobs:
     time.sleep(1)
     toggle_rush_by_level(False)
     #field_id to Field Name
