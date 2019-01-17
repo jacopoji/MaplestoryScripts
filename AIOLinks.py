@@ -214,11 +214,12 @@ SCHotkey.RegisterKeyEvent(HotKey, KillPersistVarThred) #F11
 
 
 def AlishanRushing():
-    if level > 30:
+    if level > 32:
         if field_id != 749080900:
             Quest.StartQuest(55234,9330458)
         else:
             teleport_enter(-822,-537)
+            toggle_rush_by_level(True)
 
 def dungeonTeleport():
     if len(Field.GetMobs()) == 0:
@@ -3019,6 +3020,12 @@ def AranFirst():
     polearm_id                = 1201001
 
     toggle_rush_by_level(False)
+    pet = Inventory.FindItemByID(2434265)
+    if pet.valid:
+        Key.Set(0x41, 2, 2001582)
+        time.sleep(2)
+        Inventory.UseItem(2434265)
+        time.sleep(2)
     if field_id == black_road:
 
         rush(field_id + 100)
