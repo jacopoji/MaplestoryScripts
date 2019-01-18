@@ -445,6 +445,7 @@ def rush(mapid):
 
 def exploit1():
     toggle_rush_by_level(False)
+    toggle_HTR(True)
     if SCLib.GetVar("ExploitCount"):
         time.sleep(2)
         rush(224000041)
