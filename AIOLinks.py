@@ -6944,3 +6944,8 @@ if not SCLib.GetVar("BuyExpansion") and field_id == 240000002 and not SCLib.GetV
 if level >= 50 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and useExploit and not SCLib.GetVar("DoingJobAdv"):
     print("Doing exploit")
     exploit1()
+    Terminal.SetComboBox("eva_cmb",1)
+    Terminal.SetComboBox("HackingOpt",1)
+elif level < 50 or not Inventory.FindItemByID(5040004).valid or not useExploit:
+    Terminal.SetComboBox("eva_cmb",3)
+    Terminal.SetComboBox("HackingOpt",2)
