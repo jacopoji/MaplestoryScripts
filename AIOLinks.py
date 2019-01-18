@@ -5594,10 +5594,13 @@ if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == Entran
             Character.Teleport(-3003, -220)
             time.sleep(0.5)
             Character.EnterPortal()
+            time.sleep(0.1)
+            Character.EnterPortal()
+            time.sleep(0.1)
+            Character.EnterPortal()
             toggle_rush_by_level(True)
             Terminal.SetCheckBox("Kami Vac",True)
             Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
-            time.sleep(10)
             SCLib.UpdateVar("DoingZakum",False)
     elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
         if pos.x != -1599:
