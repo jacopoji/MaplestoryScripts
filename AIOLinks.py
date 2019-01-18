@@ -1489,7 +1489,13 @@ def CadenaFirst():
     quest26 = Quest.GetQuestState(34624)
     quest27 = Quest.GetQuestState(34625)
     toggle_rush_by_level(False)
-    SCLib.UpdateVar("DoingJobAdv",False)
+    pet = Inventory.FindItemByID(2434265)
+    SCLib.UpdateVar("DoingJobAdv",True)
+    if pet.valid:
+        Key.Set(0x41, 2, 2001582)
+        time.sleep(2)
+        Inventory.UseItem(2434265)
+        time.sleep(2)
     if quest1 != 2:
         if quest1 == 0:
             Quest.StartQuest(34600, 0)
