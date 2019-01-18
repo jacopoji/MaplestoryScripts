@@ -445,6 +445,8 @@ def rush(mapid):
 
 def exploit1():
     toggle_rush_by_level(False)
+    toggleAttack(False)
+    toggle_kami(False)
     if SCLib.GetVar("ExploitCount"):
         time.sleep(2)
         rush(224000041)
@@ -5507,7 +5509,7 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
     elif job == 14200:
         if Quest.GetQuestState(22733) == 2:
             getBoogie()
-    else:
+    elif job != -1 or job != 0:
         getBoogie()
     
 
