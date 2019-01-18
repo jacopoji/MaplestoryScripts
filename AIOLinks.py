@@ -1338,6 +1338,7 @@ def IlliumSecond():
     escape = Quest.GetQuestState(34818)
     lookback = Quest.GetQuestState(34820)
     SCLib.UpdateVar("DoingJobAdv",True)
+    toggle_rush_by_level(False)
     if escape != 2:
         print("Escape")
         rush(940202032)
@@ -1417,6 +1418,7 @@ def IlliumThird():
     InitialExcavationArea = 102040000
     shuang = 9040000
     board1npc = 1022111
+    toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     if quest1 != 2:
         if quest1 == 0:
@@ -1444,6 +1446,7 @@ def IlliumThird():
     elif quest3 != 2:
         if quest3 == 0:
             acceptQuest(SanctuaryDiscovered1,shuang,RelicExcavationCamp,field_id)
+            toggle_rush_by_level(True)
             SCLib.UpdateVar("DoingJobAdv",False)
 
 def IlliumFourth():
