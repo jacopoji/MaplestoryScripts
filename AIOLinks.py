@@ -5158,6 +5158,10 @@ elif job == 15511 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
 elif (job == 2001 or job == 2200) and Quest.GetQuestState(22510) != 2:
     print("Completing Evan prequests")
     EvanFirst()
+elif job == 3600 and level < 30 and field_id == 310010000:
+    print("Xenon leave home")
+    toggle_rush_by_level(True)
+    toggle_kami(True)
 elif job == 3600 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Xenon Second Job")
     XenonSecond()
