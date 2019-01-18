@@ -6475,7 +6475,7 @@ if doBeach and not Terminal.IsRushing() and level >= 36 and level < 55 and quest
                 if field_id not in range(ShadyBeach-1,ShadyBeach+20):
                     Terminal.Rush(HardWaveBeach)
                     print("Not in range")
-                    if pos.x != 797 and field_id == HardWaveBeach:
+                    if field_id == HardWaveBeach:
                         teleport_enter(797,-385)
                 else:
                     toggle_kami(True)
