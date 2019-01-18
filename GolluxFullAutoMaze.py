@@ -4,7 +4,7 @@ import Field, GameState, Terminal, time, Character, Npc, Quest, Packet, os, sys,
 # gollux prequest + SunCat's auto maze crawler v197.4
 
 # tp packet
-header = 0x032C
+header = 0x0340
 
 # using kami?
 # no = 0  (gfma/fma)
@@ -175,8 +175,8 @@ def setAttack(bool):
          Terminal.SetSpinBox("SkillInjection", 400)
       if Terminal.GetCheckBox("Melee No Delay") is False:
          Terminal.SetCheckBox("Melee No Delay", True)
-      if Terminal.GetCheckBox("General FMA") is False:
-         Terminal.SetCheckBox("General FMA", True)
+      if Terminal.GetCheckBox("General FMA") is True:
+         Terminal.SetCheckBox("General FMA", False)
       Terminal.SetCheckBox("Skill Injection", bool)
    else:
       if kami == 1 and Terminal.GetCheckBox("Kami Vac") != bool:

@@ -892,6 +892,7 @@ def IlliumZero():
         Character.Teleport(-3000, -500)
      
     if field_id == 940202013 or field_id == 940202014 or field_id == 940202015:
+        print('1')
         mob = Field.FindMob(2400418)
         if mob.valid:
             toggle_kami(True)
@@ -908,6 +909,7 @@ def IlliumZero():
     preparations = Quest.GetQuestState(34800)
     collecting = Quest.GetQuestState(34801)
     if preparations != 2:
+        print("2")
         if preparations == 0:
             Quest.StartQuest(34800, 3001330)
             time.sleep(1)
@@ -921,7 +923,8 @@ def IlliumZero():
             Quest.CompleteQuest(34800, 3001330)
 
  
-    if collecting != 2:
+    elif collecting != 2:
+        print("3")
         if field_id == 940202012:
             teleport_enter(13,813)
         if collecting == 0:
@@ -939,39 +942,19 @@ def IlliumZero():
                     teleport_enter(832,813)
             if field_id in range(940203000, 940203010) :
                 mob = Field.FindMob(2400413)
-                item = Field.FindItem(4036162)
-                if item.valid:
-                    if item.y in range(pos.y - 50, pos.y + 50):
-                        Character.Teleport(item.x, 20000)
-                        Character.LootItem()
-                    elif item.y < 600:
-                        Character.Teleport(-146, 20000)
-                        time.sleep(2)
-                        Character.Jump()
-                        Character.MoveY(584, 3000)
-                        time.sleep(1)
-                    else:
-                        Character.JumpDown()
-                elif mob.valid:
-                    if mob.y in range(pos.y - 50, pos.y + 50):
-                        Character.Teleport(mob.x, 10000)
-                        Character.BasicAttack()
-                    elif mob.y < 600:
-                        Character.Teleport(-146, 20000)
-                        time.sleep(2)
-                        Character.Jump()
-                        Character.MoveY(584, 1000)
-                        time.sleep(1)
-                    else:
-                        Character.JumpDown()
- 
+                if mob.valid:
+                    toggle_kami(True)
+                    Character.BasicAttack()
+                else:
+                    toggle_kami(False)
         else:
             Quest.CompleteQuest(34801, 3001330)
-            Character.Teleport(803, 50000)
-            Character.EnterPortal()
-            toggle_kami(True)
-    if field_id == 940202012:
+            teleport_enter(803,813)
+    elif field_id == 940202012:
+        print("4")
         teleport_enter(13,813)
+    elif field_id in range(940203000, 940203010):
+        teleport_enter(803,813)
 def IlliumFirst():
     grossular = Quest.GetQuestState(34802)
     combat = Quest.GetQuestState(34803)
@@ -1019,17 +1002,20 @@ def IlliumFirst():
             print("Pressing Control Key")
             time.sleep(1)
             Key.Press(0x11)
-            time.sleep(3)
+            time.sleep(5)
             Key.Press(0x11)
+            print("Done Pressing")
             Quest.StartQuest(34803, 3001333)
          
         elif Quest.CheckCompleteDemand(34803, 3001333) != 0:
             rush(402000531)
+            print("Teleport")
             if pos.x not in range(440,470):
                 toggle_kami(False)
                 Character.Teleport(461, 20000)
      
         else:
+            print("rushing")
             rush(402000527)
             Quest.CompleteQuest(34803, 3001333)
          
@@ -4254,6 +4240,7 @@ if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
 if len(accountData["done_char"]) == 12 and GameState.IsInGame():
     accountData['training_done'] = True
     Terminal.ChangeStatus("#################Training Done##############")
+    Terminal.SendLog("#################Training Done##############")
     writeJson(accountData,accountId)
     Terminal.Logout()
 
@@ -5113,6 +5100,9 @@ elif job == 15200:
 elif job == 15210 and Quest.GetQuestState(34820) != 2:
     print("Completing Illium Second Job")
     IlliumSecond()
+elif job == 15210 and level < 40 and field_id == 400000001:
+    Quest.StartQuest(5500, 1061005)
+    SCLib.UpdateVar("DoingCurbrock",True)
 elif job == 15210 and level >= 60:
     print("Completing Illium Third Job")
     IlliumThird()
@@ -5791,6 +5781,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level <
                     SCLib.UpdateVar("DoingCurbrock",False)
             else:
                 print("Enable kami to kill curbrock")
+                SCLib.UpdateVar("DoingCurbrock",True)
                 toggle_kami(True)
                 toggleAttack(True)
 if GameState.IsInGame() and not Terminal.IsRushing() and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
