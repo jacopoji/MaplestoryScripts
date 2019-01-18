@@ -1429,9 +1429,9 @@ def IlliumThird():
         elif quest2 == 1:
             if Quest.CheckCompleteDemand(HelpingShuang,shuang) != 0:
                 if quest2_1 !=2:
-                    if quest2 == 0:
+                    if quest2_1 == 0:
                         acceptQuest(Board1,board1npc,ExcavationCompletionArea,field_id)
-                    elif quest2 == 1:
+                    elif quest2_1 == 1:
                         if Quest.CheckCompleteDemand(Board1,board1npc) != 0:
                             rush(InitialExcavationArea)
                             time.sleep(30)
@@ -5697,7 +5697,7 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
                         print("Dropping stone to spawn Zakum")
                         Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
 
-if level >= 120 and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
+if level >= 140 and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
     if accountData['cur_pos'] == "16": #finished training all link to level 110
         print("Phase one end")
         accountData['phase_one'] = True
