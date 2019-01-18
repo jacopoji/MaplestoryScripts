@@ -2207,6 +2207,9 @@ def ArkSecond():
         elif Field.GetID() == 940205900:
             toggle_kami(True)
             time.sleep(3)
+    elif quest2 == 2:
+        toggle_rush_by_level(True)
+        toggle_kami(True)
     elif level >= 60:
         jobQuest = Quest.GetQuestState(34903)
         print("Completing Ark Third Job Adv")
@@ -5232,7 +5235,7 @@ elif job == 15001:
 elif job == 15500:
     print("Completing Ark First Job")
     ArkFirst()
-elif job == 15510 and level < 35:
+elif job == 15510 and level < 35 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Ark Second Job")
     ArkSecond()
     if Quest.GetQuestState(34940) == 2 and not SCLib.GetVar("DoingCurbrock"):
