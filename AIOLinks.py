@@ -5058,7 +5058,7 @@ elif job ==2710 and level == 60 and not SCLib.GetVar("DoingCurbrock"):
     LumiThird()
     toggle_rush_by_level(True)
     toggle_kami(True)
-elif job == 2711 and level ==100 and not SCLib.GetVar("DoingCurbrock"):
+elif job == 2711 and level ==100 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingZakum"):
     print("Completing Lumi fourth job")
     LumiFourth()
     toggle_rush_by_level(True)
@@ -5116,7 +5116,7 @@ elif job == 15210 and Quest.GetQuestState(34820) != 2:
 elif job == 15210 and level >= 60:
     print("Completing Illium Third Job")
     IlliumThird()
-elif job == 15211 and level >= 100:
+elif job == 15211 and level >= 100 and not SCLib.GetVar("DoingZakum"):
     print("Completing Illium Fourth job")
     IlliumFourth()
     toggle_rush_by_level(True)
@@ -5134,7 +5134,7 @@ elif (job == 6400 or job == 6002 or job == 6410) and Quest.GetQuestState(34625) 
 elif job == 6410 and level >= 60:
     print("Completing Cadena Third job")
     CadenaThird()
-elif job == 6411 and level >= 100:
+elif job == 6411 and level >= 100 and not SCLib.GetVar("DoingZakum"):
     print("Completing Cadena Fourth job")
     CadenaFourth()
 elif job == 15001:
@@ -5152,7 +5152,7 @@ elif job == 15510 and level < 35:
 elif job == 15510 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Ark Third Job")
     ArkSecond()
-elif job == 15511 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
+elif job == 15511 and level >= 100 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingZakum"):
     print("Completing Ark Fourth Job")
     ArkFourth()
 elif (job == 2001 or job == 2200) and Quest.GetQuestState(22510) != 2:
@@ -5177,7 +5177,7 @@ elif job == 3611 and level < 100 and field_id == 230050000:
     print("Enabling rush by level to leave Veritas")
     toggle_rush_by_level(True)
     toggle_kami(True)
-elif job == 3611 and level >= 100:
+elif job == 3611 and level >= 100 and not SCLib.GetVar("DoingZakum"):
     print("Completing Xenon Fourth Job")
     XenonFourth()
 elif job == 3612 and field_id == 230050000:
@@ -5230,7 +5230,7 @@ elif job == 2411 and level < 100:
         dungeonTeleport()
     elif field_id == arianttreasurevault:
         dungeonTeleport()
-elif job == 2411 and level >= 100:
+elif job == 2411 and level >= 100 and not SCLib.GetVar("DoingZakum"):
     print("Doing Phantom Fourth Job")
     PhantomFourth()
 elif job == 2412:
@@ -5283,7 +5283,7 @@ elif job == 2110 and level >=60:
 elif job == 2111 and field_id == 140000000 and level < 100:
     toggle_rush_by_level(True)
     toggle_kami(True)
-elif job == 2111 and level >= 100:
+elif job == 2111 and level >= 100 and not SCLib.GetVar("DoingZakum"):
     print("Doing Aran Fourth Job")
     AranFourth()
 elif job == 2112 and field_id == 140000000:
@@ -5315,7 +5315,7 @@ elif job == 14200 and level >= 30:
 elif job == 14210 and level >= 60:
     print("Kinesis Third Job")
     KinesisThird()
-elif job == 14211 and level >= 100:
+elif job == 14211 and level >= 100 and not SCLib.GetVar("DoingZakum"):
     print("Kinesis Fourth Job")
     KinesisFourth()
 ###### lvl 50 hyper rock #######
@@ -5519,17 +5519,18 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
             if field_id != TheDoorToZakum:
                 GetToTheDoorToZakum()
             else:
-                if pos.x != -720:
+                if pos.x not in range(-725,-715):
                     NewY = pos.y -5
                     Character.Teleport(-720, NewY)
                 elif Inventory.GetItemCount(4001017) < 1:
+                    print("Getting offer")
                     Npc.ClearSelection()
                     Npc.RegisterSelection("Receive an offering for Zakum.")
                     time.sleep(1)
                     Npc.RegisterSelection("Normal/Chaos Zakum")
                     Character.TalkToNpc(2030008)
                     time.sleep(1)
-                else:
+                elif Inventory.GetItemCount(4001017) >= 1:
                     print("Entering Portal to EntranceToZakumAlter")
                     Npc.ClearSelection()
                     Npc.RegisterSelection("Normal Zakum")
