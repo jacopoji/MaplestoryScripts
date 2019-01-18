@@ -5902,7 +5902,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level <
                 SCLib.UpdateVar("DoingCurbrock",True)
                 toggle_kami(True)
                 toggleAttack(True)
-if GameState.IsInGame() and not Terminal.IsRushing() and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if curbrock3 !=2:
         print("Doing third curbrock")
