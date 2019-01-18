@@ -2210,7 +2210,7 @@ def ArkSecond():
     elif quest2 == 2:
         toggle_rush_by_level(True)
         toggle_kami(True)
-    elif level >= 60:
+    if level >= 60:
         jobQuest = Quest.GetQuestState(34903)
         print("Completing Ark Third Job Adv")
         if jobQuest != 2:
