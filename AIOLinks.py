@@ -5922,6 +5922,8 @@ if field_id in escaperoutes:
     toggle_kami(True)
     toggle_rush_by_level(True)
     toggleAttack(True)
+    SCLib.UpdateVar("DoingCurbrock",False)
+
 
 quest26 = Quest.GetQuestState(2976)
 if doBeach and not Terminal.IsRushing() and level >= 36 and level < 55 and quest26 !=2 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and job not in XenonJobs:
