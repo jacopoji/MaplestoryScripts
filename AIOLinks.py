@@ -5200,6 +5200,8 @@ elif job == 15210 and level < 40 and field_id == 400000001:
 elif job == 15210 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Illium Third Job")
     IlliumThird()
+elif job == 15211 and level < 100:
+    SCLib.UpdateVar("DoingJobAdv",False)
 elif job == 15211 and level >= 100 and not SCLib.GetVar("DoingZakum"):
     print("Completing Illium Fourth job")
     IlliumFourth()
@@ -5209,9 +5211,11 @@ elif job == 15212 and field_id == 940202000:
     teleport_enter(-2,-20)
     toggle_kami(True)
     toggle_rush_by_level(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
 elif field_id == 102040200 and job == 15211: #Still in relicExcavation Camp
     toggle_rush_by_level(True)
     toggle_kami(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
 elif (job == 6400 or job == 6002 or job == 6410) and Quest.GetQuestState(34625) != 2:
     print("Completing Cadena First Job and Second Job")
     CadenaFirst()
