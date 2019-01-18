@@ -9,18 +9,16 @@ import Packet
 import Quest
 import Terminal
 import time
+import GameState
 
 Terminal.SetRushByLevel(False)
 
-while True:
+if GameState.IsInGame():
         time.sleep(2) #no stress cpu 
         jobid = Character.GetJob()
         level = Character.GetLevel()
         if jobid == -1 or level == -1:
             time.sleep(1)
-            continue
-        if Terminal.IsRushing():
-            continue
         field_id = Field.GetID()
         quest_req = Quest.GetQuestState(31802)
         quest1 = Quest.GetQuestState(31804)
@@ -49,7 +47,7 @@ while True:
 
         #Talk to Edea and Piston
         if quest_req != 2:
-                break
+                print("Need to talk")
         if quest1 != 2:
                     if field_id != 401000001:
                             Terminal.Rush(401000001)
@@ -98,24 +96,28 @@ while True:
                                             pos = Character.GetPos()
                                             if portal.valid and pos.x != portal.x:
                                                     time.sleep(7)
+                                                    Terminal.SetCheckBox("Kami Vac",False)
                                                     Character.Teleport(portal.x, portal.y-20)
                                                     time.sleep(1)
                                             time.sleep(3)
                                             Character.EnterPortal()
                                             time.sleep(0.1)
                                             Character.EnterPortal() #incase 1st doesn't register
+                                            Terminal.SetCheckBox("Kami Vac",True)
                                     elif field_id == 401070200:
                                             time.sleep(1)
                                             portal = Field.FindPortal("east00")
                                             pos = Character.GetPos()
                                             if portal.valid and pos.x != portal.x:
                                                     time.sleep(7)
+                                                    Terminal.SetCheckBox("Kami Vac",False)
                                                     Character.Teleport(portal.x, portal.y-20)
                                                     time.sleep(1)
                                             time.sleep(3)
                                             Character.EnterPortal()
                                             time.sleep(0.1)
                                             Character.EnterPortal() #incase 1st doesn't register
+                                            Terminal.SetCheckBox("Kami Vac",True)
         #Talk to the guy outside the barracks
         elif quest4 != 2:
                     if quest4 == 0:
@@ -316,45 +318,53 @@ while True:
                                     pos = Character.GetPos()
                                     if portal.valid and portal.x != pos.x:
                                             time.sleep(7)
+                                            Terminal.SetCheckBox("Kami Vac",False)
                                             Character.Teleport(portal.x, portal.y-20)
                                             time.sleep(1)
                                     time.sleep(3)
                                     Character.EnterPortal()
                                     time.sleep(0.1)
                                     Character.EnterPortal() #incase 1st doesn't register
+                                    Terminal.SetCheckBox("Kami Vac",True)
                             elif field_id == 401070700:
                                     portal = Field.FindPortal("east00")
                                     pos = Character.GetPos()
                                     if portal.valid and portal.x != pos.x:
                                             time.sleep(7)
+                                            Terminal.SetCheckBox("Kami Vac",False)
                                             Character.Teleport(portal.x, portal.y-20)
                                             time.sleep(1)
                                     time.sleep(3)
                                     Character.EnterPortal()
                                     time.sleep(0.1)
                                     Character.EnterPortal() #incase 1st doesn't register
+                                    Terminal.SetCheckBox("Kami Vac",True)
                             elif field_id == 401070800:
                                     portal = Field.FindPortal("east00")
                                     pos = Character.GetPos()
                                     if portal.valid and portal.x != pos.x:
                                             time.sleep(7)
+                                            Terminal.SetCheckBox("Kami Vac",False)
                                             Character.Teleport(portal.x, portal.y-20)
                                             time.sleep(1)
                                     time.sleep(3)
                                     Character.EnterPortal()
                                     time.sleep(0.1)
                                     Character.EnterPortal() #incase 1st doesn't register
+                                    Terminal.SetCheckBox("Kami Vac",True)
                             elif field_id == 401070900:
                                     portal = Field.FindPortal("east00")
                                     pos = Character.GetPos()
                                     if portal.valid and portal.x != pos.x:
                                             time.sleep(7)
+                                            Terminal.SetCheckBox("Kami Vac",False)
                                             Character.Teleport(portal.x, portal.y-20)
                                             time.sleep(1)
                                     time.sleep(3)
                                     Character.EnterPortal()
                                     time.sleep(0.1)
                                     Character.EnterPortal() #incase 1st doesn't register
+                                    Terminal.SetCheckBox("Kami Vac",True)
                             else:
                                     time.sleep(1)
                                 
@@ -425,13 +435,9 @@ while True:
                                         Terminal.Rush(401040000)
                                 else:
                                         Quest.CompleteQuest(31505, 3001100)
-                                        break
                         else:
                                 if field_id != 401052002:
                                         time.sleep(1)
                                         Terminal.Rush(401052002)
                                 else:
                                         time.sleep(1)
-        
-        else:
-                break

@@ -18,6 +18,7 @@ Aran            DONE
 Beast Tamer     DONE
 '''
 curbrockhideout = [600050000,600050010,600050020]
+useExploit = True
 #do Monster park how many times?
 do_MP = True
 do_MP_count = 2
@@ -32,6 +33,7 @@ whitelist = []
 #Zakum
 DoZakumDaily=True
 
+getSpider = False
 
 DoBlackGate = True
 doSleepyWood = False
@@ -134,6 +136,8 @@ if SCLib.GetVar("BuyExpansion") is None:
     SCLib.PersistVar("BuyExpansion",False)
 if SCLib.GetVar("EvanLogout") is None:
     SCLib.PersistVar("EvanLogout",False)
+if SCLib.GetVar("ExploitCount") is None:
+    SCLib.PersistVar("ExploitCount",0)
 HasSpawned = SCLib.GetVar("HasSpawned")
 NowLockedVar = SCLib.GetVar("NowLockedVar")
 KillZakumDaily = SCLib.GetVar("KillZakumDaily")
@@ -436,6 +440,25 @@ def rush(mapid):
             time.sleep(2)
         else:
             time.sleep(1)
+
+def exploit1():
+    toggle_rush_by_level(False)
+    if SCLib.GetVar("ExploitCount"):
+        time.sleep(2)
+        rush(224000041)
+        SCLib.UpdateVar("ExploitCount",False)
+    elif not SCLib.GetVar("ExploitCount"):
+        Npc.ClearSelection()
+        Npc.RegisterSelection("ghost")
+        rush(224000040)
+        time.sleep(2)
+        SCLib.UpdateVar("ExploitCount",True)
+    else:
+        Npc.ClearSelection()
+        Npc.RegisterSelection("ghost")
+        rush(224000040)
+        time.sleep(2)
+        SCLib.UpdateVar("ExploitCount",True)
 
 def toHex(val, nbits):
     return ((val + (1 << nbits)) % (1 << nbits))
@@ -1002,7 +1025,7 @@ def IlliumFirst():
             print("Pressing Control Key")
             time.sleep(1)
             Key.Press(0x11)
-            time.sleep(5)
+            time.sleep(3.5)
             Key.Press(0x11)
             print("Done Pressing")
             Quest.StartQuest(34803, 3001333)
@@ -1266,7 +1289,8 @@ def IlliumFirst():
                     Character.EnterPortal()
             elif field_id in range(940202300, 940202399):
                 toggle_kami(False)
-                Character.Teleport(35, 10000)
+                if pos.x != 35:
+                    Character.Teleport(35, -2000)
                 Character.JumpDown()
                 time.sleep(1)
                 mob = Field.FindMob(2400421)
@@ -1352,9 +1376,10 @@ def IlliumSecond():
         elif Quest.CheckCompleteDemand(34820, 3000002) == 0:
             rush(400000000)
             Quest.CompleteQuest(34820, 3000002)
+        elif Quest.GetQuestState(34820) == 2:
+            toggle_rush_by_level(True)
             print("Completed all Illium Quests and now returning control to rush by level")
             time.sleep(1)
-            toggle_rush_by_level(True)
             
 def IlliumThird():
     GirlWhoSaved = 34831
@@ -5103,7 +5128,7 @@ elif job == 15210 and Quest.GetQuestState(34820) != 2:
 elif job == 15210 and level < 40 and field_id == 400000001:
     Quest.StartQuest(5500, 1061005)
     SCLib.UpdateVar("DoingCurbrock",True)
-elif job == 15210 and level >= 60:
+elif job == 15210 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Illium Third Job")
     IlliumThird()
 elif job == 15211 and level >= 100 and not SCLib.GetVar("DoingZakum"):
@@ -5121,7 +5146,7 @@ elif field_id == 102040200 and job == 15211: #Still in relicExcavation Camp
 elif (job == 6400 or job == 6002 or job == 6410) and Quest.GetQuestState(34625) != 2:
     print("Completing Cadena First Job and Second Job")
     CadenaFirst()
-elif job == 6410 and level >= 60:
+elif job == 6410 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Cadena Third job")
     CadenaThird()
 elif job == 6411 and level >= 100 and not SCLib.GetVar("DoingZakum"):
@@ -5261,13 +5286,13 @@ elif job == 2100 and field_id == 100020400 and level < 30:
         Inventory.SendChangeSlotPositionRequest(1,polearm.pos,weapon_slot,-1)
     toggle_rush_by_level(True)
     toggle_kami(True)
-elif job == 2100 and level >= 30:
+elif job == 2100 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
     print("Doing Aran Second Job")
     AranSecond()
 elif job == 2110 and field_id == 140000000 and level < 60:
     toggle_rush_by_level(True)
     toggle_kami(True)
-elif job == 2110 and level >=60:
+elif job == 2110 and level >=60 and not SCLib.GetVar("DoingCurbrock"):
     print("Doing Aran Third Job")
     AranThird()
 elif job == 2111 and field_id == 140000000 and level < 100:
@@ -5413,7 +5438,7 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
         getBoogie()
     
 
-if Character.GetLevel() >= 83 and GameState.IsInGame():
+if Character.GetLevel() >= 83 and GameState.IsInGame() and getSpider:
     # Big Spider
     if Character.IsOwnFamiliar(9960295) == False:
         print("Getting Big Spider")
@@ -6824,3 +6849,7 @@ if SCLib.GetVar("BuyExpansion") and not SCLib.GetVar("DoingMP") and not SCLib.Ge
 if not SCLib.GetVar("BuyExpansion") and field_id == 240000002 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock"):
     toggle_rush_by_level(True)
     toggle_kami(True)
+
+if level >= 50 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and useExploit:
+    print("Doing exploit")
+    exploit1()
