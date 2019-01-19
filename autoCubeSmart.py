@@ -26,16 +26,16 @@ useOccult   = False                 # option for smart cube.
 
 #Slot of item to cube
 startSlot   = 1
-endSlot     = 9
+endSlot     = 4
 
 #Stat threshold
 statThreshold           = 27
-stopAtStatThreshold     = True
+stopAtStatThreshold     = False
 autoStat                = True      # Automatically set whichever highest stat you have
 isLvl160                = 0
 
 #For drop&meso rate
-dropStatThreshold       = 15        # Work only with Single Meso or Drop rate
+dropStatThreshold       = 0        # Work only with Single Meso or Drop rate
 stopAtMesoRate          = False
 stopAtDropRate          = True
 stopAtDoubleMesoRate    = True

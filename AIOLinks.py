@@ -1213,6 +1213,7 @@ def IlliumFirst():
          
         elif Quest.CheckCompleteDemand(34813, 3001336) != 0:
             rush(402000502)
+            toggle_kami(False)
             Character.Teleport(1309, 10000)
          
         else:
@@ -1283,6 +1284,7 @@ def IlliumFirst():
                 mob = Field.FindMob(2400420)
                 if mob.valid:
                     time.sleep(20)
+                    toggle_kami(False)
                     Character.Teleport(-500, 20000)
                     time.sleep(1)
                 else:
@@ -1332,6 +1334,7 @@ def IlliumFirst():
             time.sleep(1)
     elif escape != 2:
         rush(940202032)
+        toggle_kami(False)
         Character.Teleport(915, 10000)
         Quest.CompleteQuest(34718, 3001344)
         SCLib.UpdateVar("DoingJobAdv",False)
@@ -2410,6 +2413,7 @@ def EvanFirst():
                 if field_id == lushforest:
                     piglet = Field.FindNpc(1013200)
                     if piglet.valid:
+                        toggle_kami(False)
                         Character.Teleport(piglet.x,piglet.y)
                         time.sleep(1)
                         Character.TalkToNpc(1013200)
@@ -2589,6 +2593,7 @@ def EvanFirst():
                 Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             if field_id == henesys:
+                toggle_kami(False)
                 Character.Teleport(3350,124)
                 time.sleep(1)
         if Quest.GetQuestState(LetterDelivery) == 2:
@@ -2725,6 +2730,7 @@ def PhantomFirst():
                 teleport_enter(-600,-672)
             elif field_id == KnightsChamberPre:
                 if pos.x != -2447 and pos.y != 40:
+                    toggle_kami(False)
                     Character.Teleport(-2447,40)
                 EnterPortal("in00")
             elif field_id == KnightsChamberPost:
@@ -3037,6 +3043,7 @@ def AranFirst():
         fnpc = Field.FindNpc(npc)           
         if fnpc.valid:
             time.sleep(delay)                        
+            toggle_kami(False)
             Character.Teleport(fnpc.x, fnpc.y)
             time.sleep(delay)         
                 
@@ -4373,6 +4380,7 @@ def toggleAttack(on):
             Terminal.SetCheckBox("Auto AP",True)
     else:
         Terminal.SetCheckBox("Auto AP",True)
+    toggle_kami(on)
     if job == 3712:
         Terminal.SetCheckBox("Auto SP",True)
         Terminal.SetLineEdit("SISkillID","37121003")
@@ -5661,22 +5669,16 @@ if level >= 60 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetV
 if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
     if field_id == TheDoorToZakum:
         if pos.x != -3003:
-            Character.Teleport(-3003, -220)
-            time.sleep(0.5)
-            Character.EnterPortal()
-            time.sleep(0.1)
-            Character.EnterPortal()
-            time.sleep(0.1)
-            Character.EnterPortal()
+            toggle_kami(False)
+            teleport_enter(-3003,-220)
             toggle_rush_by_level(True)
             Terminal.SetCheckBox("Kami Vac",True)
             Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
             SCLib.UpdateVar("DoingZakum",False)
     elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
         if pos.x != -1599:
-            Character.Teleport(-1599, -331)
-            time.sleep(0.5)
-            Character.EnterPortal()
+            toggle_kami(False)
+            teleport_enter(-1599,-331)
 
 if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
     print("Doing Zakum")
