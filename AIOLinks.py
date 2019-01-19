@@ -4952,7 +4952,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 14211 or job == 14212 and field_id in curbrockhideout:
+    elif (job == 14211 or job == 14212) and field_id in curbrockhideout:
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,142001001)
         Terminal.SetCheckBox("Skill Injection", False)
