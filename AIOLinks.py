@@ -2207,7 +2207,10 @@ def ArkSecond():
         elif Field.GetID() == 940205900:
             toggle_kami(True)
             time.sleep(3)
-    elif level >= 60:
+    elif quest2 == 2:
+        toggle_rush_by_level(True)
+        toggle_kami(True)
+    if level >= 60:
         jobQuest = Quest.GetQuestState(34903)
         print("Completing Ark Third Job Adv")
         if jobQuest != 2:
@@ -5242,7 +5245,7 @@ elif job == 15001:
 elif job == 15500:
     print("Completing Ark First Job")
     ArkFirst()
-elif job == 15510 and level < 35:
+elif job == 15510 and level < 35 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Ark Second Job")
     ArkSecond()
     if Quest.GetQuestState(34940) == 2 and not SCLib.GetVar("DoingCurbrock"):
@@ -5909,7 +5912,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level <
                 SCLib.UpdateVar("DoingCurbrock",True)
                 toggle_kami(True)
                 toggleAttack(True)
-if GameState.IsInGame() and not Terminal.IsRushing() and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if curbrock3 !=2:
         print("Doing third curbrock")
