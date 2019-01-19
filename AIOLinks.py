@@ -4923,7 +4923,7 @@ def toggleAttack(on):
             Terminal.SetCheckBox("Skill Injection", on)
             Terminal.SetCheckBox("Full Map Attack",on)
             Terminal.SetCheckBox("Kami Vac",False)
-        elif level >= 104 and not useExploit:
+        elif level >= 104 and (not useExploit or SCLib.GetVar("DoingZakum")):
             Key.Set(pgup_key, 2, 2001582)
             Terminal.SetCheckBox("Auto SP",True)
             Terminal.SetLineEdit("SISkillID","112000002")
@@ -5238,6 +5238,7 @@ elif job == 2300 and level <= 13:
     if quest == 0:
         MercedesFirst()
     toggle_rush_by_level(True)
+    toggle_kami(True)
 elif job == 2300 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
     toggle_kami(False)
     MercedesSecond()
@@ -5735,8 +5736,8 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
         if boss.valid or boss1.valid or boss2.valid:
             print("Boss valid")
             DidSpawn()
-            if pos.x != -353:
-                Character.Teleport(-353, 84)
+            if pos.x != -345:
+                Character.Teleport(-345, 84)
             else:
                 print("Fighting Zakum StandBy")
         else:
@@ -5970,31 +5971,32 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level <
                 toggleAttack(True)
 if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
-    if curbrock3 !=2:
-        print("Doing third curbrock")
+    if curbrock3 ==0:
+        toggle_rush_by_level(False)
+        Quest.StartQuest(5501, sabitrama)
         SCLib.UpdateVar("DoingCurbrock",True)
-        if curbrock3 ==0:
-            toggle_rush_by_level(False)
-            Quest.StartQuest(5501, sabitrama)
-        elif curbrock3 ==1:
-            if Quest.CheckCompleteDemand(5501, sabitrama) ==0:
-                if pos.x != -425 and field_id in curbrockhideout:
-                    toggle_kami(False)
-                    time.sleep(2)
-                    teleport_enter(-425,-195)
-                    toggle_kami(True)
-                    time.sleep(8)
-                elif pos.x != -549 and field_id == curbrockescaperoute3:
-                    toggle_kami(False)
-                    teleport_enter(-549,-195)
-                    toggle_kami(True)
-                    toggle_rush_by_level(True)
-                else:
-                    Quest.CompleteQuest(5501,sabitrama)
-                    SCLib.UpdateVar("DoingCurbrock",False)
-            else:
+    elif SCLib.GetVar("DoingCurbrock"):
+        if curbrock3 == 1:
+            if field_id not in curbrockhideout and field_id not in escaperoutes:
+                SCLib.UpdateVar("DoingCurbrock",False)
+        if Quest.CheckCompleteDemand(5501, sabitrama) ==0:
+            if pos.x != -425 and field_id in curbrockhideout:
+                toggle_kami(False)
+                time.sleep(2)
+                teleport_enter(-425,-195)
                 toggle_kami(True)
-                toggleAttack(True)
+                time.sleep(8)
+            elif pos.x != -549 and field_id == curbrockescaperoute3:
+                toggle_kami(False)
+                teleport_enter(-549,-195)
+                toggle_kami(True)
+                toggle_rush_by_level(True)
+            else:
+                Quest.CompleteQuest(5501,sabitrama)
+                SCLib.UpdateVar("DoingCurbrock",False)
+        else:
+            toggle_kami(True)
+            toggleAttack(True)
 if field_id in curbrockhideout and len(Field.GetMobs()) == 0:
     toggle_kami(False)
     time.sleep(2)
