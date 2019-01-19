@@ -5939,39 +5939,42 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level <
     elif job in CadenaJobs:
         if Quest.GetQuestState(34625) != 2:
             print("Cadena undone quest")
-    elif curbrock2 !=2:
+    if curbrock2 ==0:
         print("Doing second curbrock")
         toggle_rush_by_level(False)
         SCLib.UpdateVar("DoingCurbrock",True)
-        if curbrock2 ==0:
-            Quest.StartQuest(5500, sabitrama)
-        elif curbrock2 ==1:
-            if Quest.CheckCompleteDemand(5500, sabitrama) ==0:
-                print("Quest completed")
-                if pos.x != -425 and field_id in curbrockhideout:
-                    toggle_kami(False)
-                    time.sleep(2)
-                    teleport_enter(-425,-195)
-                    toggle_kami(True)
-                    time.sleep(8)
-                    print("Resume Kami")
-                elif pos.x != -549 and field_id == curbrockescaperoute2:
-                    toggle_kami(False)
-                    teleport_enter(-549,-195)
-                    toggle_kami(True)
-                    print("Resume Kami")
-                    toggle_rush_by_level(True)
-                else:
-                    Quest.CompleteQuest(5500,sabitrama)
-                    SCLib.UpdateVar("DoingCurbrock",False)
-            else:
-                print("Enable kami to kill curbrock")
-                SCLib.UpdateVar("DoingCurbrock",True)
+        Quest.StartQuest(5500, sabitrama)
+    elif SCLib.GetVar("DoingCurbrock"):
+        if curbrock2 == 1:
+            if field_id not in curbrockhideout and field_id not in escaperoutes:
+                SCLib.UpdateVar("DoingCurbrock",False)
+        if Quest.CheckCompleteDemand(5500, sabitrama) ==0:
+            print("Quest completed")
+            if pos.x != -425 and field_id in curbrockhideout:
+                toggle_kami(False)
+                time.sleep(2)
+                teleport_enter(-425,-195)
                 toggle_kami(True)
-                toggleAttack(True)
+                time.sleep(8)
+                print("Resume Kami")
+            elif pos.x != -549 and field_id == curbrockescaperoute2:
+                toggle_kami(False)
+                teleport_enter(-549,-195)
+                toggle_kami(True)
+                print("Resume Kami")
+                toggle_rush_by_level(True)
+            else:
+                Quest.CompleteQuest(5500,sabitrama)
+                SCLib.UpdateVar("DoingCurbrock",False)
+        else:
+            print("Enable kami to kill curbrock")
+            SCLib.UpdateVar("DoingCurbrock",True)
+            toggle_kami(True)
+            toggleAttack(True)
 if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if curbrock3 ==0:
+        print("Doing Third Curbrock")
         toggle_rush_by_level(False)
         Quest.StartQuest(5501, sabitrama)
         SCLib.UpdateVar("DoingCurbrock",True)
