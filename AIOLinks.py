@@ -5509,7 +5509,7 @@ def getBoogie():
                 # rush to the map
                 Terminal.Rush(102010000)
 
-if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("DoingCurbrock"):
+if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
     # Jr. Boogie
     if job in IlliumJobs:
         lookback = Quest.GetQuestState(34820)
@@ -5944,6 +5944,7 @@ if field_id in curbrockhideout and len(Field.GetMobs()) == 0:
     time.sleep(2)
     teleport_enter(-425,-195)
     toggle_kami(True)
+    SCLib.UpdateVar("DoingCurbrock",False)
 if field_id in escaperoutes:
     toggle_kami(False)
     teleport_enter(-549,-195)
