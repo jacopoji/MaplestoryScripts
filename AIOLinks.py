@@ -4371,6 +4371,8 @@ def toggleAttack(on):
             Terminal.SetCheckBox("Auto AP",False)
         else:
             Terminal.SetCheckBox("Auto AP",True)
+    else:
+        Terminal.SetCheckBox("Auto AP",True)
     if job == 3712:
         Terminal.SetLineEdit("SISkillID","37121003")
         Terminal.SetCheckBox("Auto Attack", False)
@@ -4868,7 +4870,7 @@ def toggleAttack(on):
             Terminal.SetCheckBox("Auto SP",False)
             Terminal.SetSpinBox("SkillInjection",17000)
             Terminal.SetLineEdit("SISkillID", "112001006")
-            Terminal.SetCheckBox("Melee No Delay",False)
+            Terminal.SetCheckBox("Melee No Delay",on)
             Terminal.SetRadioButton("SIRadioMelee",True)
             Terminal.SetCheckBox("Auto Attack", False)
             Terminal.SetComboBox("AttackKey",33)
