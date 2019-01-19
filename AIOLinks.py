@@ -4157,9 +4157,9 @@ def GetToTheDoorToZakum():
             if ZakumCheck == 2:
                 ZakumQuest = True
                 break
-            else:
+            elif ZakumCheck == 0 or ZakumCheck == 1:
                 ZakumQuest = False
-                questToDo = 6995
+                break
         if ZakumQuest:
             Npc.ClearSelection()
             Npc.RegisterSelection("I want to ")
@@ -4168,7 +4168,7 @@ def GetToTheDoorToZakum():
             time.sleep(1)
         else:
             Quest.StartQuest(questToDo,TalkNPC)
-            time.sleep(1)
+            time.sleep(3)
             Quest.CompleteQuest(questToDo,TalkNPC)
             Npc.ClearSelection()
             Npc.RegisterSelection("I want to ")
