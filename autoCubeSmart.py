@@ -30,7 +30,7 @@ endSlot     = 9
 
 #Stat threshold
 statThreshold           = 27
-stopAtStatThreshold     = False
+stopAtStatThreshold     = True
 autoStat                = True      # Automatically set whichever highest stat you have
 isLvl160                = 0
 
