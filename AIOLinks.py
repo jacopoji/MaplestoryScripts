@@ -4366,7 +4366,7 @@ def safety_setting():
 def toggleAttack(on):
     attack_key = 0x44
     pgup_key = 0x21
-    if Character.IsOwnFamiliar(9960098) and level > 13:
+    if Character.IsOwnFamiliar(9960098) and level > 15:
         Terminal.SetSlider("sliderMP", 90)
         Terminal.SetComboBox("MPKey",4)
     else:
