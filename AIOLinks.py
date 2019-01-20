@@ -1875,12 +1875,13 @@ def CadenaFirst():
                 Quest.CompleteQuest(34625, 3001205)
                 toggle_kami(True)
                 toggle_rush_by_level(True)
+                SCLib.UpdateVar("DoingJobAdv",False)
                 
     if job == 6400 and level >= 30:
         Quest.StartQuest(34657, 3001250)
         toggle_kami(True)
         toggle_rush_by_level(True)
-        SCLib.UpdateVar("DoingJobAdv",True)
+        SCLib.UpdateVar("DoingJobAdv",False)
 
 def CadenaThird():
     Quest.StartQuest(34658, 3001250)
@@ -5296,7 +5297,11 @@ elif field_id == 102040200 and job == 15211: #Still in relicExcavation Camp
     SCLib.UpdateVar("DoingJobAdv",False)
 elif (job == 6400 or job == 6002 or job == 6410) and Quest.GetQuestState(34625) != 2:
     print("Completing Cadena First Job and Second Job")
+    SCLib.UpdateVar("DoingJobAdv",True)
     CadenaFirst()
+elif job == 6410 and Quest.GetQuestState(34625) == 2:
+    print("Cadena Job Pre done")
+    SCLib.UpdateVar("DoingJobAdv",False)
 elif job == 6410 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Cadena Third job")
     CadenaThird()
