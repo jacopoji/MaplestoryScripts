@@ -40,6 +40,12 @@ potential_header = 0x013E
 potential_recv = 0x0271
 BlockBuyHeader = 0x067C
 BuyItemHeader = 0x00F4
+CashItemRequestOpcode = 1337
+CashItemResultOpcode = 1739
+BuyByMesoRequest = 85
+LoadLockerDoneResult = 2
+MoveLToSRequest = 15
+
 #oPacket.EncodeBuffer("** ** ** 00 7F 00 01 00") potential reveal
 #rPacket = Packet.WaitForRecv(0x0254,5000)
 #1oPacket.EncodeBuffer("14A3884B 01")  collide items
@@ -193,7 +199,7 @@ ZakumsAltar = [280030100,280030101,280030102,280030103,280030104]
 TheCaveOfTrials3Zakum = 211042200
 blackgate_maps = [610050000,610051300, 610051400, 610051500, 610051600, 610051700, 610051800, 610051900, 610052000, 610050100, 610050200, 610050600, 610050700, 610050800, 610051200, 610050300, 610050400, 610050500, 610050900, 610051000, 610051100]
 henesys = 100000000
-
+LongestRideOnByeByeStation = [551030001,551030002,551030003,551030004,551030005,551030006,551030007,551030008,551030009,551030010,551030011,551030012,551030013,551030014,551030015,551030016,551030017,551030018,551030019,551030020]
 #npc ids
 NpcRobeiraMagicianInstructor = 2020009
 
@@ -216,6 +222,134 @@ def KillPersistVarThred():
 	time.sleep(1)
 
 SCHotkey.RegisterKeyEvent(HotKey, KillPersistVarThred) #F11
+
+
+class CashItemInfo:
+    def __init__(self):
+        self.liSN = 0
+        self.nItemID = 0
+        # None of the other vars are useful for this specific script
+
+def GetCashItemInfo():
+    return CashItemInfo()
+
+pCashItemInfo = GetCashItemInfo()
+
+def BuyByMeso():
+    Packet.BlockSendHeader(CashItemResultOpcode)
+    oPacket = Packet.COutPacket(CashItemRequestOpcode)
+    oPacket.Encode1(BuyByMesoRequest)
+    nMeso = Character.GetMeso()
+    nPrice = 0
+    if nMeso >= 25000000:
+        nCommoditySN = 87000027
+        nPrice = 25000000
+    elif nMeso >= 13000000:
+        nCommoditySN = 87000026
+        nPrice = 13000000
+    elif nMeso >= 5200000:
+        nCommoditySN = 87000025
+        nPrice = 5200000
+    oPacket.Encode4(nCommoditySN)
+    oPacket.Encode4(nPrice)
+    Packet.SendPacket(oPacket)
+    time.sleep(3)
+    Packet.UnBlockSendHeader(CashItemResultOpcode)
+
+def MoveLToS(liSN, nEmptySlotPOS):
+    oPacket = Packet.COutPacket(CashItemRequestOpcode)
+    oPacket.Encode1(MoveLToSRequest)
+    oPacket.Encode8(liSN)
+    oPacket.Encode1(5) # nTI
+    oPacket.Encode2(nEmptySlotPOS)
+    Packet.SendPacket(oPacket)
+
+def CashItemResLoadLockerDone():
+    iPacket = Packet.WaitForRecv(CashItemResultOpcode, 10000)
+    if iPacket.GetRemaining() > 0:
+        nRes = iPacket.ReadLong(1)
+        if nRes == LoadLockerDoneResult:
+            bItemLockerFull = iPacket.ReadLong(1)
+            if bItemLockerFull == 1:
+                nOverItemCount = iPacket.ReadLong(4)
+            nCashItemCount = iPacket.ReadLong(2)
+            if nCashItemCount >= 0:
+                bFound = False
+                for i in range(0, nCashItemCount):
+                    CashItemInfoDecode(iPacket)
+                    if pCashItemInfo.nItemID == 5040004:
+                        bFound = True
+                        break
+                if bFound:
+                    time.sleep(1)
+                    MoveLToS(pCashItemInfo.liSN, nEmptySlotPOS)
+                else:
+                    BuyByMeso()
+            time.sleep(2)
+            Terminal.LeaveCashShop()
+    else:
+        Terminal.LeaveCashShop()
+
+def getMesoBuff():
+	buffmap_id = 701100015
+	xpbonus = 2023532
+	mesobonus = 2023533
+	attbonus = 2023534
+	hs = 2311003
+	htr = 5040004
+	map = Field.GetID()
+
+	# Variables To Change
+	# Change these values accordingly
+	using_mule = False
+	mule_channel = 5
+
+	if GameState.IsInGame():
+		if Inventory.FindItemByID(htr).valid:
+			# Checks for HS
+			if using_mule:
+				Terminal.ChangeChannel(mule_channel)
+				if not Character.HasBuff(2, hs):
+					time.sleep(3)
+
+			# Checks for Fortune Buff
+			if not Character.HasBuff(1, mesobonus):
+				toggle_rush_by_level(False)
+				if map in LongestRideOnByeByeStation:
+					Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
+					Terminal.Rush(551030000)
+					time.sleep(2)
+				if map is not buffmap_id:
+					Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
+					Terminal.Rush(buffmap_id)
+			else:
+				time.sleep(1)
+		else:
+			Terminal.ChangeStatus("Missing HTR")
+
+def CashItemInfoDecode(iPacket):
+    pCashItemInfo.liSN = iPacket.ReadLong(8)
+    dwAccountID = iPacket.ReadLong(4)
+    dwCharacterID = iPacket.ReadLong(4)
+    pCashItemInfo.nItemID = iPacket.ReadLong(4)
+    nCommodityID = iPacket.ReadLong(4)
+    nNumber = iPacket.ReadLong(2)
+    sBuyCharacterID = iPacket.ReadLong(13)
+    ftDateExpire = iPacket.ReadLong(8) # FileTime(4, 4)
+    nPaybackRate = iPacket.ReadLong(4)
+    dDiscountRate = iPacket.ReadLong(8)
+    dwOrderNo = iPacket.ReadLong(4)
+    dwProductNo = iPacket.ReadLong(4)
+    bRefundable = iPacket.ReadLong(1)
+    nSourceFlag = iPacket.ReadLong(1)
+    nStorageBank = iPacket.ReadLong(1)
+    # CashItemOption Decode
+    liCashItemSN = iPacket.ReadLong(8)
+    ftExpireDate = iPacket.ReadLong(8) # FileTime(4, 4)
+    nGrade = iPacket.ReadLong(4)
+    iPacket.ReadLong(4) # aOption[0]
+    iPacket.ReadLong(4) # aOption[1]
+    iPacket.ReadLong(4) # aOption[2]
 
 def toggle_rush_by_level(indicator):
 	Terminal.SetCheckBox("Rush By Level",indicator)
@@ -1560,7 +1694,24 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetSpinBox("AutoDieLevel",level)
 		Terminal.SetComboBox("Familiar0",7)
 		print("Sleeping for 30 seconds to farm")
-		time.sleep(30)
+		if Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
+			nEmptySlotPOS = 0
+			for i in range(1, Inventory.GetItemSlotCount(5)):
+				pItem = Inventory.GetItem(5, i)
+				if not pItem.valid:
+					nEmptySlotPOS = i
+					break
+			Terminal.EnterCashShop()
+			CashItemResLoadLockerDone()
+		getMesoBuff()
+		if Character.HasBuff(1, 2023533):
+			if field_id not in LongestRideOnByeByeStation:
+				Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
+				Terminal.Rush(551030000)
+				time.sleep(2)
+			else:
+				Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
+				time.sleep(30)
 	elif not SCLib.GetVar("cube_lock") and accountData['ready_for_cube'] and accountData['cubing_done']:
 		print("cubing done and now farming with pet")
 		settings_fourth_job()
@@ -1595,8 +1746,25 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103":
 			SCLib.UpdateVar("farm_counter",int(SCLib.GetVar("farm_counter"))+1)
 			Terminal.ChangeStatus("Still farming in ByeBye: {}b".format(accountData['total_meso']))
-		print("Sleeping for 60 seconds to farm")
-		time.sleep(60)
+		if Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
+			nEmptySlotPOS = 0
+			for i in range(1, Inventory.GetItemSlotCount(5)):
+				pItem = Inventory.GetItem(5, i)
+				if not pItem.valid:
+					nEmptySlotPOS = i
+					break
+			Terminal.EnterCashShop()
+			CashItemResLoadLockerDone()
+		getMesoBuff()
+		if Character.HasBuff(1, 2023533):
+			if field_id not in LongestRideOnByeByeStation:
+				Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
+				Terminal.Rush(551030000)
+				time.sleep(2)
+			else:
+				Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
+				print("Sleeping 60 seconds to farm mesos")
+				time.sleep(60)
 	elif not SCLib.GetVar("cube_lock") and not accountData['ready_for_cube'] and level >= 149:
 		print("not ready for cube and farming equip")
 		settings_fourth_job()

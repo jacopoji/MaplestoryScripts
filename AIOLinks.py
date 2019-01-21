@@ -2341,6 +2341,7 @@ def EvanFirst():
                 Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(StrangeDream,Utah,frontyard,frontyard,field_id) # leaving living room once completing the quest at Utah once
+            time.sleep(1)
             if Quest.GetQuestState(StrangeDream) == 2:
                 SCLib.UpdateVar("EvanLogout",True)
     elif quest2 != 2:
@@ -2352,6 +2353,10 @@ def EvanFirst():
                 Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(FeedingBullDog,Utah,frontyard,field_id) #once before accepting quest
+            time.sleep(1)
+            if Quest.GetQuestState(FeedingBullDog) != 1:
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
         elif quest2 == 1:
             completeQuest(FeedingBullDog,BullDog,frontyard,frontyard,field_id)
     elif quest3 != 2:
@@ -2384,6 +2389,9 @@ def EvanFirst():
             time.sleep(1)
             if Quest.GetQuestState(DeliveringTheLunchBox) == 1:
                 SCLib.UpdateVar("EvanLogout",True)
+            else:
+                Terminal.Logout()
+                SCLib.UpdateVar("EvanLogout",False)
         elif quest4 == 1:
             if SCLib.GetVar("EvanLogout"):
                 Terminal.Logout()
@@ -2475,6 +2483,7 @@ def EvanFirst():
                 Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(ChasingAwayTheFoxes,Utah,frontyard,field_id)
+            time.sleep(1)
             if Quest.GetQuestState(ChasingAwayTheFoxes) == 1:
                 SCLib.UpdateVar("EvanLogout",True)
         elif quest9 == 1: #setting up hot key once
@@ -2482,6 +2491,7 @@ def EvanFirst():
                 Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(ChasingAwayTheFoxes,Utah,frontyard,backyard,field_id)
+            time.sleep(1)
             if Quest.GetQuestState(ChasingAwayTheFoxes) == 2:
                 SCLib.UpdateVar("EvanLogout",True)
     elif quest10 != 2:
@@ -3736,6 +3746,8 @@ def KinesisFirst():
     elif quest3 != 2:
         toggle_kami(False)
         if quest3 == 0:
+            Npc.ClearSelection()
+            Npc.RegisterSelection(" ")
             acceptQuest(VicePresidents,Yuna,firstfloor,field_id)
         elif quest3 == 1:
             if Quest.CheckCompleteDemand(VicePresidents,Yuna) != 0:
@@ -4306,10 +4318,10 @@ def BossCheck():
     time.sleep(2)
 
 
-if job == -1 and not accountData['changing_mule']:
+if job == -1 and not accountData['changing_mule'] and GameState.GetLoginStep() == 1:
     print("Not logged in yet")
     Terminal.SetLineEdit("LoginChar",accountData["cur_pos"])
-    time.sleep(2)
+    time.sleep(15)
 
 if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     Terminal.SetCheckBox("Auto Login",False)
@@ -4381,7 +4393,8 @@ def toggleAttack(on):
             Terminal.SetCheckBox("Auto AP",True)
     else:
         Terminal.SetCheckBox("Auto AP",True)
-    toggle_kami(on)
+    if not SCLib.GetVar("DoingJobAdv"):
+        toggle_kami(on)
     if job == 3712:
         Terminal.SetCheckBox("Auto SP",True)
         Terminal.SetLineEdit("SISkillID","37121003")
@@ -7030,4 +7043,4 @@ if level >= 50 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("D
     Terminal.SetComboBox("HackingOpt",1)
 elif level < 50 or not Inventory.FindItemByID(5040004).valid or not useExploit:
     Terminal.SetComboBox("eva_cmb",3)
-    Terminal.SetComboBox("HackingOpt",2)
+    Terminal.SetComboBox("HackingOpt",0)
