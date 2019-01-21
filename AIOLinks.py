@@ -7041,6 +7041,8 @@ if level >= 50 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("D
     exploit1()
     Terminal.SetComboBox("eva_cmb",1)
     Terminal.SetComboBox("HackingOpt",1)
+    Terminal.SetCheckBox("Legit Vac",False)
 elif level < 50 or not Inventory.FindItemByID(5040004).valid or not useExploit:
     Terminal.SetComboBox("eva_cmb",3)
     Terminal.SetComboBox("HackingOpt",0)
+    Terminal.SetCheckBox("Legit Vac",True)
