@@ -1703,6 +1703,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 					break
 			Terminal.EnterCashShop()
 			CashItemResLoadLockerDone()
+		'''
 		getMesoBuff()
 		if Character.HasBuff(1, 2023533):
 			if field_id not in LongestRideOnByeByeStation:
@@ -1711,7 +1712,9 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 				time.sleep(2)
 			else:
 				Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
-				time.sleep(30)
+				time.sleep(30
+		'''
+		time.sleep(30)
 	elif not SCLib.GetVar("cube_lock") and accountData['ready_for_cube'] and accountData['cubing_done']:
 		print("cubing done and now farming with pet")
 		settings_fourth_job()
@@ -1723,7 +1726,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetCheckBox("Auto Loot",False)
 		Terminal.SetSpinBox("AutoDieExp",90)
 		Terminal.SetSpinBox("AutoDieLevel",level)
-		Terminal.SetComboBox("Familiar0",7)
+		Terminal.SetComboBox("Familiar0",2)
 		Terminal.SetCheckBox("settings/mesologout",True)
 		if not SCLib.GetVar("EquipMesoDone"):
 			Terminal.SetCheckBox('MonkeySpiritsNDcheck',False)
@@ -1743,7 +1746,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			accountData['total_meso'] = new_meso
 			writeJson_cube(accountData,accountId)
 			SCLib.UpdateVar("farm_counter",0)
-		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103":
+		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103": # and Character.HasBuff(1, 2023533)
 			SCLib.UpdateVar("farm_counter",int(SCLib.GetVar("farm_counter"))+1)
 			Terminal.ChangeStatus("Still farming in ByeBye: {}b".format(accountData['total_meso']))
 		if Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
@@ -1755,7 +1758,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 					break
 			Terminal.EnterCashShop()
 			CashItemResLoadLockerDone()
-		getMesoBuff()
+		"""getMesoBuff()
 		if Character.HasBuff(1, 2023533):
 			if field_id not in LongestRideOnByeByeStation:
 				Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
@@ -1764,7 +1767,8 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			else:
 				Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
 				print("Sleeping 60 seconds to farm mesos")
-				time.sleep(60)
+				time.sleep(60)"""
+		time.sleep(60)
 	elif not SCLib.GetVar("cube_lock") and not accountData['ready_for_cube'] and level >= 149:
 		print("not ready for cube and farming equip")
 		settings_fourth_job()
