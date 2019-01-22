@@ -3773,6 +3773,8 @@ def KinesisFirst():
         if quest8 == 0:
             Npc.ClearSelection()
             Npc.RegisterSelection(" ")
+            if field_id != HQ:
+                rush(HQ)
             acceptQuest(CodeBreakerJay1,Jay,HQ,field_id)
         elif quest8 == 1:
             if field_id != firstfloor:
