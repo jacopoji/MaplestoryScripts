@@ -470,7 +470,7 @@ def settings_fourth_job():
 	if not Terminal.GetCheckBox("Grenade Kami"):
 		Terminal.SetCheckBox("Grenade Kami",True)
 	if not Terminal.GetCheckBox("MonkeySpiritsNDcheck"):
-		Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
+		Terminal.SetSpinBox("MonkeySpiritsNDdelay",40)
 		Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
 	if Terminal.GetCheckBox("Skill Injection"):
 		Terminal.SetCheckBox("Skill Injection",False)
