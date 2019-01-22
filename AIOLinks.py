@@ -2601,8 +2601,8 @@ def EvanFirst():
         elif quest22 == 1:#world map once
             completeQuest(LetterDelivery,ChiefStan,henesys,henesys,field_id)
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
+                Terminal.Logout()
             if field_id == henesys:
                 toggle_kami(False)
                 Character.Teleport(3350,124)
@@ -4378,6 +4378,9 @@ def safety_setting():
 def toggleAttack(on):
     attack_key = 0x44
     pgup_key = 0x21
+    exploit_map = 224000102
+    if field_id == exploit_map:
+        return
     if Character.IsOwnFamiliar(9960098) and level > 15:
         Terminal.SetSlider("sliderMP", 90)
         Terminal.SetComboBox("MPKey",4)
