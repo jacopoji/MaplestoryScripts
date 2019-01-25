@@ -4929,6 +4929,7 @@ def toggleAttack(on):
         if level <= 17:
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
             Key.Set(attack_key,1,112000000)
+            Terminal.SetCheckBox("Auto SP",True)
             Terminal.SetCheckBox("Skill Injection", False)
             #Terminal.SetSpinBox("SkillInjection",100)
             Terminal.SetCheckBox("Melee No Delay",False)
@@ -4937,20 +4938,23 @@ def toggleAttack(on):
             Terminal.SetComboBox("AttackKey",33)
             Terminal.SetSpinBox("autoattack_spin",100)
             Terminal.SetCheckBox("Full Map Attack",False)
-        elif level >17 and level < 104:
-            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-            Key.Set(attack_key,1,112000000)
-            Terminal.SetCheckBox("Auto SP",False)
-            Terminal.SetSpinBox("SkillInjection",17000)
-            Terminal.SetLineEdit("SISkillID", "112001006")
-            Terminal.SetCheckBox("Melee No Delay",on)
-            Terminal.SetRadioButton("SIRadioMelee",True)
+        elif level >17 and level < 50:
+            Key.Set(pgup_key, 2, 2001582)
+            Terminal.SetCheckBox("Auto SP",True)
+            Terminal.SetLineEdit("SISkillID","112000002")
             Terminal.SetCheckBox("Auto Attack", False)
-            Terminal.SetComboBox("AttackKey",33)
-            Terminal.SetSpinBox("autoattack_spin",100)
-            Terminal.SetCheckBox("Skill Injection", on)
-            Terminal.SetCheckBox("Full Map Attack",on)
-            Terminal.SetCheckBox("Kami Vac",False)
+            Terminal.SetSpinBox("SkillInjection",200)
+            Terminal.SetCheckBox("Skill Injection", False)
+            Terminal.SetCheckBox("Melee No Delay",False)
+            Terminal.SetRadioButton("SIRadioMelee",True)
+            count = 0
+            if on:
+                while count < 100 and len(Field.GetMobs())>0:
+                    Key.Down(0x11)
+                    time.sleep(0.1)
+                    Key.Up(0x11)
+                    time.sleep(0.1)
+                    count += 1
         elif level >= 104 and (not useExploit or SCLib.GetVar("DoingZakum")):
             Key.Set(pgup_key, 2, 2001582)
             Terminal.SetCheckBox("Auto SP",True)
@@ -4996,7 +5000,7 @@ def toggleAttack(on):
                 Key.Press(0x44)
                 count += 1
         '''
-    elif job == 2100: #Aran 1st 21000007
+    elif job == 2100 or job == 2110 or job == 2111 or job == 2112: #Aran 1st 21000007
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,21001010)
         Terminal.SetLineEdit("SISkillID","21000006")
@@ -5008,18 +5012,20 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 2110 or job == 2111 or job == 2112: #Aran 2nd+3rd+4th 21000007
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,21001010)
-        Terminal.SetLineEdit("SISkillID","21100018")
-        Terminal.SetCheckBox("Skill Injection", on)
-        Terminal.SetSpinBox("SkillInjection",30)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",on)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        '''
+        elif job == 2110 or job == 2111 or job == 2112: #Aran 2nd+3rd+4th 21000007
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+            Key.Set(attack_key,1,21001010)
+            Terminal.SetLineEdit("SISkillID","21100018")
+            Terminal.SetCheckBox("Skill Injection", on)
+            Terminal.SetSpinBox("SkillInjection",30)
+            Terminal.SetCheckBox("Auto SP",True)
+            Terminal.SetCheckBox("Melee No Delay",on)
+            #Terminal.SetRadioButton("SIRadioMagic",True)
+            Terminal.SetCheckBox("Auto Attack", False)
+            Terminal.SetComboBox("AttackKey",33)
+            Terminal.SetSpinBox("autoattack_spin",100)
+        '''
     elif job == 14200:# Kinesis 1st
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,142001001)
