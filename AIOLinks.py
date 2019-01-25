@@ -5257,7 +5257,7 @@ elif (job == 3120 or job == 3110) and level >= 60 and not SCLib.GetVar("DoingCur
     print("Completing Demon Avenger second job")
     toggle_rush_by_level(False)
     DASecond()
-elif (job == 3121 or job == 3111) and field_id == 931050110 and level == 60 and not SCLib.GetVar("DoingCurbrock"):
+elif (job == 3121 or job == 3111) and field_id == 931050110 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     teleport_enter(111,-14)
     toggle_rush_by_level(True)
     toggle_kami(True)
