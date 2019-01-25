@@ -44,15 +44,15 @@ HotKey = 0x7A
 #headers that might need to be updated every game update
 #headers updated for v199
 store_header = 0x00F5
-block_header = 0x0695
-buy_ticket_header = 0x0539
-recv = 0x06CB
+block_header = 0x069D
+buy_ticket_header = 0x0540
+recv = 0x06D3
 SF_header = 0x0138
 StarForceRecv = 0x014D
 collide_header = 0x0104
 potential_header = 0x013E
-potential_recv = 0x0271
-BlockBuyHeader = 0x067C
+potential_recv = 0x0274
+BlockBuyHeader = 0x0684
 BuyItemHeader = 0x00F4
 useExpansionHeader = 0x0121
 
@@ -106,7 +106,7 @@ if not any("SunCat" in s for s in sys.path):
     sys.path.append(os.getcwd() + "/SunCat")
 
 try:
-    import SunCat, SCLib, SCHotkey
+    import SCLib, SCHotkey
 except:
     print("Couldn't find SunCat module")
 
@@ -464,7 +464,8 @@ def exploit1():
         rush(224000040)
         time.sleep(2)
         SCLib.UpdateVar("ExploitCount",True)
-
+    if field_id == 224000101:
+        Terminal.StopRush()
 def toHex(val, nbits):
     return ((val + (1 << nbits)) % (1 << nbits))
 
@@ -3038,7 +3039,7 @@ def BeastTamerFirst():
     elif quest11 == 2 and level < 33:
         rush(KoboldPit1)
         toggle_kami(False)
-    else:
+    elif quest11 == 2 and level >= 33:
         AlishanRushing()
         SCLib.UpdateVar("DoingJobAdv",False)
     
@@ -5442,7 +5443,7 @@ elif job == 2412:
         dungeonTeleport()
     elif field_id == leafretreasurevault:
         dungeonTeleport()
-elif job == 11212 and level < 35:
+elif job == 11212 and Quest.GetQuestState(55234) != 2:
     print("Doing Beast Tamer Prequests")
     BeastTamerFirst()
 elif (job == 2000 or job == 2100) and Quest.GetQuestState(21700) != 2:
@@ -5702,6 +5703,7 @@ if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == Entran
         if pos.x != -1599:
             toggle_kami(False)
             teleport_enter(-1599,-331)
+            SCLib.UpdateVar("DoingZakum",False)
 
 if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
     print("Doing Zakum")

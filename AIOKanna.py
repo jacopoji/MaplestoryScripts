@@ -29,19 +29,17 @@ storage_map_id = 550000000
 storage_npc_id = 9270054
 
 #headers that might need to be updated every game update
-#headers updated for v199
+#headers updated for v202
 store_header = 0x00F5
-block_header = 0x0695
-buy_ticket_header = 0x0539
-recv = 0x06CB
+block_header = 0x069D
+buy_ticket_header = 0x0540
+recv = 0x06D3
 SF_header = 0x0138
 StarForceRecv = 0x014D
-RerollHeader = 0x018F #does not need to be updated anymore
-IARecv = 0x00E5 #does not need to be updated anymore
 collide_header = 0x0104
 potential_header = 0x013E
-potential_recv = 0x0271
-BlockBuyHeader = 0x067C
+potential_recv = 0x0274
+BlockBuyHeader = 0x0684
 BuyItemHeader = 0x00F4
 #oPacket.EncodeBuffer("** ** ** 00 7F 00 01 00") potential reveal
 #rPacket = Packet.WaitForRecv(0x0254,5000)
@@ -120,7 +118,7 @@ if not any("SunCat" in s for s in sys.path):
 	sys.path.append(os.getcwd() + "/SunCat")
 
 try:
-	import SunCat, SCLib, SCHotkey
+	import SCLib, SCHotkey
 except:
 	print("Couldn't find SunCat module")
 
@@ -1636,8 +1634,11 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103":
 			SCLib.UpdateVar("farm_counter",int(SCLib.GetVar("farm_counter"))+1)
 			Terminal.ChangeStatus("Still farming in ByeBye: {}b".format(accountData['total_meso']))
-		print("Sleeping for 60 seconds to farm")
-		time.sleep(60)
+		if Character.HasBuff(2,runebuff_id):
+			Character.TakeDamage(30000)
+			print("Suiciding to cancel buff")
+		print("Sleeping for 30 seconds to farm")
+		time.sleep(30)
 	elif not SCLib.GetVar("cube_lock") and not accountData['ready_for_cube'] and level >= 149:
 		print("not ready for cube and farming equip")
 		settings_fourth_job()

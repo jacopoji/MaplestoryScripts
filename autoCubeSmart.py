@@ -26,17 +26,17 @@ useOccult   = False                 # option for smart cube.
 
 #Slot of item to cube
 startSlot   = 1
-endSlot     = 4
+endSlot     = 8
 
 #Stat threshold
-statThreshold           = 27
-stopAtStatThreshold     = False
+statThreshold           = 18
+stopAtStatThreshold     = True
 autoStat                = True      # Automatically set whichever highest stat you have
 isLvl160                = 0
 
 #For drop&meso rate
-dropStatThreshold       = 0        # Work only with Single Meso or Drop rate
-stopAtMesoRate          = False
+dropStatThreshold       = 9        # Work only with Single Meso or Drop rate
+stopAtMesoRate          = True
 stopAtDropRate          = True
 stopAtDoubleMesoRate    = True
 stopAtDoubleDropRate    = True
@@ -49,7 +49,7 @@ stopAtDoubleCritDamage  = True
 
 #For Weapons
 #Currenlty supports only "ATT" "MATT" "IED" "BOSS"
-stopAtAtkThreshold      = True
+stopAtAtkThreshold      = False
 atkThreshold            = 18
 wepPotentialLines       = 3         # Set 0 if you are not going to use it
 wepPotentialOptions     = [["ATT","ATT","BOSS"],["ATT","BOSS","BOSS"],["ATT","IED","BOSS"],["ATT","ATT","ATT"],["ATT","ATT","IED"],["ATT","IED","IED"]]      # Always keep end squre bracket
@@ -58,13 +58,14 @@ wepPotentialOptions     = [["ATT","ATT","BOSS"],["ATT","BOSS","BOSS"],["ATT","IE
 delay = 0.3
 
 #Only if autoStat is False, adjust these
-STRcheck    = True
-DEXcheck    = True
-INTcheck    = True
-LUKcheck    = True
-ALLcheck    = True
-ATTcheck    = True
-MATTcheck   = True
+STRcheck    = False
+DEXcheck    = False
+INTcheck    = False
+LUKcheck    = False
+ALLcheck    = False
+ATTcheck    = False
+MATTcheck   = False
+HPcheck     = True
 
 
 # Change order if you want other smart cube order (Case sensitive)
@@ -81,6 +82,7 @@ optSTRr = {10041:(3,4),12041:(2,3),12047:(3,4),20041:(6,7),22041:(4,5),22057:(6,
 optDEXr = {10042:(3,4),12042:(2,3),12048:(3,4),20042:(6,7),22042:(4,5),22058:(6,7),30042:(9,10),32042:(5,6),32060:(9,10),40042:(12,13),40047:(12,12),42042:(7,8),42064:(12,13),60061:(9,9),60069:(6,6),70073:(2,2),70093:(2,3)}
 optINTr = {10043:(3,4),12043:(2,3),12049:(3,4),20043:(6,7),22043:(4,5),22059:(6,7),30043:(9,10),30048:(9,9),32043:(5,6),32061:(9,10),40043:(12,13),42043:(7,8),42065:(12,13),60062:(9,9),60070:(6,6),70063:(2,2),70106:(2,3)}
 optLUKr = {10044:(3,4),12044:(2,3),12050:(3,4),20044:(6,7),22044:(4,5),22060:(6,7),30044:(9,10),32044:(5,6),32062:(9,10),40044:(12,13),40048:(12,12),42044:(7,8),42066:(12,13),60063:(9,9),60071:(6,6),70023:(2,3),70067:(2,2)}
+optHPr = {10045:(3,4),12045:(2,3),20045:(6,7),20047:(6,7),22045:(4,5),22047:(4,5),30045:(9,10),32045:(5,6),32047:(5,6),40045:(12,13),42045:(7,8),42047:(7,8),60006:(9,9),60007:(6,6),60059:(2,3),70066:(2,2)}
 optALLr = {20086:(3,4),22086:(2,3),22087:(3,4),22802:(2,2),30086:(6,7),32086:(4,5),32087:(6,7),32801:(6,6),40086:(9,10),42086:(5,6),42087:(9,10),60002:(20,20),60004:(5,5),60005:(10,10),60038:(3,3),60067:(6,6),60073:(3,3),70029:(2,4),70049:(2,3)}
 optATTr = {20051:(6,7),22051:(6,7),30051:(9,10),32051:(9,10),40051:(12,13),42051:(12,13),60025:(12,12),60034:(4,4)}
 optMATTr = {20052:(6,7),22052:(6,7),30052:(9,10),32053:(9,10),40052:(12,13),42053:(12,13),60026:(12,12),60035:(4,4)}
@@ -89,29 +91,37 @@ MATT    = [30052, 32052, 40052, 42052, 60026, 60035]
 IED     = [20291, 30291, 40291, 40292, 60010, 60027]
 BOSS    = [30601, 30602, 40601, 40602, 40603, 42601, 42602, 42603, 60003, 60011, 60057]
 
-stat    = {"STR", "DEX", "INT", "LUK", "ALL"}
+stat    = {"STR", "DEX", "INT", "LUK", "ALL","HP"}
 atkstat = {"ATT", "MATT"}
 
 def FindHighestStat():
-    stats = {"STR":Character.GetStr(), "DEX":Character.GetDex(), "INT":Character.GetInt(), "LUK":Character.GetLuk()}
-    return sorted(stats, key=stats.get, reverse=True)[0]
+    demonA = [3122,3121,3120]
+    if Character.GetJob() in demonA:
+        return "HP"
+    else:
+        stats = {"STR":Character.GetStr(), "DEX":Character.GetDex(), "INT":Character.GetInt(), "LUK":Character.GetLuk()}
+        return sorted(stats, key=stats.get, reverse=True)[0]
  
 if autoStat:
     ALLcheck = True
     if FindHighestStat() == "STR":
-        STRcheck, DEXcheck, INTcheck, LUKcheck = True, False, False, False
+        STRcheck, DEXcheck, INTcheck, LUKcheck,HPcheck = True, False, False, False,False
+        ATTcheck    = True
+        MATTcheck   = False
+    elif FindHighestStat() == "HP":
+        STRcheck, DEXcheck, INTcheck, LUKcheck,HPcheck = False, False, False, False,True
         ATTcheck    = True
         MATTcheck   = False
     elif FindHighestStat() == "DEX":
-        STRcheck, DEXcheck, INTcheck, LUKcheck = False, True, False, False
+        STRcheck, DEXcheck, INTcheck, LUKcheck,HPcheck = False, True, False, False,False
         ATTcheck    = True
         MATTcheck   = False
     elif FindHighestStat() == "INT":
-        STRcheck, DEXcheck, INTcheck, LUKcheck = False, False, True, False
+        STRcheck, DEXcheck, INTcheck, LUKcheck,HPcheck = False, False, True, False,False
         ATTcheck    = False
         MATTcheck   = True
     elif FindHighestStat() == "LUK":
-        STRcheck, DEXcheck, INTcheck, LUKcheck = False, False, False, True
+        STRcheck, DEXcheck, INTcheck, LUKcheck,HPcheck = False, False, False, True,False
         ATTcheck    = True
         MATTcheck   = False
 
@@ -158,12 +168,18 @@ def getStats(stat, option):
             return value[isLvl160]
         else:
             return 0
+    elif stat == "HP":
+        value = optHPr.get(option)
+        if value != None:
+            return value[isLvl160]
+        else:
+            return 0
     else:
         return 0
  
  
 def getHighestPotential(item):
-    statcalc = {'STR':0, 'DEX':0, 'INT':0, 'LUK':0, 'ALL':0}
+    statcalc = {'STR':0, 'DEX':0, 'INT':0, 'LUK':0, 'ALL':0,'HP':0}
     #print(item.id)
     #print("\t"+ str(item.option1) + "\n\t" + str(item.option2) + "\n\t" + str(item.option3))
     for x in stat:
@@ -176,6 +192,8 @@ def getHighestPotential(item):
         elif x == 'LUK' and LUKcheck == False:
             continue
         elif x == 'ALL' and ALLcheck == False:
+            continue
+        elif x == 'HP' and HPcheck == False:
             continue
         else:
             perc = statcalc.get(x)
@@ -198,7 +216,7 @@ def getHighestAtk(item):
     statcalc = {'ATT':0, 'MATT':0}
     for x in atkstat:
         if x == 'ATT' and ATTcheck == False:
-                continue
+            continue
         elif x == 'MATT' and MATTcheck == False:
             continue
         else:
