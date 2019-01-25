@@ -1704,6 +1704,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 					break
 			Terminal.EnterCashShop()
 			CashItemResLoadLockerDone()
+		'''
 		getMesoBuff()
 		if Character.HasBuff(1, 2023533):
 			if field_id not in LongestRideOnByeByeStation:
@@ -1726,7 +1727,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetCheckBox("Auto Loot",False)
 		Terminal.SetSpinBox("AutoDieExp",90)
 		Terminal.SetSpinBox("AutoDieLevel",level)
-		Terminal.SetComboBox("Familiar0",7)
+		Terminal.SetComboBox("Familiar0",2)
 		Terminal.SetCheckBox("settings/mesologout",True)
 		if not SCLib.GetVar("EquipMesoDone"):
 			Terminal.SetCheckBox('MonkeySpiritsNDcheck',False)
@@ -1746,7 +1747,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			accountData['total_meso'] = new_meso
 			writeJson_cube(accountData,accountId)
 			SCLib.UpdateVar("farm_counter",0)
-		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103":
+		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103": # and Character.HasBuff(1, 2023533)
 			SCLib.UpdateVar("farm_counter",int(SCLib.GetVar("farm_counter"))+1)
 			Terminal.ChangeStatus("Still farming in ByeBye: {}b".format(accountData['total_meso']))
 		if Character.HasBuff(2,runebuff_id):
