@@ -119,7 +119,7 @@ if not any("SunCat" in s for s in sys.path):
 	sys.path.append(os.getcwd() + "/SunCat")
 
 try:
-	import SCLib, SCHotkey
+	import SunCat,SCLib, SCHotkey
 except:
 	print("Couldn't find SunCat module")
 

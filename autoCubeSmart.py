@@ -110,6 +110,7 @@ if autoStat:
         MATTcheck   = False
     elif FindHighestStat() == "HP":
         STRcheck, DEXcheck, INTcheck, LUKcheck,HPcheck = False, False, False, False,True
+        ALLcheck = False
         ATTcheck    = True
         MATTcheck   = False
     elif FindHighestStat() == "DEX":

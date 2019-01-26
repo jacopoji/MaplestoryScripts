@@ -31,7 +31,7 @@ safeguard = True
 whitelist = []
 
 #Zakum
-DoZakumDaily=True
+DoZakumDaily=False
 
 getSpider = False
 
@@ -106,7 +106,7 @@ if not any("SunCat" in s for s in sys.path):
     sys.path.append(os.getcwd() + "/SunCat")
 
 try:
-    import SCLib, SCHotkey
+    import SunCat,SCLib, SCHotkey
 except:
     print("Couldn't find SunCat module")
 
@@ -5820,18 +5820,21 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
                         Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
 
 if level >= 140 and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
-    if accountData['cur_pos'] == "16": #finished training all link to level 110
-        print("Phase one end")
-        accountData['phase_one'] = True
-        accountData['cur_pos'] = '-1'
-        accountData['changing_mule'] = True
-        writeJson(accountData,accountId)
-        Terminal.Logout()
+    if field_id != 240000000:
+        rush(240000000)
     else:
-        print("Current character done, moving to next one")
-        accountData['changing_mule'] = True
-        writeJson(accountData,accountId)
-        Terminal.Logout()
+        if accountData['cur_pos'] == "16": #finished training all link to level 110
+            print("Phase one end")
+            accountData['phase_one'] = True
+            accountData['cur_pos'] = '-1'
+            accountData['changing_mule'] = True
+            writeJson(accountData,accountId)
+            Terminal.Logout()
+        else:
+            print("Current character done, moving to next one")
+            accountData['changing_mule'] = True
+            writeJson(accountData,accountId)
+            Terminal.Logout()
 
 '''
 if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
@@ -5848,10 +5851,13 @@ if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
         Terminal.Logout()
 '''
 if level >= 140 and not SCLib.GetVar("DoingZakum"):
-    print("Current character done, moving to next one")
-    accountData['changing_mule'] = True
-    writeJson(accountData,accountId)
-    Terminal.Logout()
+    if field_id != 240000000:
+        rush(240000000)
+    else:
+        print("Current character done, moving to next one")
+        accountData['changing_mule'] = True
+        writeJson(accountData,accountId)
+        Terminal.Logout()
 #####Black gate    
 
 #print(SCLib.GetVar("cube_lock"))
