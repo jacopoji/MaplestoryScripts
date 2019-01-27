@@ -468,9 +468,11 @@ def settings_fourth_job():
 		Terminal.SetCheckBox("Summon Kishin",True)
 	if not Terminal.GetCheckBox("Grenade Kami"):
 		Terminal.SetCheckBox("Grenade Kami",True)
-	if not Terminal.GetCheckBox("MonkeySpiritsNDcheck"):
+	if accountData['ready_for_cube']:
+		Terminal.SetSpinBox("MonkeySpiritsNDdelay",500)
+	else:
 		Terminal.SetSpinBox("MonkeySpiritsNDdelay",40)
-		Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
+	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
 	if Terminal.GetCheckBox("Skill Injection"):
 		Terminal.SetCheckBox("Skill Injection",False)
 	if Terminal.GetCheckBox("bot/kanna_kami"):
@@ -1736,7 +1738,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			check_meso_equip()
 			SCLib.UpdateVar("EquipMesoDone",True)
 			Terminal.SetCheckBox('MonkeySpiritsNDcheck',True)
-		if int(SCLib.GetVar("farm_counter")) >= 4:
+		if int(SCLib.GetVar("farm_counter")) >= 14:
 			new_meso = int(accountData['storage_number']) * 30 + Character.GetMeso() / 1000000000
 			print("Updating total mesos from {} to {}b".format(accountData['total_meso'],new_meso))
 			if accountData['total_meso'] == new_meso:
@@ -1750,6 +1752,8 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103": # and Character.HasBuff(1, 2023533)
 			SCLib.UpdateVar("farm_counter",int(SCLib.GetVar("farm_counter"))+1)
 			Terminal.ChangeStatus("Still farming in ByeBye: {}b".format(accountData['total_meso']))
+		elif Terminal.IsAutoDying():
+			SCLib.UpdateVar("farm_counter",0)
 		if Character.HasBuff(2,runebuff_id):
 			Character.TakeDamage(30000)
 			print("Suiciding to cancel buff")
