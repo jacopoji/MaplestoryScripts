@@ -1801,7 +1801,7 @@ def print_info():
 		print("Creating folder")
 	else:
 		print("Writing to file")
-		with open('C:/Users/Jacopo/Pictures/MapleStoryMerch/ready_to_sell/{0}/{0}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as f:
+		with open('C:/Users/Jacopo/Pictures/MapleStoryMerch/ready_to_sell/{0}/{1}b_{0}.txt'.format(Terminal.GetLineEdit("LoginID"),accountData['total_meso']),'w') as f:
 			f.write("[Premade Meso Account] Lv149 Kanna with {}b+ and meso gear \n".format(int(accountData['total_meso'])))
 			f.write("\nComes with:\n{}b+ Mesos(Spread out among meso mules and Kanna) \n".format(int(accountData['total_meso'])))
 			f.write("110%+ Meso Obtain (check screenshots below)\n")
