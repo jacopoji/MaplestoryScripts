@@ -191,6 +191,7 @@ PhantomJobs = [2400, 2410, 2411, 2412]
 EvanJobs = [2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218]
 IlliumJobs = [15200,15210,15211,15212]
 CadenaJobs = [6400,6410,6411,6412]
+KinesisJobs = [14200,14210,14211,14212]
 
 NpcTylusWarriorInstructor = 2020008
 NpcRobeiraMagicianInstructor = 2020009
@@ -4053,6 +4054,12 @@ def id2str(jobid):
         return "Illium"
     elif jobid in CadenaJobs:
         return "Cadena"
+    elif jobid == 11212:
+        return "Beast Tamer"
+    elif jobid in AranJobs:
+        return "Aran"
+    elif jobid in KinesisJobs:
+        return "Kinesis"
     else:
         return "Unknown Job"
 
@@ -4403,8 +4410,8 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     chars = Login.GetChars()
     for char in chars:
         if char.level >= 140:
-            if str(char.id) not in accountData["done_char"]:
-                accountData["done_char"].append(str(char.id))
+            if id2str(char.jobid) not in accountData["done_char"]:
+                accountData["done_char"].append(id2str(char.jobid))
     Terminal.SetCheckBox("Auto Login",True)
     accountData["changing_mule"] = False
     time.sleep(1)
@@ -4415,25 +4422,30 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
 if accountData['training_done'] and GameState.GetLoginStep() == 2:
     Terminal.SetCheckBox("Auto Login",False)
     chars = Login.GetChars()
-    with open('info/{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
+    with open('info/output/links_{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
         for char in chars:
-            charInfo.write("{} {}\n".format(id2str(char.id),char.level))
+            charInfo.write("{} {}\n".format(id2str(char.jobid),char.level))
         charInfo.close()
     Terminal.ChangeStatus("#################Training Done##############")
+    time.sleep(60)
 
 if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     accountData['total_slots'] = Login.GetCharSlot()
     accountData['used_slots'] = Login.GetCharCount()
     writeJson(accountData,accountId)
+    chars = Login.GetChars()
+    for char in chars:
+        if char.level >= 140:
+            if id2str(char.jobid) not in accountData["done_char"]:
+                accountData["done_char"].append(id2str(char.jobid))
     if accountData['total_slots'] <  (1 + accountData['link_end'] - accountData['link_start'] + accountData['storage_number']):
         SCLib.UpdateVar("BuyExpansion",True)
-    
-if len(accountData["done_char"]) == 20 and GameState.IsInGame():
-    accountData['training_done'] = True
-    Terminal.ChangeStatus("#################Training Done##############")
-    Terminal.SendLog("#################Training Done##############")
     writeJson(accountData,accountId)
-    Terminal.Logout()
+if len(accountData["done_char"]) >= 14:
+    accountData['training_done'] = True
+    writeJson(accountData,accountId)
+    if GameState.IsInGame():
+        Terminal.Logout()
 
 
 def safety_setting():
