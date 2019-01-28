@@ -26,16 +26,16 @@ useOccult   = False                 # option for smart cube.
 
 #Slot of item to cube
 startSlot   = 1
-endSlot     = 8
+endSlot     = 9
 
 #Stat threshold
-statThreshold           = 18
+statThreshold           = 21
 stopAtStatThreshold     = True
 autoStat                = True      # Automatically set whichever highest stat you have
 isLvl160                = 0
 
 #For drop&meso rate
-dropStatThreshold       = 9        # Work only with Single Meso or Drop rate
+dropStatThreshold       = 15        # Work only with Single Meso or Drop rate
 stopAtMesoRate          = True
 stopAtDropRate          = True
 stopAtDoubleMesoRate    = True
@@ -49,7 +49,7 @@ stopAtDoubleCritDamage  = True
 
 #For Weapons
 #Currenlty supports only "ATT" "MATT" "IED" "BOSS"
-stopAtAtkThreshold      = False
+stopAtAtkThreshold      = True
 atkThreshold            = 18
 wepPotentialLines       = 3         # Set 0 if you are not going to use it
 wepPotentialOptions     = [["ATT","ATT","BOSS"],["ATT","BOSS","BOSS"],["ATT","IED","BOSS"],["ATT","ATT","ATT"],["ATT","ATT","IED"],["ATT","IED","IED"]]      # Always keep end squre bracket

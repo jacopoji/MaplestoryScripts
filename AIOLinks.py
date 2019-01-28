@@ -55,6 +55,7 @@ potential_recv = 0x0274
 BlockBuyHeader = 0x0684
 BuyItemHeader = 0x00F4
 useExpansionHeader = 0x0121
+level_skill_header = 0x014F
 
 #equip slot numbers
 helmet_slot = -1
@@ -448,24 +449,82 @@ def exploit1():
     toggleAttack(False)
     toggle_kami(False)
     toggle_HTR(True)
-    if SCLib.GetVar("ExploitCount"):
-        time.sleep(2)
-        rush(224000041)
-        SCLib.UpdateVar("ExploitCount",False)
-    elif not SCLib.GetVar("ExploitCount"):
-        Npc.ClearSelection()
-        Npc.RegisterSelection("ghost")
-        rush(224000040)
-        time.sleep(2)
-        SCLib.UpdateVar("ExploitCount",True)
+    expTable = dict()
+    expTable[30] = 19112
+    expTable[31] = 19112
+    expTable[32] = 19112
+    expTable[33] = 19112
+    expTable[34] = 19112
+    expTable[35] = 22934
+    expTable[36] = 27520
+    expTable[37] = 33024
+    expTable[38] = 29628
+    expTable[39] = 47553
+    expTable[40] = 51357
+    expTable[41] = 55465
+    expTable[42] = 59902
+    expTable[43] = 64694
+    expTable[44] = 69869
+    expTable[45] = 75458
+    expTable[46] = 81494
+    expTable[47] = 88013
+    expTable[48] = 95054
+    expTable[49] = 102658
+    expTable[50] = 110870
+    expTable[51] = 119739
+    expTable[52] = 129318
+    expTable[53] = 139663
+    expTable[54] = 150836
+    expTable[55] = 162902
+    expTable[56] = 175934
+    expTable[57] = 190008
+    expTable[58] = 205208
+    expTable[59] = 221624
+    expTable[60] = 221624
+    expTable[61] = 221624
+    expTable[62] = 221624
+    expTable[63] = 221624
+    expTable[64] = 221624
+    expTable[65] = 238245
+    expTable[66] = 256113
+    expTable[67] = 275321
+    expTable[68] = 295970
+    expTable[69] = 318167
+    expTable[70] = 342029
+    expTable[71] = 367681
+    expTable[72] = 395257
+    expTable[73] = 424901
+    expTable[74] = 456768
+    expTable[75] = 488741
+    expTable[76] = 522952
+    expTable[77] = 559558
+    expTable[78] = 598727
+    expTable[79] = 640637
+    expTable[80] = 685481
+    expTable[81] = 733464
+    if level < 30 or (level <= 81 and Character.GetExp() > (expTable[level] - 5309)):
+        if field_id != 866000390:
+            rush(866000390)
+            time.sleep(0.5)
     else:
-        Npc.ClearSelection()
-        Npc.RegisterSelection("ghost")
-        rush(224000040)
-        time.sleep(2)
-        SCLib.UpdateVar("ExploitCount",True)
-    if field_id == 224000101:
-        Terminal.StopRush()
+        if SCLib.GetVar("ExploitCount"):
+            time.sleep(2)
+            rush(224000041)
+            SCLib.UpdateVar("ExploitCount",False)
+        elif not SCLib.GetVar("ExploitCount"):
+            Npc.ClearSelection()
+            Npc.RegisterSelection("ghost")
+            rush(224000040)
+            time.sleep(2)
+            SCLib.UpdateVar("ExploitCount",True)
+        else:
+            Npc.ClearSelection()
+            Npc.RegisterSelection("ghost")
+            rush(224000040)
+            time.sleep(2)
+            SCLib.UpdateVar("ExploitCount",True)
+        if field_id == 224000101:
+            Terminal.StopRush()
 def toHex(val, nbits):
     return ((val + (1 << nbits)) % (1 << nbits))
 
@@ -737,7 +796,7 @@ def DASecond():
                 Quest.CompleteQuest(23213, 2153006)
     elif Quest.GetQuestState(23218) != 2:
         print("2")
-        if job == 3110:
+        if job == 3120:
             if Quest.GetQuestState(23214) == 0:
                 Quest.StartQuest(23214, 2153006)
             elif Quest.GetQuestState(23214) == 1:
@@ -762,7 +821,7 @@ def DASecond():
                     Terminal.StopRush()
                     toggleAttack(True)
                     toggle_kami(True)
-                elif field_id == 931050120:
+                elif field_id == 931050120 and len(Field.GetMobs()) == 0:
                     toggle_kami(False)
                     teleport_enter(109,-14)
                 else:
@@ -2626,6 +2685,7 @@ def EvanFirst():
 def XenonSecond():
     #print("Needs to be implemented")
     toggle_rush_by_level(False)
+    SCLib.UpdateVar("DoingJobAdv",True)
     SecretInstructions = 23610
     VeritasFinest = 23611
     quest1 = Quest.GetQuestState(SecretInstructions)
@@ -2645,6 +2705,7 @@ def XenonSecond():
             if Quest.GetQuestState(VeritasFinest) == 2:
                 toggle_rush_by_level(True)
                 toggle_kami(True)
+                SCLib.UpdateVar("DoingJobAdv",False)
     if Quest.GetQuestState(VeritasFinest) == 2:
         toggle_rush_by_level(True)
         toggle_kami(True)
@@ -2692,6 +2753,8 @@ def XenonThird():
                     toggleAttack(False)
                     time.sleep(5)
                     Quest.CompleteQuest(23615, 2159421)
+                    time.sleep(1)
+                    dungeonTeleport()
                     time.sleep(1)
                     dungeonTeleport()
             else:
@@ -3730,9 +3793,16 @@ def KinesisFirst():
         if quest1 == 0:
             acceptQuest(CheckYourself,Jay,HQ,field_id)
         elif quest1 == 1:
+            SkillLevel = Character.GetSkillLevel(140000291)
             drink = Inventory.FindItemByID(2000040)
             if drink.valid:
                 Inventory.UseItem(2000040)
+            if SkillLevel < 6:
+                print("Skill level is {},continue".format(SkillLevel))
+                qPacket = Packet.COutPacket(level_skill_header)
+                qPacket.EncodeBuffer("8D 47 8D 00 23 3C 58 08 01 00 00 00")
+                Packet.SendPacket(qPacket)
+                time.sleep(1)
             completeQuest(CheckYourself,Jay,HQ,HQ,field_id)
     elif quest2 != 2:
         if quest2 == 0:
@@ -3938,6 +4008,7 @@ def KinesisSecond():
         print("1")
         if quest1 == 0:
             Quest.StartQuest(TypeNDataUpgrade,Jay)
+            SCLib.UpdateVar("DoingJobAdv",False)
 
 def KinesisThird():
     TypeEDataUpgrade = 22800
@@ -4357,7 +4428,7 @@ if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     if accountData['total_slots'] <  (1 + accountData['link_end'] - accountData['link_start'] + accountData['storage_number']):
         SCLib.UpdateVar("BuyExpansion",True)
     
-if len(accountData["done_char"]) == 12 and GameState.IsInGame():
+if len(accountData["done_char"]) == 20 and GameState.IsInGame():
     accountData['training_done'] = True
     Terminal.ChangeStatus("#################Training Done##############")
     Terminal.SendLog("#################Training Done##############")
@@ -4803,20 +4874,20 @@ def toggleAttack(on):
     elif job == 15500 or job == 15510 or job == 15511: #Ark 1st + 2nd + 3rd 155001100
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID", "155001100")
-        Terminal.SetCheckBox("Melee No Delay",True)
+        Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetSpinBox("SkillInjection",700)
         Terminal.SetCheckBox("Auto SP",True)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetCheckBox("Skill Injection", False)
     elif job == 15512: #Ark 4th 155121007 @50
         Terminal.SetLineEdit("SISkillID", "155121007")
         Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Melee No Delay",True)
+        Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetCheckBox("Auto SP",True)
         Terminal.SetSpinBox("SkillInjection",50)
         Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetCheckBox("Skill Injection", False)
     elif job == 2001: #Evan pre 1st job
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,22001010)
@@ -5364,6 +5435,7 @@ elif job == 3600 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
 elif job == 3610 and level < 60 and field_id == 230050000:
     print("Accepting quest to leave Veritas")
     Quest.StartQuest(32155, 2300001)
+    SCLib.UpdateVar("DoingJobAdv",False)
     toggle_rush_by_level(True)
     toggle_kami(True)
 elif job == 3610 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
@@ -5628,7 +5700,7 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
     elif job == 14200:
         if Quest.GetQuestState(22733) == 2:
             getBoogie()
-    elif job != -1 or job != 0:
+    elif job != -1 and job != 0 and job not in DemonAvengerJobs and job not in DemonSlayerJobs and job not in KannaJobs:
         getBoogie()
     
 
@@ -7055,7 +7127,7 @@ if not SCLib.GetVar("BuyExpansion") and field_id == 240000002 and not SCLib.GetV
     toggle_rush_by_level(True)
     toggle_kami(True)
 
-if level >= 50 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and useExploit and not SCLib.GetVar("DoingJobAdv"):
+if level < 140 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and useExploit and not SCLib.GetVar("DoingJobAdv"):
     print("Doing exploit")
     exploit1()
     Terminal.SetComboBox("eva_cmb",1)

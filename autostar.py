@@ -16,7 +16,7 @@ import GameState
 starTo = 12
 
 # change this to true if you want to use safeguard for stars 13-17
-safeguard = False
+safeguard = True
 
 # change this to true if you want to star whatever item is in equip inventory slot 1
 fIStar = False

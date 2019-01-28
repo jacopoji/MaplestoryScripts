@@ -56,13 +56,16 @@ while True:
         Inventory.SendChangeSlotPositionRequest(1, realsymbol.pos, -1600, -1)
     if fieldid == 450001000:
         time.sleep(1)
-        Character.Teleport(-338, -3)
+        if Character.GetPos().x != -338:
+            Character.Teleport(-338, -3)
     if fieldid == 450001340:
         time.sleep(1)
-        Character.Teleport(563, 177)
+        if Character.GetPos().x != 563:
+            Character.Teleport(563, 177)
     if fieldid == 450001350:
         time.sleep(1)
-        Character.Teleport(1200, 177)
+        if Character.GetPos().x != 1200:
+            Character.Teleport(1200, 177)
     if quest1 != 2:
         if quest1 == 0:
             if fieldid != 270010111:

@@ -80,6 +80,17 @@ ssBaseY = -491
 ssNpc = 3003381
 enemyMobs = [8644201, 8644301, 8644302, 8644303, 8644304, 8644305]
 
+HotKey = 0x79
+try:
+    SCHotkey.StartHotkeys(100)
+except:
+    SCHotkey.StopHotkeys()
+def KillPersistVarThred():
+    print("Restarting SCLib variables")
+    SCLib.StopVars()
+    time.sleep(1)
+SCHotkey.RegisterKeyEvent(HotKey, KillPersistVarThred) #F10
+
 def initVars():
 	SCLib.PersistVar("StartingMap", Field.GetID())
 	SCLib.PersistVar("UsingKami", Terminal.GetCheckBox("Kami Vac"))
@@ -191,6 +202,10 @@ def acceptVJ():
 	Terminal.SetCheckBox("Auto NPC", True)
 	SunCat.Teleport(-1941, 60)
 	time.sleep(0.1)
+	if Quest.GetQuestState(34128) != 2:
+		Quest.StartQuest(34128,vjNPC)
+		time.sleep(1.5)
+		Quest.CompleteQuest(34128,vjNPC)
 	#Quest.StartQuest(34128, vjNPC)
 	
 	Npc.ClearSelection()
@@ -681,8 +696,7 @@ if not Terminal.IsRushing():
 					Terminal.SetCheckBox("General FMA", True)
 				if SCLib.GetVar("UsingAutoBuff"):
 					Terminal.SetCheckBox("Auto Buff", True)
-				
-				Terminal.Rush(SCLib.GetVar("StartingMap"))
+				Terminal.SetCheckBox("Rush By Level",True)
 			else:
 				SCLib.StartVars(5)
 		else:

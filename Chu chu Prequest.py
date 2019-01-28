@@ -44,8 +44,9 @@ if GameState.IsInGame():
     quest19 = Quest.GetQuestState(34218)
 
     if fieldid == 450002000:
-        Character.Teleport(1084, 138)
-        time.sleep(2)
+        if Character.GetPos().x != 1084:
+            Character.Teleport(1084, 138)
+            time.sleep(2)
 
     if fieldid == 450002010:
         Character.Teleport(667, -588)
