@@ -5913,11 +5913,13 @@ if level >= 140 and not accountData['phase_one'] and not SCLib.GetVar("DoingZaku
             accountData['cur_pos'] = '-1'
             accountData['changing_mule'] = True
             writeJson(accountData,accountId)
+            toggle_rush_by_level(True)
             Terminal.Logout()
         else:
             print("Current character done, moving to next one")
             accountData['changing_mule'] = True
             writeJson(accountData,accountId)
+            toggle_rush_by_level(True)
             Terminal.Logout()
 
 '''
