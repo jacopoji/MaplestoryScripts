@@ -2553,13 +2553,16 @@ if not accountData['cubing_done'] and level >=145 and not SCLib.GetVar("DoingMP"
 		if Character.GetMeso() > 800000000:
 			toggle_rush_by_level(False)
 			SCLib.UpdateVar("cube_lock",True)
-			if Terminal.IsRushing():
-				print("Still rushing")
-				time.sleep(3)
-			elif curr_map != el_nath:
+			if curr_map != el_nath:
+				if Terminal.IsRushing():
+					print("Still rushing")
+					time.sleep(3)
 				print("Rush to el_nath")
 				Terminal.Rush(el_nath)
 				time.sleep(3)
+			elif curr_map == el_nath and Terminal.IsRushing():
+				Terminal.StopRush()
+				time.sleep(1)
 			else:
 				buy_cubes()
 		else:
