@@ -15,7 +15,21 @@ except:
 dailyVJ = True
 dailyChuChu = True
 dailyDD = False
-dailySS = False
+dailySS = True
+
+if GameState.IsInGame():
+    if Quest.GetQuestState(34120) != 2:
+        #print("You havn't completed VJ storyline quests yet. Disable VJ daily")
+        dailyVJ = False
+    if Quest.GetQuestState(34218) != 2:
+        #print("You havn't completed ChuChu storyline quests yet. Disable Chuchu daily")
+        dailyChuChu = False
+    if Quest.GetQuestState(34330) != 2:
+        #print("You havn't completed Lachelein storyline quests yet. Disable Dream Defender daily")
+        dailyDD = False
+    if Quest.GetQuestState(34479) != 2:
+        #print("You havn't completed Arcana storyline quests yet. Disable Sirit Savior daily")
+        dailySS = False
 
 kamiOffsetX = -100
 kamiOffsetY = -50
@@ -50,8 +64,8 @@ vjNPC = 3003104
 
 #ChuChu
 ccStartingMap = 450002023
-ccExitMap = 450002024
-ccNpc = 3003166
+ccExitMap     = 450002024
+ccNpc         = 3003166
 hungryMutoMaps = [921170050, 921170100, 921170101, 921170102, 921170103, 921170104, 921170105]
 allIngredients = []
 allRecipes = []
@@ -161,7 +175,7 @@ current_date = str(datetime.datetime.utcnow().date())
 if current_date != accountData['date']:
     accountData['date'] = current_date
     accountData['daily_done'] = False
-    accountData['done_char'] = []
+    accountData['done_char'][:] = []
     writeJson(accountData,accountId)
     print("It's a new day!")
 
@@ -336,6 +350,7 @@ def initAttack():
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Kami Vac",True)
+        Terminal.SetCheckBox("dragon_kami",False)
     elif job == 2112: #Aran 4th 21000007
         print("Setting up Settings for Aran")
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -568,18 +583,17 @@ def initAttackDone():
     elif job == 2217: #Evan 4th 22170061 SI/ND
         print("Setting up Settings for Evan")
         Terminal.SetLineEdit("SISkillID", "400021046")
-        Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetCheckBox("dragon_kami",True)
-        Terminal.SetCheckBox("Mob Falldown",True)
+        Terminal.SetCheckBox("Mob Falldown",False)
         
         Terminal.SetCheckBox("Legit Vac",True)
         Terminal.SetSpinBox("SkillInjection",80)
-        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetRadioButton("SIRadioDragon",True)
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetSpinBox("autoattack_spin",2500)
-        Terminal.SetCheckBox("Kami Vac",True)
-        Terminal.SetCheckBox("Auto Attack",True)
+        Terminal.SetCheckBox("Kami Vac",False)
+        Terminal.SetCheckBox("Auto Attack",False)
     elif job == 2112: #Aran 4th 21000007
         print("Setting up Settings for Aran")
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -731,7 +745,8 @@ class VJQuest:
                     if Terminal.GetCheckBox("Kami Vac"):
                         Terminal.SetCheckBox("Kami Vac", False)
                     
-                    SunCat.Teleport(self.npcx, self.npcy)
+                    if Character.GetPos().x != self.npcx:
+                        SunCat.Teleport(self.npcx, self.npcy)
                     time.sleep(1)
                     Quest.CompleteQuest(self.quest, self.npc)
                     time.sleep(2)
@@ -773,7 +788,8 @@ def acceptVJ():
         Terminal.SetCheckBox("Kami Vac", False)
     
     Terminal.SetCheckBox("Auto NPC", True)
-    SunCat.Teleport(-1941, 60)
+    if Character.GetPos().x != -2233:
+        SunCat.Teleport(-2233, 60)
     time.sleep(0.1)
     if Quest.GetQuestState(34128) != 2:
         Quest.StartQuest(34128,vjNPC)

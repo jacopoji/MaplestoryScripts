@@ -35,7 +35,7 @@ DoZakumDaily=False
 
 getSpider = False
 
-DoBlackGate = True
+DoBlackGate = False
 doSleepyWood = False
 doBeach = False
 #Key to restart pers. variables
@@ -192,6 +192,7 @@ EvanJobs = [2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218]
 IlliumJobs = [15200,15210,15211,15212]
 CadenaJobs = [6400,6410,6411,6412]
 KinesisJobs = [14200,14210,14211,14212]
+BlazeWizardJobs = [1200,1210,1211,1212]
 
 NpcTylusWarriorInstructor = 2020008
 NpcRobeiraMagicianInstructor = 2020009
@@ -798,10 +799,10 @@ def DASecond():
     elif Quest.GetQuestState(23218) != 2:
         print("2")
         if job == 3120:
-            if Quest.GetQuestState(23214) == 0:
-                Quest.StartQuest(23214, 2153006)
-            elif Quest.GetQuestState(23214) == 1:
-                if Quest.CheckCompleteDemand(23214,2153006) != 0:
+            if Quest.GetQuestState(23218) == 0:
+                Quest.StartQuest(23218, 2153006)
+            elif Quest.GetQuestState(23218) == 1:
+                if Quest.CheckCompleteDemand(23218,2153006) != 0:
                     if len(Field.GetMobs()) > 0:
                         Terminal.StopRush()
                         toggleAttack(True)
@@ -811,7 +812,7 @@ def DASecond():
                         teleport_enter(109,-14)
                 else:
                     time.sleep(1)
-                    Quest.CompleteQuest(23214, 2153006)
+                    Quest.CompleteQuest(23218, 2153006)
                     toggleAttack(True)
                     toggle_kami(True)
         else:
@@ -910,6 +911,7 @@ def MercedesSecond():
                 gotoGreatSpirit()
             else:
                 Quest.CompleteQuest(24010, 1033210)
+                time.sleep(1)
     elif quest2 != 2:
         if quest2 == 0:
             if Field.GetID() != map2:
@@ -922,6 +924,7 @@ def MercedesSecond():
                 gotoGreatSpirit()
             else:
                 Quest.CompleteQuest(24011, 1033210)
+                time.sleep(1)
                 SCLib.UpdateVar("DoingJobAdv",False)
 def HayatoFirst():
     SCLib.UpdateVar("DoingJobAdv",True)
@@ -4060,9 +4063,14 @@ def id2str(jobid):
         return "Aran"
     elif jobid in KinesisJobs:
         return "Kinesis"
+    elif jobid in BlazeWizardJobs:
+        return "Blaze Wizard"
+    elif jobid in KannaJobs:
+        return "Kanna"
+    elif jobid in BlasterJobs:
+        return "Blaster"
     else:
-        return "Unknown Job"
-
+        return "Unkown Job"+str(jobid)
 
 
 def starItem(pos, currStar, itemMaxStar, userMaxStar, itemid):
@@ -4298,8 +4306,8 @@ def handleReady(data):
         data['storing_meso'] = False
     if 'storage_number' not in data:
         data['storage_number'] = 0
-    if 'cur_pos' not in data:
-        data['cur_pos'] = Terminal.GetLineEdit("LoginChar")
+    if 'cur_link_pos' not in data:
+        data['cur_link_pos'] = Terminal.GetLineEdit("LoginChar")
     if 'changing_mule' not in data:
         data['changing_mule'] = False
     if 'date' not in data:
@@ -4308,8 +4316,8 @@ def handleReady(data):
         data['daily_done'] = False
     if 'phase_one' not in data:
         data['phase_one'] = False
-    if 'done_char' not in data:
-        data['done_char'] = []
+    if 'done_links' not in data:
+        data['done_links'] = []
     if 'training_done' not in data:
         data['training_done'] = False
     if 'total_slots' not in data:
@@ -4401,21 +4409,22 @@ def BossCheck():
 
 if job == -1 and not accountData['changing_mule'] and GameState.GetLoginStep() == 1:
     print("Not logged in yet")
-    Terminal.SetLineEdit("LoginChar",accountData["cur_pos"])
+    Terminal.SetLineEdit("LoginChar",accountData["cur_link_pos"])
     time.sleep(15)
 
 if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     Terminal.SetCheckBox("Auto Login",False)
-    Terminal.SetLineEdit("LoginChar",str(int(accountData["cur_pos"]) + 1))
+    Terminal.SetLineEdit("LoginChar",str(int(accountData["cur_link_pos"]) + 1))
     chars = Login.GetChars()
     for char in chars:
         if char.level >= 140:
-            if id2str(char.jobid) not in accountData["done_char"]:
-                accountData["done_char"].append(id2str(char.jobid))
+            if id2str(char.jobid) not in accountData["done_links"]:
+                accountData["done_links"].append(id2str(char.jobid))
+                print("Updating done char list")
     Terminal.SetCheckBox("Auto Login",True)
     accountData["changing_mule"] = False
     time.sleep(1)
-    accountData["cur_pos"] = Terminal.GetLineEdit("LoginChar")
+    accountData["cur_link_pos"] = Terminal.GetLineEdit("LoginChar")
     writeJson(accountData,accountId)
     KillPersistVarThred()
 
@@ -4427,7 +4436,7 @@ if accountData['training_done'] and GameState.GetLoginStep() == 2:
             charInfo.write("{} {}\n".format(id2str(char.jobid),char.level))
         charInfo.close()
     Terminal.ChangeStatus("#################Training Done##############")
-    time.sleep(60)
+    time.sleep(30)
 
 if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     accountData['total_slots'] = Login.GetCharSlot()
@@ -4436,12 +4445,13 @@ if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     chars = Login.GetChars()
     for char in chars:
         if char.level >= 140:
-            if id2str(char.jobid) not in accountData["done_char"]:
-                accountData["done_char"].append(id2str(char.jobid))
+            if id2str(char.jobid) not in accountData["done_links"]:
+                accountData["done_links"].append(id2str(char.jobid))
+                print("Updating done char list")
     if accountData['total_slots'] <  (1 + accountData['link_end'] - accountData['link_start'] + accountData['storage_number']):
         SCLib.UpdateVar("BuyExpansion",True)
     writeJson(accountData,accountId)
-if len(accountData["done_char"]) >= 14:
+if len(accountData["done_links"]) >= 18:
     accountData['training_done'] = True
     writeJson(accountData,accountId)
     if GameState.IsInGame():
@@ -4484,7 +4494,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto AP",True)
     if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum"):
         toggle_kami(on)
-    if job == 3712:
+    if job == 3712: #Blaster
         Terminal.SetCheckBox("Auto SP",True)
         Terminal.SetLineEdit("SISkillID","37121003")
         Terminal.SetCheckBox("Auto Attack", False)
@@ -5882,7 +5892,7 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
                     Character.TalkToNpc(2030010)
                     time.sleep(1)
                     SCLib.UpdateVar("KillZakumDaily", False)
-                    if accountData['cur_pos'] == '11':
+                    if accountData['cur_link_pos'] == '11':
                         accountData['daily_done'] = True
                         writeJson(accountData,accountId)
                     ResetSpawn()
@@ -5907,10 +5917,10 @@ if level >= 140 and not accountData['phase_one'] and not SCLib.GetVar("DoingZaku
     if field_id != 240000000:
         rush(240000000)
     else:
-        if accountData['cur_pos'] == "16": #finished training all link to level 110
+        if accountData['cur_link_pos'] == "16": #finished training all link to level 110
             print("Phase one end")
             accountData['phase_one'] = True
-            accountData['cur_pos'] = '-1'
+            accountData['cur_link_pos'] = '-1'
             accountData['changing_mule'] = True
             writeJson(accountData,accountId)
             toggle_rush_by_level(True)
@@ -5924,9 +5934,9 @@ if level >= 140 and not accountData['phase_one'] and not SCLib.GetVar("DoingZaku
 
 '''
 if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
-    if accountData['cur_pos'] == "16": #finished doing zakum for every undone links
+    if accountData['cur_link_pos'] == "16": #finished doing zakum for every undone links
         print("Daily done")
-        accountData['cur_pos'] = '-1'
+        accountData['cur_link_pos'] = '-1'
         accountData['changing_mule'] = True
         writeJson(accountData,accountId)
         Terminal.Logout()
@@ -6087,6 +6097,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level <
                 teleport_enter(-549,-195)
                 toggle_kami(True)
                 print("Resume Kami")
+                time.sleep(8)
                 toggle_rush_by_level(True)
             else:
                 Quest.CompleteQuest(5500,sabitrama)
@@ -6130,6 +6141,7 @@ if field_id in curbrockhideout and len(Field.GetMobs()) == 0:
     time.sleep(2)
     teleport_enter(-425,-195)
     toggle_kami(True)
+    time.sleep(8)
     SCLib.UpdateVar("DoingCurbrock",False)
 if field_id in escaperoutes:
     toggle_kami(False)
@@ -6137,6 +6149,7 @@ if field_id in escaperoutes:
     toggle_kami(True)
     toggle_rush_by_level(True)
     toggleAttack(True)
+    time.sleep(8)
     SCLib.UpdateVar("DoingCurbrock",False)
 
 

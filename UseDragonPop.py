@@ -11,7 +11,8 @@ import Character, Context, DataType, Field, Inventory, Key, Npc, Packet, Quest, 
 #buffs = Character.GetBuffs()
 #for buff in buffs:
 #	print("Current Buff Id: {}; Remaining Time: {}".format(buff.id,buff.timeLeft))
-print(Character.HasBuff(2,80002280))
+#print(Character.HasBuff(2,80002280))
+Inventory.UseItem(5000241)
 #Key.Press(0xA2)
 #users = Terminal.GetLocalUsers()
 #for user in users:

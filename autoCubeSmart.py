@@ -35,7 +35,7 @@ autoStat                = True      # Automatically set whichever highest stat y
 isLvl160                = 0
 
 #For drop&meso rate
-dropStatThreshold       = 15        # Work only with Single Meso or Drop rate
+dropStatThreshold       = 9        # Work only with Single Meso or Drop rate
 stopAtMesoRate          = True
 stopAtDropRate          = True
 stopAtDoubleMesoRate    = True
