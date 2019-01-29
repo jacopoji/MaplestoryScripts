@@ -1340,6 +1340,8 @@ def buy_cubes():
 		time.sleep(2)
 		if GameState.IsInCashShop():
 			break
+		if not GameState.IsInGame():
+			break
 	while buy_count < buy_cube_number:
 		time.sleep(2)
 		start_slot += 1
