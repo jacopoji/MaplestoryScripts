@@ -4410,6 +4410,7 @@ def BossCheck():
 if job == -1 and not accountData['changing_mule'] and GameState.GetLoginStep() == 1:
     print("Not logged in yet")
     Terminal.SetLineEdit("LoginChar",accountData["cur_link_pos"])
+    Terminal.SetCheckBox("Auto Login",True)
     time.sleep(15)
 
 if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
@@ -4436,6 +4437,7 @@ if accountData['training_done'] and GameState.GetLoginStep() == 2:
             charInfo.write("{} {}\n".format(id2str(char.jobid),char.level))
         charInfo.close()
     Terminal.ChangeStatus("#################Training Done##############")
+    print("Detected that training is done")
     time.sleep(30)
 
 if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
@@ -4450,12 +4452,20 @@ if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
                 print("Updating done char list")
     if accountData['total_slots'] <  (1 + accountData['link_end'] - accountData['link_start'] + accountData['storage_number']):
         SCLib.UpdateVar("BuyExpansion",True)
+        print("Need to buy more expansion")
     writeJson(accountData,accountId)
-if len(accountData["done_links"]) >= 18:
+    Terminal.SetLineEdit("LoginChar",accountData["cur_link_pos"])
+    Terminal.SetCheckBox("Auto Login",True)
+if len(accountData["done_links"]) >= 20:
     accountData['training_done'] = True
+    print("Completed {} links".format(len(accountData["done_links"])))
     writeJson(accountData,accountId)
     if GameState.IsInGame():
         Terminal.Logout()
+elif len(accountData["done_links"]) < 20 and accountData['training_done']:
+    accountData['training_done'] = False
+    print("Completed {} links, need more".format(len(accountData["done_links"])))
+    writeJson(accountData,accountId)
 
 
 def safety_setting():
@@ -6045,15 +6055,11 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
         elif curbrock1 ==1:
             if Quest.CheckCompleteDemand(5499, sabitrama) ==0:
                 if pos.x != -425 and field_id in curbrockhideout:
-                    toggle_kami(False)
-                    time.sleep(2)
-                    teleport_enter(-425,-195)
+                    dungeonTeleport()
                     time.sleep(7)
                     print("Resume Kami")
                 elif pos.x != -549 and field_id == curbrockescaperoute1:
-                    toggle_kami(False)
-                    teleport_enter(-549,-195)
-                    toggle_kami(True)
+                    dungeonTeleport()
                     toggle_rush_by_level(True)
                 else:
                     Quest.CompleteQuest(5499,sabitrama)
@@ -6086,17 +6092,11 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level <
         if Quest.CheckCompleteDemand(5500, sabitrama) ==0:
             print("Quest completed")
             if pos.x != -425 and field_id in curbrockhideout:
-                toggle_kami(False)
-                time.sleep(2)
-                teleport_enter(-425,-195)
-                toggle_kami(True)
+                dungeonTeleport()
                 time.sleep(8)
                 print("Resume Kami")
             elif pos.x != -549 and field_id == curbrockescaperoute2:
-                toggle_kami(False)
-                teleport_enter(-549,-195)
-                toggle_kami(True)
-                print("Resume Kami")
+                dungeonTeleport()
                 time.sleep(8)
                 toggle_rush_by_level(True)
             else:
@@ -6120,15 +6120,10 @@ if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and leve
                 SCLib.UpdateVar("DoingCurbrock",False)
         if Quest.CheckCompleteDemand(5501, sabitrama) ==0:
             if pos.x != -425 and field_id in curbrockhideout:
-                toggle_kami(False)
-                time.sleep(2)
-                teleport_enter(-425,-195)
-                toggle_kami(True)
+                dungeonTeleport()
                 time.sleep(8)
             elif pos.x != -549 and field_id == curbrockescaperoute3:
-                toggle_kami(False)
-                teleport_enter(-549,-195)
-                toggle_kami(True)
+                dungeonTeleport()
                 toggle_rush_by_level(True)
             else:
                 Quest.CompleteQuest(5501,sabitrama)
@@ -6137,19 +6132,15 @@ if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and leve
             toggle_kami(True)
             toggleAttack(True)
 if field_id in curbrockhideout and len(Field.GetMobs()) == 0:
-    toggle_kami(False)
-    time.sleep(2)
-    teleport_enter(-425,-195)
-    toggle_kami(True)
+    dungeonTeleport()
     time.sleep(8)
     SCLib.UpdateVar("DoingCurbrock",False)
 if field_id in escaperoutes:
-    toggle_kami(False)
-    teleport_enter(-549,-195)
-    toggle_kami(True)
+    dungeonTeleport()
     toggle_rush_by_level(True)
     toggleAttack(True)
     time.sleep(8)
+    toggle_rush_by_level(True)
     SCLib.UpdateVar("DoingCurbrock",False)
 
 
