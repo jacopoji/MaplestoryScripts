@@ -5543,7 +5543,7 @@ elif job == 2412:
         dungeonTeleport()
     elif field_id == leafretreasurevault:
         dungeonTeleport()
-elif job == 11212 and Quest.GetQuestState(55234) != 2:
+elif job == 11212 and Quest.GetQuestState(55234) != 2 and level < 35:
     print("Doing Beast Tamer Prequests")
     BeastTamerFirst()
 elif (job == 2000 or job == 2100) and Quest.GetQuestState(21700) != 2:
