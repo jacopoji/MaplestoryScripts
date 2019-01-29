@@ -1347,7 +1347,7 @@ def buy_cubes():
 		buy_cube_packet = Packet.COutPacket(buy_ticket_header)
 		buy_cube_packet.EncodeBuffer("55 052F841E 044AA200")
 		Packet.SendPacket(buy_cube_packet)
-		rPacket = Packet.WaitForRecv(recv,100000000)
+		rPacket = Packet.WaitForRecv(recv,3000)
 		rPacket.Skip(1)
 		x = rPacket.ReadLong(4)
 		time.sleep(1)
