@@ -141,6 +141,8 @@ if SCLib.GetVar("ExploitCount") is None:
     SCLib.PersistVar("ExploitCount",0)
 if SCLib.GetVar("DoingJobAdv") is None:
     SCLib.PersistVar("DoingJobAdv",False)
+if SCLib.GetVar("GettingBoogie") is None:
+    SCLib.PersistVar("GettingBoogie",False)
 HasSpawned = SCLib.GetVar("HasSpawned")
 NowLockedVar = SCLib.GetVar("NowLockedVar")
 KillZakumDaily = SCLib.GetVar("KillZakumDaily")
@@ -5658,6 +5660,7 @@ def getBoogie():
     if Character.IsOwnFamiliar(9960098) == False:
         # sleep 1 second every loop
         print("Getting Boogie")
+        SCLib.UpdateVar("GettingBoogie",True)
         time.sleep(1)
         toggle_rush_by_level(False)
         item = Inventory.FindItemByID(2870098)
@@ -5681,6 +5684,7 @@ def getBoogie():
             time.sleep(1)
             Terminal.SetCheckBox("Kami Vac",True)
             toggleAttack(True)
+            SCLib.UpdateVar("GettingBoogie",False)
             if not Terminal.GetCheckBox("Familiar 0"):
                 Terminal.SetComboBox("Familiar0",1)
                 Terminal.SetCheckBox("Familiar 0",True)
@@ -7154,7 +7158,7 @@ if not SCLib.GetVar("BuyExpansion") and field_id == 240000002 and not SCLib.GetV
     toggle_rush_by_level(True)
     toggle_kami(True)
 
-if level < 140 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and useExploit and not SCLib.GetVar("DoingJobAdv"):
+if level < 140 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("GettingBoogie") and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and useExploit and not SCLib.GetVar("DoingJobAdv"):
     print("Doing exploit")
     exploit1()
     Terminal.SetComboBox("eva_cmb",1)
