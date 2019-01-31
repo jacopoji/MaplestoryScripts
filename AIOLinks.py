@@ -6139,9 +6139,9 @@ if field_id in curbrockhideout and len(Field.GetMobs()) == 0:
     dungeonTeleport()
     time.sleep(8)
     SCLib.UpdateVar("DoingCurbrock",False)
+    toggle_rush_by_level(True)
 if field_id in escaperoutes:
     dungeonTeleport()
-    toggle_rush_by_level(True)
     toggleAttack(True)
     time.sleep(8)
     toggle_rush_by_level(True)
