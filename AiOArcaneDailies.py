@@ -17,6 +17,11 @@ dailyChuChu = True
 dailyDD = False
 dailySS = True
 
+SCLib.StartVars()
+###persist variables
+if SCLib.GetVar("ToggleAttack") is None:
+    SCLib.PersistVar("ToggleAttack", False)
+
 if GameState.IsInGame():
     if Quest.GetQuestState(34120) != 2:
         #print("You havn't completed VJ storyline quests yet. Disable VJ daily")
@@ -678,6 +683,17 @@ def initAttackDone():
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         Terminal.SetCheckBox("bot/illium/summon_control",False)
 
+if not GameState.IsInGame() and not GameState.IsInCashShop() and not SCLib.GetVar("ToggleAttack"):
+    SCLib.UpdateVar("ToggleAttack",True)
+    print("Enabling TogglaAttack Flag")
+
+if GameState.IsInGame() and accountData['daily_done'] and SCLib.GetVar("ToggleAttack"):
+    initAttackDone()
+    SCLib.UpdateVar("ToggleAttack",False)
+if GameState.IsInGame() and not accountData['daily_done'] and SCLib.GetVar("ToggleAttack"):
+    initAttack()
+    SCLib.UpdateVar("ToggleAttack",False)
+
 def initVars():
     SCLib.PersistVar("StartingMap", Field.GetID())
     SCLib.PersistVar("UsingKami", Terminal.GetCheckBox("Kami Vac"))
@@ -1269,7 +1285,7 @@ if GameState.IsInGame() and accountData['changing_mule'] and not accountData['da
     accountData['changing_mule'] = False
     writeJson(accountData,accountId)
 
-if not Terminal.IsRushing() and not accountData['daily_done'] and not accountData['changing_mule']: #only need to do this if daily is not done
+if not Terminal.IsRushing() and not accountData['daily_done'] and not accountData['changing_mule'] and not SCLib.GetVar("ToggleAttack"): #only need to do this if daily is not done
     if SCLib.CheckVersion(22):
         if SCLib.GetVar("CurDaily") is None:
             initAttack()
