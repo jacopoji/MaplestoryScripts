@@ -809,6 +809,7 @@ def DASecond():
                         Terminal.StopRush()
                         toggleAttack(True)
                         toggle_kami(True)
+                        time.sleep(5)
                     elif field_id == 931050120:
                         toggle_kami(False)
                         teleport_enter(109,-14)
@@ -825,6 +826,7 @@ def DASecond():
                     Terminal.StopRush()
                     toggleAttack(True)
                     toggle_kami(True)
+                    time.sleep(5)
                 elif field_id == 931050120 and len(Field.GetMobs()) == 0:
                     toggle_kami(False)
                     teleport_enter(109,-14)
