@@ -99,7 +99,7 @@ eye_list = [aquatic_letter_eye]
 earring_list = [half_earrings,rose_earrings,horntail_earrings]
 necklace_list = [greed_pendant,blackgate_necklace,chaos_horntail_necklace,horntail_necklace]
 blackgate_eqp = [1004549, 1012535, 1052952, 1082658, 1102840, 1113185, 1122312, 1132289, 1152191]
-
+KannaJobs = [4200, 4210, 4211, 4212]
 snail_pet_box = 2434265 
 #no potential, item.grade = 0
 #rare, item.grade = 1
@@ -1187,6 +1187,10 @@ def handleReady(data):
 			data['total_meso'] = int(data['storage_number']) * 30 + Character.GetMeso() / 1000000000
 	if 'pet_expire' not in data:
 		data['pet_expire'] = False
+	if 'date' not in data:
+        data['date'] = str(datetime.datetime.utcnow().date())
+	if 'kanna_daily_done' not in data:
+        data['kanna_daily_done'] = False
 
 def initializeEquips(data):
 	if 'equips' not in data:
@@ -1206,6 +1210,13 @@ accountData = startupCheck_cube(accountId)
 initializeEquips(accountData)
 handleReady(accountData)
 writeJson_cube(accountData,accountId)
+
+current_date = str(datetime.datetime.utcnow().date())
+if current_date != accountData['date']:
+    accountData['date'] = current_date
+    accountData['kanna_daily_done'] = False
+    writeJson(accountData,accountId)
+
 def collide_items():
 	oPacket = Packet.COutPacket(collide_header)
 	oPacket.EncodeBuffer("** ** ** ** 01")
@@ -1975,7 +1986,7 @@ if level > 70 and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum"):
 		Quest.StartQuest(12396, 9010000)
 '''
 ###### Monster park starting at level 143
-if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum") and do_MP and Character.GetHP() > 0:
+if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum") and do_MP and Character.GetHP() > 0 and not accountData['kanna_daily_done']:
 	SCLib.UpdateVar("DoingMP",True)
 	Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
 	toggle_rush_by_level(False)
@@ -2055,7 +2066,7 @@ if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == Entran
 			time.sleep(0.5)
 			Character.EnterPortal()
 
-if KillZakumDaily and level >= 120 and not SCLib.GetVar("DoingMP") and not accountData["cubing_done"]:
+if KillZakumDaily and level >= 120 and not SCLib.GetVar("DoingMP") and not accountData["cubing_done"] and not accountData['kanna_daily_done']:
 	print("Doing Zakum")
 	Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
 	toggle_rush_by_level(False)
@@ -2777,3 +2788,7 @@ if Character.GetMeso() >= 7900000 and accountData["cubing_done"] == True and Inv
 	else:
 		print("Still rushing waiting to buy expansion")
 		time.sleep(2)
+
+if not KillZakumDaily and SCLib.GetVar("MPDone") and jobid in KannaJobs:
+	accountData['kanna_daily_done'] = True
+	writeJson_cube(accountData,accountId)
