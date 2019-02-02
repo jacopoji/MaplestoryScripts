@@ -113,7 +113,7 @@ runebuff_id = 80002280
 ####auto cube potentials			done
 ####Auto IA                         done
 
-import Character,Context,DataType,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party, json,math,Login
+import Character,Context,DataType,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party, json,math,Login,datetime
 
 if not any("SunCat" in s for s in sys.path):
 	sys.path.append(os.getcwd() + "/SunCat")
@@ -1188,9 +1188,9 @@ def handleReady(data):
 	if 'pet_expire' not in data:
 		data['pet_expire'] = False
 	if 'date' not in data:
-        data['date'] = str(datetime.datetime.utcnow().date())
+		data['date'] = str(datetime.datetime.utcnow().date())
 	if 'kanna_daily_done' not in data:
-        data['kanna_daily_done'] = False
+		data['kanna_daily_done'] = False
 
 def initializeEquips(data):
 	if 'equips' not in data:
