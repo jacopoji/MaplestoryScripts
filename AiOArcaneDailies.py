@@ -99,7 +99,12 @@ ssBaseY = -491
 ssNpc = 3003381
 enemyMobs = [8644201, 8644301, 8644302, 8644303, 8644304, 8644305]
 
-
+#Gollux
+secondMap = [863010400]
+thirdMap = [863010410]
+fourthMap = [863010420]
+heartMap = [863010500]
+headMap = [863010600]
 ###Jobs, Jobs[0] = 1st job, Jobs[1] = 2nd job etc###
 KannaJobs = [4200, 4210, 4211, 4212]
 LuminousJobs = [2700, 2710, 2711, 2712]
@@ -183,6 +188,7 @@ if current_date != accountData['date']:
     accountData['done_char'][:] = []
     writeJson(accountData,accountId)
     print("It's a new day!")
+    KillPersistVarThred()
 
 #check if done doing dailies on all characters
 if len(accountData['done_char']) == accountData['daily_end'] - accountData['daily_start'] + 1 and not accountData['daily_done']:
@@ -312,7 +318,7 @@ def initAttack():
         Terminal.SetRadioButton("SIRadioMelee",True)
         
         Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetSpinBox("SkillInjection",110)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15212: #Illium 4th
         print("Setting up Settings for Illium")
@@ -552,7 +558,7 @@ def initAttackDone():
         Terminal.SetRadioButton("SIRadioMelee",True)
         
         Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetSpinBox("SkillInjection",110)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15212: #Illium 4th
         print("Setting up Settings for Illium")
@@ -734,7 +740,7 @@ class VJQuest:
     npcx = None
     npcy = None
     
-    def __init__(self, q, km, cm=vjMap, n=vjNPC, snx=-1941, sny=60):
+    def __init__(self, q, km, cm=vjMap, n=vjNPC, snx=-2233, sny=60):
         self.quest = q
         self.killmap = km
         self.completemap = cm
@@ -1060,8 +1066,10 @@ def doingChuChu():
         time.sleep(0.5)
         SunCat.StopTP()
         SunCat.UnhookChuChu()
+        time.sleep(1)
         Npc.ClearSelection()
-        Npc.RegisterSelection("Claim")
+        Npc.RegisterSelection("Claim ")
+        time.sleep(0.1)
         Character.TalkToNpc(3003166)
         time.sleep(1)
         print("Done! Sleeping for a few seconds to check for another run...")
@@ -1363,3 +1371,7 @@ if accountData['daily_done'] and GameState.IsInGame() and accountData['changing_
     initAttackDone()
     accountData['changing_mule'] = False
     writeJson(accountData,accountId)
+
+if Field.GetID() == ccExitMap:
+    Character.TalkToNpc(3003166)
+    time.sleep(1)

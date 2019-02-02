@@ -30,12 +30,12 @@ endSlot     = 9
 
 #Stat threshold
 statThreshold           = 21
-stopAtStatThreshold     = True
+stopAtStatThreshold     = False
 autoStat                = True      # Automatically set whichever highest stat you have
 isLvl160                = 0
 
 #For drop&meso rate
-dropStatThreshold       = 9        # Work only with Single Meso or Drop rate
+dropStatThreshold       = 18        # Work only with Single Meso or Drop rate
 stopAtMesoRate          = True
 stopAtDropRate          = True
 stopAtDoubleMesoRate    = True
@@ -50,7 +50,7 @@ stopAtDoubleCritDamage  = True
 #For Weapons
 #Currenlty supports only "ATT" "MATT" "IED" "BOSS"
 stopAtAtkThreshold      = True
-atkThreshold            = 18
+atkThreshold            = 24
 wepPotentialLines       = 3         # Set 0 if you are not going to use it
 wepPotentialOptions     = [["ATT","ATT","BOSS"],["ATT","BOSS","BOSS"],["ATT","IED","BOSS"],["ATT","ATT","ATT"],["ATT","ATT","IED"],["ATT","IED","IED"]]      # Always keep end squre bracket
 

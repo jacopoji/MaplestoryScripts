@@ -1975,10 +1975,11 @@ if level > 70 and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum"):
 		Quest.StartQuest(12396, 9010000)
 '''
 ###### Monster park starting at level 143
-if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum") and do_MP and Character.GetHP() > 0:
+if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum") and do_MP and Character.GetHP() > 0 and not (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter):
 	SCLib.UpdateVar("DoingMP",True)
 	Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
 	toggle_rush_by_level(False)
+	SCLib.UpdateVar("DoingZakum",False)
 	Terminal.SetCheckBox("bot/kanna_kami",True)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",5000)
 	if level_checker():
@@ -2041,6 +2042,7 @@ if level >= 140 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.Get
 
 #ZAKUM DAILY
 if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
+	pos = Character.GetPos()
 	if field_id == TheDoorToZakum:
 		if pos.x != -3003:
 			Character.Teleport(-3003, -220)
@@ -2155,6 +2157,23 @@ if KillZakumDaily and level >= 120 and not SCLib.GetVar("DoingMP") and not accou
 						print("Dropping stone to spawn Zakum")
 						Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
 
+if not SCLib.GetVar("DoingZakum") and (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter):
+	print("Leaving")
+	pos = Character.GetPos()
+	if field_id == TheDoorToZakum:
+		if pos.x != -3003:
+			Character.Teleport(-3003, -220)
+			time.sleep(0.5)
+			Character.EnterPortal()
+			SCLib.UpdateVar("DoingZakum",False)
+			toggle_rush_by_level(True)
+			Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
+	elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
+		if pos.x != -1599:
+			Character.Teleport(-1599, -331)
+			time.sleep(0.5)
+			Character.EnterPortal()
+	
 
 ############IA
 ############IA
