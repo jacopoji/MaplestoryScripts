@@ -31,7 +31,7 @@ safeguard = True
 whitelist = []
 
 #Zakum
-DoZakumDaily=False
+DoZakumDaily=True
 
 getSpider = False
 
@@ -196,6 +196,26 @@ CadenaJobs = [6400,6410,6411,6412]
 KinesisJobs = [14200,14210,14211,14212]
 BlazeWizardJobs = [1200,1210,1211,1212]
 
+#explorer jobs
+#thief
+ShadowerJobs = [400,420,421,422]
+NightlordJobs = [400,410,411,412]
+DualbladeJobs = [400,430,431,432,433,434]
+#warrior
+HeroJobs = [100,110,111,112]
+PaladinJobs = [100,120,121,122]
+DarkknightJobs = [100,130,131,132]
+#archer
+BowmasterJobs = [300,310,311,312]
+MarksmanJobs = [300,320,321,322]
+#magician
+ILMageJobs = [200,220,221,222]
+FPMageJobs = [200,210,211,212]
+BishopJobs = [200,230,231,232]
+#pirate
+CorsairJobs = [500,510,511,512]
+BuccaneerJobs = [500,520,521,522]
+
 NpcTylusWarriorInstructor = 2020008
 NpcRobeiraMagicianInstructor = 2020009
 NpcReneBowmanInstructor = 2020010
@@ -256,6 +276,7 @@ def toggle_kami(indicator):
 
 def toggle_loot(indicator):
     Terminal.SetCheckBox("Kami Loot",indicator)
+    Terminal.SetCheckBox("Auto Loot",indicator)
 
 def teleport_enter(x,y):
     prefield = field_id
@@ -426,6 +447,8 @@ def rush(mapid):
     citycentre = 331000000
     firstfloor = 331002000
     secondfloor=331002100
+    ManonForest = 924000200
+    GriffeyForest = 924000201
     if mapid == HQ:
         if field_id == secondfloor:
             teleport_enter(-464,207)
@@ -440,6 +463,16 @@ def rush(mapid):
             teleport_enter(1042,199)
         if field_id == secondfloor:
             teleport_enter(-464,207)
+    elif mapid == ManonForest:
+        if field_id != 240020400:
+            Terminal.Rush(240020400)
+        elif field_id == 240020400:
+            teleport_enter(1040,452)
+    elif mapid == GriffeyForest:
+        if field_id != 240020100:
+            Terminal.Rush(240020100)
+        elif field_id == 240020100:
+            teleport_enter(-50,332)
     else:
         if not Terminal.IsRushing():
             print("Rushing to map ID: {0}".format(mapid))
@@ -559,7 +592,7 @@ def mano():
         Terminal.SetCheckBox("Kami Vac", True)
         Terminal.SetCheckBox("Auto Attack", True)
         Character.BasicAttack()
-    if not mob.valid:
+    elif not mob.valid:
         Terminal.SetCheckBox("Kami Vac", False)
         Terminal.SetCheckBox("Auto Attack", False)
         Character.Teleport(68, 150)
@@ -3504,7 +3537,7 @@ def AranFourth():
             else:
                 completeQuest(TrainingThePolearm,Maha,Rien,Rien,field_id)
 
-def ExplorerFirst(desired_job):
+def ExplorerFirst():
     toggle_kami(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     if Field.GetID() == 4000011:
@@ -3588,6 +3621,17 @@ def ExplorerFirst(desired_job):
         Bowman = 2
         Thief = 3
         Pirate = 4
+        if "Shadower" not in accountData['done_links'] or "Night Lord" not in accountData['done_links']:
+            desired_job = Thief
+        elif "Hero" not in accountData['done_links'] or "Dark Knight" not in accountData['done_links'] or "Paladin" not in accountData['done_links']:
+            desired_job = Warrior
+        elif "Ice/Lightning Archmage" not in accountData['done_links'] or "Fire/Poison Archmage" not in accountData['done_links']:
+            desired_job = Magician
+        elif "Marksman" not in accountData['done_links'] or "Bowmaster" not in accountData['done_links']:
+            desired_job = Bowman
+        elif "Corsair" not in accountData['done_links'] or "Buccaneer" not in accountData['done_links']:
+            desired_job = Pirate
+
         if desired_job == 0:
             desired_job_text = "powerful"
         elif desired_job == 1:
@@ -3629,13 +3673,23 @@ def ExplorerSecond():
     banditQuest = 1423
     thiefInstructor = 1052001
     thiefMap = 103000003
-
+    thiefMap2= 103050310
     toDoQuest = thiefQuest
-    targetJob = assassinQuest
+    if "Shadower" in accountData['done_links']:
+        targetJob = assassinQuest
+    else:
+        targetJob = banditQuest
     Instructor = thiefInstructor
     toGoMap = thiefMap
     quest = Quest.GetQuestState(toDoQuest)
     quest2= Quest.GetQuestState(targetJob)
+
+    pet = Inventory.FindItemByID(2434265)
+    if pet.valid:
+        Key.Set(0x41, 2, 2001582)
+        time.sleep(2)
+        Inventory.UseItem(2434265)
+        time.sleep(2)
 
     if job == 400:
         if quest != 2:
@@ -3649,14 +3703,19 @@ def ExplorerSecond():
                 acceptQuest(targetJob,Instructor,toGoMap,field_id)
             elif quest2 == 1:
                 print(Inventory.FindItemByID(4031013).count)
-                if Quest.CheckCompleteDemand(targetJob,Instructor) == 0:
+                if Quest.CheckCompleteDemand(targetJob,Instructor) == 0 or Inventory.FindItemByID(4031013).count >= 30:
+                    print("Done")
                     if field_id != toGoMap:
+                        print("Need to teleport")
                         dungeonTeleport()
+                        completeQuest(targetJob,Instructor,toGoMap,toGoMap,field_id)
                     elif field_id == toGoMap:
                         completeQuest(targetJob,Instructor,toGoMap,toGoMap,field_id)
                         SCLib.UpdateVar("DoingJobAdv",False)
+                        toggle_rush_by_level(True)
                 else:
                     toggle_kami(True)
+                    print("not done")
 
 def ExplorerThird():
     print("Explorer 3")
@@ -3668,7 +3727,8 @@ def ExplorerThird():
     ThiefChief = 2020011
     PirateChief = 2020013
     thiefQuest = 1441
-    thiefQuest2= 1442
+    assassinQuest= 1442
+    banditQuest = 1443
     thiefInstructor = 1052001
     thiefMap = 103000003
 
@@ -3676,13 +3736,20 @@ def ExplorerThird():
     HolyStone = 2030006
     SparklingCrystal = 1061010
     RadiantCrystalPassageway = 910540000
-    DimensionalWorld = 910540400
-
-    toDoQuest = thiefQuest
-    toDoQuest2 = thiefQuest2
-    Instructor = thiefInstructor
-    Chief = ThiefChief
-    toGoMap = thiefMap
+    DimensionalWorld = [x for x in range(910540400,910540420)]
+    
+    if job in NightlordJobs:
+        toDoQuest = thiefQuest
+        toDoQuest2 = assassinQuest
+        Instructor = thiefInstructor
+        Chief = ThiefChief
+        toGoMap = thiefMap
+    elif job in ShadowerJobs:
+        toDoQuest = thiefQuest
+        toDoQuest2 = banditQuest
+        Instructor = thiefInstructor
+        Chief = ThiefChief
+        toGoMap = thiefMap
     quest = Quest.GetQuestState(toDoQuest)
     quest2= Quest.GetQuestState(toDoQuest2)
     if quest != 2:
@@ -3695,7 +3762,7 @@ def ExplorerThird():
             acceptQuest(toDoQuest2,Chief,CheifsResidence,field_id)
         elif quest2 == 1:
             if Quest.CheckCompleteDemand(toDoQuest2,Chief) == 0:
-                if field_id == DimensionalWorld:
+                if field_id in DimensionalWorld:
                     mobs = Field.GetMobs()
                     if len(mobs) == 0:
                         if pos.x != 692:
@@ -3705,6 +3772,8 @@ def ExplorerThird():
                             Character.TalkToNpc(SparklingCrystal)
                 else:
                     completeQuest(toDoQuest2,Chief,CheifsResidence,CheifsResidence,field_id)
+                    if Quest.GetQuestState(toDoQuest2) == 2:
+                        SCLib.UpdateVar("DoingJobAdv",False)
             elif field_id == el_nath_map:
                 if pos.x != 27:
                     toggle_kami(False)
@@ -3713,15 +3782,110 @@ def ExplorerThird():
                     Character.TalkToNpc(HolyStone)
             elif field_id == RadiantCrystalPassageway:
                 dungeonTeleport()
-            elif field_id == DimensionalWorld:
+                dungeonTeleport()
+                dungeonTeleport()
+            elif field_id in DimensionalWorld:
                 mobs = Field.GetMobs()
+                time.sleep(4)
+                toggle_loot(True)
                 if len(mobs) == 0:
                     if pos.x != 692:
                         toggle_kami(False)
                         Character.Teleport(692,-456)
+                        toggle_loot(False)
                     else:
                         Character.TalkToNpc(SparklingCrystal)
+                        toggle_loot(False)
+    
+    if Quest.GetQuestState(toDoQuest2) == 2:
+        SCLib.UpdateVar("DoingJobAdv",False)
+        toggle_rush_by_level(True)
 
+def ExplorerFourth():
+    print("Explorer 4")
+    SCLib.UpdateVar("DoingJobAdv",True)
+    thiefInstructor = 2020011
+    thiefChief = 2081400
+    thiefQuest = 1456
+    thiefQuest2 = 1457
+
+    ForestOfThePriest = 240010501
+    ManonForest = 924000200
+    GriffeyForest = 924000201
+    if job in NightlordJobs or job in ShadowerJobs:
+        toDoQuest = thiefQuest
+        toDoQuest2 = thiefQuest2
+        Instructor = thiefInstructor
+        Chief = thiefChief
+
+    quest = Quest.GetQuestState(toDoQuest)
+    quest2 = Quest.GetQuestState(toDoQuest2)
+
+    star = 4031344
+    pentagon= 4031343
+
+    pentagon_loot = 4031517
+    star_loot = 4031518
+    if quest != 2:
+        if quest == 0:
+            acceptQuest(toDoQuest,Instructor,field_id,field_id)
+        elif quest == 1:
+            completeQuest(toDoQuest,Chief,ForestOfThePriest,ForestOfThePriest,field_id)
+    elif quest2 != 2:
+        if quest2 == 0:
+
+            Npc.ClearSelection()
+            Npc.RegisterSelection("Manon")
+            acceptQuest(toDoQuest2,Chief,ForestOfThePriest,field_id)
+        elif quest2 == 1:
+            if Quest.CheckCompleteDemand(toDoQuest2,Chief) == 0:
+                print("Done")
+                toggle_loot(False)
+                if field_id == ManonForest or field_id == GriffeyForest:
+                    dungeonTeleport()
+                toggle_HTR(True)
+                completeQuest(toDoQuest2,Chief,ForestOfThePriest,ForestOfThePriest,field_id)
+                SCLib.UpdateVar("DoingJobAdv",False)
+            elif Inventory.FindItemByID(pentagon_loot).count < 1:
+                print("Hunt for pentagon")
+                if field_id == GriffeyForest:
+                    dungeonTeleport()
+                if field_id != ManonForest:
+                    toggle_HTR(False)
+                    rush(ManonForest)
+                    time.sleep(1)
+                else:
+                    loot = Field.FindItem(pentagon_loot)
+                    if not loot.valid:
+                        toggleAttack(True)
+                        toggle_kami(True)
+                    else:
+                        toggle_loot(True)
+                        toggle_kami(False)
+                        pos = Character.GetPos()
+                        if pos.x != loot.x:
+                            Character.Teleport(loot.x,loot.y)
+                            time.sleep(5)
+            elif Inventory.FindItemByID(star_loot).count < 1:
+                print("Hunt for star")
+                if field_id == ManonForest:
+                    dungeonTeleport()
+                if field_id != GriffeyForest:
+                    toggle_HTR(False)
+                    rush(GriffeyForest)
+                    time.sleep(1)
+                else:
+                    loot = Field.FindItem(star_loot)
+                    if not loot.valid:
+                        toggleAttack(True)
+                        toggle_kami(True)
+                    else:
+                        toggle_loot(True)
+                        toggle_kami(False)
+                        pos = Character.GetPos()
+                        if pos.x != loot.x:
+                            Character.Teleport(loot.x,loot.y)
+                            time.sleep(5)
 def KinesisFirst():
     print("Kinis")
 
@@ -4073,6 +4237,32 @@ def id2str(jobid):
         return "Kanna"
     elif jobid in BlasterJobs:
         return "Blaster"
+    elif jobid in ShadowerJobs:
+        return "Shadower"
+    elif jobid in NightlordJobs:
+        return "Night Lord"
+    elif jobid in DualbladeJobs:
+        return "Dual Blade"
+    elif jobid in HeroJobs:
+        return "Hero"
+    elif jobid in PaladinJobs:
+        return "Paladin"
+    elif jobid in DarkknightJobs:
+        return "Dark Knight"
+    elif jobid in ILMageJobs:
+        return "Ice/Lightning Archmage"
+    elif jobid in FPMageJobs:
+        return "Fire/Poison Archmage"
+    elif jobid in BishopJobs:
+        return "Bishop"
+    elif jobid in MarksmanJobs:
+        return "Marksman"
+    elif jobid in BowmasterJobs:
+        return "Bowmaster"
+    elif jobid in CorsairJobs:
+        return "Corsair"
+    elif jobid in BuccaneerJobs:
+        return "Buccaneer"
     else:
         return "Unkown Job"+str(jobid)
 
@@ -4247,7 +4437,7 @@ def GetToTheDoorToZakum():
         #Wild Hunter, Wind Archer, Mercedes
         Bowman = [3300, 3310, 3311, 3312, 1300, 1310, 1311, 1312, 2300, 2310, 2311, 2312]
         #Phantom, Xenon, Dual Blade
-        Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6411,6412,6410]
+        Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6411,6412,6410,422,421,411,412]
         #Kanna, Battle Mage, Beast Tamer, Blaze Wizard, Evan, Luminous
         Magician = [14212,15211,15212,4200, 4210, 4211, 4212, 3200, 3210, 3211, 3212, 11000, 11200, 11210, 11211, 11212, 1200, 1210, 1211, 1212, 2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2700, 2710, 2711, 2712, ]
         #Aran, Blaster, Demon Avenger, Demon Slayer, Hayato, Kaiser, Mihile, Zero, Dawn Warrior
@@ -5001,7 +5191,7 @@ def toggleAttack(on):
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 400: #Thief
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,4001344)
+        Key.Set(attack_key,1,4001334)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Auto SP",True)
@@ -5012,7 +5202,45 @@ def toggleAttack(on):
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 410: #Assassin
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,4101008)
+        #Key.Set(attack_key,1,4101008)
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetLineEdit("SISkillID", "4101008")
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto SP",True)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", False)
+        #Terminal.SetComboBox("AttackKey",33)
+        #Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 411: #Hermit
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        #Key.Set(attack_key,1,4111015)
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetLineEdit("SISkillID", "4111015")
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto SP",True)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", False)
+        #Terminal.SetComboBox("AttackKey",33)
+        #Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 412:
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        if Character.GetSkillLevel(4121017) >= 1:
+            Terminal.SetLineEdit("SISkillID", "4121017")
+        else:
+            Terminal.SetLineEdit("SISkillID", "4111015")
+        Terminal.SetCheckBox("Skill Injection", on)
+        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto SP",True)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", False)
+        #Terminal.SetComboBox("AttackKey",33)
+        #Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 420: #Bandit
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,4201012)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -5021,14 +5249,25 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 411: #Hermit
+    elif job == 421: #Chief Bandit
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,4111015)
+        Key.Set(attack_key,1,4211002)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto SP",True)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 422: #Shadower
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,4221007)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto SP",True)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
@@ -5606,19 +5845,25 @@ elif job == 2112 and field_id == 140000000:
     toggle_kami(True)
     SCLib.UpdateVar("DoingJobAdv",False)
 elif job == 0 and GameState.IsInGame():
-    Warrior = 0
-    Magician = 1
-    Bowman = 2
-    Thief = 3
-    Pirate = 4
-    ExplorerFirst(Thief)
+    ExplorerFirst()
+elif job == 400 and level < 11:
+    knife = Inventory.FindItemByID(1332063)
+    if knife.valid:
+        Inventory.SendChangeSlotPositionRequest(1,knife.pos,weapon_slot,-1)
+elif job == 410 and level < 31:
+    claw = Inventory.FindItemByID(1472061)
+    if claw.valid:
+        Inventory.SendChangeSlotPositionRequest(1,claw.pos,weapon_slot,-1)
 elif job == 400 and level >= 30:
     print("Doing Explorer Second Job")
     ExplorerSecond()
-elif job == 410 and level >= 60:
+elif (job == 410 or job == 420) and level >= 60:
     print("Doing Explorer Third Job")
     ExplorerThird()
-elif job == 14000 or job == 14200 and field_id != 101020400 and Quest.GetQuestState(22733) != 2:
+elif (job == 411 or job == 421) and level >= 100:
+    print("Doing Explorer Fourth Job")
+    ExplorerFourth()
+elif (job == 14000 or job == 14200) and field_id != 101020400 and Quest.GetQuestState(22733) != 2:
     print("Doing Kinesis First Job")
     KinesisFirst()
 elif job == 14200 and field_id == 101020400:
@@ -5929,7 +6174,7 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
                         print("Dropping stone to spawn Zakum")
                         Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
 
-if level >= 140 and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
+if level >= 150 and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
     if field_id != 240000000:
         rush(240000000)
     else:
@@ -5962,7 +6207,7 @@ if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
         writeJson(accountData,accountId)
         Terminal.Logout()
 '''
-if level >= 140 and not SCLib.GetVar("DoingZakum"):
+if level >= 150 and not SCLib.GetVar("DoingZakum"):
     if field_id != 240000000:
         rush(240000000)
     else:

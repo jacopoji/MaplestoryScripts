@@ -143,6 +143,7 @@ def bind_skill(skill):
 
    Key.Set(skill[1], KeyType.Skill, skill[0])
 
+
 if GameState.IsInGame():
    bind_skill(Ark.Divine_Wrath)
    bind_skill(Bishop.Epic_Adventure)

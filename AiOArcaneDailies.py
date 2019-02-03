@@ -1052,6 +1052,7 @@ def startChuChu():
             elif Field.GetID() in hungryMutoMaps:
                 print("Starting ChuChuPQ!")
                 SCLib.UpdateVar("CurStep", "DoingChuChu")
+                time.sleep(4)
 
 def doingChuChu():
     if Field.GetID() != ccExitMap:

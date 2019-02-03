@@ -47,13 +47,23 @@ critStatThreshold       = 12         # Work only with single crit ilne
 stopAtCritDamage        = True
 stopAtDoubleCritDamage  = True
 
+def FindHighestStat():
+    demonA = [3122,3121,3120]
+    if Character.GetJob() in demonA:
+        return "HP"
+    else:
+        stats = {"STR":Character.GetStr(), "DEX":Character.GetDex(), "INT":Character.GetInt(), "LUK":Character.GetLuk()}
+        return sorted(stats, key=stats.get, reverse=True)[0]
+
 #For Weapons
 #Currenlty supports only "ATT" "MATT" "IED" "BOSS"
 stopAtAtkThreshold      = True
-atkThreshold            = 24
+atkThreshold            = 21
 wepPotentialLines       = 3         # Set 0 if you are not going to use it
-wepPotentialOptions     = [["ATT","ATT","BOSS"],["ATT","BOSS","BOSS"],["ATT","IED","BOSS"],["ATT","ATT","ATT"],["ATT","ATT","IED"],["ATT","IED","IED"]]      # Always keep end squre bracket
-
+if FindHighestStat() == "INT":
+    wepPotentialOptions     = [["MATT","MATT","BOSS"],["MATT","BOSS","BOSS"],["MATT","IED","BOSS"],["MATT","MATT","MATT"],["MATT","MATT","IED"],["MATT","IED","IED"]]
+else:
+    wepPotentialOptions     = [["ATT","ATT","BOSS"],["ATT","BOSS","BOSS"],["ATT","IED","BOSS"],["ATT","ATT","ATT"],["ATT","ATT","IED"],["ATT","IED","IED"]]      # Always keep end squre bracket
 #Change delay if you want (seconds)
 delay = 0.3
 
@@ -94,13 +104,7 @@ BOSS    = [30601, 30602, 40601, 40602, 40603, 42601, 42602, 42603, 60003, 60011,
 stat    = {"STR", "DEX", "INT", "LUK", "ALL","HP"}
 atkstat = {"ATT", "MATT"}
 
-def FindHighestStat():
-    demonA = [3122,3121,3120]
-    if Character.GetJob() in demonA:
-        return "HP"
-    else:
-        stats = {"STR":Character.GetStr(), "DEX":Character.GetDex(), "INT":Character.GetInt(), "LUK":Character.GetLuk()}
-        return sorted(stats, key=stats.get, reverse=True)[0]
+
  
 if autoStat:
     ALLcheck = True
