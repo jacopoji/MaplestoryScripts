@@ -216,6 +216,12 @@ BishopJobs = [200,230,231,232]
 CorsairJobs = [500,510,511,512]
 BuccaneerJobs = [500,520,521,522]
 
+explorerFirstJobs = [100,200,300,400,500]
+explorerSecondJobs = [110,120,130,210,220,230,310,320,410,420,430,510,520]
+explorerThirdJobs = [111,121,131,211,221,231,311,321,411,421,431,511,521]
+explorerFourthJobs = [112,122,132,212,222,232,312,322,412,422,432,512,522]
+
+
 NpcTylusWarriorInstructor = 2020008
 NpcRobeiraMagicianInstructor = 2020009
 NpcReneBowmanInstructor = 2020010
@@ -3669,18 +3675,86 @@ def ExplorerSecond():
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     thiefQuest = 1421
+    warriorQuest = 1410
+    fighterQuest = 1411
+    pageQuest = 1412
+    spearmanQuest = 1413
+    mageQuest = 1414
+    ILwizardQuest = 1416
+    FPwizardQuest = 1415
+    clericQuest = 1417
+    archerQuest = 1418
+    pirateQuest = 1424
+    brawlerQuest = 1425
+    gunslingerQuest = 1426
+    hunterQuest = 1419
+    crossbowmanQuest = 1420
     assassinQuest = 1422
     banditQuest = 1423
+
     thiefInstructor = 1052001
+    warriorInstructor = 1022000
+    mageInstructor = 1032001
+    archerInstructor = 10200
+    pirateInstructor = 10204
     thiefMap = 103000003
-    thiefMap2= 103050310
-    toDoQuest = thiefQuest
-    if "Shadower" in accountData['done_links']:
-        targetJob = assassinQuest
-    else:
-        targetJob = banditQuest
-    Instructor = thiefInstructor
-    toGoMap = thiefMap
+    warriorMap = 102000003
+    mageMap = 101000003
+    archerMap = 100000201
+    pirateMap = 120000101
+    thiefMap2= 910370000 #103050310
+    warriorMap2 = 910230000
+    mageMap2 = 910140000
+    archerMap2 = 910070000
+    pirateMap2 = 912040000
+    
+
+    done_list = accountData['done_links']
+    if job == ShadowerJobs[0]:
+        if "Shadower" not in done_list:
+            targetJob = banditQuest
+        elif "Night Lord":
+            targetJob = assassinQuest
+        Instructor = thiefInstructor
+        toGoMap = thiefMap
+        toDoQuest = thiefQuest
+    elif job == HeroJobs[0]:
+        if "Hero" not in done_list:
+            targetJob = fighterQuest
+        elif "Paladin" not in done_list:
+            targetJob = pageQuest
+        elif "Dark Knight" not in done_list:
+            targetJob = spearmanQuest
+        Instructor = warriorInstructor
+        toGoMap = warriorMap
+        toDoQuest = warriorQuest
+    elif job == ILMageJobs[0]:
+        if "Ice/Lightning Archmage" not in done_list:
+            targetJob = ILwizardQuest
+        elif "Fire/Poison Archmage" not in done_list:
+            targetJob = FPwizardQuest
+        elif "Bishop" not in done_list:
+            targetJob = clericQuest
+        Instructor = mageInstructor
+        toGoMap = mageMap
+        toDoQuest = mageQuest
+    elif job == BowmasterJobs[0]:
+        if "Bowmaster" not in done_list:
+            targetJob = hunterQuest
+        elif "Marksman" not in done_list:
+            targetJob = crossbowmanQuest
+        Instructor = archerInstructor
+        toGoMap = archerMap
+        toDoQuest = archerQuest
+    elif job == CorsairJobs[0]:
+        if "Corsair" not in done_list:
+            targetJob = gunslingerQuest
+        elif "Buccaneer" not in done_list:
+            targetJob = brawlerQuest
+        Instructor = pirateInstructor
+        toGoMap = pirateMap
+        toDoQuest = pirateQuest
+
     quest = Quest.GetQuestState(toDoQuest)
     quest2= Quest.GetQuestState(targetJob)
 
@@ -3691,7 +3765,7 @@ def ExplorerSecond():
         Inventory.UseItem(2434265)
         time.sleep(2)
 
-    if job == 400:
+    if job in explorerFirstJobs:
         if quest != 2:
             if quest == 0:
                 acceptQuest(toDoQuest,Instructor,toGoMap,field_id)
@@ -5854,15 +5928,20 @@ elif job == 410 and level < 31:
     claw = Inventory.FindItemByID(1472061)
     if claw.valid:
         Inventory.SendChangeSlotPositionRequest(1,claw.pos,weapon_slot,-1)
-elif job == 400 and level >= 30:
+elif job in explorerFirstJobs and level >= 30:
     print("Doing Explorer Second Job")
     ExplorerSecond()
-elif (job == 410 or job == 420) and level >= 60:
+elif job in explorerSecondJobs and level >= 60:
     print("Doing Explorer Third Job")
     ExplorerThird()
-elif (job == 411 or job == 421) and level >= 100:
+elif job in explorerThirdJobs and level >= 100:
     print("Doing Explorer Fourth Job")
     ExplorerFourth()
+elif job in explorerFourthJobs and field_id == 240010501:
+    print("Returning to farming settings")
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
 elif (job == 14000 or job == 14200) and field_id != 101020400 and Quest.GetQuestState(22733) != 2:
     print("Doing Kinesis First Job")
     KinesisFirst()
