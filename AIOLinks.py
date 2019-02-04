@@ -4016,7 +4016,6 @@ def ExplorerFourth():
             completeQuest(toDoQuest,Chief,ForestOfThePriest,ForestOfThePriest,field_id)
     elif quest2 != 2:
         if quest2 == 0:
-
             Npc.ClearSelection()
             Npc.RegisterSelection("Manon")
             acceptQuest(toDoQuest2,Chief,ForestOfThePriest,field_id)
@@ -4026,9 +4025,11 @@ def ExplorerFourth():
                 toggle_loot(False)
                 if field_id == ManonForest or field_id == GriffeyForest:
                     dungeonTeleport()
-                toggle_HTR(True)
-                completeQuest(toDoQuest2,Chief,ForestOfThePriest,ForestOfThePriest,field_id)
-                SCLib.UpdateVar("DoingJobAdv",False)
+                else:
+                    toggle_HTR(True)
+                    completeQuest(toDoQuest2,Chief,ForestOfThePriest,ForestOfThePriest,field_id)
+                if Character.GetJob() in explorerFourthJobs:
+                    SCLib.UpdateVar("DoingJobAdv",False)
             elif Inventory.FindItemByID(pentagon).count < 1:
                 print("Hunt for pentagon")
                 if field_id == GriffeyForest:
@@ -4039,9 +4040,11 @@ def ExplorerFourth():
                     time.sleep(1)
                 else:
                     loot = Field.FindItem(pentagon_loot)
+                    time.sleep(2)
                     if not loot.valid:
                         toggleAttack(True)
                         toggle_kami(True)
+                        time.sleep(2)
                         mobs = Field.GetMobs()
                         if len(mobs) == 0 and not Field.FindItem(pentagon_loot).valid:
                             Terminal.SetCheckBox("timedCCCheck",True)
@@ -4063,11 +4066,13 @@ def ExplorerFourth():
                     rush(GriffeyForest)
                     time.sleep(1)
                 else:
+                    time.sleep(2)
                     loot = Field.FindItem(star_loot)
                     if not loot.valid:
                         toggleAttack(True)
                         toggle_kami(True)
                         mobs = Field.GetMobs()
+                        time.sleep(3)
                         if len(mobs) == 0 and not Field.FindItem(star_loot).valid:
                             Terminal.SetCheckBox("timedCCCheck",True)
                             time.sleep(1)
@@ -4626,15 +4631,15 @@ def GetToTheDoorToZakum():
         Terminal.Rush(CheifsResidence)
     else:
         #Ark, Angelic Buster, Cannoneer, Jett, Mechanic, Shade, Thunder Breaker
-        Pirates = [15500, 15510, 15511, 15512, 6500, 6510, 6511, 6512, 530, 531, 532, 508, 570, 571, 572, 3500, 3510, 3511, 3512, 2500, 2510, 2511, 2512, 1500, 1510, 1511, 1512]
+        Pirates = [511,512,521,522,15500, 15510, 15511, 15512, 6500, 6510, 6511, 6512, 530, 531, 532, 508, 570, 571, 572, 3500, 3510, 3511, 3512, 2500, 2510, 2511, 2512, 1500, 1510, 1511, 1512]
         #Wild Hunter, Wind Archer, Mercedes
-        Bowman = [3300, 3310, 3311, 3312, 1300, 1310, 1311, 1312, 2300, 2310, 2311, 2312]
+        Bowman = [311,312,321,322,3300, 3310, 3311, 3312, 1300, 1310, 1311, 1312, 2300, 2310, 2311, 2312]
         #Phantom, Xenon, Dual Blade
         Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6411,6412,6410,422,421,411,412]
         #Kanna, Battle Mage, Beast Tamer, Blaze Wizard, Evan, Luminous
-        Magician = [14212,15211,15212,4200, 4210, 4211, 4212, 3200, 3210, 3211, 3212, 11000, 11200, 11210, 11211, 11212, 1200, 1210, 1211, 1212, 2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2700, 2710, 2711, 2712, ]
+        Magician = [211,212,221,222,231,232,14212,15211,15212,4200, 4210, 4211, 4212, 3200, 3210, 3211, 3212, 11000, 11200, 11210, 11211, 11212, 1200, 1210, 1211, 1212, 2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2700, 2710, 2711, 2712, ]
         #Aran, Blaster, Demon Avenger, Demon Slayer, Hayato, Kaiser, Mihile, Zero, Dawn Warrior
-        Warrior = [3700, 3710, 3711, 3712, 2100, 2110, 2111, 2112, 3101, 3120, 1321, 3122,3121, 3100, 3110, 3111, 3112, 4100, 4110, 4111, 4112, 6100, 6110, 6111, 6112, 5100, 5110, 5111, 5112, 10100, 10110, 10111, 10112, 1100, 1110, 1111, 1112]
+        Warrior = [111,112,121,122,131,132,3700, 3710, 3711, 3712, 2100, 2110, 2111, 2112, 3101, 3120, 1321, 3122,3121, 3100, 3110, 3111, 3112, 4100, 4110, 4111, 4112, 6100, 6110, 6111, 6112, 5100, 5110, 5111, 5112, 10100, 10110, 10111, 10112, 1100, 1110, 1111, 1112]
         if job in Bowman:
             TalkNPC = NpcReneBowmanInstructor
         elif job in Thief:
@@ -5396,6 +5401,17 @@ def toggleAttack(on):
     elif job == 111: #crusader 1111010
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,1111010)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto SP",True)
+        #Terminal.SetRadioButton("SIRadioMagic",True)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 112: #Hero 1120017
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,1120017)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -6344,8 +6360,8 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
         if boss.valid or boss1.valid or boss2.valid:
             print("Boss valid")
             DidSpawn()
-            if pos.x != -345:
-                Character.Teleport(-345, 84)
+            if pos.x != -260:
+                Character.Teleport(-260, 84)
             else:
                 print("Fighting Zakum StandBy")
         else:
