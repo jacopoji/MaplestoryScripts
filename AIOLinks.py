@@ -4042,7 +4042,7 @@ def ExplorerFourth():
 
     star = 4031344
     pentagon= 4031343
-
+    pentagon2 = 4031511
     pentagon_loot = 4031517
     star_loot = 4031518
     if quest != 2:
@@ -4066,7 +4066,7 @@ def ExplorerFourth():
                     completeQuest(toDoQuest2,Chief,ForestOfThePriest,ForestOfThePriest,field_id)
                 if Character.GetJob() in explorerFourthJobs:
                     SCLib.UpdateVar("DoingJobAdv",False)
-            elif Inventory.FindItemByID(pentagon).count < 1:
+            elif not (Inventory.FindItemByID(pentagon).count < 1 or Inventory.FindItemByID(pentagon2).count < 1):
                 print("Hunt for pentagon")
                 if field_id == GriffeyForest:
                     dungeonTeleport()
@@ -4884,7 +4884,7 @@ if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     writeJson(accountData,accountId)
     Terminal.SetLineEdit("LoginChar",accountData["cur_link_pos"])
     Terminal.SetCheckBox("Auto Login",True)
-if len(accountData["done_links"]) >= 20:
+if len(accountData["done_links"]) >= 30:
     accountData['training_done'] = True
     print("Completed {} links".format(len(accountData["done_links"])))
     writeJson(accountData,accountId)
@@ -5469,6 +5469,8 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
+    elif job in HeroJobs and field_id in curbrockhideout: #1001005
+        attackAuto(1001005,on)
     elif job == 111: #crusader 1111010
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,1111010)
@@ -5502,6 +5504,8 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
+    elif job in PaladinJobs and field_id in curbrockhideout: #1001005
+        attackAuto(1001005,on)
     elif job == 121: #White knight 1211008
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,1201011)
@@ -5527,11 +5531,38 @@ def toggleAttack(on):
     elif job == 130: #Spearman 1301011
         attackAuto(1301011,on)
         Terminal.SetCheckBox("Auto SP",True)
+    elif job in DarkknightJobs and field_id in curbrockhideout: #1001005
+        attackAuto(1001005,on)
     elif job == 131: #Berserker
-        attackAuto(1311011,on)
+        attackAuto(1301011,on)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 132: #Dark Knight
         attackAuto(1321012,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 200: #Mage
+        attackAuto(2001008,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 220: #IL wizard
+        attackAuto(2201005,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job in ILMageJobs and field_id in curbrockhideout: #1001005
+        attackAuto(2001008,on)
+    elif job == 221: #IL mage
+        attackAuto(2211002,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 222: #IL archmage
+        attackAuto(2221006,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 210: #FP wizard
+        attackAuto(2101004,on) 
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job in FPMageJobs and field_id in curbrockhideout: #1001005
+        attackAuto(2001008,on)
+    elif job == 211: #FP mage
+        attackAuto(2111002,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 212:
+        attackAuto(2121006,on)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 400: #Thief
         attackAuto(4001334,on)
@@ -5539,6 +5570,8 @@ def toggleAttack(on):
     elif job == 410: #Assassin
         attackSI(4101008,on)
         Terminal.SetCheckBox("Auto SP",True)
+    elif job in NightlordJobs and field_id in curbrockhideout: #1001005
+        attackAuto(4101008,on)
     elif job == 411: #Hermit
         attackSI(4111015,on)
         Terminal.SetCheckBox("Auto SP",True)
@@ -5551,6 +5584,8 @@ def toggleAttack(on):
     elif job == 420: #Bandit
         attackAuto(4201012,on)
         Terminal.SetCheckBox("Auto SP",True)
+    elif job in ShadowerJobs and field_id in curbrockhideout: #1001005
+        attackAuto(4001334,on)
     elif job == 421: #Chief Bandit
         attackAuto(4211002,on)
         Terminal.SetCheckBox("Auto SP",True)
@@ -6167,6 +6202,10 @@ elif job == 410 and level < 31:
     claw = Inventory.FindItemByID(1472061)
     if claw.valid:
         Inventory.SendChangeSlotPositionRequest(1,claw.pos,weapon_slot,-1)
+elif job == 200 and level < 11:
+    wand = Inventory.FindItemByID(1372043)
+    if wand.valid:
+        Inventory.SendChangeSlotPositionRequest(1,wand.pos,weapon_slot,-1)
 elif job in explorerFirstJobs and level >= 30:
     print("Doing Explorer Second Job")
     ExplorerSecond()
