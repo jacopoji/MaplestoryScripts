@@ -1215,7 +1215,7 @@ current_date = str(datetime.datetime.utcnow().date())
 if current_date != accountData['date']:
     accountData['date'] = current_date
     accountData['kanna_daily_done'] = False
-    writeJson(accountData,accountId)
+    writeJson_cube(accountData,accountId)
 
 def collide_items():
 	oPacket = Packet.COutPacket(collide_header)

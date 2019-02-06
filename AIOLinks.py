@@ -3665,7 +3665,7 @@ def ExplorerFirst():
             desired_job = Thief
         elif "Hero" not in accountData['done_links'] or "Dark Knight" not in accountData['done_links'] or "Paladin" not in accountData['done_links']:
             desired_job = Warrior
-        elif "Ice/Lightning Archmage" not in accountData['done_links'] or "Fire/Poison Archmage" not in accountData['done_links']:
+        elif "Ice/Lightning Archmage" not in accountData['done_links'] or "Fire/Poison Archmage" not in accountData['done_links'] or "Bishop" not in accountData['done_links']:
             desired_job = Magician
         elif "Marksman" not in accountData['done_links'] or "Bowmaster" not in accountData['done_links']:
             desired_job = Bowman
@@ -4041,6 +4041,7 @@ def ExplorerFourth():
     quest2 = Quest.GetQuestState(toDoQuest2)
 
     star = 4031344
+    star2 = 4031512
     pentagon= 4031343
     pentagon2 = 4031511
     pentagon_loot = 4031517
@@ -4066,7 +4067,7 @@ def ExplorerFourth():
                     completeQuest(toDoQuest2,Chief,ForestOfThePriest,ForestOfThePriest,field_id)
                 if Character.GetJob() in explorerFourthJobs:
                     SCLib.UpdateVar("DoingJobAdv",False)
-            elif not (Inventory.FindItemByID(pentagon).count < 1 or Inventory.FindItemByID(pentagon2).count < 1):
+            elif not (Inventory.FindItemByID(pentagon).count >= 1 or Inventory.FindItemByID(pentagon2).count >= 1):
                 print("Hunt for pentagon")
                 if field_id == GriffeyForest:
                     dungeonTeleport()
@@ -4093,7 +4094,7 @@ def ExplorerFourth():
                         if pos.x != loot.x:
                             Character.Teleport(loot.x,loot.y)
                             time.sleep(5)
-            elif Inventory.FindItemByID(star).count < 1:
+            elif not (Inventory.FindItemByID(star).count >= 1 or Inventory.FindItemByID(star2).count >= 1):
                 print("Hunt for star")
                 if field_id == ManonForest:
                     dungeonTeleport()
@@ -5559,10 +5560,21 @@ def toggleAttack(on):
     elif job in FPMageJobs and field_id in curbrockhideout: #1001005
         attackAuto(2001008,on)
     elif job == 211: #FP mage
-        attackAuto(2111002,on)
+        attackAuto(2101004,on) 
         Terminal.SetCheckBox("Auto SP",True)
-    elif job == 212:
+    elif job == 212: #FP archmage
         attackAuto(2121006,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 230: #cleric
+        attackAuto(2301005,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job in BishopJobs and field_id in curbrockhideout: #1001005
+        attackAuto(2001008,on)
+    elif job == 231: #priest
+        attackAuto(2311004,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 232: #Bishop
+        attackAuto(2321007,on)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 400: #Thief
         attackAuto(4001334,on)
