@@ -260,13 +260,14 @@ def AlishanRushing():
 
 def dungeonTeleport():
     toggle_kami(False)
+    toggleAttack(False)
     time.sleep(1)
     Key.Press(0x08)
     time.sleep(1)
     Character.EnterPortal()
     time.sleep(1)
     toggle_kami(True)
-
+    toggleAttack(True)
 def toggle_rush_by_level(indicator):
     Terminal.SetCheckBox("Rush By Level",indicator)
     Terminal.SetRushByLevel(indicator)
@@ -689,6 +690,56 @@ def buy_spear():
             time.sleep(0.5)
             BuyKey = Packet.COutPacket(BuyItemHeader)
             BuyKey.EncodeBuffer("00 0033 0015D9C2 0001 00000000 00009C40")
+            Packet.SendPacket(BuyKey)
+            time.sleep(0.5)
+            Packet.UnBlockRecvHeader(BlockBuyHeader)
+            CloseShop = Packet.COutPacket(BuyItemHeader)
+            CloseShop.EncodeBuffer("[03]")
+            Packet.SendPacket(CloseShop)
+            time.sleep(0.5)
+            toggle_rush_by_level(True)
+            toggle_kami(True)
+
+def buy_crossbow():
+    toggle_rush_by_level(False)
+    toggle_kami(False)
+    if field_id != 100000101:
+        rush(100000101)
+    else:
+        if Character.GetMeso() > 30000: #00F4 [00] 000A 00164EF0 0001 00000000 00007530
+            time.sleep(1)
+            Character.TalkToNpc(1011000)
+            time.sleep(1)
+            print("Buying crossbow via packet")
+            Packet.BlockRecvHeader(BlockBuyHeader)
+            time.sleep(0.5)
+            BuyKey = Packet.COutPacket(BuyItemHeader)
+            BuyKey.EncodeBuffer("00 000A 00164EF0 0001 00000000 00007530")
+            Packet.SendPacket(BuyKey)
+            time.sleep(0.5)
+            Packet.UnBlockRecvHeader(BlockBuyHeader)
+            CloseShop = Packet.COutPacket(BuyItemHeader)
+            CloseShop.EncodeBuffer("[03]")
+            Packet.SendPacket(CloseShop)
+            time.sleep(0.5)
+            toggle_rush_by_level(True)
+            toggle_kami(True)
+
+def buy_arrow():
+    toggle_rush_by_level(False)
+    toggle_kami(False)
+    if field_id != 100000102:
+        rush(100000102)
+    else:
+        if Character.GetMeso() > 1400: #00F4 [00] 0029 001F72C8 0001 00000000 00000578
+            time.sleep(1)
+            Character.TalkToNpc(1011100)
+            time.sleep(1)
+            print("Buying crossbow arrow via packet")
+            Packet.BlockRecvHeader(BlockBuyHeader)
+            time.sleep(0.5)
+            BuyKey = Packet.COutPacket(BuyItemHeader)
+            BuyKey.EncodeBuffer("00 0029 001F72C8 0001 00000000 00000578")
             Packet.SendPacket(BuyKey)
             time.sleep(0.5)
             Packet.UnBlockRecvHeader(BlockBuyHeader)
@@ -6311,6 +6362,25 @@ elif job == DarkknightJobs[1] and level <32 and Inventory.GetItem(1,weapon_slot)
             Terminal.SetPushButton("Leave shop",True)
             time.sleep(1)
             Terminal.SetPushButton("Leave shop",False)
+elif job == MarksmanJobs[1] and level <32 and (Inventory.GetItem(1,weapon_slot).id != 1432002 or Inventory.FindItemByID(2061000).count < 1):
+    print("Check Crossbow")
+    mountainCrossbowid = 1462000
+    if Inventory.GetItem(1,weapon_slot).id != mountainCrossbowid:
+        print("Need to buy crossbow")
+        mountainCrossbow = Inventory.FindItemByID(mountainCrossbowid)
+        if mountainCrossbow.valid:
+            Inventory.SendChangeSlotPositionRequest(1,mountainCrossbow.pos,weapon_slot,-1)
+        else:
+            buy_crossbow()
+            Terminal.SetPushButton("Leave shop",True)
+            time.sleep(1)
+            Terminal.SetPushButton("Leave shop",False)
+    elif Inventory.FindItemByID(2061000).count < 1:
+        print("Need to buy crossbow arrow")
+        buy_arrow()
+        Terminal.SetPushButton("Leave shop",True)
+        time.sleep(1)
+        Terminal.SetPushButton("Leave shop",False)
 elif job in explorerSecondJobs and level >= 60:
     print("Doing Explorer Third Job")
     ExplorerThird()
