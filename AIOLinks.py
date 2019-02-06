@@ -3577,6 +3577,7 @@ def AranFourth():
                 completeQuest(TrainingThePolearm,Maha,Rien,Rien,field_id)
 
 def ExplorerFirst():
+    print("Doing explorer job adv")
     toggle_kami(False)
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
@@ -3691,7 +3692,7 @@ def ExplorerFirst():
     if Character.GetLevel() == 10:
         if Field.GetID() == 120000101:
             Quest.StartQuest(1405, 1090000)
-        if Field.GetID() == 100000101:
+        if Field.GetID() == 100000201:
             Quest.StartQuest(1403, 1012100)
         if Field.GetID() == 102000003:
             Quest.StartQuest(1401, 1022000)
@@ -3730,8 +3731,8 @@ def ExplorerSecond():
     thiefInstructor = 1052001
     warriorInstructor = 1022000
     mageInstructor = 1032001
-    archerInstructor = 10200
-    pirateInstructor = 10204
+    archerInstructor = 1012100
+    pirateInstructor = 1090000
     thiefMap = 103000003
     warriorMap = 102000003
     mageMap = 101000003
@@ -3831,6 +3832,7 @@ def ExplorerSecond():
 def ExplorerThird():
     print("Explorer 3")
     SCLib.UpdateVar("DoingJobAdv",True)
+    toggle_rush_by_level(False)
     CheifsResidence = 211000001
     WarriorChief = 2020008
     MagicianChief = 2020009
@@ -3860,8 +3862,8 @@ def ExplorerThird():
     thiefInstructor = 1052001
     warriorInstructor = 1022000
     mageInstructor = 1032001
-    archerInstructor = 10200
-    pirateInstructor = 10204
+    archerInstructor = 1012100
+    pirateInstructor = 1090000
     thiefMap = 103000003
     warriorMap = 102000003
     mageMap = 101000003
@@ -3923,7 +3925,31 @@ def ExplorerThird():
         Instructor = mageInstructor
         Chief = MagicianChief
         toGoMap = mageMap
-        
+    elif job in BowmasterJobs:
+        toDoQuest = archerQuest
+        toDoQuest2 = hunterQuest
+        Instructor = archerInstructor
+        Chief = BowmanChief
+        toGoMap = archerMap
+    elif job in MarksmanJobs:
+        toDoQuest = archerQuest
+        toDoQuest2 = crossbowmanQuest
+        Instructor = archerInstructor
+        Chief = BowmanChief
+        toGoMap = archerMap
+    elif job in BuccaneerJobs:
+        toDoQuest = pirateQuest
+        toDoQuest2 = brawlerQuest
+        Instructor = pirateInstructor
+        Chief = pirateChief
+        toGoMap = pirateMap
+    elif job in CorsairJobs:
+        toDoQuest = pirateQuest
+        toDoQuest2 = gunslingerQuest
+        Instructor = pirateInstructor
+        Chief = pirateChief
+        toGoMap = pirateMap
+
     quest = Quest.GetQuestState(toDoQuest)
     quest2= Quest.GetQuestState(toDoQuest2)
     if quest != 2:
@@ -3951,6 +3977,7 @@ def ExplorerThird():
                     time.sleep(3)
                     if Quest.GetQuestState(toDoQuest2) == 2:
                         SCLib.UpdateVar("DoingJobAdv",False)
+                        toggle_rush_by_level(True)
             elif field_id == el_nath_map:
                 if pos.x != 27:
                     toggle_kami(False)
@@ -3973,6 +4000,9 @@ def ExplorerThird():
                     else:
                         Character.TalkToNpc(SparklingCrystal)
                         toggle_loot(False)
+                else:
+                    toggle_kami(True)
+                    toggleAttack(True)
     
     if Quest.GetQuestState(toDoQuest2) == 2:
         SCLib.UpdateVar("DoingJobAdv",False)
@@ -3980,6 +4010,7 @@ def ExplorerThird():
 
 def ExplorerFourth():
     print("Explorer 4")
+    toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     #3rd job instructors
     warriorInstructor = 2020008
@@ -4044,6 +4075,8 @@ def ExplorerFourth():
     star2 = 4031512
     pentagon= 4031343
     pentagon2 = 4031511
+    pentagon3 = 4031514
+    pentagon4 = 4031517
     pentagon_loot = 4031517
     star_loot = 4031518
     if quest != 2:
@@ -4065,9 +4098,11 @@ def ExplorerFourth():
                 else:
                     toggle_HTR(True)
                     completeQuest(toDoQuest2,Chief,ForestOfThePriest,ForestOfThePriest,field_id)
+                time.sleep(3)
                 if Character.GetJob() in explorerFourthJobs:
                     SCLib.UpdateVar("DoingJobAdv",False)
-            elif not (Inventory.FindItemByID(pentagon).count >= 1 or Inventory.FindItemByID(pentagon2).count >= 1):
+                    toggle_rush_by_level(True)
+            elif not (Inventory.FindItemByID(pentagon).count >= 1 or Inventory.FindItemByID(pentagon2).count >= 1 or Inventory.FindItemByID(pentagon3).count >= 1 or Inventory.FindItemByID(pentagon4).count >= 1):
                 print("Hunt for pentagon")
                 if field_id == GriffeyForest:
                     dungeonTeleport()
@@ -5543,39 +5578,59 @@ def toggleAttack(on):
     elif job == 200: #Mage
         attackAuto(2001008,on)
         Terminal.SetCheckBox("Auto SP",True)
+    elif job in ILMageJobs and field_id in curbrockhideout: #1001005
+        attackAuto(2001008,on)
     elif job == 220: #IL wizard
         attackAuto(2201005,on)
         Terminal.SetCheckBox("Auto SP",True)
-    elif job in ILMageJobs and field_id in curbrockhideout: #1001005
-        attackAuto(2001008,on)
     elif job == 221: #IL mage
         attackAuto(2211002,on)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 222: #IL archmage
         attackAuto(2221006,on)
         Terminal.SetCheckBox("Auto SP",True)
+    elif job in FPMageJobs and field_id in curbrockhideout: #1001005
+        attackAuto(2001008,on)
     elif job == 210: #FP wizard
         attackAuto(2101004,on) 
         Terminal.SetCheckBox("Auto SP",True)
-    elif job in FPMageJobs and field_id in curbrockhideout: #1001005
-        attackAuto(2001008,on)
     elif job == 211: #FP mage
         attackAuto(2101004,on) 
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 212: #FP archmage
         attackAuto(2121006,on)
         Terminal.SetCheckBox("Auto SP",True)
+    elif job in BishopJobs and field_id in curbrockhideout: #1001005
+        attackAuto(2001008,on)
     elif job == 230: #cleric
         attackAuto(2301005,on)
         Terminal.SetCheckBox("Auto SP",True)
-    elif job in BishopJobs and field_id in curbrockhideout: #1001005
-        attackAuto(2001008,on)
     elif job == 231: #priest
         attackAuto(2311004,on)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 232: #Bishop
         attackAuto(2321007,on)
         Terminal.SetCheckBox("Auto SP",True)
+    elif job == 300: #Archer
+        attackAuto(3001004,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif (job in BowmasterJobs or job in MarksmanJobs) and field_id in curbrockhideout: #1001005
+        attackAuto(3001004,on)
+    elif job == 310: #Hunter
+        attackAuto(3101005,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 311: #Ranger
+        attackAuto(3111003,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 312: #Bowmaster
+        attackAuto(3121015,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 320: #Crossbowman
+        attackAuto(3201005,on)
+    elif job == 321: #Sniper
+        attackAuto(3211009,on)
+    elif job == 322: #Marksman
+        attackAuto(3221001,on)
     elif job == 400: #Thief
         attackAuto(4001334,on)
         Terminal.SetCheckBox("Auto SP",True)
@@ -5604,6 +5659,24 @@ def toggleAttack(on):
     elif job == 422: #Shadower
         attackAuto(4221007,on)
         Terminal.SetCheckBox("Auto SP",True)
+    elif job == 500: #Pirate
+        attackAuto(5001002,on)
+    elif job in BuccaneerJobs and field_id in curbrockhideout: #1001005
+        attackAuto(5101012,on)
+    elif job in CorsairJobs and field_id in curbrockhideout: #1001005
+        attackAuto(5201001,on)
+    elif job == 510: #Brawler
+        attackAuto(5101012,on)
+    elif job == 511: #Marauder
+        attackAuto(5111002,on)
+    elif job == 512: #Buccaneer
+        attackAuto(5121020,on)
+    elif job == 520: #Gunslinger
+        attackAuto(5201001,on)
+    elif job == 521: #Outlaw
+        attackAuto(5211008,on)
+    elif job == 522: #Corsair
+        attackAuto(5221004,on)
     elif job == 11212: #Beast Tamer
         if level <= 17:
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -6218,6 +6291,10 @@ elif job == 200 and level < 11:
     wand = Inventory.FindItemByID(1372043)
     if wand.valid:
         Inventory.SendChangeSlotPositionRequest(1,wand.pos,weapon_slot,-1)
+elif job == 300 and level < 11:
+    bow = Inventory.FindItemByID(1452051)
+    if bow.valid:
+        Inventory.SendChangeSlotPositionRequest(1,bow.pos,weapon_slot,-1)
 elif job in explorerFirstJobs and level >= 30:
     print("Doing Explorer Second Job")
     ExplorerSecond()
