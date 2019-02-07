@@ -4992,7 +4992,7 @@ elif len(accountData["done_links"]) < 20 and accountData['training_done']:
 
 def safety_setting():
     #Turn off dangerous settings
-    dangerous_settings = ["Auto Aggro","MonkeySpiritsNDcheck","General FMA","Full Map Attack","Mob Vac","Grenade Kami","Mob Falldown","Vellum Freeze","main/boss_freeze","Full God Mode","Guard God Mode"]
+    dangerous_settings = ["Auto Aggro","MonkeySpiritsNDcheck","General FMA","Full Map Attack","Mob Vac","Mob Falldown","Vellum Freeze","main/boss_freeze","Full God Mode","Guard God Mode"]
     for settings in dangerous_settings:
         if settings == "General FMA":
             if job not in IlliumJobs:
