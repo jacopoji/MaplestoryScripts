@@ -213,8 +213,8 @@ ILMageJobs = [200,220,221,222]
 FPMageJobs = [200,210,211,212]
 BishopJobs = [200,230,231,232]
 #pirate
-CorsairJobs = [500,510,511,512]
-BuccaneerJobs = [500,520,521,522]
+BuccaneerJobs = [500,510,511,512]
+CorsairJobs = [500,520,521,522]
 
 explorerFirstJobs = [100,200,300,400,500]
 explorerSecondJobs = [110,120,130,210,220,230,310,320,410,420,430,510,520]
@@ -259,6 +259,7 @@ def AlishanRushing():
             toggle_rush_by_level(True)
 
 def dungeonTeleport():
+    prefield = field_id
     toggle_kami(False)
     toggleAttack(False)
     time.sleep(1)
@@ -266,8 +267,13 @@ def dungeonTeleport():
     time.sleep(1)
     Character.EnterPortal()
     time.sleep(1)
-    toggle_kami(True)
-    toggleAttack(True)
+    newfield = Field.GetID()
+    if newfield != prefield:
+        print("Successfully entered portal")
+        toggle_kami(True)
+        toggleAttack(True)
+    else:
+        print("Failed to enter portal")
 def toggle_rush_by_level(indicator):
     Terminal.SetCheckBox("Rush By Level",indicator)
     Terminal.SetRushByLevel(indicator)
@@ -287,7 +293,8 @@ def teleport_enter(x,y):
     toggle_kami(False)
     toggleAttack(False)
     time.sleep(1)
-    Character.Teleport(x,y)
+    if Character.GetPos().x != x:
+        Character.Teleport(x,y)
     time.sleep(1)
     Character.EnterPortal()
     Character.EnterPortal()
@@ -296,11 +303,12 @@ def teleport_enter(x,y):
     newfield = Field.GetID()
     if newfield != prefield:
         print("Successfully entered portal")
+        toggle_kami(True)
+        toggleAttack(True)
     else:
         print("Failed to enter portal")
     time.sleep(1)
-    toggle_kami(True)
-    toggleAttack(True)
+    
 
 def toggle_HTR(indicator):
     Terminal.SetCheckBox("map/maprusher/hypertelerock",indicator)
@@ -3751,11 +3759,12 @@ def ExplorerFirst():
             Quest.StartQuest(1404, 1052001)
         if Field.GetID() == 101000003:
             Quest.StartQuest(1402, 1032001)
-        time.sleep(1)
-        toggle_rush_by_level(True)
-        toggle_kami(True)
-        SCLib.UpdateVar("DoingJobAdv",False)
-        toggle_loot(False)
+        time.sleep(3)
+        if Character.GetJob() !=0:
+            toggle_rush_by_level(True)
+            toggle_kami(True)
+            SCLib.UpdateVar("DoingJobAdv",False)
+            toggle_loot(False)
 
 def ExplorerSecond():
     print("Explorer 2")
@@ -3925,7 +3934,7 @@ def ExplorerThird():
     HolyStone = 2030006
     SparklingCrystal = 1061010
     RadiantCrystalPassageway = 910540000
-    DimensionalWorld = [x for x in range(910540000,910540420)]
+    DimensionalWorld = [x for x in range(910540000,910540600)]
     
 
     if job in NightlordJobs:
@@ -3992,13 +4001,13 @@ def ExplorerThird():
         toDoQuest = pirateQuest
         toDoQuest2 = brawlerQuest
         Instructor = pirateInstructor
-        Chief = pirateChief
+        Chief = PirateChief
         toGoMap = pirateMap
     elif job in CorsairJobs:
         toDoQuest = pirateQuest
         toDoQuest2 = gunslingerQuest
         Instructor = pirateInstructor
-        Chief = pirateChief
+        Chief = PirateChief
         toGoMap = pirateMap
 
     quest = Quest.GetQuestState(toDoQuest)
@@ -4017,11 +4026,8 @@ def ExplorerThird():
                     mobs = Field.GetMobs()
                     print("Still in dimensional world")
                     if len(mobs) == 0:
-                        if pos.x != 692:
-                            toggle_kami(False)
-                            Character.Teleport(692,-456)
-                        else:
-                            Character.TalkToNpc(SparklingCrystal)
+                        Character.TalkToNpc(SparklingCrystal)
+                        toggle_loot(False)
                 else:
                     print("Completing quest")
                     completeQuest(toDoQuest2,Chief,CheifsResidence,CheifsResidence,field_id)
@@ -4128,6 +4134,7 @@ def ExplorerFourth():
     pentagon2 = 4031511
     pentagon3 = 4031514
     pentagon4 = 4031517
+    pentagon5 = 4031860
     pentagon_loot = 4031517
     star_loot = 4031518
     if quest != 2:
@@ -4153,7 +4160,7 @@ def ExplorerFourth():
                 if Character.GetJob() in explorerFourthJobs:
                     SCLib.UpdateVar("DoingJobAdv",False)
                     toggle_rush_by_level(True)
-            elif not (Inventory.FindItemByID(pentagon).count >= 1 or Inventory.FindItemByID(pentagon2).count >= 1 or Inventory.FindItemByID(pentagon3).count >= 1 or Inventory.FindItemByID(pentagon4).count >= 1):
+            elif not (Inventory.FindItemByID(pentagon).count >= 1 or Inventory.FindItemByID(pentagon2).count >= 1 or Inventory.FindItemByID(pentagon3).count >= 1 or Inventory.FindItemByID(pentagon4).count >= 1 or Inventory.FindItemByID(pentagon5).count >= 1):
                 print("Hunt for pentagon")
                 if field_id == GriffeyForest:
                     dungeonTeleport()
@@ -6346,6 +6353,14 @@ elif job == 300 and level < 11:
     bow = Inventory.FindItemByID(1452051)
     if bow.valid:
         Inventory.SendChangeSlotPositionRequest(1,bow.pos,weapon_slot,-1)
+elif job == 500 and level < 11:
+    knuckle = Inventory.FindItemByID(1482014)
+    if knuckle.valid:
+        Inventory.SendChangeSlotPositionRequest(1,knuckle.pos,weapon_slot,-1)
+elif job == CorsairJobs[1] and level < 31:
+    pistol = Inventory.FindItemByID(1492014)
+    if pistol.valid:
+        Inventory.SendChangeSlotPositionRequest(1,pistol.pos,weapon_slot,-1)
 elif job in explorerFirstJobs and level >= 30:
     print("Doing Explorer Second Job")
     ExplorerSecond()
@@ -7937,6 +7952,19 @@ if not SCLib.GetVar("BuyExpansion") and field_id == 240000002 and not SCLib.GetV
 
 if level < 140 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("GettingBoogie") and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and useExploit and not SCLib.GetVar("DoingJobAdv"):
     print("Doing exploit")
+    if field_id == TheDoorToZakum:
+        if pos.x != -3003:
+            toggle_kami(False)
+            teleport_enter(-3003,-220)
+            toggle_rush_by_level(True)
+            Terminal.SetCheckBox("Kami Vac",True)
+            Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
+            SCLib.UpdateVar("DoingZakum",False)
+    elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
+        if pos.x != -1599:
+            toggle_kami(False)
+            teleport_enter(-1599,-331)
+            SCLib.UpdateVar("DoingZakum",False)
     exploit1()
     Terminal.SetComboBox("eva_cmb",1)
     Terminal.SetComboBox("HackingOpt",1)

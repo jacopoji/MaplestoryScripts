@@ -1360,7 +1360,7 @@ def buy_cubes():
 		buy_cube_packet = Packet.COutPacket(buy_ticket_header)
 		buy_cube_packet.EncodeBuffer("55 052F841E 044AA200")
 		Packet.SendPacket(buy_cube_packet)
-		rPacket = Packet.WaitForRecv(recv,3000)
+		rPacket = Packet.WaitForRecv(recv,15000)
 		rPacket.Skip(1)
 		x = rPacket.ReadLong(4)
 		time.sleep(1)
@@ -1371,7 +1371,7 @@ def buy_cubes():
 		third_byte = out[4:6]
 		fourth_byte = out[2:4]
 		take_out = Packet.COutPacket(buy_ticket_header)
-		take_out.EncodeBuffer("0F {} {} {} {} 00 00 00 00 05 {} 00".format(first_byte,second_byte,third_byte,fourth_byte,hex(start_slot).split('x')[1].zfill(2)))
+		take_out.EncodeBuffer("0F {} {} {} {} 00 00 00 00 79 3D 4D 00 05 {} 00".format(first_byte,second_byte,third_byte,fourth_byte,hex(start_slot).split('x')[1].zfill(2)))
 		print("0F {} {} {} {} 00 00 00 00 05 {} 00".format(first_byte,second_byte,third_byte,fourth_byte,hex(start_slot).split('x')[1].zfill(2)))
 		Packet.SendPacket(take_out)
 		print("out is {}".format(out))
