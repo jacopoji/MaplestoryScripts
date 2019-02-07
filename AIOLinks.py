@@ -4214,6 +4214,163 @@ def ExplorerFourth():
                         if pos.x != loot.x:
                             Character.Teleport(loot.x,loot.y)
                             time.sleep(5)
+
+def JettSecond():
+    print("Jett Second")
+    toggle_rush_by_level(False)
+    SCLib.UpdateVar("DoingJobAdv",True)
+    toDoQuest = 53236
+    toDoQuest2 = 53237
+    toDoQuest3 = 53238
+    pirateInstructor = 1090000
+    thunderhammer = 9270091
+    toGoMap = 552000071
+    quest = Quest.GetQuestState(toDoQuest)
+    quest2 = Quest.GetQuestState(toDoQuest2)
+    quest3 = Quest.GetQuestState(toDoQuest3)
+
+    pet = Inventory.FindItemByID(2434265)
+    if pet.valid:
+        Key.Set(0x41, 2, 2001582)
+        time.sleep(2)
+        Inventory.UseItem(2434265)
+        time.sleep(2)
+
+    if quest != 2:
+        if quest == 0:
+            acceptQuest(toDoQuest,pirateInstructor,field_id,field_id)
+        elif quest == 1:
+            completeQuest(toDoQuest,thunderhammer,toGoMap,toGoMap,field_id)
+    elif quest2 != 2:
+        if quest2 == 0:
+            acceptQuest(toDoQuest2,thunderhammer,toGoMap,field_id)
+        elif quest2 == 1:
+            if Quest.CheckCompleteDemand(toDoQuest2,thunderhammer) == 0:
+                if field_id == 552000072:
+                    dungeonTeleport()
+                else:
+                    completeQuest(toDoQuest2,thunderhammer,toGoMap,toGoMap,field_id)
+            else:
+                mobs = Field.GetMobs()
+                if len(mobs) != 0:
+                    toggle_kami(True)
+    elif quest3 != 2:
+        if quest3 == 0:
+            acceptQuest(toDoQuest3,thunderhammer,toGoMap,field_id)
+            toggle_rush_by_level(True)
+            SCLib.UpdateVar("DoingJobAdv",False)
+
+def JettThird():
+    print("Jett Third")
+    toggle_rush_by_level(False)
+    SCLib.UpdateVar("DoingJobAdv",True)
+    toDoQuest = 53239
+    pirateInstructor = 1090000
+    thunderhammer = 9270091
+    toGoMap = 552000071
+    quest = Quest.GetQuestState(toDoQuest)
+
+    if quest != 2:
+        if quest == 0:
+            acceptQuest(toDoQuest,thunderhammer,field_id,field_id)
+        elif quest == 1:
+            if Quest.CheckCompleteDemand(toDoQuest,thunderhammer) == 0:
+                if field_id != toGoMap:
+                    dungeonTeleport()
+                else:
+                    completeQuest(toDoQuest,thunderhammer,toGoMap,toGoMap,field_id)
+            else:
+                mobs = Field.GetMobs()
+                if len(mobs) != 0:
+                    toggle_kami(True)
+
+def JettFourth():
+    print("Jett Fourth")
+    toggle_rush_by_level(False)
+    SCLib.UpdateVar("DoingJobAdv",True)
+    toDoQuest = 53242
+    toDoQuest2 = 53243
+    toDoQuest3 = 53244
+    toDoQuest4 = 53249
+    toDoQuest5 = 53251
+    toDoQuest6 = 53252
+    toDoQuest7 = 53253
+
+    broker = 2111007
+    bedin = 2111008
+    bart = 1094000
+    eurek = 2040050
+    baroq = 9270090
+
+    quest = Quest.GetQuestState(toDoQuest)
+    quest2 = Quest.GetQuestState(toDoQuest2)
+    quest3 = Quest.GetQuestState(toDoQuest3)
+    quest4 = Quest.GetQuestState(toDoQuest4)
+    quest5 = Quest.GetQuestState(toDoQuest5)
+    quest7 = Quest.GetQuestState(toDoQuest7)
+
+    magatia = 261000000
+    labhallway = 261010000
+    desertofdreams = 260020620
+    steephill = 240010300
+    if quest != 2:
+        if quest == 0:
+            acceptQuest(toDoQuest,broker,field_id,field_id)
+        elif quest == 1:
+            if Quest.CheckCompleteDemand(toDoQuest,broker) == 0:
+                completeQuest(toDoQuest,broker,magatia,magatia,field_id)
+            else:
+                pieceOfSteel = 4000357
+                hardenedPieceOfSteel = 4000358
+                wires = 4000364
+                if Inventory.FindItemByID(pieceOfSteel).count < 50:
+                    rush(261020600)
+                elif Inventory.FindItemByID(hardenedPieceOfSteel).count < 50:
+                    rush(261020700)
+                else:
+                    rush(261020400)
+                toggle_kami(True)
+                toggleAttack(True)
+    elif quest2 != 2:
+        if quest2 == 0:
+            acceptQuest(toDoQuest2,broker,magatia,field_id)
+        elif quest2 == 1:
+            completeQuest(toDoQuest2,bedin,labhallway,labhallway,field_id)
+    elif quest3 != 2:
+        if quest3 == 0:
+            acceptQuest(toDoQuest3,broker,magatia,field_id)
+        elif quest3 == 1:
+            if Quest.CheckCompleteDemand(toDoQuest3,broker) == 0:
+                completeQuest(toDoQuest3,broker,magatia,magatia,field_id)
+            elif field_id != desertofdreams:
+                rush(desertofdreams)
+            elif field_id == desertofdreams:
+                teleport_enter(-935,455)
+                time.sleep(5)
+    elif quest4 != 2:
+        if quest4 == 0:
+            acceptQuest(toDoQuest4,bart,field_id,field_id)
+        elif quest4 == 1:
+            message = 2430752
+            if Quest.CheckCompleteDemand(toDoQuest4,bart) == 0:
+                Quest.CompleteQuest(toDoQuest4,bart)
+            if Inventory.FindItemByID(message).valid:
+                Inventory.UseItem(message)
+    elif quest5 != 2:
+        if quest5 == 0:
+            acceptQuest(toDoQuest5,eurek,field_id,field_id)
+        elif quest5 == 1:
+            if Quest.CheckCompleteDemand(toDoQuest6,baroq) == 0:
+                Quest.CompleteQuest(toDoQuest6,baroq)
+            else:
+                toggle_kami(True)
+    elif quest7 != 2:
+        if quest7 == 1:
+            if field_id != steephill:
+                rush(steephill)
+            else:
+                teleport_enter(441,332)
+
 def KinesisFirst():
     print("Kinis")
 
@@ -5728,13 +5885,21 @@ def toggleAttack(on):
     elif job == 511: #Marauder
         attackAuto(5111002,on)
     elif job == 512: #Buccaneer
-        attackAuto(5121020,on)
+        attackAuto(5121007,on)
     elif job == 520: #Gunslinger
         attackAuto(5201001,on)
     elif job == 521: #Outlaw
         attackAuto(5211008,on)
     elif job == 522: #Corsair
         attackAuto(5221004,on)
+    elif job == 508: #Jett 1st
+        attackAuto(5081020,on)
+    elif job == 570: #Jett 2nd
+        attackAuto(5081020,on)
+    elif job == 571: #Jett 3rd
+        attackAuto(5081020,on)
+    elif job == 572: #Jett 4th
+        attackAuto(5081020,on)
     elif job == 11212: #Beast Tamer
         if level <= 17:
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -6407,6 +6572,26 @@ elif job in explorerFourthJobs and field_id == 240010501:
     toggle_rush_by_level(True)
     toggle_kami(True)
     SCLib.UpdateVar("DoingJobAdv",False)
+elif job == 508 and level == 10 and field_id == 120000100:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
+elif job == 508 and level >= 30:
+    JettSecond()
+elif job == 570 and level < 40 and field_id == 552000071:
+    teleport_enter(53,214)
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
+elif job == 570 and level >= 60:
+    JettThird()
+elif job == 571 and level < 70 and field_id == 552000071:
+    teleport_enter(53,214)
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
+elif job == 571 and level >= 100:
+    JettFourth()
 elif (job == 14000 or job == 14200) and field_id != 101020400 and Quest.GetQuestState(22733) != 2:
     print("Doing Kinesis First Job")
     KinesisFirst()
