@@ -1297,6 +1297,7 @@ if not Terminal.IsRushing() and not accountData['daily_done'] and not accountDat
     if SCLib.CheckVersion(22):
         if SCLib.GetVar("CurDaily") is None:
             initAttack()
+            time.sleep(2)
         initVars()
         curDaily = SCLib.GetVar("CurDaily")
         if GameState.IsInGame():
