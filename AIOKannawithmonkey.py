@@ -1768,10 +1768,12 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		elif Terminal.IsAutoDying():
 			SCLib.UpdateVar("farm_counter",0)
 		if Character.HasBuff(2,runebuff_id):
-			Character.TakeDamage(30000)
+			if Character.GetHP() != 0:
+				Character.TakeDamage(50000)
 			print("Suiciding to cancel buff")
 		print("Sleeping for 30 seconds to farm")
-		time.sleep(30)
+		if not Character.HasBuff(2,runebuff_id):
+			time.sleep(30)
 		"""
 		if Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
 			nEmptySlotPOS = 0

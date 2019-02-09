@@ -208,8 +208,6 @@ EvanJobs = [2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218]
 IlliumJobs = [15200,15210,15211,15212]
 CadenaJobs = [6400,6410,6411,6412]
 KinesisJobs = [14200,14210,14211,14212]
-BlazeWizardJobs = [1200,1210,1211,1212]
-
 #explorer jobs
 #thief
 ShadowerJobs = [400,420,421,422]
@@ -236,6 +234,18 @@ explorerFirstJobs = [100,200,300,400,500,501]
 explorerSecondJobs = [110,120,130,210,220,230,310,320,410,420,430,510,520,530]
 explorerThirdJobs = [111,121,131,211,221,231,311,321,411,421,431,511,521,531]
 explorerFourthJobs = [112,122,132,212,222,232,312,322,412,422,432,512,522,532]
+
+#Cygnus Jobs=
+DawnWarriorJobs = [1100,1110,1111,1112]
+BlazeWizardJobs = [1200,1210,1211,1212]
+WindArcherJobs  = [1300,1310,1311,1312]
+NightWalkerJobs = [1400,1410,1411,1412]
+ThunderBreakerJobs=[1500,1510,1511,1512]
+
+cygnusFirstJobs = [1100,1200,1300,1400,1500]
+cygnusSecondJobs= [1110,1210,1310,1410,1510]
+cygnusThirdJobs = [1111,1211,1311,1411,1511]
+cygnusFourthJobs= [1112,1212,1312,1412,1512]
 
 
 NpcTylusWarriorInstructor = 2020008
@@ -3654,6 +3664,7 @@ def ExplorerFirst():
     print("Doing explorer job adv")
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
+    
     if SCLib.GetVar("Cannoneer"):
         CannoneerFirst()
     elif SCLib.GetVar("DualBlade"):
@@ -3671,6 +3682,7 @@ def ExplorerFirst():
             time.sleep(5)
             
         if Character.GetLevel() == 2:
+            toggle_kami(False)
             if Field.GetID() == 4000020:
                 Character.Teleport(1614 ,154)
                 time.sleep(5)
@@ -3678,32 +3690,39 @@ def ExplorerFirst():
                 time.sleep(3)
                 Character.TalkToNpc(10304)
         if Character.GetLevel() == 3:
+            toggle_kami(False)
             if Field.GetID() == 4000020:
                 Character.Teleport(2197, 274)
                 Character.EnterPortal()
         if Field.GetID() == 4000021:
+            toggle_kami(False)
             Character.Teleport(683, 215)
             time.sleep(3)
             Character.EnterPortal()
         if Field.GetID() == 4000026:
+            toggle_kami(False)
             Character.Teleport(765, 215)
             time.sleep(3)
             Character.EnterPortal()
         if Character.GetLevel() ==3:
+            toggle_kami(False)
             if Field.GetID() == 4000030:
                 Character.Teleport(2506, 287)
                 time.sleep(3)
                 Character.EnterPortal()      
         if Field.GetID() == 4000031:
+            toggle_kami(False)
             if Character.GetLevel() ==3:
                 Character.Teleport(1962, 407)
                 time.sleep(5)
                 Quest.CompleteQuest(32211, 10305)
         if Character.GetLevel() ==4:
+            toggle_kami(False)
             Quest.StartQuest(32212, 10305)
             time.sleep(5)
             Quest.CompleteQuest(32212, 10306)
         if Character.GetLevel() ==5:
+            toggle_kami(False)
             Quest.StartQuest(32213, 10306)
             if Quest.GetQuestState(32213) == 1:
                 if Field.GetID() == 4000031:
@@ -3727,16 +3746,14 @@ def ExplorerFirst():
             
         if Character.GetLevel() == 6:
             if Field.GetID() == 4000030:
-                Character.EnterPortal()
-                time.sleep(2)
-                if Field.GetID() == 4000030:
-                    rush(4000031)
+                teleport_enter(2506,282)
             if Field.GetID() == 4000031:
                 Character.Teleport(1835, 407)
                 time.sleep(5)
                 Quest.StartQuest(32214, 10305)
                 if Quest.GetQuestState(32214) ==1:
                     Character.EnterPortal()
+                
             mano()
         if Character.GetLevel() == 7:
             Warrior = 0
@@ -3975,6 +3992,7 @@ def ExplorerThird():
     pirateQuest = 1444
     gunslingerQuest = 1446
     brawlerQuest = 1445
+    dualbladeQuest = 1447
     cannoneerQuest = 1448
 
 
@@ -4074,7 +4092,12 @@ def ExplorerThird():
         Instructor = pirateInstructor
         Chief = PirateChief
         toGoMap = pirateMap
-
+    elif job in DualbladeJobs:
+        toDoQuest = thiefQuest
+        toDoQuest2 = dualbladeQuest
+        Instructor = thiefInstructor
+        Chief = ThiefChief
+        toGoMap = thiefMap
     quest = Quest.GetQuestState(toDoQuest)
     quest2= Quest.GetQuestState(toDoQuest2)
     if quest != 2:
@@ -4101,6 +4124,9 @@ def ExplorerThird():
                         SCLib.UpdateVar("DoingJobAdv",False)
                         toggle_rush_by_level(True)
             elif field_id == el_nath_map:
+                if pos.x != 27 and pos.y != 454:
+                    Character.Teleport(27, 454)
+                    time.sleep(3)
                 Character.TalkToNpc(HolyStone)
             elif field_id == RadiantCrystalPassageway:
                 dungeonTeleport()
@@ -4121,6 +4147,12 @@ def ExplorerThird():
                 else:
                     toggle_kami(True)
                     toggleAttack(True)
+            elif field_id != 211040300:
+                rush(211040300)
+                time.sleep(3)
+                toggleAttack(False)
+                teleport_enter(31,454)
+                time.sleep(1)
     
     if Quest.GetQuestState(toDoQuest2) == 2:
         SCLib.UpdateVar("DoingJobAdv",False)
@@ -4160,7 +4192,7 @@ def ExplorerFourth():
     ForestOfThePriest = 240010501
     ManonForest = 924000200
     GriffeyForest = 924000201
-    if job in NightlordJobs or job in ShadowerJobs:
+    if job in NightlordJobs or job in ShadowerJobs or job in DualbladeJobs:
         toDoQuest = thiefQuest
         toDoQuest2 = thiefQuest2
         Instructor = thiefInstructor
@@ -4275,6 +4307,546 @@ def ExplorerFourth():
                         if pos.x != loot.x:
                             Character.Teleport(loot.x,loot.y)
                             time.sleep(5)
+
+def CygnusFirst():
+    #map 1
+    toggle_rush_by_level(False)
+    SCLib.UpdateVar("DoingJobAdv",True)
+    toggle_kami(False)
+
+    if field_id == 130030000:
+        quest_state = Quest.GetQuestState(20820)
+        if quest_state == 0:
+            Quest.StartQuest(20820, 1102101)
+    #map 2
+    elif field_id == 130030100:
+        quest1 = Quest.GetQuestState(20821)
+        quest2 = Quest.GetQuestState(20822)
+        if quest1 != 2:
+            if quest1 == 0:
+                Quest.StartQuest(20821, 1102101)
+            elif quest1 == 1:
+                Quest.CompleteQuest(20821, 1102100)
+        else:
+            if quest2 == 0:
+                Quest.StartQuest(20822, 1102100)
+            elif quest2 == 1:
+                Quest.CompleteQuest(20822, 1102101)
+    #map 3
+    elif field_id == 130030101:
+        quest1 = Quest.GetQuestState(20823)
+        quest2 = Quest.GetQuestState(20824)
+        quest3 = Quest.GetQuestState(20825)
+        quest4 = Quest.GetQuestState(20826)
+        quest5 = Quest.GetQuestState(20827)
+        if quest1 != 2:
+            if quest1 == 0:
+                Quest.StartQuest(20823, 1102101)
+            elif quest1 == 1:
+                Quest.CompleteQuest(20823, 1102101)
+        elif quest2 != 2:
+            if quest2 == 0:
+                Quest.StartQuest(20824, 1102101)
+            elif quest2 == 1:
+                equip = Inventory.FindItemByID(1003769)
+                if equip.valid:
+                    Inventory.SendChangeSlotPositionRequest(1, equip.pos, -1, -1)
+                elif Character.GetEquippedItemIDBySlot(-1) == 1003769:
+                    Quest.CompleteQuest(20824, 1102101)
+        elif quest3 != 2:
+            if quest3 == 0:
+                Quest.StartQuest(20825, 1102103)
+            elif quest3 == 1:
+                Quest.CompleteQuest(20825, 1102103)
+        elif quest4 != 2:
+            if quest4 == 0:
+                Quest.StartQuest(20826, 1102103)
+            elif quest4 == 1:
+                Quest.CompleteQuest(20826, 1102112)
+        elif quest5 != 2:
+            if quest5 == 0:
+                Quest.StartQuest(20827, 1102101)
+            elif quest5 == 1:
+                portal = Field.FindPortal("next00")
+                if portal.valid:
+                    Character.Teleport(portal.x, portal.y)
+                    time.sleep(1)
+                    Character.EnterPortal()
+                    time.sleep(1)
+    #map 4
+    elif field_id == 130030102:
+        quest1 = Quest.GetQuestState(20827)
+        quest2 = Quest.GetQuestState(20828)
+        if quest1 != 2:
+            Quest.CompleteQuest(20827, 1102114)
+        elif quest2 == 0:
+            Quest.StartQuest(20828, 1102114)
+        elif quest2 == 1:
+            Character.Teleport(-2524, -173)
+            time.sleep(1)
+            Quest.CompleteQuest(20828, 1102101)
+    #map 5
+    elif field_id == 130030103:
+        quest1 = Quest.GetQuestState(20829)
+        quest2 = Quest.GetQuestState(20830)
+        quest3 = Quest.GetQuestState(20831)
+        quest4 = Quest.GetQuestState(20832)
+        quest5 = Quest.GetQuestState(20833)
+        if quest1 != 2:
+            if quest1 == 0:
+                Quest.StartQuest(20829, 1102102)
+            if quest1 == 1:
+                if Quest.CheckCompleteDemand(20829, 1102102) == 0:
+                    Quest.CompleteQuest(20829, 1102102)
+                else:
+                    # kill mobs
+                    pos = Character.GetPos()
+                    if pos.y >= 29:
+                        # move up
+                        if pos.x < -430:
+                            # move right
+                            Character.AMoveX(-430)
+                        elif pos.x > -280:
+                            # move left
+                            Character.AMoveX(-280)
+                        else:
+                            Character.Jump()
+                    else:
+                        # move and attack
+                        mob = Field.FindMob(9300730)
+                        if mob.valid:
+                            if pos.x < mob.x:
+                                if pos.x < mob.x - 100:
+                                    # move right
+                                    Character.MoveX(mob.x - 100, 10000)
+                                else:
+                                    # face right
+                                    Character.AMoveX(pos.x + 1)
+                            else:
+                                if pos.x > mob.x + 100:
+                                    # move left
+                                    Character.MoveX(mob.x + 100, 10000)
+                                else:
+                                    # face left
+                                    Character.AMoveX(pos.x - 1)
+                            Character.BasicAttack()
+        elif quest2 != 2:
+            if quest2 == 0:
+                Quest.StartQuest(20830, 1102101)
+            elif quest2 == 1:
+                Inventory.UseItem(2001555)
+                time.sleep(1)
+                Quest.CompleteQuest(20830, 1102101)
+        elif quest3 != 2:
+            if quest3 == 0:
+                Quest.StartQuest(20831, 1102102)
+            elif quest3 == 1:
+                if Quest.CheckCompleteDemand(20831, 1102102) == 0:
+                    Quest.CompleteQuest(20831, 1102102)
+                else:
+                    pos = Character.GetPos()
+                    if pos.y >= 29:
+                        # move up
+                        if pos.x < -430:
+                            # move right
+                            Character.AMoveX(-430)
+                        elif pos.x > -280:
+                            # move left
+                            Character.AMoveX(-280)
+                        else:
+                            Character.Jump()
+                    else:
+                        # move and attack and pickup
+                        dropitem = Field.FindItem(4000489)
+                        if dropitem.valid:
+                            if pos.x < dropitem.x - 25:
+                                # move right
+                                Character.MoveX(dropitem.x - 25, 10000)
+                            elif pos.x > dropitem.x + 25:
+                                # move left
+                                Character.MoveX(dropitem.x + 25, 10000)
+                            Character.LootItem()
+                        else:
+                            mob = Field.FindMob(9300730)
+                            if mob.valid:
+                                if pos.x < mob.x:
+                                    if pos.x < mob.x - 100:
+                                        # move right
+                                        Character.MoveX(mob.x - 100, 10000)
+                                    else:
+                                        # face right
+                                        Character.AMoveX(pos.x + 1)
+                                else:
+                                    if pos.x > mob.x + 100:
+                                        # move left
+                                        Character.MoveX(mob.x + 100, 10000)
+                                    else:
+                                        # face left
+                                        Character.AMoveX(pos.x - 1)
+                                Character.BasicAttack()
+        elif quest4 != 2:
+            Quest.StartQuest(20832, 1102102)
+        elif quest5 != 2:
+            Quest.StartQuest(20833, 1102113)
+    elif field_id == 130030104:
+        quest1 = Quest.GetQuestState(20833)
+        quest2 = Quest.GetQuestState(20834)
+        quest3 = Quest.GetQuestState(20835)
+        if quest1 != 2:
+            Quest.CompleteQuest(20833, 1102113)
+        else:
+            if quest2 != 2:
+                if quest2 == 0:
+                    Quest.StartQuest(20834, 1102106)
+                elif quest2 == 1:
+                    Quest.CompleteQuest(20834, 1102107)
+            elif quest3 == 0: 
+                Quest.StartQuest(20835, 1102107)
+            elif quest3 == 1:
+                Quest.CompleteQuest(20835, 1102112)
+            elif quest3 == 2:
+                Quest.StartQuest(20836, 1102102)
+    elif field_id == 130030105:
+        quest1 = Quest.GetQuestState(20836)
+        quest2 = Quest.GetQuestState(20837)
+        if quest1 != 2:
+            Quest.CompleteQuest(20836, 1102102)
+        elif quest2 == 0:
+            Key.Set(0x43, 1, 10001244) # 'C'
+            time.sleep(1)
+            Quest.StartQuest(20837, 1102102)
+        elif quest2 == 1:
+            if Quest.CheckCompleteDemand(20837, 1102102) == 0:
+                Quest.CompleteQuest(20837, 1102102)
+            else:
+                # kill mobs
+                pos = Character.GetPos()
+                if pos.y >= 30:
+                    # move up
+                    if pos.x < -430:
+                        # move right
+                        Character.AMoveX(-430)
+                    elif pos.x > -280:
+                        # move left
+                        Character.AMoveX(-280)
+                    else:
+                        Character.Jump()
+                else:
+                    # move and attack
+                    mob = Field.FindMob(9300731)
+                    if mob.valid:
+                        Character.AMoveX(mob.x)
+                        Key.Press(0x43) # 'C'
+    elif field_id == 130030106:
+        quest1 = Quest.GetQuestState(20838)
+        quest2 = Quest.GetQuestState(20839)
+        if quest1 == 0:
+            Quest.StartQuest(20838, 1102104)
+        elif quest1 == 1:
+            if Quest.CheckCompleteDemand(20838, 1102104) == 0:
+                Quest.CompleteQuest(20838, 1102104)
+            else:
+                rope_x = 2201
+                rope_y = -152
+                reactor_x = 1861
+                reactor_y = -212
+                pos = Character.GetPos()
+                if pos.y > rope_y:
+                    if pos.x < rope_x:
+                        Character.MoveX(rope_x - 50, 10000)
+                        Character.Jump()
+                        Character.MoveY(rope_y, 2000)
+                    elif pos.x > rope_x:
+                        Character.MoveX(rope_x + 50, 10000)
+                        Character.Jump()
+                        Character.MoveY(rope_y, 2000)
+                    else:
+                        Character.MoveY(rope_y, 10000)
+                elif pos.y == rope_y:
+                    Character.MoveX(2160, 10000)
+                    Character.Jump()
+                elif pos.y == reactor_y:
+                    if pos.x < reactor_x - 10:
+                        Character.MoveX(reactor_x - 10, 10000)
+                    elif pos.x > reactor_x + 10:
+                        Character.MoveX(reactor_x + 10, 10000)
+                    dropitem = Field.FindItem(4033670)
+                    if dropitem.valid:
+                        if pos.x < dropitem.x - 25:
+                            Character.MoveX(dropitem.x - 25, 10000)
+                        elif pos.x > dropitem.x + 25:
+                            Character.MoveX(dropitem.x + 25, 10000)
+                        Character.LootItem()
+                    else:
+                        Character.BasicAttack()
+                else:
+                    # ??? reset pls ???
+                    Character.MoveX(2600, 20000)
+        elif quest2 == 0:
+            Quest.StartQuest(20839, 1102100)
+        else:
+            portal = Field.FindPortal("next00")
+            if portal.valid:
+                Character.Teleport(portal.x, portal.y)
+                time.sleep(1)
+                Character.EnterPortal()
+                time.sleep(1)
+    elif field_id == 130030006:
+        portal = Field.FindPortal("west00")
+        if portal.valid:
+            Character.Teleport(portal.x, portal.y)
+            time.sleep(1)
+            Character.EnterPortal()
+            time.sleep(1)
+
+    elif field_id == 130000000:
+        quest1 = Quest.GetQuestState(20839)
+        quest2 = Quest.GetQuestState(20860)
+
+        done_list = accountData['done_links']
+        if "Blaze Wizard" not in done_list:
+            targetJobQuest =  20862
+            Instructor = 1101004
+        elif "Dawn Warrior" not in done_list:
+            targetJobQuest = 20861
+            Instructor = 1101003
+        elif "Wind Archer" not in done_list:
+            targetJobQuest = 20863
+            Instructor = 1101005
+        elif "Night Walker" not in done_list:
+            targetJobQuest = 20864
+            Instructor = 1101006
+        elif "Thunder Breaker" not in done_list:
+            targetJobQuest = 20865
+            Instructor = 1101007
+        quest3 = Quest.GetQuestState(targetJobQuest)
+        if quest1 == 1:
+            Character.Teleport(189, 88)
+            time.sleep(1)
+            Quest.CompleteQuest(20839, 1101000)
+        elif quest1 == 2:
+            if quest2 == 0:
+                Quest.StartQuest(20860, 1101002)
+            elif quest2 == 1:
+                Quest.CompleteQuest(20860, 1101002)
+
+            elif quest2 == 2:
+                if quest3 == 0:
+                    if Character.GetPos().x != -870:
+                        Character.Teleport(-870, 88)
+                    time.sleep(1)
+                    Quest.StartQuest(targetJobQuest, Instructor)
+                elif quest3 == 1:
+                    Quest.CompleteQuest(targetJobQuest, Instructor)
+                    toggle_rush_by_level(True)
+                    SCLib.UpdateVar("DoingJobAdv",False)
+                    toggle_kami(True)
+
+def CygnusSecond():
+    toggle_rush_by_level(False)
+    SCLib.UpdateVar("DoingJobAdv",True)
+
+    if job in BlazeWizardJobs:
+        targetJobQuest =  20872
+        Instructor = 1101004
+    elif job in DawnWarriorJobs:
+        targetJobQuest = 20871
+        Instructor = 1101003
+    elif job in WindArcherJobs:
+        targetJobQuest = 20873
+        Instructor = 1101005
+    elif job in NightWalkerJobs:
+        targetJobQuest = 20874
+        Instructor = 1101006
+    elif job in ThunderBreakerJobs:
+        targetJobQuest = 20875
+        Instructor = 1101007
+    quest1 = Quest.GetQuestState(20870)
+
+    quest2 = Quest.GetQuestState(targetJobQuest)
+    if quest1 == 0:
+        Quest.StartQuest(20870, 1101002)
+    elif quest1 == 1:
+        if field_id != 130000000:
+            Terminal.Rush(130000000)
+        else:
+            if Character.GetPos().x != -870:
+                Character.Teleport(-870, 88)
+                time.sleep(1)
+            Quest.CompleteQuest(20870, 1101002)
+    elif quest2 == 0:
+        if field_id != 130000000:
+            Terminal.Rush(130000000)
+        else:
+            if Character.GetPos().x != -870:
+                Character.Teleport(-870, 88)
+                time.sleep(1)
+            Quest.StartQuest(targetJobQuest, Instructor)
+    elif quest2 == 1:
+        if field_id == 913001000 or field_id == 913001001 or field_id == 913001002:
+            if Quest.CheckCompleteDemand(targetJobQuest, Instructor) == 0:
+                # leave that map
+                Character.TalkToNpc(1102001)
+            else:
+                # bot should be attacking now and killing mobs cause of the settings inside terminal (fma, flame orb hack auto att, blabla)
+                toggle_kami(True)
+                time.sleep(1)
+        elif field_id == 130020000:
+            if Quest.CheckCompleteDemand(targetJobQuest, Instructor) == 0:
+                Terminal.Rush(130000000)
+            else:
+                portal = Field.FindPortal("in01")
+                if portal.valid:
+                    Character.Teleport(portal.x, portal.y - 20)
+                    time.sleep(1)
+                    Character.EnterPortal()
+        elif field_id == 130000000:
+            if Quest.CheckCompleteDemand(targetJobQuest, Instructor) == 0:
+                if Character.GetPos().x != -870:
+                    Character.Teleport(-870, 88)
+                    time.sleep(1)
+                Quest.CompleteQuest(targetJobQuest, Instructor)
+                toggle_rush_by_level(True)
+                SCLib.UpdateVar("DoingJobAdv",False)
+                toggle_kami(True)
+            else:
+                Terminal.Rush(130020000)
+        else:
+            if Quest.CheckCompleteDemand(targetJobQuest, Instructor) == 0:
+                Terminal.Rush(130000000)
+            else:
+                Terminal.Rush(130020000)
+
+def CygnusThird():
+    toggle_rush_by_level(False)
+    SCLib.UpdateVar("DoingJobAdv",True)
+    quest1 = Quest.GetQuestState(20880)
+    quest2 = Quest.GetQuestState(20881)
+    quest3 = Quest.GetQuestState(20882)
+    quest4 = Quest.GetQuestState(20883)
+    if quest1 != 2:
+        print("1")
+        if quest1 == 0:
+            Quest.StartQuest(20880, 1101002)
+        elif quest1 == 1:
+            if field_id == 222020100:
+                portal = Field.FindPortal("in01")
+                if portal.valid:
+                    Character.Teleport(portal.x, portal.y-20)
+                    time.sleep(1)
+                    Character.EnterPortal()
+            elif field_id == 222020000:
+                Quest.CompleteQuest(20880, 2040052)
+            else:
+                Terminal.Rush(222020000)
+    elif quest2 != 2:
+        print("2")
+        if quest2 == 0:
+            if field_id == 222020000:
+                Quest.StartQuest(20881, 2040052)
+            else:
+                Terminal.Rush(222020000)
+        elif quest2 == 1:
+            if field_id == 222020000:
+                portal = Field.FindPortal("in00")
+                if portal.valid:
+                    Character.Teleport(portal.x, portal.y-20)
+                    time.sleep(1)
+                    Character.EnterPortal()
+            elif field_id == 922030400:
+                Quest.CompleteQuest(20881, 1104302)
+            else:
+                Terminal.Rush(222020000)
+    elif quest3 != 2:
+        print("3")
+        if quest3 == 0:
+            if field_id == 922030400:
+                Quest.StartQuest(20882, 1104302)
+        elif quest3 == 1:
+            print("doing 3")
+            if field_id == 922030400:
+                if Quest.CheckCompleteDemand(20882, 1104303) == 0:
+                    Quest.CompleteQuest(20882, 1104303)
+                    print("Turn on kill settings")
+                else:
+                    time.sleep(1) #bot should kill mobs cause of terminal settings
+                    toggle_kami(True)
+            elif field_id != 922030400:
+                if len(Field.GetMobs()) == 0 and Quest.CheckCompleteDemand(20882, 1104303) != 0:
+                    rush(222020000)
+                    time.sleep(3)
+                    teleport_enter(372,-435)
+    elif quest4 != 2:
+        print("4")
+        if quest4 == 0:
+            if field_id == 922030400:
+                Quest.StartQuest(20883, 1104303)
+            elif field_id != 922030400:
+                rush(922030400)
+        elif quest4 == 1:
+            if field_id == 130000000:
+                Quest.CompleteQuest(20883, 1101002)
+            else:
+                Terminal.Rush(130000000)
+
+def CygnusFourth():
+    toggle_rush_by_level(False)
+    SCLib.UpdateVar("DoingJobAdv",True)
+    quest1 = Quest.GetQuestState(20890)
+    quest2 = Quest.GetQuestState(20891)
+    quest3 = Quest.GetQuestState(20892)
+    quest4 = Quest.GetQuestState(20893)
+    quest5 = Quest.GetQuestState(20894)
+    if quest1 != 2:
+        print('1')
+        if quest1 == 0:
+            Quest.StartQuest(20890, 1101002)
+        elif quest1 == 1:
+            if field_id == 913031003:
+                Quest.CompleteQuest(20890, 1104300)
+    elif quest2 != 2:
+        print("2")
+        if quest2 == 0:
+            if Character.GetPos().x != 553:
+                Character.Teleport(553,1310)
+            time.sleep(1)
+            Quest.StartQuest(20891, 1104300)
+        elif quest2 == 1:
+            if field_id == 913031003:
+                Quest.CompleteQuest(20891, 1102112)
+    elif quest3 != 2:
+        print("3")
+        if field_id == 130000000:
+            if quest3 == 0:
+                Quest.StartQuest(20892, 1101002)
+            elif quest3 == 1:
+                Quest.CompleteQuest(20892, 1101000)
+        else:
+            Terminal.Rush(130000000)
+    elif quest4 != 2: #913031002
+        print("4")
+        if quest4 == 0:
+            time.sleep(1)
+            Quest.StartQuest(20893, 1101000)
+        elif quest4 == 1:
+            if field_id == 913031002:
+                time.sleep(1) #let bot kill cygnus boss
+                toggle_kami(True)
+            elif field_id == 130000000:
+                Quest.CompleteQuest(20893, 1101000)
+            else:
+                time.sleep(1)
+    elif quest5 != 2:
+        print("5")
+        if quest5 == 0:
+            if field_id == 130000000:
+                Quest.StartQuest(20894, 1101000)
+        elif quest5 == 1:
+            Quest.CompleteQuest(20894,1101000)
+            time.sleep(1)
+            toggle_rush_by_level(True)
+            SCLib.UpdateVar("DoingJobAdv",False)
+            toggle_kami(True)
 
 def JettSecond():
     print("Jett Second")
@@ -5667,6 +6239,14 @@ def id2str(jobid):
         return "Cannoneer"
     elif jobid in JettJobs:
         return "Jett"
+    elif jobid in DawnWarriorJobs:
+        return "Dawn Warrior"
+    elif jobid in NightWalkerJobs:
+        return "Night Walker"
+    elif jobid in WindArcherJobs:
+        return "Wind Archer"
+    elif jobid in ThunderBreakerJobs:
+        return "Thunder Breaker"
     else:
         return "Unkown Job"+str(jobid)
 
@@ -6850,6 +7430,38 @@ def toggleAttack(on):
         attackAuto(5081020,on)
     elif job == 572: #Jett 4th
         attackAuto(5081020,on)
+    elif job == 1100: #Dawn warrior 1st
+        attackAuto(11001020,on)
+    elif job == 1110: #Dawn Warrior 2nd
+        attackAuto(11101120,on)
+    elif job == 1111: #Dawn Warrior 3rd
+        attackAuto(11111220,on)
+    elif job == 1112: #Dawn Warrior 4th
+        attackAuto(11121203,on)
+    elif job == 1300: #Wind Archer 1st
+        attackAuto(13001020,on)
+    elif job == 1310: #Wind Archer 2nd
+        attackAuto(13101021,on)
+    elif job == 1311: #Wind Archer 3rd
+        attackAuto(13111020,on)
+    elif job == 1312: #Wind Archer 4th
+        attackAuto(13121002,on)
+    elif job == 1400: #Night Walker 1st
+        attackAuto(14001020,on)
+    elif job == 1410: #Night Walker 2nd
+        attackAuto(14101020,on)
+    elif job == 1411: #Night Walker 3rd
+        attackSI(14111022,on)
+    elif job == 1412: #Night Walker 4th
+        attackSI(14111022,on)
+    elif job == 1500: #Thunder breaker 1st
+        attackAuto(15001020,on)
+    elif job == 1510: #Thunder breaker 2nd
+        attackAuto(15101020,on)
+    elif job == 1511: #Thunder breaker 3rd
+        attackAuto(15111020,on)
+    elif job == 1512: #Thunder breaker 4th
+        attackAuto(15121001,on)
     elif job == 11212: #Beast Tamer
         if level <= 17:
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -7471,7 +8083,7 @@ elif job == 200 and level < 11:
     wand = Inventory.FindItemByID(1372043)
     if wand.valid:
         Inventory.SendChangeSlotPositionRequest(1,wand.pos,weapon_slot,-1)
-elif job == 300 and level < 11:
+elif (job == 300 or job == 1300)and level < 11:
     bow = Inventory.FindItemByID(1452051)
     if bow.valid:
         Inventory.SendChangeSlotPositionRequest(1,bow.pos,weapon_slot,-1)
@@ -7490,16 +8102,16 @@ elif job == CorsairJobs[1] and level < 31:
 elif job in explorerFirstJobs and level >= 30 and not SCLib.GetVar("DualBlade"):
     print("Doing Explorer Second Job")
     ExplorerSecond()
-elif job == 400 and level>=20 and SCLib.GetVar("DualBlade"):
+elif job == 400 and level>=20 and SCLib.GetVar("DualBlade")  and not SCLib.GetVar("DoingCurbrock"):
     DualbladeSecond()
-elif job == 430 and level>=30:
+elif job == 430 and level>=30 and not SCLib.GetVar("DoingCurbrock"):
     DualBladeThird()
-elif job == 431 and level>=45:
+elif job == 431 and level>=45 and not SCLib.GetVar("DoingCurbrock"):
     DualBladeFourth()
-elif job == 432 and level>=60:
-    DualBladeFifth()
-elif job == 433 and level >= 100:
-    DualBladeSixth()
+elif job == 432 and level>=60 and not SCLib.GetVar("DoingCurbrock"):
+    ExplorerThird()
+elif job == 433 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
+    ExplorerFourth()
 elif job == DarkknightJobs[1] and level <32 and Inventory.GetItem(1,weapon_slot).id != 1432002:
     print("Check spear")
     forkspearid = 1432002
@@ -7532,10 +8144,10 @@ elif job == MarksmanJobs[1] and level <32 and (Inventory.GetItem(1,weapon_slot).
         Terminal.SetPushButton("Leave shop",True)
         time.sleep(1)
         Terminal.SetPushButton("Leave shop",False)
-elif job in explorerSecondJobs and level >= 60:
+elif job in explorerSecondJobs and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     print("Doing Explorer Third Job")
     ExplorerThird()
-elif job in explorerThirdJobs and level >= 100:
+elif job in explorerThirdJobs and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
     print("Doing Explorer Fourth Job")
     ExplorerFourth()
 elif job in explorerFourthJobs and field_id == 240010501:
@@ -7547,22 +8159,42 @@ elif job == 508 and level == 10 and field_id == 120000100:
     toggle_rush_by_level(True)
     toggle_kami(True)
     SCLib.UpdateVar("DoingJobAdv",False)
-elif job == 508 and level >= 30:
+elif job == 508 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
     JettSecond()
 elif job == 570 and level < 40 and field_id == 552000071:
     teleport_enter(53,214)
     toggle_rush_by_level(True)
     toggle_kami(True)
     SCLib.UpdateVar("DoingJobAdv",False)
-elif job == 570 and level >= 60:
+elif job == 570 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     JettThird()
 elif job == 571 and level < 70 and field_id == 552000071:
     teleport_enter(53,214)
     toggle_rush_by_level(True)
     toggle_kami(True)
     SCLib.UpdateVar("DoingJobAdv",False)
-elif job == 571 and level >= 100:
+elif job == 571 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
     JettFourth()
+elif job == 1000 and not SCLib.GetVar("DoingCurbrock"):
+    CygnusFirst()
+elif job in cygnusFirstJobs and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
+    CygnusSecond()
+elif job in cygnusSecondJobs and level <60 and field_id == 130000000:
+    toggle_rush_by_level(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
+    toggle_kami(True)
+elif job in cygnusSecondJobs and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
+    CygnusThird()
+elif job in cygnusThirdJobs and level < 100 and field_id == 130000000:
+    toggle_rush_by_level(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
+    toggle_kami(True)
+elif job in cygnusThirdJobs and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
+    CygnusFourth()
+elif job in cygnusFourthJobs and field_id == 130000000:
+    toggle_rush_by_level(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
+    toggle_kami(True)
 elif (job == 14000 or job == 14200) and field_id != 101020400 and Quest.GetQuestState(22733) != 2:
     print("Doing Kinesis First Job")
     KinesisFirst()
@@ -7571,13 +8203,13 @@ elif job == 14200 and field_id == 101020400:
     toggle_rush_by_level(True)
     toggle_kami(True)
     SCLib.UpdateVar("DoingJobAdv",False)
-elif job == 14200 and level >= 30:
+elif job == 14200 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
     print("Kinesis Second Job")
     KinesisSecond()
-elif job == 14210 and level >= 60:
+elif job == 14210 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     print("Kinesis Third Job")
     KinesisThird()
-elif job == 14211 and level >= 100 and not SCLib.GetVar("DoingZakum"):
+elif job == 14211 and level >= 100 and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock"):
     print("Kinesis Fourth Job")
     KinesisFourth()
 ###### lvl 50 hyper rock #######
