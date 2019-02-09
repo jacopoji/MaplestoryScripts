@@ -7481,6 +7481,18 @@ def toggleAttack(on):
         attackAuto(11111220,on)
     elif job == 1112: #Dawn Warrior 4th
         attackAuto(11121203,on)
+    elif job == 1200: #BW 1st
+        attackAuto(12000026,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 1210: #BW 2nd
+        attackAuto(12000026,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 1211: #BW 3rd
+        attackAuto(12000026,on)
+        Terminal.SetCheckBox("Auto SP",True)
+    elif job == 1212: #BW 4th
+        attackAuto(12000026,on)
+        Terminal.SetCheckBox("Auto SP",True)
     elif job == 1300: #Wind Archer 1st
         attackAuto(13001020,on)
     elif job in WindArcherJobs and field_id in curbrockhideout: #1001005
@@ -7713,46 +7725,6 @@ def toggleAttack(on):
         else:
             if Terminal.GetCheckBox("Skill Injection"):
                 Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 1200: #BW 1st
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,142111002)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 1210: #BW 2nd
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,142111002)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 1211: #BW 3rd
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,142111002)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 1212: #BW 4th
-        Terminal.SetLineEdit("SISkillID","12121055")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",0)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Skill Injection", on)
-        Terminal.SetCheckBox("Melee No Delay",on)
     elif job == 572: #Jett 4th
         Terminal.SetLineEdit("SISkillID","5710020")
         Terminal.SetCheckBox("Auto Attack", False)
