@@ -783,6 +783,35 @@ def buy_arrow():
             toggle_rush_by_level(True)
             toggle_kami(True)
 
+def buy_stars():
+    toggle_rush_by_level(False)
+    toggle_kami(False)
+    print("Buying stars")
+    count = 0
+    if field_id != 100000102:
+        rush(100000102)
+    else:
+        if Character.GetMeso() > 10000: #00F4 [00] 002E 001F95F0 0001 00000000 000001F4
+            time.sleep(1)
+            Character.TalkToNpc(1011100)
+            time.sleep(1)
+            print("Buying throwing stars via packet")
+            Packet.BlockRecvHeader(BlockBuyHeader)
+            time.sleep(0.5)
+            BuyKey = Packet.COutPacket(BuyItemHeader)
+            BuyKey.EncodeBuffer("00 002E 001F95F0 0001 00000000 000001F4")
+            while count < 20:
+                Packet.SendPacket(BuyKey)
+                time.sleep(1)
+                count += 1
+            Packet.UnBlockRecvHeader(BlockBuyHeader)
+            CloseShop = Packet.COutPacket(BuyItemHeader)
+            CloseShop.EncodeBuffer("[03]")
+            Packet.SendPacket(CloseShop)
+            time.sleep(0.5)
+            toggle_rush_by_level(True)
+            toggle_kami(True)
+
 def use_expansion_packet():
     item = Inventory.FindItemByID(2350003)
     if item.valid:
@@ -4683,6 +4712,7 @@ def CygnusSecond():
                 time.sleep(1)
             Quest.StartQuest(targetJobQuest, Instructor)
     elif quest2 == 1:
+        print("2")
         if field_id == 913001000 or field_id == 913001001 or field_id == 913001002:
             if Quest.CheckCompleteDemand(targetJobQuest, Instructor) == 0:
                 # leave that map
@@ -4697,12 +4727,14 @@ def CygnusSecond():
             else:
                 portal = Field.FindPortal("in01")
                 if portal.valid:
+                    toggle_kami(False)
                     Character.Teleport(portal.x, portal.y - 20)
                     time.sleep(1)
                     Character.EnterPortal()
         elif field_id == 130000000:
             if Quest.CheckCompleteDemand(targetJobQuest, Instructor) == 0:
                 if Character.GetPos().x != -870:
+                    toggle_kami(False)
                     Character.Teleport(-870, 88)
                     time.sleep(1)
                 Quest.CompleteQuest(targetJobQuest, Instructor)
@@ -4732,6 +4764,7 @@ def CygnusThird():
             if field_id == 222020100:
                 portal = Field.FindPortal("in01")
                 if portal.valid:
+                    toggle_kami(False)
                     Character.Teleport(portal.x, portal.y-20)
                     time.sleep(1)
                     Character.EnterPortal()
@@ -4750,6 +4783,7 @@ def CygnusThird():
             if field_id == 222020000:
                 portal = Field.FindPortal("in00")
                 if portal.valid:
+                    toggle_kami(False)
                     Character.Teleport(portal.x, portal.y-20)
                     time.sleep(1)
                     Character.EnterPortal()
@@ -4807,6 +4841,7 @@ def CygnusFourth():
     elif quest2 != 2:
         print("2")
         if quest2 == 0:
+            toggle_kami(False)
             if Character.GetPos().x != 553:
                 Character.Teleport(553,1310)
             time.sleep(1)
@@ -6634,7 +6669,7 @@ if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     writeJson(accountData,accountId)
     Terminal.SetLineEdit("LoginChar",accountData["cur_link_pos"])
     Terminal.SetCheckBox("Auto Login",True)
-if len(accountData["done_links"]) >= 35:
+if len(accountData["done_links"]) >= 50:
     accountData['training_done'] = True
     print("Completed {} links".format(len(accountData["done_links"])))
     writeJson(accountData,accountId)
@@ -8075,10 +8110,16 @@ elif job == 400 and level < 11:
         Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinksDB.xml")
     else:
         Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinks.xml")
-elif job == 410 and level < 31:
+elif (job == 410 or job == 1400) and level < 31:
     claw = Inventory.FindItemByID(1472061)
     if claw.valid:
         Inventory.SendChangeSlotPositionRequest(1,claw.pos,weapon_slot,-1)
+elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.FindItemByID(2070000).count == 0 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
+    print("Need stars")
+    buy_stars()
+    Terminal.SetPushButton("Leave shop",True)
+    time.sleep(1)
+    Terminal.SetPushButton("Leave shop",False)
 elif job == 200 and level < 11:
     wand = Inventory.FindItemByID(1372043)
     if wand.valid:
@@ -8102,7 +8143,7 @@ elif job == CorsairJobs[1] and level < 31:
 elif job in explorerFirstJobs and level >= 30 and not SCLib.GetVar("DualBlade"):
     print("Doing Explorer Second Job")
     ExplorerSecond()
-elif job == 400 and level>=20 and SCLib.GetVar("DualBlade")  and not SCLib.GetVar("DoingCurbrock"):
+elif job == 400 and level>=20 and SCLib.GetVar("DualBlade") and not SCLib.GetVar("DoingCurbrock"):
     DualbladeSecond()
 elif job == 430 and level>=30 and not SCLib.GetVar("DoingCurbrock"):
     DualBladeThird()
