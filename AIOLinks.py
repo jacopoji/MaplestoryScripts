@@ -4806,10 +4806,9 @@ def CygnusThird():
                     time.sleep(1) #bot should kill mobs cause of terminal settings
                     toggle_kami(True)
             elif field_id != 922030400:
-                if len(Field.GetMobs()) == 0 and Quest.CheckCompleteDemand(20882, 1104303) != 0:
-                    rush(222020000)
-                    time.sleep(3)
-                    teleport_enter(372,-435)
+                rush(222020000)
+                time.sleep(3)
+                teleport_enter(372,-435)
     elif quest4 != 2:
         print("4")
         if quest4 == 0:
@@ -4865,10 +4864,13 @@ def CygnusFourth():
             Quest.StartQuest(20893, 1101000)
         elif quest4 == 1:
             if field_id == 913031002:
-                time.sleep(1) #let bot kill cygnus boss
                 toggle_kami(True)
+                print("Waiting for it to be killed")
+                time.sleep(3) #let bot kill cygnus boss
             elif field_id == 130000000:
                 Quest.CompleteQuest(20893, 1101000)
+            elif field_id != 130000000:
+                rush(130000000)
             else:
                 time.sleep(1)
     elif quest5 != 2:
@@ -6456,7 +6458,7 @@ def GetToTheDoorToZakum():
         #Wild Hunter, Wind Archer, Mercedes
         Bowman = [311,312,321,322,3300, 3310, 3311, 3312, 1300, 1310, 1311, 1312, 2300, 2310, 2311, 2312]
         #Phantom, Xenon, Dual Blade
-        Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6411,6412,6410,422,421,411,412]
+        Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6411,6412,6410,422,421,411,412,1412,1411]
         #Kanna, Battle Mage, Beast Tamer, Blaze Wizard, Evan, Luminous
         Magician = [211,212,221,222,231,232,14212,15211,15212,4200, 4210, 4211, 4212, 3200, 3210, 3211, 3212, 11000, 11200, 11210, 11211, 11212, 1200, 1210, 1211, 1212, 2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2700, 2710, 2711, 2712, ]
         #Aran, Blaster, Demon Avenger, Demon Slayer, Hayato, Kaiser, Mihile, Zero, Dawn Warrior
@@ -6502,6 +6504,7 @@ def startupCheck(accountId):
     split_id = accountId.split("@")[0]
     if os.path.exists('info/{}.json'.format(split_id)):
         #print("Loading")
+        #print(split_id)
         with open('info/{}.json'.format(split_id)) as f:
             return json.load(f)
     else:
@@ -7486,9 +7489,9 @@ def toggleAttack(on):
     elif job == 1410: #Night Walker 2nd
         attackAuto(14101020,on)
     elif job == 1411: #Night Walker 3rd
-        attackSI(14111022,on)
+        attackAuto(14111022,on)
     elif job == 1412: #Night Walker 4th
-        attackSI(14111022,on)
+        attackAuto(14111022,on)
     elif job == 1500: #Thunder breaker 1st
         attackAuto(15001020,on)
     elif job == 1510: #Thunder breaker 2nd
@@ -7812,7 +7815,6 @@ if GameState.IsInGame():
     toggleAttack(True)
     GetEmblem()
     #print("Toggling attack")
-
 ############################Job Advancements###############################
 if job == 4200 and level < 13:
     print("Completing Kanna First job")
@@ -8114,7 +8116,7 @@ elif (job == 410 or job == 1400) and level < 31:
     claw = Inventory.FindItemByID(1472061)
     if claw.valid:
         Inventory.SendChangeSlotPositionRequest(1,claw.pos,weapon_slot,-1)
-elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.FindItemByID(2070000).count == 0 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
+elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.FindItemByID(2070000).valid == 0 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
     print("Need stars")
     buy_stars()
     Terminal.SetPushButton("Leave shop",True)
@@ -8128,7 +8130,7 @@ elif (job == 300 or job == 1300)and level < 11:
     bow = Inventory.FindItemByID(1452051)
     if bow.valid:
         Inventory.SendChangeSlotPositionRequest(1,bow.pos,weapon_slot,-1)
-elif job == 500 and level < 11:
+elif (job == 500 or job in ThunderBreakerJobs) and level < 11:
     knuckle = Inventory.FindItemByID(1482014)
     if knuckle.valid:
         Inventory.SendChangeSlotPositionRequest(1,knuckle.pos,weapon_slot,-1)
@@ -8216,7 +8218,7 @@ elif job == 571 and level < 70 and field_id == 552000071:
     SCLib.UpdateVar("DoingJobAdv",False)
 elif job == 571 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
     JettFourth()
-elif job == 1000 and not SCLib.GetVar("DoingCurbrock"):
+elif job == 1000:
     CygnusFirst()
 elif job in cygnusFirstJobs and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
     CygnusSecond()
@@ -8254,7 +8256,7 @@ elif job == 14211 and level >= 100 and not SCLib.GetVar("DoingZakum") and not SC
     print("Kinesis Fourth Job")
     KinesisFourth()
 ###### lvl 50 hyper rock #######
-if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
+if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50 and Inventory.GetEmptySlotCount(2)>=4:
     print("Getting hyper rock")
     Npc.ClearSelection()
     Npc.RegisterSelection("Familiar")
@@ -8503,6 +8505,7 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
                 print("Fighting Zakum StandBy")
         else:
             if HasSpawned:
+                toggle_loot(True)
                 print("Zakum is dead, waiting 10 sec before continue")
                 time.sleep(5)
                 face_drop = Field.FindItem(condensed_power_crystal)
