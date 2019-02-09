@@ -7473,6 +7473,8 @@ def toggleAttack(on):
         attackAuto(5081020,on)
     elif job == 1100: #Dawn warrior 1st
         attackAuto(11001020,on)
+    elif job in DawnWarriorJobs and field_id in curbrockhideout: #1001005
+        attackAuto(11001020,on)
     elif job == 1110: #Dawn Warrior 2nd
         attackAuto(11101120,on)
     elif job == 1111: #Dawn Warrior 3rd
@@ -7480,6 +7482,8 @@ def toggleAttack(on):
     elif job == 1112: #Dawn Warrior 4th
         attackAuto(11121203,on)
     elif job == 1300: #Wind Archer 1st
+        attackAuto(13001020,on)
+    elif job in WindArcherJobs and field_id in curbrockhideout: #1001005
         attackAuto(13001020,on)
     elif job == 1310: #Wind Archer 2nd
         attackAuto(13101021,on)
@@ -7489,6 +7493,8 @@ def toggleAttack(on):
         attackAuto(13121002,on)
     elif job == 1400: #Night Walker 1st
         attackAuto(14001020,on)
+    elif job in NightWalkerJobs and field_id in curbrockhideout: #1001005
+        attackAuto(14001020,on)
     elif job == 1410: #Night Walker 2nd
         attackAuto(14101020,on)
     elif job == 1411: #Night Walker 3rd
@@ -7496,6 +7502,8 @@ def toggleAttack(on):
     elif job == 1412: #Night Walker 4th
         attackAuto(14111022,on)
     elif job == 1500: #Thunder breaker 1st
+        attackAuto(15001020,on)
+    elif job in ThunderBreakerJobs and field_id in curbrockhideout: #1001005
         attackAuto(15001020,on)
     elif job == 1510: #Thunder breaker 2nd
         attackAuto(15101020,on)
