@@ -452,6 +452,7 @@ def initAttackDone():
     pgup_key = 0x21
     Terminal.SetComboBox("Familiar0",5)
     Terminal.SetCheckBox("Rush By Level",True)
+    Terminal.SetCheckBox("Kami Vac",False)
     if job == 3712:
         print("Setting up settings for Blaster")
         Terminal.SetLineEdit("SISkillID","37121003")
@@ -1052,7 +1053,7 @@ def startChuChu():
             elif Field.GetID() in hungryMutoMaps:
                 print("Starting ChuChuPQ!")
                 SCLib.UpdateVar("CurStep", "DoingChuChu")
-                time.sleep(14)
+                time.sleep(10)
 
 def doingChuChu():
     if Field.GetID() != ccExitMap:
@@ -1069,7 +1070,7 @@ def doingChuChu():
         SunCat.UnhookChuChu()
         time.sleep(1)
         Npc.ClearSelection()
-        Npc.RegisterSelection(" ")
+        Npc.RegisterSelection("Claim")
         Character.TalkToNpc(3003166)
         time.sleep(1)
         print("Done! Sleeping for a few seconds to check for another run...")
@@ -1374,5 +1375,9 @@ if accountData['daily_done'] and GameState.IsInGame() and accountData['changing_
     writeJson(accountData,accountId)
 
 if Field.GetID() == ccExitMap:
+    print("Leaving chuchu exit map")
+    time.sleep(1)
+    Npc.ClearSelection()
+    Npc.RegisterSelection("Claim")
     Character.TalkToNpc(3003166)
     time.sleep(1)
