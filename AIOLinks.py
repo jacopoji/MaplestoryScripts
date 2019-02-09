@@ -8767,7 +8767,10 @@ if field_id in curbrockhideout and len(Field.GetMobs()) == 0:
     time.sleep(8)
     SCLib.UpdateVar("DoingCurbrock",False)
     toggle_rush_by_level(True)
-    
+elif field_id in curbrockhideout and len(Field.GetMobs()) != 0 and curbrock1 == 2:
+    SCLib.UpdateVar("DoingCurbrock",True)
+    toggleAttack(True)
+    toggle_kami(True)
 if field_id in escaperoutes:
     if Quest.CheckCompleteDemand(5500, sabitrama) ==0:
         Quest.CompleteQuest(5500,sabitrama)
