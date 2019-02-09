@@ -4810,6 +4810,8 @@ def CygnusThird():
                     rush(222020000)
                     time.sleep(3)
                     teleport_enter(372,-435)
+                    time.sleep(1)
+                    toggle_kami(True)
     elif quest4 != 2:
         print("4")
         if quest4 == 0:
