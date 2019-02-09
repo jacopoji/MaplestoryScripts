@@ -4869,6 +4869,7 @@ def CygnusFourth():
             if field_id == 913031002:
                 toggle_kami(True)
                 print("Waiting for it to be killed")
+                Terminal.StopRush()
                 time.sleep(3) #let bot kill cygnus boss
             elif field_id == 130000000:
                 Quest.CompleteQuest(20893, 1101000)
