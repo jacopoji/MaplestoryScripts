@@ -5409,7 +5409,7 @@ def ResistanceSecond():
 def ResistanceThird():
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
-
+    Terminal.SetCheckBox("Auto Equip",False)
     if job in WildHunterJobs:
         toDoQuest = 23031
         toDoQuest2 = 23034
@@ -5506,9 +5506,7 @@ def ResistanceThird():
         elif Quest.CheckCompleteDemand(toDoQuest2, Instructor) == 0:
             # if we are done, then rush back to hand it in
             if field_id == 931000200:
-                Character.Teleport(140, 18)
-                time.sleep(1)
-                Character.EnterPortal()
+                teleport_enter(140,18)
             
             elif field_id == 310010000:
                 Quest.CompleteQuest(toDoQuest2, Instructor)
@@ -5516,13 +5514,14 @@ def ResistanceThird():
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_kami(True)
+                Terminal.SetCheckBox("Auto Equip",True)
             else:
                 Terminal.Rush(310010000)
 
 def ResistanceFourth():
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
-
+    Terminal.SetCheckBox("Auto Equip",False)
     if job in WildHunterJobs:
         toDoQuest = 23041
         toDoQuest2 = 23044
@@ -5690,6 +5689,7 @@ def ResistanceFourth():
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_kami(True)
+                Terminal.SetCheckBox("Auto Equip",True)
 
 def JettSecond():
     print("Jett Second")
@@ -8346,6 +8346,16 @@ def toggleAttack(on):
     elif job == 3312: #Wild Hunter 4th
         attackAuto(33121114,on)
         toggle_jaguar()
+    elif job == 3700: #Blaster 1st
+        attackAuto(37001000,on)
+    elif job in BlasterJobs and field_id in curbrockhideout: #1001005
+        attackAuto(37001000,on)
+    elif job == 3710: #Blaster 2nd
+        attackAuto(37101000,on)
+    elif job == 3711: #Blaster 3rd
+        attackAuto(37110006,on)
+    elif job == 3712: #Blaster 4th
+        attackAuto(37121003,on)
     elif job == 11212: #Beast Tamer
         if level <= 17:
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
