@@ -323,16 +323,27 @@ def toggle_loot(indicator):
     Terminal.SetCheckBox("Kami Loot",indicator)
     Terminal.SetCheckBox("Auto Loot",indicator)
 
-def toggle_jaguar():
-    ride = 33001001
-    Key.Set(0x22, 1, ride)
-    if Character.HasBuff(2, ride) == False:
-        Terminal.SetCheckBox("Auto Attack",False)
-        toggle_kami(False)
-        time.sleep(2)
-        Key.Press(0x22)
-        time.sleep(1)
-        toggle_kami(True)
+def toggle_skill():
+    if job in WildHunterJobs:
+        ride = 33001001
+        Key.Set(0x22, 1, ride)
+        if Character.HasBuff(2, ride) == False:
+            Terminal.SetCheckBox("Auto Attack",False)
+            toggle_kami(False)
+            time.sleep(2)
+            Key.Press(0x22)
+            time.sleep(1)
+            toggle_kami(True)
+    elif job in MechanicJobs:
+        humanoid = 35001002
+        Key.Set(0x22, 1, humanoid)
+        if Character.HasBuff(2, humanoid) == False:
+            Terminal.SetCheckBox("Auto Attack",False)
+            toggle_kami(False)
+            time.sleep(2)
+            Key.Press(0x22)
+            time.sleep(1)
+            toggle_kami(True)
 
 def teleport_enter(x,y):
     prefield = field_id
@@ -5044,8 +5055,7 @@ def ResistanceFirst():
         if field_id == 931000000:
             # the beginning map
             toggle_kami(False)
-            if Character.GetPos().x != -100:
-                Character.Teleport(-100,28)
+            Character.AMoveX(-96)
         elif field_id == 931000001:
             # move to the portal
             if Character.GetPos().x != 1440:
@@ -5111,9 +5121,11 @@ def ResistanceFirst():
                 if field_id == 310000000:
                     pos = Character.GetPos()
                     if pos.x != -1297 and pos.y != -14:
+                        toggle_kami(False)
                         Character.Teleport(-1297, -14)
                         
                 if spillIt == 0:
+                    toggle_kami(False)
                     Character.Teleport(-1297, -14)
                     # we need to accept the quest.
                     Quest.StartQuest(23000, 2152000)
@@ -5156,6 +5168,7 @@ def ResistanceFirst():
                                     Character.BasicAttack()
                                     
                                 else:
+                                    toggle_kami(False)
                                     # bottom platform
                                     Character.Teleport(mob.x, mob.y)
                                     
@@ -5165,6 +5178,7 @@ def ResistanceFirst():
                             time.sleep(1)
                             pos = Character.GetPos()
                             if pos.x != -1297 and pos.y != -14:
+                                toggle_kami(False)
                                 Character.Teleport(-1297, -14)
                             time.sleep(1)
                             Npc.ClearSelection()
@@ -5195,6 +5209,7 @@ def ResistanceFirst():
                                     Character.BasicAttack()
                                 
                                 else:
+                                    toggle_kami(False)
                                     Character.Teleport(mob.x, mob.y)
                                     
                         
@@ -5222,12 +5237,14 @@ def ResistanceFirst():
                             item = Field.FindItem(4034738)
                             
                             if item.valid and (pos.y < item.y + 75 and pos.y > item.y -75):
+                                toggle_loot(False)
                                 if pos.x < item.x -15 or pos.x > item.x + 15:
                                     Character.AMoveX(item.x)
                                     Character.LootItem()
                                 Character.LootItem()
                                 
                             else:
+                                toggle_loot(False)
                                 if pos.x < 588 or pos.x > 628 or pos.y > item.y - 75:
                                     Character.Teleport(608, -260)
                                 Character.BasicAttack()
@@ -5258,6 +5275,7 @@ def ResistanceFirst():
                             item = Field.FindItem(4000597)
                             
                             if item.valid:
+                                toggle_loot(False)
                                 if item.y > -100:
                                     # bottom platform
                                     if pos.y < -100:
@@ -5419,13 +5437,16 @@ def ResistanceSecond():
                 # we are int he field_id
                 Character.TalkToNpc(2159100)	# talk to him to activate scene
                 item = Field.FindItem(4034787)	# look for the item
-                toggle_kami(True)
+                
                 if item.valid:
                     toggle_kami(False)
                     if pos.x < item.x -15 or pos.x > item.x + 15:
                         Character.AMoveX(item.x)
                     Character.LootItem()
+                else:
+                    toggle_kami(True)
                 time.sleep(1)
+                toggle_loot(True)
             
         elif Quest.CheckCompleteDemand(toDoQuest2, Instructor) == 0:
             if field_id != 310010000 and field_id != 310000000:
@@ -5440,6 +5461,7 @@ def ResistanceSecond():
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_kami(True)
+                toggle_loot(False)
             else:
                 Terminal.Rush(310010000)
                 time.sleep(1)
@@ -8374,18 +8396,18 @@ def toggleAttack(on):
         attackAuto(15121001,on)
     elif job == 3300: #Wild Hunter 1st
         attackAuto(33001105,on)
-        toggle_jaguar()
+        toggle_skill()
     elif job in WildHunterJobs and field_id in curbrockhideout: #1001005
         attackAuto(33001105,on)
     elif job == 3310: #Wild Hunter 2nd
         attackAuto(33101113,on)
-        toggle_jaguar()
+        toggle_skill()
     elif job == 3311: #Wild Hunter 3rd
         attackAuto(33111112,on)
-        toggle_jaguar()
+        toggle_skill()
     elif job == 3312: #Wild Hunter 4th
         attackAuto(33121114,on)
-        toggle_jaguar()
+        toggle_skill()
     elif job == 3200: #Battle Mage 1st
         attackAuto(32001000,on)
     elif job in BattleMageJobs and field_id in curbrockhideout: #1001005
@@ -8408,14 +8430,19 @@ def toggleAttack(on):
         attackAuto(37121003,on)
     elif job == 3500: #Mechanic 1st
         attackAuto(35001004,on)
+        toggle_skill()
     elif job in MechanicJobs and field_id in curbrockhideout: #1001005
         attackAuto(35001004,on)
+        toggle_skill()
     elif job == 3510: #Mechanic 2nd
         attackAuto(35101001,on)
+        toggle_skill()
     elif job == 3511: #Mechanic 3rd
         attackAuto(35111006,on)
+        toggle_skill()
     elif job == 3512: #Mechanic 4th
         attackAuto(35111006,on)
+        toggle_skill()
     elif job == 11212: #Beast Tamer
         if level <= 17:
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -9014,7 +9041,7 @@ elif job == 501 and level < 11:
     cannon = Inventory.FindItemByID(1532000)
     if cannon.valid:
         Inventory.SendChangeSlotPositionRequest(1,cannon.pos,weapon_slot,-1)
-elif job == CorsairJobs[1] and level < 31:
+elif (job == CorsairJobs[1] or job in MechanicJobs) and level < 31:
     pistol = Inventory.FindItemByID(1492014)
     if pistol.valid:
         Inventory.SendChangeSlotPositionRequest(1,pistol.pos,weapon_slot,-1)
@@ -9217,6 +9244,7 @@ def getBoogie():
             Terminal.SetCheckBox("Kami Vac",True)
             toggleAttack(True)
             SCLib.UpdateVar("GettingBoogie",False)
+            Terminal.SetCheckBox("Kami Loot",False)
             if not Terminal.GetCheckBox("Familiar 0"):
                 Terminal.SetComboBox("Familiar0",1)
                 Terminal.SetCheckBox("Familiar 0",True)
@@ -9591,6 +9619,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
                 else:
                     Quest.CompleteQuest(5499,sabitrama)
                     SCLib.UpdateVar("DoingCurbrock",False)
+                    toggle_rush_by_level(True)
             else:
                 if pos.x != -425 and field_id in curbrockhideout:
                     toggle_kami(False)
@@ -9632,6 +9661,7 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level <
         else:
             print("Enable kami to kill curbrock")
             SCLib.UpdateVar("DoingCurbrock",True)
+            Terminal.StopRush()
             toggle_kami(True)
             toggleAttack(True)
 if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
@@ -9656,8 +9686,11 @@ if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and leve
                 Quest.CompleteQuest(5501,sabitrama)
                 SCLib.UpdateVar("DoingCurbrock",False)
         else:
+            print("Enable kami to kill curbrock")
+            SCLib.UpdateVar("DoingCurbrock",True)
             toggle_kami(True)
             toggleAttack(True)
+            Terminal.StopRush()
 if field_id in curbrockhideout and len(Field.GetMobs()) == 0:
     if Quest.CheckCompleteDemand(5500, sabitrama) ==0:
         Quest.CompleteQuest(5500,sabitrama)
@@ -9665,12 +9698,12 @@ if field_id in curbrockhideout and len(Field.GetMobs()) == 0:
         Quest.CompleteQuest(5501,sabitrama)
     dungeonTeleport()
     time.sleep(8)
-    SCLib.UpdateVar("DoingCurbrock",False)
-    toggle_rush_by_level(True)
 elif field_id in curbrockhideout and len(Field.GetMobs()) != 0 and curbrock1 == 2:
+    print("Mob not dead")
     SCLib.UpdateVar("DoingCurbrock",True)
     toggleAttack(True)
     toggle_kami(True)
+    Terminal.StopRush()
 if field_id in escaperoutes:
     if Quest.CheckCompleteDemand(5500, sabitrama) ==0:
         Quest.CompleteQuest(5500,sabitrama)
@@ -9681,7 +9714,13 @@ if field_id in escaperoutes:
     time.sleep(8)
     toggle_rush_by_level(True)
     SCLib.UpdateVar("DoingCurbrock",False)
-    
+if SCLib.GetVar("DoingCurbrock"):
+    time.sleep(1)
+    field_id = Field.GetID()
+    if field_id not in curbrockhideout and field_id not in escaperoutes:
+        toggle_rush_by_level(True)
+        SCLib.UpdateVar("DoingCurbrock",False)
+        print("Ended up somewhere")
 
 
 quest26 = Quest.GetQuestState(2976)
