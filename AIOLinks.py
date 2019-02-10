@@ -808,29 +808,60 @@ def buy_stars():
     toggle_kami(False)
     print("Buying stars")
     count = 0
-    if field_id != 100000102:
-        rush(100000102)
-    else:
-        if Character.GetMeso() > 10000: #00F4 [00] 002E 001F95F0 0001 00000000 000001F4
-            time.sleep(1)
-            Character.TalkToNpc(1011100)
-            time.sleep(1)
-            print("Buying throwing stars via packet")
-            Packet.BlockRecvHeader(BlockBuyHeader)
-            time.sleep(0.5)
-            BuyKey = Packet.COutPacket(BuyItemHeader)
-            BuyKey.EncodeBuffer("00 002E 001F95F0 0001 00000000 000001F4")
-            while count < 20:
-                Packet.SendPacket(BuyKey)
+    if Character.GetMeso() > 10000:
+        if field_id != 100000102:
+            rush(100000102)
+        else:
+            if Character.GetMeso() > 10000: #00F4 [00] 002E 001F95F0 0001 00000000 000001F4
                 time.sleep(1)
-                count += 1
-            Packet.UnBlockRecvHeader(BlockBuyHeader)
-            CloseShop = Packet.COutPacket(BuyItemHeader)
-            CloseShop.EncodeBuffer("[03]")
-            Packet.SendPacket(CloseShop)
-            time.sleep(0.5)
-            toggle_rush_by_level(True)
-            toggle_kami(True)
+                Character.TalkToNpc(1011100)
+                time.sleep(1)
+                print("Buying throwing stars via packet")
+                Packet.BlockRecvHeader(BlockBuyHeader)
+                time.sleep(0.5)
+                BuyKey = Packet.COutPacket(BuyItemHeader)
+                BuyKey.EncodeBuffer("00 002E 001F95F0 0001 00000000 000001F4")
+                while count < 20:
+                    Packet.SendPacket(BuyKey)
+                    time.sleep(1)
+                    count += 1
+                Packet.UnBlockRecvHeader(BlockBuyHeader)
+                CloseShop = Packet.COutPacket(BuyItemHeader)
+                CloseShop.EncodeBuffer("[03]")
+                Packet.SendPacket(CloseShop)
+                time.sleep(0.5)
+                toggle_rush_by_level(True)
+                toggle_kami(True)
+
+def buy_bullets():
+    toggle_rush_by_level(False)
+    toggle_kami(False)
+    print("Buying Bullets")
+    count = 0
+    if Character.GetMeso() > 12000:
+        if field_id != 100000102:
+            rush(100000102)
+        else:
+            if Character.GetMeso() > 12000: #00F4 [00] 0035 00238D90 0001 00000000 00000258
+                time.sleep(1)
+                Character.TalkToNpc(1011100)
+                time.sleep(1)
+                print("Buying bullets via packet")
+                Packet.BlockRecvHeader(BlockBuyHeader)
+                time.sleep(0.5)
+                BuyKey = Packet.COutPacket(BuyItemHeader)
+                BuyKey.EncodeBuffer("00 0035 00238D90 0001 00000000 00000258")
+                while count < 20:
+                    Packet.SendPacket(BuyKey)
+                    time.sleep(1)
+                    count += 1
+                Packet.UnBlockRecvHeader(BlockBuyHeader)
+                CloseShop = Packet.COutPacket(BuyItemHeader)
+                CloseShop.EncodeBuffer("[03]")
+                Packet.SendPacket(CloseShop)
+                time.sleep(0.5)
+                toggle_rush_by_level(True)
+                toggle_kami(True)
 
 def catch_jaguar():
     print("Catching jaguar")
@@ -4239,11 +4270,13 @@ def ExplorerThird():
     quest = Quest.GetQuestState(toDoQuest)
     quest2= Quest.GetQuestState(toDoQuest2)
     if quest != 2:
+        print("1")
         if quest == 0:
             acceptQuest(toDoQuest,Instructor,toGoMap,field_id)
         elif quest == 1:
             completeQuest(toDoQuest,Chief,CheifsResidence,CheifsResidence,field_id)
     elif quest2 != 2:
+        print("2")
         if quest2 == 0:
             acceptQuest(toDoQuest2,Chief,CheifsResidence,field_id)
         elif quest2 == 1:
@@ -4286,11 +4319,14 @@ def ExplorerThird():
                     toggle_kami(True)
                     toggleAttack(True)
             elif field_id != 211040300:
+                print("Rushing there")
                 rush(211040300)
                 time.sleep(3)
                 toggleAttack(False)
                 teleport_enter(31,454)
                 time.sleep(1)
+                teleport_enter(31,454)
+                teleport_enter(31,454)
     
     if Quest.GetQuestState(toDoQuest2) == 2:
         SCLib.UpdateVar("DoingJobAdv",False)
@@ -4999,6 +5035,7 @@ def CygnusFourth():
             toggle_kami(True)
 
 def ResistanceFirst():
+    print("Resistance 1")
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     if job == 3000:
@@ -5007,8 +5044,8 @@ def ResistanceFirst():
         if field_id == 931000000:
             # the beginning map
             toggle_kami(False)
-            if Character.GetPos().x != -96:
-                Character.Teleport(-96,28)
+            if Character.GetPos().x != -100:
+                Character.Teleport(-100,28)
         elif field_id == 931000001:
             # move to the portal
             if Character.GetPos().x != 1440:
@@ -5382,6 +5419,7 @@ def ResistanceSecond():
                 # we are int he field_id
                 Character.TalkToNpc(2159100)	# talk to him to activate scene
                 item = Field.FindItem(4034787)	# look for the item
+                toggle_kami(True)
                 if item.valid:
                     toggle_kami(False)
                     if pos.x < item.x -15 or pos.x > item.x + 15:
@@ -5620,8 +5658,10 @@ def ResistanceFourth():
                         
                 elif keyCard.valid and (field_id <931000300 or field_id > 931000300) and (field_id < 931000310 or field_id > 931000313):
                     # rush to the hidden field_id
-                    Terminal.Rush(310060221)
+                    Terminal.Rush(310060220)
                     time.sleep(1)
+                    time.sleep(3)
+                    teleport_enter(1613,-284)
                     
                 else:
                     # field_id with the job instructor
@@ -7304,11 +7344,11 @@ def GetToTheDoorToZakum():
             time.sleep(1)
         else:
             Quest.StartQuest(questToDo,TalkNPC)
-            time.sleep(3)
+            time.sleep(4)
             Quest.CompleteQuest(questToDo,TalkNPC)
             Npc.ClearSelection()
             Npc.RegisterSelection("I want to ")
-            time.sleep(1)
+            time.sleep(3)
             Character.TalkToNpc(TalkNPC)
             time.sleep(1)
 
@@ -8204,7 +8244,7 @@ def toggleAttack(on):
     elif job == 321: #Sniper
         attackAuto(3211009,on)
     elif job == 322: #Marksman
-        attackAuto(3221001,on)
+        attackAuto(3221017,on)
     elif job == 400: #Thief
         if SCLib.GetVar("DualBlade"):
             attackAuto(4001013,on)
@@ -8346,6 +8386,16 @@ def toggleAttack(on):
     elif job == 3312: #Wild Hunter 4th
         attackAuto(33121114,on)
         toggle_jaguar()
+    elif job == 3200: #Battle Mage 1st
+        attackAuto(32001000,on)
+    elif job in BattleMageJobs and field_id in curbrockhideout: #1001005
+        attackAuto(32001000,on)
+    elif job == 3210: #Battle Mage 2nd
+        attackAuto(32101000,on)
+    elif job == 3211: #Batlle Mage 3rd
+        attackAuto(32111002,on)
+    elif job == 3212: #Battle Mage 4th
+        attackAuto(32121002,on)
     elif job == 3700: #Blaster 1st
         attackAuto(37001000,on)
     elif job in BlasterJobs and field_id in curbrockhideout: #1001005
@@ -8356,6 +8406,16 @@ def toggleAttack(on):
         attackAuto(37110006,on)
     elif job == 3712: #Blaster 4th
         attackAuto(37121003,on)
+    elif job == 3500: #Mechanic 1st
+        attackAuto(35001004,on)
+    elif job in MechanicJobs and field_id in curbrockhideout: #1001005
+        attackAuto(35001004,on)
+    elif job == 3510: #Mechanic 2nd
+        attackAuto(35101001,on)
+    elif job == 3511: #Mechanic 3rd
+        attackAuto(35111006,on)
+    elif job == 3512: #Mechanic 4th
+        attackAuto(35111006,on)
     elif job == 11212: #Beast Tamer
         if level <= 17:
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -8958,6 +9018,12 @@ elif job == CorsairJobs[1] and level < 31:
     pistol = Inventory.FindItemByID(1492014)
     if pistol.valid:
         Inventory.SendChangeSlotPositionRequest(1,pistol.pos,weapon_slot,-1)
+elif job in CorsairJobs and Inventory.FindItemByID(2330000).valid == 0 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
+    print("Need bullets")
+    buy_bullets()
+    Terminal.SetPushButton("Leave shop",True)
+    time.sleep(1)
+    Terminal.SetPushButton("Leave shop",False)
 elif job in explorerFirstJobs and level >= 30 and not SCLib.GetVar("DualBlade"):
     print("Doing Explorer Second Job")
     ExplorerSecond()
@@ -9064,6 +9130,14 @@ elif job in resistanceThirdJobs and level >= 100:
     ResistanceFourth()
 elif job == 3300 and level == 10 and field_id == 310010000:
     catch_jaguar()
+elif job in resistanceFirstJobs and level == 10 and field_id == 310010000:
+    toggle_rush_by_level(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
+    toggle_kami(True)
+elif job == BattleMageJobs[0] and level == 10:
+    staff = Inventory.FindItemByID(1382100)
+    if staff.valid:
+        Inventory.SendChangeSlotPositionRequest(1,staff.pos,weapon_slot,-1)
 elif (job == 14000 or job == 14200) and field_id != 101020400 and Quest.GetQuestState(22733) != 2:
     print("Doing Kinesis First Job")
     KinesisFirst()
