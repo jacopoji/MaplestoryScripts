@@ -878,6 +878,7 @@ def catch_jaguar():
     print("Catching jaguar")
     jaguar_map = 931000500
     toggle_rush_by_level(False)
+    toggle_kami(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     while True:
         jagQuest = Quest.GetQuestState(23015)
@@ -960,6 +961,7 @@ def catch_jaguar():
                 Character.EnterPortal()
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                Terminal.StopRush()
                 time.sleep(10)
                 break
 
@@ -4958,16 +4960,16 @@ def CygnusThird():
                 if Quest.CheckCompleteDemand(20882, 1104303) == 0:
                     Quest.CompleteQuest(20882, 1104303)
                     print("Turn on kill settings")
+                    toggle_kami(True)
                 else:
                     time.sleep(1) #bot should kill mobs cause of terminal settings
                     toggle_kami(True)
             elif field_id != 922030400:
-                if len(Field.GetMobs()) == 0 and Quest.CheckCompleteDemand(20882, 1104303) != 0:
-                    rush(222020000)
-                    time.sleep(3)
-                    teleport_enter(372,-435)
-                    time.sleep(1)
-                    toggle_kami(True)
+                rush(222020000)
+                time.sleep(3)
+                teleport_enter(372,-435)
+                time.sleep(1)
+                toggle_kami(True)
     elif quest4 != 2:
         print("4")
         if quest4 == 0:
@@ -5527,6 +5529,8 @@ def ResistanceThird():
                 hat = Inventory.FindItemByID(1003134)
                 if hat.valid:
                     # wear the hat
+                    toggleAttack(False)
+                    time.sleep(5)
                     Inventory.SendChangeSlotPositionRequest(1, hat.pos, -1, -1)
                     time.sleep(1) # sleep 1 second
                     
@@ -5752,6 +5756,48 @@ def ResistanceFourth():
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_kami(True)
                 Terminal.SetCheckBox("Auto Equip",True)
+
+def ABSecond():
+    toDoQuest = 25825
+    quest = Quest.GetQuestState(toDoQuest)
+    if quest != 2:
+        if quest == 0:
+            Quest.StartQuest(toDoQuest,3000018)
+
+def ABThird():
+    toDoQuest = 25826
+    quest = Quest.GetQuestState(toDoQuest)
+    if quest != 2:
+        if quest == 0:
+            Quest.StartQuest(toDoQuest,3000018)
+
+def ABFourth():
+    toDoQuest = 25827
+    quest = Quest.GetQuestState(toDoQuest)
+    if quest != 2:
+        if quest == 0:
+            Quest.StartQuest(toDoQuest,3000018)
+
+def KaiserSecond():
+    toDoQuest = 25710
+    quest = Quest.GetQuestState(toDoQuest)
+    if quest != 2:
+        if quest == 0:
+            Quest.StartQuest(toDoQuest,0)
+
+def KaiserThird():
+    toDoQuest = 25711
+    quest = Quest.GetQuestState(toDoQuest)
+    if quest != 2:
+        if quest == 0:
+            Quest.StartQuest(toDoQuest,0)
+
+def KaiserFourth():
+    toDoQuest = 25712
+    quest = Quest.GetQuestState(toDoQuest)
+    if quest != 2:
+        if quest == 0:
+            Quest.StartQuest(toDoQuest,3000011)
 
 def JettSecond():
     print("Jett Second")
@@ -7156,10 +7202,12 @@ def id2str(jobid):
         return "Wild Hunter"
     elif jobid in BattleMageJobs:
         return "Battle Mage"
-    elif job in MechanicJobs:
+    elif jobid in MechanicJobs:
         return "Mechanic"
+    elif jobid in AngelicBusterJobs:
+        return "Angelic Buster"
     else:
-        return "Unkown Job"+str(jobid)
+        return "Unkown Job jobid ="+str(jobid)
 
 
 def starItem(pos, currStar, itemMaxStar, userMaxStar, itemid):
@@ -7566,7 +7614,7 @@ def safety_setting():
             if job not in IlliumJobs:
                 Terminal.SetCheckBox(settings, False)
         elif settings == "Full Map Attack":
-            if job != 11212 or level < 17 or level >= 104:
+            if job not in BlazeWizardJobs:
                 Terminal.SetCheckBox(settings, False)
         else:
             Terminal.SetCheckBox(settings, False)
@@ -8280,8 +8328,10 @@ def toggleAttack(on):
         attackAuto(4101008,on)
     elif job == 411: #Hermit
         attackSI(4111015,on)
+        Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 412:
+        Terminal.SetRadioButton("SIRadioMelee",True)
         if Character.GetSkillLevel(4121017) >= 1:
             attackSI(4121017,on)
         else:
@@ -8353,16 +8403,21 @@ def toggleAttack(on):
     elif job == 1112: #Dawn Warrior 4th
         attackAuto(11121203,on)
     elif job == 1200: #BW 1st
-        attackAuto(12000026,on)
+        Terminal.SetCheckBox("Full Map Attack",True)
+        attackAuto(12001020,on)
         Terminal.SetCheckBox("Auto SP",True)
+        toggle_loot(False)
     elif job == 1210: #BW 2nd
-        attackAuto(12000026,on)
+        Terminal.SetCheckBox("Full Map Attack",True)
+        attackAuto(12001020,on)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 1211: #BW 3rd
-        attackAuto(12000026,on)
+        Terminal.SetCheckBox("Full Map Attack",True)
+        attackAuto(12001020,on)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 1212: #BW 4th
-        attackAuto(12000026,on)
+        Terminal.SetCheckBox("Full Map Attack",True)
+        attackAuto(12001020,on)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 1300: #Wind Archer 1st
         attackAuto(13001020,on)
@@ -8588,44 +8643,17 @@ def toggleAttack(on):
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 6500: #AB 1st
-        Terminal.SetLineEdit("SISkillID","65001100")
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
+        attackSI(65001100,on)
         Terminal.SetRadioButton("SIRadioMagic",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
     elif job == 6510 or job == 6511: #AB 2nd + 3rd
-        Terminal.SetLineEdit("SISkillID","65101100")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
+        attackSI(65101100,on)
         Terminal.SetRadioButton("SIRadioMagic",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
     elif job == 6512: #AB 4th
-        Terminal.SetLineEdit("SISkillID","65121100")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
+        attackSI(65121008,on)
         Terminal.SetRadioButton("SIRadioMagic",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
+    elif job in KaiserJobs: #Kaiser 1st 2nd 3rd 4th
+        attackSI(61001005,on)
+        Terminal.SetRadioButton("SIRadioMelee",True)
     elif job == 3512: #mechanic 4th
         #mech_att(on)
         Terminal.SetCheckBox("Auto Attack", False)
@@ -9025,10 +9053,11 @@ elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.FindItemByID
     Terminal.SetPushButton("Leave shop",True)
     time.sleep(1)
     Terminal.SetPushButton("Leave shop",False)
-elif job == 200 and level < 11:
+elif (job == 200 or job == BlazeWizardJobs[0]) and level < 11:
     wand = Inventory.FindItemByID(1372043)
     if wand.valid:
         Inventory.SendChangeSlotPositionRequest(1,wand.pos,weapon_slot,-1)
+    Terminal.SetCheckBox("Kami Loot",False)
 elif (job == 300 or job == 1300)and level < 11:
     bow = Inventory.FindItemByID(1452051)
     if bow.valid:
@@ -9149,6 +9178,14 @@ elif job in cygnusFourthJobs and field_id == 130000000:
     toggle_kami(True)
 elif job == 3000:
     ResistanceFirst()
+elif job == WildHunterJobs[0] and level == 10 and field_id == 931000500 and Terminal.GetCheckBox("Rush By Level"):
+    print("Leave this jaguar place")
+    toggle_kami(False)
+    toggle_rush_by_level(False)
+    time.sleep(2)
+    teleport_enter(328,25)
+    toggle_rush_by_level(True)
+    time.sleep(10)
 elif job in resistanceFirstJobs and level >= 30:
     ResistanceSecond()
 elif job in resistanceSecondJobs and level >= 60:
@@ -9182,6 +9219,26 @@ elif job == 14210 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
 elif job == 14211 and level >= 100 and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock"):
     print("Kinesis Fourth Job")
     KinesisFourth()
+elif job == AngelicBusterJobs[0] and level == 10 and field_id == 400000000:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
+elif job == AngelicBusterJobs[0] and level >= 30:
+    ABSecond()
+elif job == AngelicBusterJobs[1] and level >= 60:
+    ABThird()
+elif job == AngelicBusterJobs[2] and level >= 100:
+    ABFourth()
+elif job == KaiserJobs[0] and level == 10 and field_id == 400000000:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
+elif job == KaiserJobs[0] and level >= 30:
+    KaiserSecond()
+elif job == KaiserJobs[1] and level >= 60:
+    KaiserThird()
+elif job == KaiserJobs[2] and level >= 100:
+    KaiserFourth()
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50 and Inventory.GetEmptySlotCount(2)>=4:
     print("Getting hyper rock")
@@ -9356,18 +9413,16 @@ if level >= 60 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetV
 #ZAKUM DAILY
 if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
     if field_id == TheDoorToZakum:
-        if pos.x != -3003:
-            toggle_kami(False)
-            teleport_enter(-3003,-220)
-            toggle_rush_by_level(True)
-            Terminal.SetCheckBox("Kami Vac",True)
-            Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
-            SCLib.UpdateVar("DoingZakum",False)
+        toggle_kami(False)
+        teleport_enter(-3003,-220)
+        toggle_rush_by_level(True)
+        Terminal.SetCheckBox("Kami Vac",True)
+        Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
+        SCLib.UpdateVar("DoingZakum",False)
     elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
-        if pos.x != -1599:
-            toggle_kami(False)
-            teleport_enter(-1599,-331)
-            SCLib.UpdateVar("DoingZakum",False)
+        toggle_kami(False)
+        teleport_enter(-1599,-331)
+        SCLib.UpdateVar("DoingZakum",False)
 
 if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
     print("Doing Zakum")

@@ -455,21 +455,21 @@ def settings_fourth_job():
 	level = Character.GetLevel()
 	if not Terminal.GetCheckBox("Auto Attack"):
 		Terminal.SetCheckBox("Auto Attack",True)
-		Terminal.SetSpinBox("autoattack_spin",7500)
+		Terminal.SetSpinBox("autoattack_spin",2500)
 		Terminal.SetComboBox("AttackKey",36)
 	if Terminal.GetComboBox("AttackKey") != 36:
-		Terminal.SetSpinBox("autoattack_spin",7500)
+		Terminal.SetSpinBox("autoattack_spin",2500)
 		Terminal.SetComboBox("AttackKey",36)
 	if Terminal.GetCheckBox("Legit Vac"):
 		Terminal.SetCheckBox("Legit Vac",False)
 	if Terminal.GetCheckBox("charm_fma"):
 		Terminal.SetCheckBox("charm_fma",False)
-	if not Terminal.GetCheckBox("Summon Kishin"):
-		Terminal.SetCheckBox("Summon Kishin",True)
+	#if not Terminal.GetCheckBox("Summon Kishin"):
+	#	Terminal.SetCheckBox("Summon Kishin",True)
 	if not Terminal.GetCheckBox("Grenade Kami"):
 		Terminal.SetCheckBox("Grenade Kami",True)
 	if accountData['ready_for_cube']:
-		Terminal.SetSpinBox("MonkeySpiritsNDdelay",500)
+		Terminal.SetSpinBox("MonkeySpiritsNDdelay",450)
 	else:
 		Terminal.SetSpinBox("MonkeySpiritsNDdelay",40)
 	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
@@ -1526,7 +1526,7 @@ def CPU_hack(flag):
 
 if jobid == -1 and not accountData['storing_meso']:
 	#print("Not logged in yet")
-	time.sleep(2)
+	time.sleep(1)
 
 if Character.GetMeso() == 29999999999 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and jobid == 4212:
 	#if mesos =29999999999, which is max, store them in the storage
@@ -1542,7 +1542,8 @@ if Character.GetMeso() == 29999999999 and not SCLib.GetVar("DoingMP") and not SC
 		writeJson_cube(accountData,accountId)
 		print("logging out")
 		Terminal.Logout()
-		time.sleep(1)
+		time.sleep(3)
+		jobid = -1
 #print(GameState.GetLoginStep())
 if accountData['storing_meso'] and GameState.GetLoginStep() == 2:
 	autochar_kanna = 19
@@ -1751,7 +1752,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			check_meso_equip()
 			SCLib.UpdateVar("EquipMesoDone",True)
 			Terminal.SetCheckBox('MonkeySpiritsNDcheck',True)
-		if int(SCLib.GetVar("farm_counter")) >= 14:
+		if int(SCLib.GetVar("farm_counter")) >= 20:
 			new_meso = int(accountData['storage_number']) * 30 + Character.GetMeso() / 1000000000
 			print("Updating total mesos from {} to {}b".format(accountData['total_meso'],new_meso))
 			if accountData['total_meso'] == new_meso:
@@ -1760,17 +1761,18 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 				Terminal.SendLog("This account's pet has expired")
 				Terminal.ChangeStatus("#################Farming Done##############")
 			accountData['total_meso'] = new_meso
-			writeJson_cube(accountData,accountId)
+			writeJson_cube(accountData,accountId) 
 			SCLib.UpdateVar("farm_counter",0)
-		if not Terminal.IsAutoDying() and str(field_id)[0:5] == "55103": # and Character.HasBuff(1, 2023533)
+		if not Terminal.IsAutoDying() and field_id in LongestRideOnByeByeStation and not SCLib.GetVar("DoingMP"): # and Character.HasBuff(1, 2023533)
 			SCLib.UpdateVar("farm_counter",int(SCLib.GetVar("farm_counter"))+1)
 			Terminal.ChangeStatus("Still farming in ByeBye: {}b".format(accountData['total_meso']))
 		elif Terminal.IsAutoDying():
 			SCLib.UpdateVar("farm_counter",0)
 		if Character.HasBuff(2,runebuff_id):
-			if Character.GetHP() != 0:
-				Character.TakeDamage(50000)
+			Terminal.SetCheckBox("30 Sec God Mode",False)
+			Character.TakeDamage(50000)
 			print("Suiciding to cancel buff")
+			Terminal.SetCheckBox("30 Sec God Mode",True)
 		print("Sleeping for 30 seconds to farm")
 		if not Character.HasBuff(2,runebuff_id):
 			time.sleep(30)
