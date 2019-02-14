@@ -4956,7 +4956,7 @@ def CygnusThird():
                 Quest.StartQuest(20882, 1104302)
         elif quest3 == 1:
             print("doing 3")
-            if field_id == 922030400:
+            if field_id in range(922030400,922030400+20):
                 if Quest.CheckCompleteDemand(20882, 1104303) == 0:
                     Quest.CompleteQuest(20882, 1104303)
                     print("Turn on kill settings")
@@ -4964,7 +4964,7 @@ def CygnusThird():
                 else:
                     time.sleep(1) #bot should kill mobs cause of terminal settings
                     toggle_kami(True)
-            elif field_id != 922030400:
+            elif field_id not in range(922030400,922030400+20):
                 rush(222020000)
                 time.sleep(3)
                 teleport_enter(372,-435)
