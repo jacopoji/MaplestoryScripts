@@ -266,8 +266,8 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 3112: #DS fourth job
         print("Setting up Settings for DS")
-        Terminal.SetLineEdit("SISkillID","31121010")
-        Terminal.SetSpinBox("SkillInjection",0)
+        Terminal.SetLineEdit("SISkillID","400011018")
+        Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         
@@ -799,7 +799,7 @@ def initVJ():
     vjQuests.append(VJQuest(34147, 450001210))
     vjQuests.append(VJQuest(34148, 450001013, 450001013, 3003107, 991, -898))
     vjQuests.append(VJQuest(34149, 450001112, 450001112, 3003108, 74, -710))
-    vjQuests.append(VJQuest(34150, 450001216, 450001216, 3003109, -1079, -149))
+    vjQuests.append(VJQuest(34150, 450001216, 450001216, 3003109, 1299, -28))
 
 def acceptVJ():
     curMap = Field.GetID()
@@ -1035,6 +1035,7 @@ def startChuChu():
             SCLib.UpdateVar("CurStep", "FinishedChuChu")
             SunCat.UnhookChuChu()
         else:
+            time.sleep(0.5)
             Npc.ClearSelection()
             Npc.RegisterSelection("Enter <Hungry Muto>")
             if chuChuHardMode:
@@ -1056,7 +1057,7 @@ def startChuChu():
                 time.sleep(10)
 
 def doingChuChu():
-    if Field.GetID() != ccExitMap:
+    if Field.GetID() != ccExitMap and Field.GetID() != ccStartingMap:
         currentRecipe = allRecipes[SunCat.GetRecipe()]
         for i in range(len(currentRecipe.ingredients)):
             print("Getting " + str(currentRecipe.amounts[i]) + "x " + currentRecipe.ingredients[i].name)

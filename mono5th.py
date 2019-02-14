@@ -13,6 +13,8 @@ import GameState
 import Party
 # credits: leroy.jenkins93
 
+usingKami = False
+
 def rushAndDo(startRush, endRush, questState, questID, npcStartID, npcEndID):
 	if currentMap  != startRush:
 		Terminal.Rush(startRush)
@@ -538,7 +540,10 @@ if GameState.IsInGame():
 			# elif Quest.CheckCompleteDemand(1465, 2140001) != 0:
 			else:
 				Terminal.SetCheckBox("Rush By Level",True)
-				Terminal.SetCheckBox("Kami Vac",True)
+				if usingKami == True:
+					Terminal.SetCheckBox("Kami Vac",True)
+				else:
+					Terminal.SetCheckBox("Kami Vac",False)
 				time.sleep(2)
 				Inventory.UseItem(2435734)
 				time.sleep(2)
