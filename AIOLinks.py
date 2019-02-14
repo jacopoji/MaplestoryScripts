@@ -4954,6 +4954,15 @@ def CygnusThird():
         if quest3 == 0:
             if field_id in range(922030400,922030400+20):
                 Quest.StartQuest(20882, 1104302)
+            elif field_id == 222020000:
+                portal = Field.FindPortal("in00")
+                if portal.valid:
+                    toggle_kami(False)
+                    Character.Teleport(portal.x, portal.y-20)
+                    time.sleep(1)
+                    Character.EnterPortal()
+            else:
+                Terminal.Rush(222020000)
         elif quest3 == 1:
             print("doing 3")
             if field_id in range(922030400,922030400+20):
