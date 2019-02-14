@@ -4952,7 +4952,7 @@ def CygnusThird():
     elif quest3 != 2:
         print("3")
         if quest3 == 0:
-            if field_id == 922030400:
+            if field_id in range(922030400,922030400+20):
                 Quest.StartQuest(20882, 1104302)
         elif quest3 == 1:
             print("doing 3")
