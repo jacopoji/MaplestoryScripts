@@ -21,6 +21,8 @@ buy_cube_number = 10 # 720M
 #Key to restart pers. variables
 HotKey = 0x7A
 
+buy_character_expansion = True
+
 #store mesos
 storage_map_id = 550000000
 storage_npc_id = 9270054
@@ -37,6 +39,7 @@ collide_header = 0x0104
 potential_header = 0x013E
 potential_recv = 0x0274
 BlockBuyHeader = 0x0684
+useExpansionHeader = 0x0121
 BuyItemHeader = 0x00F4
 CashItemRequestOpcode = 1337
 CashItemResultOpcode = 1739
@@ -369,8 +372,7 @@ def settings_first_job():
 	if Terminal.GetCheckBox("bot/kanna_kami"):
 		Terminal.SetCheckBox("bot/kanna_kami",False)
 		Terminal.SetSpinBox("bot/kanna_kami_delay",1000)
-	if Terminal.GetCheckBox("Legit Vac"):
-		Terminal.SetCheckBox("Legit Vac",False)
+	Terminal.SetCheckBox("Legit Vac",True)
 	if not Terminal.GetCheckBox("Kami Vac"):
 		Terminal.SetCheckBox("Kami Vac",True)
 	if Terminal.GetCheckBox("charm_fma"):
@@ -392,8 +394,7 @@ def settings_first_job():
 def settings_second_job():
 	if Terminal.GetCheckBox("Auto Attack"):
 		Terminal.SetCheckBox("Auto Attack",False)
-	if Terminal.GetCheckBox("Legit Vac"):
-		Terminal.SetCheckBox("Legit Vac",False)
+	Terminal.SetCheckBox("Legit Vac",True)
 	if Terminal.GetCheckBox("Skill Injection"):
 		Terminal.SetCheckBox("Skill Injection",False)
 	if not Terminal.GetCheckBox("charm_fma"):
@@ -417,8 +418,7 @@ def settings_second_job():
 		Terminal.SetCheckBox("Rush By Level",True)
 	Terminal.SetCheckBox("settings/mesologout",False)
 def settings_third_job():
-	if Terminal.GetCheckBox("Legit Vac"):
-		Terminal.SetCheckBox("Legit Vac",False)
+	Terminal.SetCheckBox("Legit Vac",True)
 	if Terminal.GetCheckBox("Skill Injection"):
 		Terminal.SetCheckBox("Skill Injection",False)
 	if not Terminal.GetCheckBox("charm_fma"):
@@ -460,8 +460,7 @@ def settings_fourth_job():
 	if Terminal.GetComboBox("AttackKey") != 36:
 		Terminal.SetSpinBox("autoattack_spin",2500)
 		Terminal.SetComboBox("AttackKey",36)
-	if Terminal.GetCheckBox("Legit Vac"):
-		Terminal.SetCheckBox("Legit Vac",False)
+	Terminal.SetCheckBox("Legit Vac",True)
 	if Terminal.GetCheckBox("charm_fma"):
 		Terminal.SetCheckBox("charm_fma",False)
 	#if not Terminal.GetCheckBox("Summon Kishin"):
@@ -525,6 +524,7 @@ def rush(mapid):
         time.sleep(2)
     else:
         time.sleep(1)
+
 
 def get_earring():
 	Terminal.SetSpinBox("FilterMeso",50000)
@@ -639,7 +639,7 @@ def farmed_enough_accessories():
 	else:
 		return False
 
-def buy_expansion():
+def buy_item_expansion():
 	if Character.GetMeso() > 7900000:
 		Character.TalkToNpc(2080001)
 		time.sleep(0.5)
@@ -655,6 +655,57 @@ def buy_expansion():
 		Packet.SendPacket(CloseShop)
 		time.sleep(0.5)
 		Packet.UnBlockRecvHeader(BlockBuyHeader)
+
+def use_expansion_packet():
+	item = Inventory.FindItemByID(2350003)
+	if item.valid:
+		usePacket = Packet.COutPacket(useExpansionHeader)
+		usePacket.EncodeBuffer("[{}00B3DB2300]".format(hex(item.pos).split('x')[1].zfill(2)))
+		Packet.SendPacket(usePacket)
+		time.sleep(2)
+		if not Inventory.FindItemByID(2350003).valid:
+			print("Use expansion success")
+			accountData['total_slots'] = accountData['total_slots'] + 1
+			writeJson_cube(accountData,accountId)
+		Terminal.ChangeChannel(0)
+		time.sleep(3)
+
+def buy_expansion():
+	if Character.GetMeso() > 20000000:
+		toggle_rush_by_level(False)
+		if not Terminal.IsRushing():
+			if field_id != 240000002:
+				rush(240000002)
+			elif field_id == 240000002:
+				Terminal.SetPushButton("Use item",False)
+				Terminal.SetPushButton("Sell item",False)
+				print("Buy item packet")
+				if not Inventory.FindItemByID(2350003).valid:
+					buy_expansion_packet()
+				Terminal.SetPushButton("Leave shop",True)
+				time.sleep(1)
+				use_expansion_packet()
+				Terminal.SetPushButton("Leave shop",False)
+				Terminal.SetPushButton("Use item",True)
+				Terminal.SetPushButton("Sell item",True)
+
+def buy_expansion_packet():
+    if Character.GetMeso() > 19900000:
+        time.sleep(1)
+        Character.TalkToNpc(2080001)
+        time.sleep(1)
+        print("Buying expansion via packet")
+        Packet.BlockRecvHeader(BlockBuyHeader)
+        time.sleep(0.5)
+        BuyKey = Packet.COutPacket(BuyItemHeader)
+        BuyKey.EncodeBuffer("00 000D 0023DBB3 0001 00000000 012FA660")
+        Packet.SendPacket(BuyKey)
+        time.sleep(0.5)
+        Packet.UnBlockRecvHeader(BlockBuyHeader)
+        CloseShop = Packet.COutPacket(BuyItemHeader)
+        CloseShop.EncodeBuffer("[03]")
+        Packet.SendPacket(CloseShop)
+        time.sleep(0.5)
 
 def toHex(val, nbits):
    return ((val + (1 << nbits)) % (1 << nbits))
@@ -1191,6 +1242,10 @@ def handleReady(data):
 		data['date'] = str(datetime.datetime.utcnow().date())
 	if 'kanna_daily_done' not in data:
 		data['kanna_daily_done'] = False
+	if 'total_slots' not in data:
+		data['total_slots'] = 1
+	if 'used_slots' not in data:
+		data['used_slots'] = 0
 
 def initializeEquips(data):
 	if 'equips' not in data:
@@ -1553,6 +1608,10 @@ if accountData['storing_meso'] and GameState.GetLoginStep() == 2:
 	Terminal.SetComboBox("settings/autochar_job",autochar_lumi)
 	Terminal.SetCheckBox("Auto Login",True)
 	Terminal.SetCheckBox("settings/autochar",True)
+elif GameState.GetLoginStep() == 2:
+	accountData['total_slots'] = Login.GetCharSlot()
+	accountData['used_slots'] = Login.GetCharCount()
+	writeJson_cube(accountData,accountId)
 
 if accountData['storing_meso'] and jobid == 2700 and Character.GetMeso() == 0:
 	print("withdrawing mesos")
@@ -1857,7 +1916,11 @@ if accountData['pet_expire']:
 			Terminal.ChangeChannel(0)
 		Terminal.SetCheckBox("settings/mesologout",False)
 		print_info()
-		time.sleep(60)
+		if accountData['total_slots'] <= 20 and buy_character_expansion:
+			buy_expansion()
+		else:
+			print("Done buying expansion, sleep")
+			time.sleep(60)
 
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
@@ -2779,28 +2842,28 @@ if Character.GetMeso() >= 7900000 and accountData["cubing_done"] == True and Inv
 			time.sleep(2)
 		elif Field.GetID() == store_map:
 			Terminal.SetPushButton("Use item",False)
-			buy_expansion()
+			buy_item_expansion()
 			Terminal.SetPushButton("Leave shop",True)
 			time.sleep(1)
 			Inventory.UseItem(2430965)
 			Inventory.UseItem(2433937)
 			time.sleep(2)
 			Terminal.SetPushButton("Leave shop",False)
-			buy_expansion()
+			buy_item_expansion()
 			Terminal.SetPushButton("Leave shop",True)
 			time.sleep(1)
 			Inventory.UseItem(2430965)
 			Inventory.UseItem(2433937)
 			time.sleep(2)
 			Terminal.SetPushButton("Leave shop",False)
-			buy_expansion()
+			buy_item_expansion()
 			Terminal.SetPushButton("Leave shop",True)
 			time.sleep(1)
 			Inventory.UseItem(2430965)
 			Inventory.UseItem(2433937)
 			time.sleep(2)
 			Terminal.SetPushButton("Leave shop",False)
-			buy_expansion()
+			buy_item_expansion()
 			Terminal.SetPushButton("Leave shop",True)
 			time.sleep(1)
 			Inventory.UseItem(2430965)

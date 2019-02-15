@@ -994,6 +994,40 @@ def buy_expansion():
         toggle_rush_by_level(True)
         toggle_kami(True)
 
+def has_pensalir():
+    #pensalir gear
+    pensalir_warrior_cape = 1102718
+    pensalir_mage_cape = 1102719
+    pensalir_bowman_cape = 1102720
+    pensalir_thief_cape = 1102721
+    pensalir_pirate_cape = 1102722
+
+    pensalir_warrior_helmet = 1004229
+    pensalir_mage_helmet = 1004230
+    pensalir_bowman_helmet = 1004231
+    pensalir_thief_helmet = 1004232
+    pensalir_pirate_helmet = 1004231
+
+    pensalir_warrior_gloves = 1082608
+    pensalir_mage_gloves = 1082609
+    pensalir_bowman_gloves = 1082610
+    pensalir_thief_gloves = 1082611
+    pensalir_pirate_gloves = 1082612
+
+    pensalir_warrior_shoes = 1072967
+    pensalir_mage_shoes = 1072968
+    pensalir_bowman_shoes = 1072969
+    pensalir_thief_shoes = 1072970
+    pensalir_pirate_shoes = 1072971
+
+    pensalir_warrior_overall = 1052799
+    pensalir_mage_overall = 1052800
+    pensalir_bowman_overall = 1052801
+    pensalir_thief_overall = 1052802
+    pensalir_pirate_overall = 1052803
+    
+    utgard_fan = 1552102
+
 #########Job specific advancements##########
 def kannaFirst():
     if field_id == 807040000:
@@ -7551,7 +7585,10 @@ def startupCheck(accountId):
 
 def handleReady(data):
     if 'link_start' not in data:
-        data['link_start'] = 0
+        if 'storage_number' in data:
+            data['link_start'] = data['storage_number']
+        else:
+            data['link_start'] = 0
     if 'link_end' not in data:
         data['link_end'] = 11
     if 'storing_meso' not in data:
@@ -7559,7 +7596,8 @@ def handleReady(data):
     if 'storage_number' not in data:
         data['storage_number'] = 0
     if 'cur_link_pos' not in data:
-        data['cur_link_pos'] = Terminal.GetLineEdit("LoginChar")
+        if 'link_start' in data:
+            data['cur_link_pos'] = data['link_start']
     if 'changing_mule' not in data:
         data['changing_mule'] = False
     if 'date' not in data:
@@ -7588,7 +7626,7 @@ accountData = startupCheck(accountId)
 handleReady(accountData)
 writeJson(accountData,accountId)
 
-if field_id in range(3000400,3000700):
+if field_id in range(3000000,3000700):
     SCLib.UpdateVar("Cannoneer",True)
     SCLib.UpdateVar("DualBlade",False)
     print("Doing Cannoneer job adv")
@@ -8498,11 +8536,11 @@ def toggleAttack(on):
     elif job == 508: #Jett 1st
         attackAuto(5081020,on)
     elif job == 570: #Jett 2nd
-        attackAuto(5081020,on)
+        attackSIND(5701011,on,100)
     elif job == 571: #Jett 3rd
         attackAuto(5081020,on)
     elif job == 572: #Jett 4th
-        attackAuto(5081020,on)
+        attackSIND(5710020,on,100)
     elif job == 1100: #Dawn warrior 1st
         attackAuto(11001020,on)
     elif job in DawnWarriorJobs and field_id in curbrockhideout: #1001005
@@ -9800,11 +9838,11 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
             Quest.StartQuest(5499, sabitrama)
         elif curbrock1 ==1:
             if Quest.CheckCompleteDemand(5499, sabitrama) ==0:
-                if pos.x != -425 and field_id in curbrockhideout:
+                if field_id in curbrockhideout:
                     time.sleep(8)
                     dungeonTeleport()
                     print("Resume Kami")
-                elif pos.x != -549 and field_id == curbrockescaperoute1:
+                elif field_id == curbrockescaperoute1:
                     time.sleep(8)
                     dungeonTeleport()
                     toggle_rush_by_level(True)

@@ -267,26 +267,23 @@ def initAttack():
     elif job == 3112: #DS fourth job
         print("Setting up Settings for DS")
         Terminal.SetLineEdit("SISkillID","400011018")
-        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetSpinBox("SkillInjection",50)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Kami Vac",True)
-    elif job == 2312: #Mercedes 4th
+    elif job == 2312: #Mercedes 4th 400031024
         print("Setting up Settings for Mercedes")
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,23111000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        
+        Terminal.SetLineEdit("SISkillID","400031024")
+        Terminal.SetSpinBox("SkillInjection",110)
         Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", True)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        
+        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Kami Vac",True)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 4112: #Hayato 4th 41121011
         print("Setting up Settings for Hayato")
         Key.Set(pgup_key, 2, 2001582)
@@ -392,10 +389,10 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 6512: #AB 4th
         print("Setting up Settings for AB")
-        Terminal.SetLineEdit("SISkillID","65121100")
+        Terminal.SetLineEdit("SISkillID","400051011")
         Terminal.SetCheckBox("Auto Attack", False)
         
-        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetSpinBox("SkillInjection",0)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Skill Injection", True)
@@ -1035,9 +1032,9 @@ def startChuChu():
             SCLib.UpdateVar("CurStep", "FinishedChuChu")
             SunCat.UnhookChuChu()
         else:
-            time.sleep(0.5)
+            time.sleep(1.5)
             Npc.ClearSelection()
-            Npc.RegisterSelection("Enter <Hungry Muto>")
+            Npc.RegisterSelection("Enter ")
             if chuChuHardMode:
                 Npc.RegisterSelection("Hard")
             else:
