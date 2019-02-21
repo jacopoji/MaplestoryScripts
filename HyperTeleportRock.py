@@ -1,17 +1,9 @@
-import Character, GameState, Inventory, Key, Packet, Terminal, time, os, sys
-
-if not any("SunCat" in s for s in sys.path):
-    sys.path.append(os.getcwd() + "\SunCat")
-
-try:
-    import SunCat, SCHotkey, SCLib
-except:
-    print("Couldn't find SunCat module")
+import Character, GameState, Inventory, Key, Packet, Terminal, time
 
 # These will need updating each version
-CashItemRequestOpcode = 1262
-CashItemResultOpcode = 1647
-BuyByMesoRequest = 84
+CashItemRequestOpcode = 1337
+CashItemResultOpcode = 1739
+BuyByMesoRequest = 85
 LoadLockerDoneResult = 2
 MoveLToSRequest = 15
 
@@ -46,7 +38,7 @@ def BuyByMeso():
     Packet.SendPacket(oPacket)
     time.sleep(3)
     Packet.UnBlockSendHeader(CashItemResultOpcode)
- 
+
 def MoveLToS(liSN, nEmptySlotPOS):
     oPacket = Packet.COutPacket(CashItemRequestOpcode)
     oPacket.Encode1(MoveLToSRequest)
@@ -54,7 +46,7 @@ def MoveLToS(liSN, nEmptySlotPOS):
     oPacket.Encode1(5) # nTI
     oPacket.Encode2(nEmptySlotPOS)
     Packet.SendPacket(oPacket)
- 
+
 def CashItemResLoadLockerDone():
     iPacket = Packet.WaitForRecv(CashItemResultOpcode, 10000)
     if iPacket.GetRemaining() > 0:
@@ -80,7 +72,7 @@ def CashItemResLoadLockerDone():
             Terminal.LeaveCashShop()
     else:
         Terminal.LeaveCashShop()
- 
+
 def CashItemInfoDecode(iPacket):
     pCashItemInfo.liSN = iPacket.ReadLong(8)
     dwAccountID = iPacket.ReadLong(4)
@@ -113,6 +105,5 @@ if GameState.IsInGame():
             if not pItem.valid:
                 nEmptySlotPOS = i
                 break
-        SCLib.Delay(CashItemResLoadLockerDone, 0)
-        time.sleep(1)
         Terminal.EnterCashShop()
+        CashItemResLoadLockerDone()

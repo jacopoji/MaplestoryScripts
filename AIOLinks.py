@@ -17,8 +17,11 @@ Kinesis         DONE
 Aran            DONE
 Beast Tamer     DONE
 '''
+
+#demonS 00F3 [1A0101000000] 02A0 [458EB8030000]
+#demonA 00F3 [1A0100000000] 02A0 [CD5FB9030000]
 curbrockhideout = [600050000,600050010,600050020]
-useExploit = True
+useExploit = False
 #do Monster park how many times?
 do_MP = True
 do_MP_count = 2
@@ -38,6 +41,7 @@ getSpider = False
 DoBlackGate = False
 doSleepyWood = False
 doBeach = False
+get_pensalir = False
 #Key to restart pers. variables
 HotKey = 0x7A
 
@@ -319,26 +323,33 @@ def toggle_loot(indicator):
     Terminal.SetCheckBox("Auto Loot",indicator)
 
 def toggle_skill():
+    skill_key = 0x2D
     if job in WildHunterJobs:
         ride = 33001001
-        Key.Set(0x22, 1, ride)
+        Key.Set(skill_key, 1, ride)
         if Character.HasBuff(2, ride) == False:
             Terminal.SetCheckBox("Auto Attack",False)
             toggle_kami(False)
             time.sleep(2)
-            Key.Press(0x22)
+            Key.Press(skill_key)
             time.sleep(1)
             toggle_kami(True)
     elif job in MechanicJobs:
         humanoid = 35001002
-        Key.Set(0x22, 1, humanoid)
+        Key.Set(skill_key, 1, humanoid)
         if Character.HasBuff(2, humanoid) == False:
             Terminal.SetCheckBox("Auto Attack",False)
             toggle_kami(False)
             time.sleep(2)
-            Key.Press(0x22)
+            Key.Press(skill_key)
             time.sleep(1)
             toggle_kami(True)
+    elif job in FPMageJobs or job in ILMageJobs or job in BishopJobs:
+        buff = 2001002
+        Key.Set(skill_key, 1, buff)
+        if Character.HasBuff(2, buff) == False:
+            Key.Press(skill_key)
+            time.sleep(1)
 
 def teleport_enter(x,y):
     prefield = field_id
@@ -1006,7 +1017,7 @@ def has_pensalir():
     pensalir_mage_helmet = 1004230
     pensalir_bowman_helmet = 1004231
     pensalir_thief_helmet = 1004232
-    pensalir_pirate_helmet = 1004231
+    pensalir_pirate_helmet = 1004233
 
     pensalir_warrior_gloves = 1082608
     pensalir_mage_gloves = 1082609
@@ -1025,6 +1036,30 @@ def has_pensalir():
     pensalir_bowman_overall = 1052801
     pensalir_thief_overall = 1052802
     pensalir_pirate_overall = 1052803
+
+    cape_list = [pensalir_mage_cape,pensalir_warrior_cape,pensalir_bowman_cape,pensalir_thief_cape,pensalir_pirate_cape]
+    helmet_list = [pensalir_warrior_helmet,pensalir_mage_helmet,pensalir_bowman_helmet,pensalir_thief_helmet,pensalir_pirate_helmet]
+    glove_list = [pensalir_warrior_gloves,pensalir_mage_gloves,pensalir_bowman_gloves,pensalir_thief_gloves,pensalir_pirate_gloves]
+    shoe_list = [pensalir_warrior_shoes,pensalir_mage_shoes,pensalir_bowman_shoes,pensalir_thief_shoes,pensalir_pirate_shoes]
+    overall_list = [pensalir_warrior_overall,pensalir_mage_overall,pensalir_bowman_overall,pensalir_thief_overall,pensalir_pirate_overall]
+
+    if len(accountData['done_links']) >= 25:
+        get_pensalir = True
+    else:
+        get_pensalir = False
+    print("Has shoe : {}".format(Character.GetEquippedItemIDBySlot(shoe_slot) in shoe_list))
+    print("Has cape : {}".format(Character.GetEquippedItemIDBySlot(cape_slot) in cape_list))
+    print("Has helmet : {}".format(Character.GetEquippedItemIDBySlot(helmet_slot) in helmet_list))
+    print("Has glove : {}".format(Character.GetEquippedItemIDBySlot(glove_slot) in glove_list))
+    print("Has overall : {}".format(Character.GetEquippedItemIDBySlot(top_slot) in overall_list))
+    if Character.GetEquippedItemIDBySlot(shoe_slot) in shoe_list and Character.GetEquippedItemIDBySlot(cape_slot) in cape_list and Character.GetEquippedItemIDBySlot(helmet_slot) in helmet_list and Character.GetEquippedItemIDBySlot(glove_slot) in glove_list and Character.GetEquippedItemIDBySlot(top_slot) in overall_list:
+        print("Has pensalir gear now")
+        return True
+    else:
+        if get_pensalir:
+            return False
+        else:
+            return True
     
     utgard_fan = 1552102
 
@@ -1218,6 +1253,7 @@ def DAThird():
                     Quest.CompleteQuest(CalmBeforeTheStorm,2151009)
                     toggle_rush_by_level(True)
                     SCLib.UpdateVar("DoingJobAdv",False)
+                    time.sleep(1)
             else:
 
                 toggle_kami(True)
@@ -1247,6 +1283,7 @@ def DSThird():
                     Quest.CompleteQuest(TrueAwakening,2151009)
                     toggle_rush_by_level(True)
                     SCLib.UpdateVar("DoingJobAdv",False)
+                    time.sleep(1)
             else:
                 if field_id == 220050300:
                     Character.TalkToNpc(2159331)
@@ -1442,6 +1479,7 @@ def IlliumFirst():
     festival4 = Quest.GetQuestState(34816)
     jobadv = Quest.GetQuestState(34817)
     escape = Quest.GetQuestState(34718)
+    toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     while Terminal.IsRushing():
         if field_id == 402000521 or field_id == 402000524:
@@ -1764,6 +1802,7 @@ def IlliumFirst():
         Character.Teleport(915, 10000)
         Quest.CompleteQuest(34718, 3001344)
         SCLib.UpdateVar("DoingJobAdv",False)
+        toggle_rush_by_level(True)
         time.sleep(10)
 
 def IlliumSecond():
@@ -2091,6 +2130,8 @@ def CadenaFirst():
                 time.sleep(5)
             if field_id == 402000210:
                 Quest.CompleteQuest(34611, 3001214)
+            else:
+                rush(402000210)
         if field_id == 940200700:
             print("first field")
             if len(Field.GetMobs()) == 0:
@@ -2772,8 +2813,11 @@ def EvanFirst():
             acceptQuest(StrangeDream,Mom,livingroom,field_id)
             SCLib.UpdateVar("EvanLogout",True)
         elif quest1 == 1:
+            Terminal.SetCheckBox("settings/explogout",True)
+            Terminal.SetSpinBox("settings/explogout",1)
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(StrangeDream,Utah,frontyard,frontyard,field_id) # leaving living room once completing the quest at Utah once
             time.sleep(1)
@@ -2785,12 +2829,14 @@ def EvanFirst():
         if quest2 == 0:
             toggle_kami(False)
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(FeedingBullDog,Utah,frontyard,field_id) #once before accepting quest
             time.sleep(1)
             if Quest.GetQuestState(FeedingBullDog) != 1:
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
         elif quest2 == 1:
             completeQuest(FeedingBullDog,BullDog,frontyard,frontyard,field_id)
@@ -2803,7 +2849,8 @@ def EvanFirst():
         elif quest3 == 1:
             sandwich = Inventory.FindItemByID(2022620)
             if SCLib.GetVar("EvanLogout") and sandwich.valid:
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             if sandwich.valid:
                 time.sleep(1)
@@ -2818,18 +2865,21 @@ def EvanFirst():
         Terminal.SetCheckBox("settings/loginwait",False)
         if quest4 == 0:
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(DeliveringTheLunchBox,Mom,livingroom,field_id) #lunch box once
             time.sleep(1)
             if Quest.GetQuestState(DeliveringTheLunchBox) == 1:
                 SCLib.UpdateVar("EvanLogout",True)
             else:
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
         elif quest4 == 1:
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(DeliveringTheLunchBox,Dad,farmcentre,farmcentre,field_id)
     elif quest5 != 2:
@@ -2839,12 +2889,15 @@ def EvanFirst():
             acceptQuest(FixingTheFence,Dad,farmcentre,field_id) #attaking once
         elif quest5 == 1:
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(FixingTheFence,Dad,farmcentre,farmcentre,field_id)
+            toggle_loot(True)
     elif quest6 != 2:
         print("6")
         Terminal.SetCheckBox("settings/loginwait",False)
+        toggle_loot(False)
         if quest6 == 0:
             print("Toggling logout var")
             SCLib.UpdateVar("EvanLogout",True)
@@ -2853,7 +2906,8 @@ def EvanFirst():
             if Quest.CheckCompleteDemand(RescuingThePiglet,Dad) != 0:
                 if SCLib.GetVar("EvanLogout"):
                     SCLib.UpdateVar("EvanLogout",False)
-                    Terminal.Logout()
+                    if GameState.IsInGame():
+                        Terminal.Logout()
                 if field_id == lushforest:
                     piglet = Field.FindNpc(1013200)
                     if piglet.valid:
@@ -2882,7 +2936,8 @@ def EvanFirst():
                 SCLib.UpdateVar("EvanLogout",True)
             elif field_id == lushforest or field_id == 900020110: #dragon egg once
                 if SCLib.GetVar("EvanLogout"):
-                    Terminal.Logout()
+                    if GameState.IsInGame():
+                        Terminal.Logout()
                     SCLib.UpdateVar("EvanLogout",False)
                 toggle_kami(False)
                 Key.Press(0x08)
@@ -2915,7 +2970,8 @@ def EvanFirst():
     elif quest9 != 2:
         if quest9 == 0: #incubator once
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(ChasingAwayTheFoxes,Utah,frontyard,field_id)
             time.sleep(1)
@@ -2923,7 +2979,8 @@ def EvanFirst():
                 SCLib.UpdateVar("EvanLogout",True)
         elif quest9 == 1: #setting up hot key once
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(ChasingAwayTheFoxes,Utah,frontyard,backyard,field_id)
             time.sleep(1)
@@ -2932,7 +2989,8 @@ def EvanFirst():
     elif quest10 != 2:
         if quest10 == 0:
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(VerifyingTheFarmSituation,Utah,frontyard,field_id)
         elif quest10 == 1:
@@ -2943,7 +3001,8 @@ def EvanFirst():
             SCLib.UpdateVar("EvanLogout",True)
         elif quest11 == 1: #dragon out once
             if SCLib.GetVar("EvanLogout") and level == 10:
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(StrangeFarm,Dad,farmcentre,largeforesttrail,field_id)
     elif quest12 != 2:
@@ -2952,7 +3011,8 @@ def EvanFirst():
             SCLib.UpdateVar("EvanLogout",True)
         elif quest12 == 1: #stat window
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             completeQuest(BabyDragonAwakens,Mir,farmcentre,largeforesttrail,field_id)
     elif quest13 != 2:
@@ -2972,6 +3032,7 @@ def EvanFirst():
                 if Quest.CheckCompleteDemand(ABiteOfHay,Mir) == 0:
                     break
                 else:
+                    toggle_loot(True)
                     if pos.x != haystack.x:
                         Character.Teleport(haystack.x,haystack.y)
                         toggleAttack(False)
@@ -2993,11 +3054,13 @@ def EvanFirst():
                         time.sleep(2)
                         Character.BasicAttack()
             completeQuest(ABiteOfHay,Mir,farmcentre,farmcentre,field_id)
+            toggle_loot(False)
             SCLib.UpdateVar("EvanLogout",True)
     elif quest15 != 2:
         if quest15 == 0: #destroying object once
             if SCLib.GetVar("EvanLogout"):
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
                 SCLib.UpdateVar("EvanLogout",False)
             acceptQuest(ABiteOfPork,Mir,farmcentre,field_id)
         elif quest15 ==1:
@@ -3037,7 +3100,8 @@ def EvanFirst():
             completeQuest(LetterDelivery,ChiefStan,henesys,henesys,field_id)
             if SCLib.GetVar("EvanLogout"):
                 SCLib.UpdateVar("EvanLogout",False)
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
             if field_id == henesys:
                 toggle_kami(False)
                 Character.Teleport(3350,124)
@@ -3056,6 +3120,7 @@ def EvanFirst():
         SCLib.UpdateVar("DoingJobAdv",False)
         SCLib.UpdateVar("EvanLogout",False)
         Terminal.SetCheckBox("settings/loginwait",True)
+        Terminal.SetCheckBox("settings/explogout",False)
 
 def XenonSecond():
     #print("Needs to be implemented")
@@ -3220,7 +3285,7 @@ def PhantomSecond():
                         time.sleep(1)
                     elif field_id == cloudpark2:
                         teleport_enter(1116,-637)
-                        time.sleep(1)
+                        time.sleep(2)
                 elif field_id == smallpark:
                     teleport_enter(263,83)
                     time.sleep(2)
@@ -3822,9 +3887,11 @@ def AranThird():
                             else:
                                 toggle_kami(True)
                                 toggleAttack(True)
+                                toggle_loot(True)
                         elif Quest.CheckCompleteDemand(FriendshipWithYeti,Tititi) == 0:
                             if field_id != razorsharpcliff:
                                 dungeonTeleport()
+                                toggle_loot(False)
                             else:
                                 completeQuest(FriendshipWithYeti,Tititi,razorsharpcliff,razorsharpcliff,field_id)
             elif Quest.CheckCompleteDemand(MakingRedJade,Maha) == 0:
@@ -4021,6 +4088,7 @@ def ExplorerSecond():
     print("Explorer 2")
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
+    Terminal.SetCheckBox("Auto Loot",True)
     thiefQuest = 1421
     warriorQuest = 1410
     fighterQuest = 1411
@@ -4171,9 +4239,13 @@ def ExplorerSecond():
                         completeQuest(targetJob,Instructor,toGoMap,toGoMap,field_id)
                         SCLib.UpdateVar("DoingJobAdv",False)
                         toggle_rush_by_level(True)
+                        toggle_loot(False)
                 else:
-                    toggle_kami(True)
-                    print("not done")
+                    if len(Field.GetMobs()) > 0:
+                        toggle_kami(True)
+                        print("not done")
+                    else:
+                        print("Not in map, need to forfeit quest")
 
 def ExplorerThird():
     print("Explorer 3")
@@ -4486,9 +4558,9 @@ def ExplorerFourth():
                     loot = Field.FindItem(pentagon_loot)
                     time.sleep(2)
                     if not loot.valid:
+                        time.sleep(5)
                         toggleAttack(True)
                         toggle_kami(True)
-                        time.sleep(2)
                         mobs = Field.GetMobs()
                         if len(mobs) == 0 and not Field.FindItem(pentagon_loot).valid:
                             Terminal.SetCheckBox("timedCCCheck",True)
@@ -4513,10 +4585,10 @@ def ExplorerFourth():
                     time.sleep(2)
                     loot = Field.FindItem(star_loot)
                     if not loot.valid:
+                        time.sleep(5)
                         toggleAttack(True)
                         toggle_kami(True)
                         mobs = Field.GetMobs()
-                        time.sleep(3)
                         if len(mobs) == 0 and not Field.FindItem(star_loot).valid:
                             Terminal.SetCheckBox("timedCCCheck",True)
                             time.sleep(1)
@@ -6000,6 +6072,8 @@ def JettFourth():
                 rush(steephill)
             else:
                 teleport_enter(441,332)
+                toggle_rush_by_level(True)
+                SCLib.UpdateVar("DoingJobAdv",False)
 
 def CannoneerFirst():
     def Autism():
@@ -6060,11 +6134,13 @@ def CannoneerFirst():
     elif Quest4 != 2:
         if field_id == 3000100 and Quest4 != 2:
             if Quest4 == 0:
+                Npc.ClearSelection()
                 Npc.RegisterSelection('''Is there someone else there?''')
                 Quest.StartQuest(2562, 1096003)
                 time.sleep(3)
             elif Quest4 == 1:
                 if field_id == 3000100:
+                    toggle_kami(False)
                     Character.Teleport(847, 118)
                     time.sleep(1)
                     Key.Press(0x26)
@@ -6072,6 +6148,7 @@ def CannoneerFirst():
                     Character.Teleport(-257, 164)
                     Quest.CompleteQuest(2562, 1096005)
                 elif field_id == 3000200:
+                    toggle_kami(False)
                     Character.Teleport(-257, 164)
                     Quest.CompleteQuest(2562, 1096005)
     elif Quest5 != 2:
@@ -6088,6 +6165,7 @@ def CannoneerFirst():
                 time.sleep(1)
         elif Quest6 == 1 and Quest.CheckCompleteDemand(2564, 1096005) != 0:
             if field_id != 3000300:
+                toggle_kami(False)
                 Character.Teleport(382, 164)
                 time.sleep(1)
                 Key.Press(0x26)
@@ -6115,10 +6193,12 @@ def CannoneerFirst():
                 box = Field.FindReactor(1209001)
                 toggle_loot(True)
                 if Character.GetPos().x != box.x-10:
+                    toggle_kami(False)
                     Character.Teleport(box.x-10,box.y)
                     Autism()
                     time.sleep(2)
             elif field_id != 3000400:
+                toggle_kami(False)
                 Character.Teleport(150, -175)
                 time.sleep(1)
                 Key.Press(0x26)
@@ -6127,6 +6207,7 @@ def CannoneerFirst():
             if field_id == 3000200:
                 Quest.CompleteQuest(2565, 1096005)
             elif field_id != 3000200:
+                toggle_kami(False)
                 Character.Teleport(-1764, 168)
                 time.sleep(1)
                 Key.Press(0x26)
@@ -7530,7 +7611,7 @@ def GetToTheDoorToZakum():
         #Phantom, Xenon, Dual Blade
         Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6411,6412,6410,422,421,411,412,1412,1411]
         #Kanna, Battle Mage, Beast Tamer, Blaze Wizard, Evan, Luminous
-        Magician = [211,212,221,222,231,232,14212,15211,15212,4200, 4210, 4211, 4212, 3200, 3210, 3211, 3212, 11000, 11200, 11210, 11211, 11212, 1200, 1210, 1211, 1212, 2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2700, 2710, 2711, 2712, ]
+        Magician = [211,212,221,222,231,232,14211,14212,15211,15212,4200, 4210, 4211, 4212, 3200, 3210, 3211, 3212, 11000, 11200, 11210, 11211, 11212, 1200, 1210, 1211, 1212, 2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2700, 2710, 2711, 2712, ]
         #Aran, Blaster, Demon Avenger, Demon Slayer, Hayato, Kaiser, Mihile, Zero, Dawn Warrior
         Warrior = [111,112,121,122,131,132,3700, 3710, 3711, 3712, 2100, 2110, 2111, 2112, 3101, 3120, 1321, 3122,3121, 3100, 3110, 3111, 3112, 4100, 4110, 4111, 4112, 6100, 6110, 6111, 6112, 5100, 5110, 5111, 5112, 10100, 10110, 10111, 10112, 1100, 1110, 1111, 1112]
         if job in Bowman:
@@ -7559,7 +7640,7 @@ def GetToTheDoorToZakum():
             Npc.RegisterSelection("I want to ")
             time.sleep(1)
             Character.TalkToNpc(TalkNPC)
-            time.sleep(1)
+            time.sleep(3)
         else:
             Quest.StartQuest(questToDo,TalkNPC)
             time.sleep(4)
@@ -7597,7 +7678,7 @@ def handleReady(data):
         data['storage_number'] = 0
     if 'cur_link_pos' not in data:
         if 'link_start' in data:
-            data['cur_link_pos'] = data['link_start']
+            data['cur_link_pos'] = str(data['link_start'])
     if 'changing_mule' not in data:
         data['changing_mule'] = False
     if 'date' not in data:
@@ -7630,7 +7711,7 @@ if field_id in range(3000000,3000700):
     SCLib.UpdateVar("Cannoneer",True)
     SCLib.UpdateVar("DualBlade",False)
     print("Doing Cannoneer job adv")
-elif field_id in range(103050900,103050900+100) or job in DualbladeJobs[1::] or (job == 400 and 'Shadower' in accountData['done_links'] and 'Night Lord' in accountData['done_links']):
+elif field_id in range(103050900,103050900+100) or job in DualbladeJobs[1::]:
     SCLib.UpdateVar("Cannoneer",False)
     SCLib.UpdateVar("DualBlade",True)
 
@@ -7768,7 +7849,7 @@ elif len(accountData["done_links"]) < 20 and accountData['training_done']:
 
 def safety_setting():
     #Turn off dangerous settings
-    dangerous_settings = ["Auto Aggro","MonkeySpiritsNDcheck","General FMA","Full Map Attack","Mob Vac","Mob Falldown","Vellum Freeze","main/boss_freeze","Full God Mode","Guard God Mode"]
+    dangerous_settings = ["Auto Aggro","MonkeySpiritsNDcheck","General FMA","Full Map Attack","Mob Vac","Vellum Freeze","main/boss_freeze","Full God Mode","Guard God Mode"]
     for settings in dangerous_settings:
         if settings == "General FMA":
             if job not in IlliumJobs and job not in BlasterJobs:
@@ -7782,7 +7863,10 @@ def safety_setting():
 def attackAuto(skillid,on):
     attack_key = 0x44
     pgup_key = 0x21
-    Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+    if Inventory.FindItemByID(2001582).valid:
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+    else:
+        Key.Set(pgup_key, 2, 2002023)
     Key.Set(attack_key,1,skillid)
     Terminal.SetCheckBox("Skill Injection", False)
     #Terminal.SetSpinBox("SkillInjection",100)
@@ -7796,7 +7880,10 @@ def attackAuto(skillid,on):
 def attackSI(skillid,on,delay=100):
     attack_key = 0x44
     pgup_key = 0x21
-    Key.Set(pgup_key, 2, 2001582)
+    if Inventory.FindItemByID(2001582).valid:
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+    else:
+        Key.Set(pgup_key, 2, 2002023)
     Terminal.SetLineEdit("SISkillID",str(skillid))
     Terminal.SetSpinBox("SkillInjection",delay)
     Terminal.SetCheckBox("Melee No Delay",False)
@@ -7806,7 +7893,10 @@ def attackSI(skillid,on,delay=100):
 def attackSIND(skillid,on,delay=100):
     attack_key = 0x44
     pgup_key = 0x21
-    Key.Set(pgup_key, 2, 2001582)
+    if Inventory.FindItemByID(2001582).valid:
+        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+    else:
+        Key.Set(pgup_key, 2, 2002023)
     Terminal.SetLineEdit("SISkillID",str(skillid))
     Terminal.SetSpinBox("SkillInjection",delay)
     Terminal.SetCheckBox("Melee No Delay",on)
@@ -7837,6 +7927,12 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto AP",True)
     if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum"):
         toggle_kami(on)
+        if Terminal.GetCheckBox("Legit Vac") and Terminal.GetCheckBox("Kami Vac") and not Terminal.GetCheckBox("Melee No Delay"):
+            Terminal.SetCheckBox("Mob Falldown",on)
+        else:
+            Terminal.SetCheckBox("Mob Falldown",False)
+    else:
+        Terminal.SetCheckBox("Mob Falldown",False)
     if job == 4200: #kanna first job
         Terminal.SetCheckBox("Auto SP",True)
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -8205,7 +8301,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",on)
         Terminal.SetCheckBox("bot/illium/summon_control",on)
         Terminal.SetCheckBox("General FMA",on)
-    elif job == 6400 or job == 6410 or job == 6411: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
+    elif job == 6400 or job == 6410 or job == 6411 or job == 6412: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
         Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","64001006")
         Terminal.SetSpinBox("SkillInjection",200)
@@ -8223,15 +8319,17 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 15500 or job == 15510 or job == 15511: #Ark 1st + 2nd + 3rd 155001100
+    elif job == 15500 or job == 15510 or job == 15511 or job == 15512: #Ark 1st + 2nd + 3rd 155001100
         Key.Set(pgup_key, 2, 2001582)
+        Key.Set(attack_key,1,155001100)
         Terminal.SetLineEdit("SISkillID", "155001100")
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetSpinBox("SkillInjection",700)
         Terminal.SetCheckBox("Auto SP",True)
         Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Auto Attack",on)
         Terminal.SetCheckBox("Skill Injection", False)
+        Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 15512: #Ark 4th 155121007 @50
         Terminal.SetLineEdit("SISkillID", "155121007")
         Terminal.SetCheckBox("Auto Attack",False)
@@ -8536,11 +8634,11 @@ def toggleAttack(on):
     elif job == 508: #Jett 1st
         attackAuto(5081020,on)
     elif job == 570: #Jett 2nd
-        attackSIND(5701011,on,100)
+        attackSIND(5701011,on,150)
     elif job == 571: #Jett 3rd
-        attackAuto(5081020,on)
+        attackSIND(5710020,on,150)
     elif job == 572: #Jett 4th
-        attackSIND(5710020,on,100)
+        attackSIND(5710020,on,150)
     elif job == 1100: #Dawn warrior 1st
         attackAuto(11001020,on)
     elif job in DawnWarriorJobs and field_id in curbrockhideout: #1001005
@@ -8603,18 +8701,14 @@ def toggleAttack(on):
         attackAuto(15121001,on)
     elif job == 3300: #Wild Hunter 1st
         attackAuto(33001105,on)
-        toggle_skill()
     elif job in WildHunterJobs and field_id in curbrockhideout: #1001005
         attackAuto(33001105,on)
     elif job == 3310: #Wild Hunter 2nd
         attackAuto(33101113,on)
-        toggle_skill()
     elif job == 3311: #Wild Hunter 3rd
         attackAuto(33111112,on)
-        toggle_skill()
     elif job == 3312: #Wild Hunter 4th
         attackAuto(33121114,on)
-        toggle_skill()
     elif job == 3200: #Battle Mage 1st
         attackSI(32001014,on)
     elif job in BattleMageJobs and field_id in curbrockhideout: #1001005
@@ -8642,19 +8736,14 @@ def toggleAttack(on):
         #Terminal.SetCheckBox("General FMA",on)
     elif job == 3500: #Mechanic 1st
         attackAuto(35001004,on)
-        toggle_skill()
     elif job in MechanicJobs and field_id in curbrockhideout: #1001005
         attackAuto(35001004,on)
-        toggle_skill()
     elif job == 3510: #Mechanic 2nd
         attackAuto(35101001,on)
-        toggle_skill()
     elif job == 3511: #Mechanic 3rd
         attackAuto(35111006,on)
-        toggle_skill()
     elif job == 3512: #Mechanic 4th
         attackAuto(35111006,on)
-        toggle_skill()
     elif job == 11212: #Beast Tamer
         if level <= 17:
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -8789,7 +8878,7 @@ def toggleAttack(on):
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 14211 or job == 14212: #Kinesis 3rd + 4th 142111002
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        #Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,142111002)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
@@ -8800,11 +8889,11 @@ def toggleAttack(on):
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 6500: #AB 1st
-        attackSIND(60011216,on)
-        Terminal.SetRadioButton("SIRadioMagic",True)
+        attackSIND(60011216,on,150)
+        Terminal.SetRadioButton("SIRadioMelee",True)
     elif job == 6510 or job == 6511: #AB 2nd + 3rd
-        attackSI(65101100,on)
-        Terminal.SetRadioButton("SIRadioMagic",True)
+        attackSI(65001100,on)
+        Terminal.SetRadioButton("SIRadioMelee",True)
     elif job == 6512: #AB 4th
         attackSI(65121008,on)
         Terminal.SetRadioButton("SIRadioMagic",True)
@@ -8867,6 +8956,7 @@ def toggleAttack(on):
     if job not in IlliumJobs:
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         Terminal.SetCheckBox("bot/illium/summon_control",False)
+    toggle_skill()
     Terminal.SetCheckBox("MonkeySpiritsNDcheck", False)
 
 def GetEmblem():
@@ -8937,7 +9027,10 @@ elif job == 2711 and level >=100 and not SCLib.GetVar("DoingCurbrock") and not S
     toggle_rush_by_level(True)
     toggle_kami(True)
     time.sleep(2)
-    
+elif (job == 3101 or job == 3100) and level == 10:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    time.sleep(2)
 elif (job == 3101 or job ==3100) and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Demon Avenger first job")
     toggle_rush_by_level(False)
@@ -9029,11 +9122,12 @@ elif job == 15001:
 elif job == 15500:
     print("Completing Ark First Job")
     ArkFirst()
-elif job == 15510 and level < 35 and not SCLib.GetVar("DoingCurbrock"):
+elif job == 15510 and level < 35 and Quest.GetQuestState(34940) != 2 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Ark Second Job")
     ArkSecond()
-    if Quest.GetQuestState(34940) == 2 and not SCLib.GetVar("DoingCurbrock"):
-        toggle_rush_by_level(True)
+elif job == 15510 and level < 35 and Quest.GetQuestState(34940) == 2 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("GettingBoogie"):
+    toggle_rush_by_level(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
 elif job == 15510 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Ark Third Job")
     ArkSecond()
@@ -9142,7 +9236,7 @@ elif job == 2412:
 elif job == 11212 and Quest.GetQuestState(55234) != 2 and level < 35:
     print("Doing Beast Tamer Prequests")
     BeastTamerFirst()
-elif (job == 2000 or job == 2100) and Quest.GetQuestState(21700) != 2:
+elif (job == 2000 or job == 2100) and Quest.GetQuestState(21700) != 2 and level < 13:
     print("Doing Aran First Job")
     AranFirst()
 elif job == 2100 and field_id == 140000000 and level < 30:
@@ -9159,7 +9253,7 @@ elif job == 2100 and level == 10 and field_id == 140020300 and Character.GetMeso
             toggle_rush_by_level(True)
             SCLib.UpdateVar("DoingJobAdv",False)
             break
-elif job == 2100 and field_id == 100020400 and level < 30:
+elif job == 2100 and level < 30:
     polearm = Inventory.FindItemByID(1442077)
     if polearm.valid:
         Inventory.SendChangeSlotPositionRequest(1,polearm.pos,weapon_slot,-1)
@@ -9194,12 +9288,19 @@ elif job == 400 and level < 11:
     toggle_kami(True)
     SCLib.UpdateVar("DoingJobAdv",False)
     knife = Inventory.FindItemByID(1332063)
+    stars = Inventory.FindItemByID(2070015)
     if knife.valid:
         Inventory.SendChangeSlotPositionRequest(1,knife.pos,weapon_slot,-1)
-    if SCLib.GetVar("DualBlade"):
-        Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinksDB.xml")
-    else:
-        Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinks.xml")
+    if not Terminal.GetProperty("checked", -1):
+        if stars.valid:
+            SCLib.UpdateVar("DualBlade",False)
+        else:
+            SCLib.UpdateVar("DualBlade",True)
+        if SCLib.GetVar("DualBlade"):
+            Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinksDB.xml")
+        else:
+            Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinks.xml")
+        Terminal.SetProperty("checked", 1)
 elif (job == 410 or job == 1400) and level < 31:
     claw = Inventory.FindItemByID(1472061)
     if claw.valid:
@@ -9313,6 +9414,11 @@ elif job == 571 and level < 70 and field_id == 552000071:
     SCLib.UpdateVar("DoingJobAdv",False)
 elif job == 571 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
     JettFourth()
+elif job == 572 and level <= 104 and SCLib.GetVar("DoingJobAdv"):
+    if field_id == 240010300:
+        toggle_rush_by_level(True)
+        toggle_kami(True)
+        SCLib.UpdateVar("DoingJobAdv",False)
 elif job == 1000:
     CygnusFirst()
 elif job in cygnusFirstJobs and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
@@ -9497,8 +9603,10 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
     # Jr. Boogie
     if job in IlliumJobs:
         lookback = Quest.GetQuestState(34820)
-        if lookback == 2:
+        if lookback == 2 or level >= 33:
             getBoogie()
+        else:
+            print("Illium not done")
     elif job in CadenaJobs:
         if Quest.GetQuestState(34625) == 2:
             getBoogie()
@@ -9718,13 +9826,15 @@ if level >= 150 and not accountData['phase_one'] and not SCLib.GetVar("DoingZaku
             accountData['changing_mule'] = True
             writeJson(accountData,accountId)
             toggle_rush_by_level(True)
-            Terminal.Logout()
+            if GameState.IsInGame():
+                Terminal.Logout()
         else:
             print("Current character done, moving to next one")
             accountData['changing_mule'] = True
             writeJson(accountData,accountId)
             toggle_rush_by_level(True)
-            Terminal.Logout()
+            if GameState.IsInGame():
+                Terminal.Logout()
 
 '''
 if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
@@ -9741,13 +9851,26 @@ if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
         Terminal.Logout()
 '''
 if level >= 140 and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv"):
-    if field_id != 240000000:
-        rush(240000000)
+    if has_pensalir():
+        if field_id != 240000000:
+            rush(240000000)
+        else:
+            print("Current character done, moving to next one")
+            accountData['changing_mule'] = True
+            writeJson(accountData,accountId)
+            if GameState.IsInGame():
+                Terminal.Logout()
     else:
-        print("Current character done, moving to next one")
-        accountData['changing_mule'] = True
-        writeJson(accountData,accountId)
-        Terminal.Logout()
+        toggle_rush_by_level(True)
+        toggle_loot(False)
+        pet = Inventory.FindItemByID(2434265)
+        if pet.valid:
+            Key.Set(0x41, 2, 2001582)
+            time.sleep(2)
+            Inventory.UseItem(2434265)
+            time.sleep(2)
+        Terminal.SetCheckBox("settings/expcrash",False)
+        Terminal.SetCheckBox("Instant Final Smash",False)
 #####Black gate    
 
 #print(SCLib.GetVar("cube_lock"))
@@ -9828,14 +9951,17 @@ curbrockescaperoute1 = 600050030
 curbrockescaperoute2 = 600050040
 curbrockescaperoute3 = 600050050
 escaperoutes = [curbrockescaperoute1,curbrockescaperoute2,curbrockescaperoute3]
-if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <= 29 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
+if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <= 29 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv"):
     pos = Character.GetPos()
-    if curbrock1 !=2:
+    if job in IlliumJobs and Quest.GetQuestState(34820) !=2:
+        print("Illium undone quest")
+    elif curbrock1 !=2:
         print("Doing first Curbrock")
         SCLib.UpdateVar("DoingCurbrock",True)
+        toggle_rush_by_level(False)
         if curbrock1 ==0:
-            toggle_rush_by_level(False)
             Quest.StartQuest(5499, sabitrama)
+            time.sleep(3)
         elif curbrock1 ==1:
             if Quest.CheckCompleteDemand(5499, sabitrama) ==0:
                 if field_id in curbrockhideout:
@@ -9859,35 +9985,39 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 27 and level <
                     teleport_enter(-425,-195)
 if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level < 60 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
-    if job == 15210 and Quest.GetQuestState(34820) !=2:
+    if job in IlliumJobs and Quest.GetQuestState(34820) !=2:
         print("Illium undone quest")
     elif job in ArkJobs and Quest.GetQuestState(34902) !=2 and Quest.GetQuestState(34940) != 2:
         print("Ark undone quest")
     elif job in CadenaJobs:
         if Quest.GetQuestState(34625) != 2:
             print("Cadena undone quest")
-    if curbrock2 ==0:
+    elif curbrock2 ==0:
         print("Doing second curbrock")
         toggle_rush_by_level(False)
         SCLib.UpdateVar("DoingCurbrock",True)
         Quest.StartQuest(5500, sabitrama)
+        time.sleep(3)
     elif SCLib.GetVar("DoingCurbrock"):
+        toggle_rush_by_level(False)
         if curbrock2 == 1:
             if field_id not in curbrockhideout and field_id not in escaperoutes:
                 SCLib.UpdateVar("DoingCurbrock",False)
         if Quest.CheckCompleteDemand(5500, sabitrama) ==0:
             print("Quest completed")
-            if pos.x != -425 and field_id in curbrockhideout:
+            if pos.x != -425 and field_id in curbrockhideout and len(Field.GetMobs()) == 0:
                 time.sleep(8)
                 dungeonTeleport()
                 print("Resume Kami")
-            elif pos.x != -549 and field_id == curbrockescaperoute2:
+            elif pos.x != -549 and field_id == curbrockescaperoute2 and len(Field.GetMobs()) == 0:
                 time.sleep(8)
                 dungeonTeleport()
                 toggle_rush_by_level(True)
             else:
                 Quest.CompleteQuest(5500,sabitrama)
                 SCLib.UpdateVar("DoingCurbrock",False)
+                time.sleep(4)
+                toggle_rush_by_level(True)
         else:
             print("Enable kami to kill curbrock")
             SCLib.UpdateVar("DoingCurbrock",True)
@@ -9901,21 +10031,23 @@ if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and leve
         toggle_rush_by_level(False)
         Quest.StartQuest(5501, sabitrama)
         SCLib.UpdateVar("DoingCurbrock",True)
+        time.sleep(3)
     elif SCLib.GetVar("DoingCurbrock"):
         if curbrock3 == 1:
             if field_id not in curbrockhideout and field_id not in escaperoutes:
                 SCLib.UpdateVar("DoingCurbrock",False)
         if Quest.CheckCompleteDemand(5501, sabitrama) ==0:
-            if pos.x != -425 and field_id in curbrockhideout:
+            if pos.x != -425 and field_id in curbrockhideout and len(Field.GetMobs()) == 0:
                 time.sleep(8)
                 dungeonTeleport()
-            elif pos.x != -549 and field_id == curbrockescaperoute3:
+            elif pos.x != -549 and field_id == curbrockescaperoute3 and len(Field.GetMobs()) == 0:
                 time.sleep(8)
                 dungeonTeleport()
                 toggle_rush_by_level(True)
             else:
                 Quest.CompleteQuest(5501,sabitrama)
                 SCLib.UpdateVar("DoingCurbrock",False)
+                toggle_rush_by_level(True)
         else:
             print("Enable kami to kill curbrock")
             SCLib.UpdateVar("DoingCurbrock",True)
@@ -9947,10 +10079,12 @@ elif field_id in escaperoutes:
     toggleAttack(True)
     toggle_rush_by_level(True)
     SCLib.UpdateVar("DoingCurbrock",False)
-elif field_id not in curbrockhideout and field_id not in escaperoutes and SCLib.GetVar("DoingCurbrock"):
+elif field_id not in curbrockhideout and field_id not in escaperoutes and SCLib.GetVar("DoingCurbrock") and len(Field.GetMobs()) == 0:
+    print("Ended up somewhere weird")
     SCLib.UpdateVar("DoingCurbrock",False)
     toggleAttack(True)
     toggle_kami(True)
+    time.sleep(4)
     toggle_rush_by_level(True)
     Terminal.StopRush()
 

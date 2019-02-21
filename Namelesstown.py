@@ -10,18 +10,17 @@ import Quest
 import Terminal
 import time
 import Packet
+import GameState,Party
 
 Terminal.SetRushByLevel(False)
 
-while True:
+if GameState.IsInGame():
     time.sleep(1)
     jobid = Character.GetJob()
     level = Character.GetLevel()
-    if jobid == -1 or level == -1:
-        continue
 
     if Terminal.IsRushing():
-        continue
+        time.sleep(1)
 
     fieldid = Field.GetID()
     quest1 = Quest.GetQuestState(1466)
@@ -91,8 +90,6 @@ while True:
             else:
                 if fieldid != 450001010:
                     Terminal.Rush(450001010)
-                else:
-                    continue
     elif quest2 != 2:
         if fieldid != 450001000:
             Terminal.Rush(450001000)
@@ -125,8 +122,6 @@ while True:
             else:
                 if fieldid != 450001010:
                     Terminal.Rush(450001010)
-                else:
-                    continue
     elif quest5 != 2:
         if quest5 == 0:
             if fieldid != 450001000:
@@ -142,8 +137,6 @@ while True:
             else:
                 if fieldid != 450001012:
                     Terminal.Rush(450001012)
-                else:
-                    continue
     elif quest6 != 2:
         if quest6 == 0:
             if fieldid != 450001000:
@@ -159,8 +152,6 @@ while True:
             else:
                 if fieldid != 450001014:
                     Terminal.Rush(450001014)
-                else:
-                    continue
     elif quest7 != 2:
         if quest7 == 0:
             if fieldid != 450001000:
@@ -176,8 +167,6 @@ while True:
             else:
                 if fieldid != 450001016:
                     Terminal.Rush(450001016)
-                else:
-                    continue
     elif quest8 != 2:
         if fieldid != 450001000:
             Terminal.Rush(450001000)
@@ -224,8 +213,6 @@ while True:
             else:
                 if fieldid != 450001110:
                     Terminal.Rush(450001110)
-                else:
-                    continue
     elif quest14 != 2:
         if quest14 == 0:
             if fieldid != 450001100:
@@ -241,8 +228,6 @@ while True:
             else:
                 if fieldid != 450001112:
                     Terminal.Rush(450001112)
-                else:
-                    continue
     elif quest15 != 2:
         if quest15 == 0:
             if fieldid != 450001100:
@@ -258,8 +243,6 @@ while True:
             else:
                 if fieldid != 450001114:
                     Terminal.Rush(450001114)
-                else:
-                    continue
     elif quest16 != 2:
         if quest16 == 0:
             if fieldid != 450001100:
@@ -271,16 +254,12 @@ while True:
                 Terminal.Rush(450001100)
             else:
                 Quest.CompleteQuest(34114, 3003126)
-        else:
-            continue
     elif quest17 != 2:
         if quest17 == 0:
             Quest.StartQuest(34115, 3003127)
             time.sleep(10)
         elif quest == 1:
             time.sleep(5)
-        else:
-            continue
     elif quest18 != 2:
         if quest18 == 0:
             if fieldid != 450001210:
@@ -300,8 +279,6 @@ while True:
             else:
                 if fieldid != 450001210:
                     Terminal.Rush(450001210)
-                else:
-                    continue
 
     elif quest19 != 2:
         if quest19 == 0:
@@ -320,11 +297,17 @@ while True:
             else:
                 if fieldid != 450001215:
                     Terminal.Rush(450001215)
-                else:
-                    continue
 
     elif quest20 != 2:
         if quest20 == 0:
+            if fieldid == 450001219:
+                time.sleep(5)
+                if Character.GetPos().x != 607:
+                    Terminal.SetCheckBox("Kami Vac",False)
+                    Character.Teleport(607,177)
+                else:
+                    Party.LeaveParty()
+                    Character.EnterPortal()
             if fieldid != 450001218:
                 Terminal.Rush(450001218)
             else:
@@ -340,15 +323,18 @@ while True:
             else:
                 if fieldid != 450001218:
                     Terminal.Rush(450001218)
-                else:
-                    continue
     elif quest21 != 2:
         if quest21 == 0:
             Terminal.Rush(450001219)
             time.sleep(5)
             if fieldid == 450001219:
                 time.sleep(5)
-                Terminal.Rush(450001340)
+                if Character.GetPos().x != 607:
+                    Terminal.SetCheckBox("Kami Vac",False)
+                    Character.Teleport(607,177)
+                else:
+                    Party.LeaveParty()
+                    Character.EnterPortal()
         if quest21 == 1:
             if Quest.CheckCompleteDemand(34119, 3003140) == 0:
                 if fieldid != 450001219:
@@ -357,7 +343,13 @@ while True:
                 else:
                     Quest.CompleteQuest(34119, 3003140)
             else:
-                continue
+                if fieldid == 450001219:
+                    if Character.GetPos().x != 607:
+                        Terminal.SetCheckBox("Kami Vac",False)
+                        Character.Teleport(607,177)
+                    else:
+                        Party.LeaveParty()
+                        Character.EnterPortal()
     elif quest22 != 2:
         if quest22 == 0:
             Terminal.Rush(450001250)
@@ -370,10 +362,8 @@ while True:
             oPacket.Encode2(0xF9C0)
             oPacket.Encode2(0xFFFF)
             time.sleep(5)
-        else:
-            continue
     elif fieldid != 450001000:
         Terminal.Rush(450001000)
         time.sleep(2)
         Terminal.SetRushByLevel(True)
-        break
+    print(quest19)

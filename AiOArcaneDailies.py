@@ -54,6 +54,12 @@ roundWaitTime = 0.5 #How long to wait when handing in spirits
 roundsPerRun = 15 #How many times you want to collect 5 spirits per run
 totalRuns = 1 #How many times you want to enter spirit savior
 
+CashItemRequestOpcode = 0x0540
+CashItemResultOpcode = 0x06D3
+BuyByMesoRequest = 85
+LoadLockerDoneResult = 2
+MoveLToSRequest = 15
+
 #--------------------------------------------------
 
 #Don't touch anything below this
@@ -126,6 +132,7 @@ EvanJobs = [2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218]
 IlliumJobs = [15200,15210,15211,15212]
 CadenaJobs = [6400,6410,6411,6412]
 job = Character.GetJob()
+level = Character.GetLevel()
 HotKey = 0x79
 try:
     SCHotkey.StartHotkeys(100)
@@ -186,9 +193,12 @@ if current_date != accountData['date']:
     accountData['date'] = current_date
     accountData['daily_done'] = False
     accountData['done_char'][:] = []
+    accountData['cur_pos'] = str(accountData['daily_start'])
     writeJson(accountData,accountId)
     print("It's a new day!")
     KillPersistVarThred()
+    if GameState.IsInGame():
+        Terminal.Logout()
 
 #check if done doing dailies on all characters
 if len(accountData['done_char']) == accountData['daily_end'] - accountData['daily_start'] + 1 and not accountData['daily_done']:
@@ -199,12 +209,764 @@ if len(accountData['done_char']) == accountData['daily_end'] - accountData['dail
 
 #change character to next char
 if accountData["cur_pos"] in accountData['done_char'] and not accountData['daily_done']:
-    print("Logging out to move to next char")
-    Terminal.Logout()
+    if GameState.IsInGame():
+        print("Logging out to move to next char")
+        Terminal.Logout()
+        
 #return to farming char
 if accountData['cur_pos'] != str(accountData['training_char']) and accountData['daily_done'] and GameState.IsInGame():
-    print("Loggin out ot return to farming char")
-    Terminal.Logout()
+    if GameState.IsInGame():
+        print("Loggin out ot return to farming char")
+        Terminal.Logout()
+
+def toggle_rush_by_level(indicator):
+    Terminal.SetCheckBox("Rush By Level",indicator)
+    Terminal.SetRushByLevel(indicator)
+
+def VJprequest():
+    toggle_rush_by_level(False)
+    #print("Doing VJ prequest")
+    jobid = Character.GetJob()
+    level = Character.GetLevel()
+
+    fieldid = Field.GetID()
+    quest1 = Quest.GetQuestState(1466)
+    quest2 = Quest.GetQuestState(34100)
+    quest3 = Quest.GetQuestState(34101)
+    quest4 = Quest.GetQuestState(34102)
+    quest5 = Quest.GetQuestState(34103)
+    quest6 = Quest.GetQuestState(34104)
+    quest7 = Quest.GetQuestState(34105)
+    quest8 = Quest.GetQuestState(34106)
+    quest9 = Quest.GetQuestState(34107)
+    quest10 = Quest.GetQuestState(34108)
+    quest11 = Quest.GetQuestState(34109)
+    quest12 = Quest.GetQuestState(34110)
+    quest13 = Quest.GetQuestState(34111)
+    quest14 = Quest.GetQuestState(34112)
+    quest15 = Quest.GetQuestState(34113)
+    quest16 = Quest.GetQuestState(34114)
+    quest17 = Quest.GetQuestState(34115)
+    quest18 = Quest.GetQuestState(34116)
+    quest19 = Quest.GetQuestState(34117)
+    quest20 = Quest.GetQuestState(34118)
+    quest21 = Quest.GetQuestState(34119)
+    quest22 = Quest.GetQuestState(34120)
+    # Fakesymbol, enter at correct place and replace FAKESYMBOLID with item ID
+    fakesymbol = Inventory.FindItemByID(1712000)  # enter ID
+    if fakesymbol.valid:
+        Inventory.SendChangeSlotPositionRequest(1, fakesymbol.pos, -1600, -1)
+    # RealSymbol, enter at correct place and replace REALSYMBOLID with item ID
+    realsymbol = Inventory.FindItemByID(1712001)  # enter ID
+    if realsymbol.valid:
+        Inventory.SendChangeSlotPositionRequest(1, realsymbol.pos, -1600, -1)
+    if fieldid == 450001000:
+        time.sleep(1)
+        if Character.GetPos().x != -338:
+            Character.Teleport(-338, -3)
+    if fieldid == 450001340:
+        time.sleep(1)
+        if Character.GetPos().x != 563:
+            Character.Teleport(563, 177)
+    if fieldid == 450001350:
+        time.sleep(1)
+        if Character.GetPos().x != 1200:
+            Character.Teleport(1200, 177)
+    if quest1 != 2:
+        if quest1 == 0:
+            if fieldid != 270010111:
+                Terminal.Rush(270010111)
+            else:
+                Quest.StartQuest(1466, 2140001)
+        elif quest1 == 1:
+            if Quest.CheckCompleteDemand(1466, 2140001) == 0:
+                if fieldid != 270010111:
+                    Terminal.Rush(270010111)
+                else:
+                    Quest.CompleteQuest(1466, 2140001)
+                    time.sleep(3)
+                    oPacket = Packet.COutPacket(0x00F4)
+                    oPacket.Encode4(0x291000E6)
+                    oPacket.Encode1(0x01)
+                    oPacket.Encode2(0x0001)
+                    oPacket.Encode2(0xF9C0)
+                    oPacket.Encode2(0xFFFF)
+                    Packet.SendPacket(oPacket)
+                    time.sleep(3)
+
+            else:
+                if fieldid != 450001010:
+                    Terminal.Rush(450001010)
+    elif quest2 != 2:
+        if fieldid != 450001000:
+            Terminal.Rush(450001000)
+        else:
+            if quest2 == 0:
+                Quest.StartQuest(34100, 3003131)
+            elif quest2 == 1:
+                Quest.CompleteQuest(34100, 3003131)
+    elif quest3 != 2:
+        if fieldid != 450001000:
+            Terminal.Rush(450001000)
+        else:
+            if quest3 == 0:
+                Quest.StartQuest(34101, 3003131)
+            elif quest3 == 1:
+                Quest.CompleteQuest(34101, 3003111)
+    elif quest4 != 2:
+        if quest4 == 0:
+            if fieldid != 450001000:
+                Terminal.Rush(450001000)
+            else:
+                Quest.StartQuest(34102, 3003111)
+        elif quest4 == 1:
+            if Quest.CheckCompleteDemand(34102, 3003111) == 0:
+                if fieldid != 450001000:
+                    Terminal.Rush(450001000)
+                else:
+                    Quest.CompleteQuest(34102, 3003111)
+
+            else:
+                if fieldid != 450001010:
+                    Terminal.Rush(450001010)
+    elif quest5 != 2:
+        if quest5 == 0:
+            if fieldid != 450001000:
+                Terminal.Rush(450001000)
+            else:
+                Quest.StartQuest(34103, 3003111)
+        elif quest5 == 1:
+            if Quest.CheckCompleteDemand(34103, 3003111) == 0:
+                if fieldid != 450001000:
+                    Terminal.Rush(450001000)
+                else:
+                    Quest.CompleteQuest(34103, 3003111)
+            else:
+                if fieldid != 450001012:
+                    Terminal.Rush(450001012)
+    elif quest6 != 2:
+        if quest6 == 0:
+            if fieldid != 450001000:
+                Terminal.Rush(450001000)
+            else:
+                Quest.StartQuest(34104, 3003111)
+        elif quest6 == 1:
+            if Quest.CheckCompleteDemand(34104, 3003111) == 0:
+                if fieldid != 450001000:
+                    Terminal.Rush(450001000)
+                else:
+                    Quest.CompleteQuest(34104, 3003111)
+            else:
+                if fieldid != 450001014:
+                    Terminal.Rush(450001014)
+    elif quest7 != 2:
+        #print("7")
+        if quest7 == 0:
+            if fieldid != 450001000:
+                Terminal.Rush(450001000)
+            else:
+                Quest.StartQuest(34105, 3003111)
+        elif quest7 == 1:
+            if Quest.CheckCompleteDemand(34105, 3003111) == 0:
+                if fieldid != 450001000:
+                    Terminal.Rush(450001000)
+                else:
+                    Quest.CompleteQuest(34105, 3003111)
+            else:
+                if fieldid != 450001016:
+                    Terminal.Rush(450001016)
+    elif quest8 != 2:
+        if fieldid != 450001000:
+            Terminal.Rush(450001000)
+        else:
+            if quest8 == 0:
+                Quest.StartQuest(34106, 3003111)
+            elif quest8 == 1:
+                Quest.CompleteQuest(34106, 3003131)
+    elif quest9 != 2:
+        if fieldid != 450001005:
+            Terminal.Rush(450001005)
+        else:
+            Quest.StartQuest(34107, 3003110)
+    elif quest10 != 2:
+        if fieldid != 450001105:
+            Terminal.Rush(450001105)
+        else:
+            Quest.StartQuest(34108, 3003133)
+    elif quest11 != 2:
+        if fieldid != 450001100:
+            Terminal.Rush(450001100)
+        else:
+            Quest.StartQuest(34109, 3003125)
+    elif quest12 != 2:
+        if fieldid != 450001100:
+            Terminal.Rush(450001100)
+        else:
+            if quest12 == 0:
+                Quest.StartQuest(34110, 3003134)
+            elif quest12 == 1:
+                Quest.CompleteQuest(34110, 3003125)
+    elif quest13 != 2:
+        if quest13 == 0:
+            if fieldid != 450001100:
+                Terminal.Rush(450001100)
+            else:
+                Quest.StartQuest(34111, 3003125)
+        elif quest13 == 1:
+            if Quest.CheckCompleteDemand(34111, 3003125) == 0:
+                if fieldid != 450001100:
+                    Terminal.Rush(450001100)
+                else:
+                    Quest.CompleteQuest(34111, 3003125)
+            else:
+                if fieldid != 450001110:
+                    Terminal.Rush(450001110)
+    elif quest14 != 2:
+        if quest14 == 0:
+            if fieldid != 450001100:
+                Terminal.Rush(450001100)
+            else:
+                Quest.StartQuest(34112, 3003125)
+        elif quest14 == 1:
+            if Quest.CheckCompleteDemand(34112, 3003125) == 0:
+                if fieldid != 450001100:
+                    Terminal.Rush(450001100)
+                else:
+                    Quest.CompleteQuest(34112, 3003125)
+            else:
+                if fieldid != 450001112:
+                    Terminal.Rush(450001112)
+    elif quest15 != 2:
+        if quest15 == 0:
+            if fieldid != 450001100:
+                Terminal.Rush(450001100)
+            else:
+                Quest.StartQuest(34113, 00000000)
+        elif quest15 == 1:
+            if Quest.CheckCompleteDemand(34113, 0000000) == 0:
+                if fieldid != 450001100:
+                    Terminal.Rush(450001100)
+                else:
+                    Quest.CompleteQuest(34113, 0000000)
+            else:
+                if fieldid != 450001114:
+                    Terminal.Rush(450001114)
+    elif quest16 != 2:
+        if quest16 == 0:
+            if fieldid != 450001100:
+                Terminal.Rush(450001100)
+            else:
+                Quest.StartQuest(34114, 3003135)
+        elif quest16 == 1:
+            if fieldid != 450001100:
+                Terminal.Rush(450001100)
+            else:
+                Quest.CompleteQuest(34114, 3003126)
+    elif quest17 != 2:
+        if quest17 == 0:
+            Quest.StartQuest(34115, 3003127)
+            time.sleep(10)
+        elif quest == 1:
+            time.sleep(5)
+    elif quest18 != 2:
+        if quest18 == 0:
+            if fieldid != 450001210:
+                Terminal.Rush(450001210)
+            else:
+                Quest.StartQuest(34116, 3003128)
+        elif quest18 == 1:
+            if Quest.CheckCompleteDemand(34116, 3003114) == 0:
+                if fieldid == 450001210:
+                    Character.Teleport(1125, -29)
+                    time.sleep(1)
+                    Quest.CompleteQuest(34116, 3003114)
+                elif fieldid != 450001210:
+                    Terminal.Rush(450001210)
+                else:
+                    Quest.CompleteQuest(34116, 3003114)
+            else:
+                if fieldid != 450001210:
+                    Terminal.Rush(450001210)
+
+    elif quest19 != 2:
+        if quest19 == 0:
+            if fieldid != 450001215:
+                Terminal.Rush(450001215)
+            else:
+                Quest.StartQuest(34117, 3003129)
+        elif quest19 == 1:
+            if Quest.CheckCompleteDemand(34117, 3003115) == 0:
+                if fieldid == 450001215:
+                    Character.Teleport(1460, -35)
+                    time.sleep(1)
+                    Quest.CompleteQuest(34117, 3003115)
+                elif fieldid != 450001215:
+                    Terminal.Rush(450001215)
+            else:
+                if fieldid != 450001215:
+                    Terminal.Rush(450001215)
+
+    elif quest20 != 2:
+        if quest20 == 0:
+            if fieldid == 450001219:
+                time.sleep(5)
+                if Character.GetPos().x != 607:
+                    Terminal.SetCheckBox("Kami Vac",False)
+                    Character.Teleport(607,177)
+                else:
+                    Party.LeaveParty()
+                    Character.EnterPortal()
+            if fieldid != 450001218:
+                Terminal.Rush(450001218)
+            else:
+                Quest.StartQuest(34118, 3003130)
+        elif quest20 == 1:
+            if Quest.CheckCompleteDemand(34118, 3003116) == 0:
+                if fieldid == 450001218:
+                    Character.Teleport(1441, 177)
+                    time.sleep(1)
+                    Quest.CompleteQuest(34118, 3003116)
+                elif fieldid != 450001218:
+                    Terminal.Rush(450001218)
+            else:
+                if fieldid != 450001218:
+                    Terminal.Rush(450001218)
+    elif quest21 != 2:
+        if quest21 == 0:
+            Terminal.Rush(450001219)
+            time.sleep(5)
+            if fieldid == 450001219:
+                time.sleep(5)
+                if Character.GetPos().x != 607:
+                    Terminal.SetCheckBox("Kami Vac",False)
+                    Character.Teleport(607,177)
+                else:
+                    Party.LeaveParty()
+                    Character.EnterPortal()
+        if quest21 == 1:
+            if Quest.CheckCompleteDemand(34119, 3003140) == 0:
+                if fieldid != 450001219:
+                    Terminal.Rush(450001219)
+                    Quest.CompleteQuest(34119, 3003140)
+                else:
+                    Quest.CompleteQuest(34119, 3003140)
+            else:
+                if fieldid == 450001219:
+                    if Character.GetPos().x != 607:
+                        Terminal.SetCheckBox("Kami Vac",False)
+                        Character.Teleport(607,177)
+                    else:
+                        Party.LeaveParty()
+                        Character.EnterPortal()
+    elif quest22 != 2:
+        if quest22 == 0:
+            Terminal.Rush(450001250)
+            Quest.StartQuest(34120, 3003143)
+            time.sleep(10)
+            oPacket = Packet.COutPacket(0x00F4)
+            oPacket.Encode4(0x2951FDBD)
+            oPacket.Encode1(0x01)
+            oPacket.Encode2(0x0001)
+            oPacket.Encode2(0xF9C0)
+            oPacket.Encode2(0xFFFF)
+            time.sleep(5)
+    elif fieldid != 450001000:
+        print("Rushing")
+        Terminal.Rush(450001000)
+        time.sleep(2)
+        toggle_rush_by_level(True)
+
+def Chuchuprequest():
+    toggle_rush_by_level(False)
+    if GameState.IsInGame():
+        time.sleep(1)
+        jobid = Character.GetJob()
+        level = Character.GetLevel()
+        if Terminal.IsRushing():
+            time.sleep(3)
+
+        fieldid = Field.GetID()
+        quest1 = Quest.GetQuestState(34200)
+        quest2 = Quest.GetQuestState(34201)
+        quest3 = Quest.GetQuestState(34202)
+        quest4 = Quest.GetQuestState(34203)
+        quest5 = Quest.GetQuestState(34204)
+        quest6 = Quest.GetQuestState(34205)
+        quest7 = Quest.GetQuestState(34206)
+        quest8 = Quest.GetQuestState(34207)
+        quest9 = Quest.GetQuestState(34208)
+        quest10 = Quest.GetQuestState(34209)
+        quest11 = Quest.GetQuestState(34210)
+        quest12 = Quest.GetQuestState(34211)
+        quest13 = Quest.GetQuestState(34212)
+        quest14 = Quest.GetQuestState(34213)
+        quest15 = Quest.GetQuestState(34214)
+        quest16 = Quest.GetQuestState(34215)
+        quest17 = Quest.GetQuestState(34216)
+        quest18 = Quest.GetQuestState(34217)
+        quest19 = Quest.GetQuestState(34218)
+
+        if fieldid == 450002000:
+            if Character.GetPos().x != 1084:
+                Character.Teleport(1084, 138)
+                time.sleep(2)
+
+        if fieldid == 450002010:
+            Character.Teleport(667, -588)
+            time.sleep(3)
+            Key.Press(0x26)
+            time.sleep(1)
+
+
+
+        fakesymbol = Inventory.FindItemByID(1712002)  # enter ID
+        if fakesymbol.valid:
+            Inventory.SendChangeSlotPositionRequest(1, fakesymbol.pos, -1601, -1)
+
+        if quest8 == 0 and quest7 == 2 and quest9 != 2:
+            time.sleep(1)
+            Npc.RegisterSelection("Delicious")
+            time.sleep(1)
+            Npc.RegisterSelection("Beefy")
+            time.sleep(1)
+            Npc.RegisterSelection("Bite of Heaven")
+
+        if quest1 != 2:
+            if quest1 == 0:
+                Terminal.Rush(450002000)
+                time.sleep(5)
+                if fieldid != 450002201:
+                    Terminal.Rush(450002201)
+                elif fieldid == 450002201:
+                    Quest.StartQuest(34200, 3003156)
+
+        elif quest2 != 2:
+            if quest2 == 0:
+                if fieldid != 450002000:
+                    Terminal.Rush(450002000)
+                elif fieldid == 450002000:
+                    Quest.StartQuest(34201, 3003150)
+
+        elif quest3 != 2:
+            if quest3 == 0:
+                if fieldid != 450002000:
+                    Terminal.Rush(450002000)
+                elif fieldid == 450002000:
+                    Quest.StartQuest(34202, 3003152)
+        elif quest4 != 2:
+            if quest4 == 0:
+                if fieldid != 450002000:
+                    Terminal.Rush(450002000)
+                elif fieldid == 450002000:
+                    Quest.StartQuest(34203, 3003152)
+            elif quest4 == 1:
+                if Quest.CheckCompleteDemand(34203, 3003152) == 0:
+                    if fieldid != 450002000:
+                        Terminal.Rush(450002000)
+                    else:
+                        Quest.CompleteQuest(34203, 3003152)
+                else:
+                    if fieldid != 450002001:
+                        Terminal.Rush(450002001)
+
+        elif quest5 != 2:
+            if quest5 == 0:
+                if fieldid != 450002000:
+                    Terminal.Rush(450002000)
+                elif fieldid == 450002000:
+                    Quest.StartQuest(34204, 3003152)
+
+        elif quest6 != 2:
+            if quest6 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34205, 0000000)
+            elif quest6 == 1:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.CompleteQuest(34205, 3003151)
+
+        elif quest7 != 2:
+            if quest7 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34206, 3003151)
+
+        elif quest8 != 2:
+            if quest8 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34207, 3003151)
+            if quest8 == 1:
+                if Quest.CheckCompleteDemand(34207, 3003151) == 0:
+                    if fieldid != 450002023:
+                        Terminal.Rush(450002023)
+                    else:
+                        Quest.CompleteQuest(34207, 3003151)
+                else:
+                    if fieldid != 450002002:
+                        Terminal.Rush(450002002)
+        elif quest9 != 2:
+            if quest9 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34208, 3003151)
+            if quest9 == 1:
+                if Quest.CheckCompleteDemand(34208, 3003151) == 0:
+                    if fieldid != 450002023:
+                        Terminal.Rush(450002023)
+                    else:
+                        Quest.CompleteQuest(34208, 3003151)
+                else:
+                    if fieldid != 450002004:
+                        Terminal.Rush(450002004)
+
+        elif quest10 != 2:
+            if quest10 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34209, 3003153)
+            if quest10 == 1:
+                if Quest.CheckCompleteDemand(34209, 3003153) == 0:
+                    if fieldid != 450002023:
+                        Terminal.Rush(450002023)
+                    else:
+                        Quest.CompleteQuest(34209, 3003153)
+                else:
+                    if fieldid != 450002009:
+                        Terminal.Rush(450002009)
+
+        elif quest11 != 2:
+            if quest11 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34210, 3003153)
+            if quest11 == 1:
+                if Quest.CheckCompleteDemand(34210, 3003153) == 0:
+                    if fieldid != 450002023:
+                        Terminal.Rush(450002023)
+                    else:
+                        Quest.CompleteQuest(34210, 3003153)
+                else:
+                    if fieldid != 450002007:
+                        Terminal.Rush(450002007)
+
+        elif quest12 != 2:
+            if quest12 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34211, 3003154)
+            if quest12 == 1:
+                if Quest.CheckCompleteDemand(34211, 3003154) == 0:
+                    if fieldid != 450002023:
+                        Terminal.Rush(450002023)
+                    else:
+                        Quest.CompleteQuest(34211, 3003154)
+                else:
+                    if fieldid != 450002012:
+                        Terminal.Rush(450002012)
+
+        elif quest13 != 2:
+            if quest13 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34212, 3003154)
+            if quest13 == 1:
+                if Quest.CheckCompleteDemand(34212, 3003154) == 0:
+                    if fieldid != 450002023:
+                        Terminal.Rush(450002023)
+                    else:
+                        Quest.CompleteQuest(34212, 3003154)
+                else:
+                    if fieldid != 450002014:
+                        Terminal.Rush(450002014)
+
+        elif quest14 != 2:
+            if quest14 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34213, 3003155)
+            if quest14 == 1:
+                if Quest.CheckCompleteDemand(34213, 3003155) == 0:
+                    if fieldid != 450002023:
+                        Terminal.Rush(450002023)
+                    else:
+                        Quest.CompleteQuest(34213, 3003155)
+                else:
+                    if fieldid != 450002017:
+                        Terminal.Rush(450002017)
+
+
+        elif quest15 != 2:
+            if quest15 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                elif fieldid == 450002023:
+                    Quest.StartQuest(34214, 3003155)
+            if quest15 == 1:
+                if Quest.CheckCompleteDemand(34214, 3003155) == 0:
+                    if fieldid != 450002023:
+                        Terminal.Rush(450002023)
+                    else:
+                        Quest.CompleteQuest(34214, 3003155)
+                else:
+                    if fieldid != 450002019:
+                        Terminal.Rush(450002019)
+
+
+        elif quest16 != 2:
+            print("q16")
+            if quest16 == 0:
+                if fieldid != 450002023:
+                    Terminal.Rush(450002023)
+                else:
+                    Quest.StartQuest(34215, 3003151)
+            if quest16 == 1:
+                if Quest.CheckCompleteDemand(34215, 3003151) == 0:
+                    if fieldid == 450002251 or fieldid == 450002250 and Quest.CheckCompleteDemand(34215, 3003151) == 0:
+                        Terminal.SetCheckBox("Kami Vac",False)
+                        Character.Teleport(11, 138)
+                        time.sleep(1)
+                        Character.EnterPortal()
+                        time.sleep(1)
+                        Terminal.SetCheckBox("Kami Vac",True)
+                    elif fieldid != 450002023:
+                        Terminal.Rush(450002023)
+                    else:
+                        Quest.CompleteQuest(34215, 3003151)
+                else:
+                    if fieldid != 450002251 and fieldid != 450002250:
+                        Terminal.Rush(450002010)
+
+        elif quest17 != 2:
+            print("q17")
+            if quest17 == 0:
+                if fieldid != 450002000:
+                    Terminal.Rush(450002000)
+                elif fieldid == 450002000:
+                    Quest.StartQuest(34216, 3003150)
+
+        elif quest18 != 2:
+            print("q18")
+            if quest18 == 0:
+                if fieldid != 450002021:
+                    Terminal.Rush(450002021)
+                elif fieldid == 450002021:
+                    Quest.StartQuest(34217, 3003156)
+
+        elif quest19 != 2:
+            if quest19 == 0:
+                if fieldid != 450002021:
+                    Terminal.Rush(450002021)
+                elif fieldid == 450002021:
+                    Quest.StartQuest(34218, 3003156)
+
+
+
+class CashItemInfo:
+    def __init__(self):
+        self.liSN = 0
+        self.nItemID = 0
+        # None of the other vars are useful for this specific script
+ 
+def GetCashItemInfo():
+    return CashItemInfo()
+ 
+pCashItemInfo = GetCashItemInfo()
+ 
+def BuyByMeso():
+    Packet.BlockSendHeader(CashItemResultOpcode)
+    oPacket = Packet.COutPacket(CashItemRequestOpcode)
+    oPacket.Encode1(BuyByMesoRequest)
+    nMeso = Character.GetMeso()
+    nPrice = 0
+    if nMeso >= 25000000:
+        nCommoditySN = 87000027
+        nPrice = 25000000
+    elif nMeso >= 13000000:
+        nCommoditySN = 87000026
+        nPrice = 13000000
+    elif nMeso >= 5200000:
+        nCommoditySN = 87000025
+        nPrice = 5200000
+    oPacket.Encode4(nCommoditySN)
+    oPacket.Encode4(nPrice)
+    Packet.SendPacket(oPacket)
+    time.sleep(3)
+    Packet.UnBlockSendHeader(CashItemResultOpcode)
+ 
+def MoveLToS(liSN, nEmptySlotPOS):
+    oPacket = Packet.COutPacket(CashItemRequestOpcode)
+    oPacket.Encode1(MoveLToSRequest)
+    print(liSN, flush=True)
+    oPacket.Encode8(liSN)
+    oPacket.Encode4(5040004)
+    oPacket.Encode1(5) # nTI
+    oPacket.Encode2(nEmptySlotPOS)
+    Packet.SendPacket(oPacket)
+ 
+def CashItemResLoadLockerDone():
+    iPacket = Packet.WaitForRecv(CashItemResultOpcode, 10000)
+    if iPacket.GetRemaining() > 0:
+        nRes = iPacket.ReadLong(1)
+        if nRes == LoadLockerDoneResult:
+            bItemLockerFull = iPacket.ReadLong(1)
+            if bItemLockerFull == 1:
+                nOverItemCount = iPacket.ReadLong(4)
+            nCashItemCount = iPacket.ReadLong(2)
+            if nCashItemCount >= 0:
+                bFound = False
+                for i in range(0, nCashItemCount):
+                    CashItemInfoDecode(iPacket)
+                    if pCashItemInfo.nItemID == 5040004:
+                        bFound = True
+                        Terminal.SetProperty("liSN", pCashItemInfo.liSN)
+                        break
+                if bFound:
+                    time.sleep(1)
+                    CashItemInfoDecode(iPacket)
+                    print("Moving", flush=True)
+                    MoveLToS(Terminal.GetProperty("liSN", -1), nEmptySlotPOS)
+                else:
+                    BuyByMeso()
+            time.sleep(2)
+            Terminal.LeaveCashShop()
+    else:
+        Terminal.LeaveCashShop()
+ 
+def CashItemInfoDecode(iPacket):
+    pCashItemInfo.liSN = iPacket.ReadLong(8)
+    dwAccountID = iPacket.ReadLong(4)
+    dwCharacterID = iPacket.ReadLong(4)
+    pCashItemInfo.nItemID = iPacket.ReadLong(4)
+    nCommodityID = iPacket.ReadLong(4)
+    nNumber = iPacket.ReadLong(2)
+    sBuyCharacterID = iPacket.ReadLong(13)
+    ftDateExpire = iPacket.ReadLong(8) # FileTime(4, 4)
+    nPaybackRate = iPacket.ReadLong(4)
+    dDiscountRate = iPacket.ReadLong(8)
+    dwOrderNo = iPacket.ReadLong(4)
+    dwProductNo = iPacket.ReadLong(4)
+    bRefundable = iPacket.ReadLong(1)
+    nSourceFlag = iPacket.ReadLong(1)
+    nStorageBank = iPacket.ReadLong(1)
+    # CashItemOption Decode
+    liCashItemSN = iPacket.ReadLong(8)
+    ftExpireDate = iPacket.ReadLong(8) # FileTime(4, 4)
+    nGrade = iPacket.ReadLong(4)
+    iPacket.ReadLong(4) # aOption[0]
+    iPacket.ReadLong(4) # aOption[1]
+    iPacket.ReadLong(4) # aOption[2]
 
 def initAttack():
     print("Initializing attack settings for this character")
@@ -212,6 +974,7 @@ def initAttack():
     pgup_key = 0x21
     Terminal.SetComboBox("Familiar0",1)
     Terminal.SetCheckBox("Mob Falldown",False)
+    toggle_rush_by_level(False)
     if job == 3712:
         
         Terminal.SetLineEdit("SISkillID","37121003")
@@ -235,13 +998,15 @@ def initAttack():
         Key.Set(0x47,1,42111003)
     elif job == 2712: #lumi fourth job
         print("Setting up Settings for Luminous")
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        '''
         if Character.HasBuff(2,20040216): #Light Mode
             Key.Set(attack_key,1,27121100)
         elif Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219): #Equi Mode
             Key.Set(attack_key,1,27111303)
         else:                              #Dark Mode
             Key.Set(attack_key,1,27121202)
+        '''
+        Key.Set(attack_key,1,27121100)
         Terminal.SetCheckBox("Skill Injection", False)
         
         #Terminal.SetSpinBox("SkillInjection",100)
@@ -251,9 +1016,9 @@ def initAttack():
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
         Terminal.SetCheckBox("Kami Vac",True)
+        Terminal.SetCheckBox("Full Map Attack",False)
     elif job == 3122: #DA fourth job
         print("Setting up Settings for DA")
-        Key.Set(pgup_key, 1, 31011001)
         Key.Set(attack_key,1,31211000)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
@@ -262,7 +1027,7 @@ def initAttack():
         #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", True)
         Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        Terminal.SetSpinBox("autoattack_spin",50)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 3112: #DS fourth job
         print("Setting up Settings for DS")
@@ -286,7 +1051,7 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 4112: #Hayato 4th 41121011
         print("Setting up Settings for Hayato")
-        Key.Set(pgup_key, 2, 2001582)
+        
         Terminal.SetLineEdit("SISkillID","41121011")
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -297,7 +1062,6 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 3612:#Xenon 4th 36121000
         print("Setting up Settings for Xenon")
-        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","36121000")
         Terminal.SetSpinBox("SkillInjection",80)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -308,7 +1072,6 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2412: #Phantom 4th 24121000
         print("Setting up Settings for Phantom")
-        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","24121000")
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -319,7 +1082,6 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15212: #Illium 4th
         print("Setting up Settings for Illium")
-        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetCheckBox("Auto Attack",False)
@@ -327,9 +1089,9 @@ def initAttack():
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
         Terminal.SetCheckBox("bot/illium/summon_control",True)
         Terminal.SetCheckBox("General FMA",True)
+        Terminal.SetCheckBox("Kami Vac",False)
     elif job == 6412: # Cadena 4th job
         print("Setting up Settings for Cadena")
-        Key.Set(pgup_key, 2, 2001582)
         Terminal.SetLineEdit("SISkillID","64001006")
         Terminal.SetSpinBox("SkillInjection",150)
         
@@ -361,7 +1123,6 @@ def initAttack():
         Terminal.SetCheckBox("dragon_kami",False)
     elif job == 2112: #Aran 4th 21000007
         print("Setting up Settings for Aran")
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,21001010)
         Terminal.SetLineEdit("SISkillID","21000006")
         
@@ -376,7 +1137,6 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 14212: # Kinesis 4th 142111002
         print("Setting up Settings for Kinesis")
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,142111002)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
@@ -397,6 +1157,7 @@ def initAttack():
         Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("General FMA",True)
+        Terminal.SetCheckBox("Kami Vac",False)
     elif job == 3512: #mechanic 4th 400051012
         #mech_att(on)
         print("Setting up Settings for Mechanic")
@@ -421,7 +1182,7 @@ def initAttack():
         print("Setting up Settings for Blaze Wizard")
         Terminal.SetLineEdit("SISkillID","12121055")
         Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",0)
+        Terminal.SetSpinBox("SkillInjection",31)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Melee No Delay",True)
@@ -442,13 +1203,17 @@ def initAttack():
     if job not in IlliumJobs:
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         Terminal.SetCheckBox("bot/illium/summon_control",False)
+        if job not in AngelicBusterJobs:
+            Terminal.SetCheckBox("General FMA",False)
+        #if job not in LuminousJobs:
+        #    Terminal.SetCheckBox("Full Map Attack",False)
 
 def initAttackDone():
     print("Initializing done attack settings for this character")
     attack_key = 0x44
     pgup_key = 0x21
     Terminal.SetComboBox("Familiar0",5)
-    Terminal.SetCheckBox("Rush By Level",True)
+    toggle_rush_by_level(True)
     Terminal.SetCheckBox("Kami Vac",False)
     if job == 3712:
         print("Setting up settings for Blaster")
@@ -473,13 +1238,8 @@ def initAttackDone():
         Key.Set(0x47,1,42111003)
     elif job == 2712: #lumi fourth job
         print("Setting up Settings for Luminous")
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        if Character.HasBuff(2,20040216): #Light Mode
-            Key.Set(attack_key,1,27121100)
-        elif Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219): #Equi Mode
-            Key.Set(attack_key,1,27111303)
-        else:                              #Dark Mode
-            Key.Set(attack_key,1,27121202)
+         #Assign an Item, reboot potion, to Page up(0x21)
+        Key.Set(attack_key,1,27121100)
         Terminal.SetCheckBox("Skill Injection", False)
         
         #Terminal.SetSpinBox("SkillInjection",100)
@@ -489,6 +1249,7 @@ def initAttackDone():
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
         Terminal.SetCheckBox("Kami Vac",True)
+        Terminal.SetCheckBox("Full Map Attack",False)
     elif job == 3122: #DA fourth job
         print("Setting up Settings for DA")
         Key.Set(pgup_key, 1, 31011001)
@@ -514,7 +1275,7 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2312: #Mercedes 4th
         print("Setting up Settings for Mercedes")
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+         #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,23111000)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
@@ -527,7 +1288,7 @@ def initAttackDone():
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 4112: #Hayato 4th 41121011
         print("Setting up Settings for Hayato")
-        Key.Set(pgup_key, 2, 2001582)
+        
         Terminal.SetLineEdit("SISkillID","41121011")
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -538,7 +1299,7 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 3612:#Xenon 4th 36121000
         print("Setting up Settings for Xenon")
-        Key.Set(pgup_key, 2, 2001582)
+        
         Terminal.SetLineEdit("SISkillID","36121000")
         Terminal.SetSpinBox("SkillInjection",80)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -549,7 +1310,7 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2412: #Phantom 4th 24121000
         print("Setting up Settings for Phantom")
-        Key.Set(pgup_key, 2, 2001582)
+        
         Terminal.SetLineEdit("SISkillID","24121000")
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -560,7 +1321,7 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15212: #Illium 4th
         print("Setting up Settings for Illium")
-        Key.Set(pgup_key, 2, 2001582)
+        
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetCheckBox("Auto Attack",False)
@@ -568,9 +1329,10 @@ def initAttackDone():
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
         Terminal.SetCheckBox("bot/illium/summon_control",True)
         Terminal.SetCheckBox("General FMA",True)
+        Terminal.SetCheckBox("Kami Vac",False)
     elif job == 6412: # Cadena 4th job
         print("Setting up Settings for Cadena")
-        Key.Set(pgup_key, 2, 2001582)
+        
         Terminal.SetLineEdit("SISkillID","64001006")
         Terminal.SetSpinBox("SkillInjection",150)
         
@@ -605,7 +1367,7 @@ def initAttackDone():
         Terminal.SetCheckBox("Auto Attack",False)
     elif job == 2112: #Aran 4th 21000007
         print("Setting up Settings for Aran")
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+         #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,21001010)
         Terminal.SetLineEdit("SISkillID","21000006")
         
@@ -620,7 +1382,7 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 14212: # Kinesis 4th 142111002
         print("Setting up Settings for Kinesis")
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+         #Assign an Item, reboot potion, to Page up(0x21)
         Key.Set(attack_key,1,142111002)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
@@ -641,6 +1403,7 @@ def initAttackDone():
         Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("General FMA",True)
+        Terminal.SetCheckBox("Kami Vac",False)
     elif job == 3512: #mechanic 4th 400051012
         #mech_att(on)
         print("Setting up Settings for Mechanic")
@@ -686,6 +1449,10 @@ def initAttackDone():
     if job not in IlliumJobs:
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         Terminal.SetCheckBox("bot/illium/summon_control",False)
+        if job not in AngelicBusterJobs:
+            Terminal.SetCheckBox("General FMA",False)
+        #if job not in LuminousJobs:
+        #    Terminal.SetCheckBox("Full Map Attack",False)
 
 if not GameState.IsInGame() and not GameState.IsInCashShop() and not SCLib.GetVar("ToggleAttack"):
     SCLib.UpdateVar("ToggleAttack",True)
@@ -1019,6 +1786,7 @@ def initChuChu():
         changeChannel()
         
         SCLib.UpdateVar("CurStep", "StartingChuChu")
+        
 
 def startChuChu():
     if Field.GetID() != ccStartingMap:
@@ -1032,13 +1800,10 @@ def startChuChu():
             SCLib.UpdateVar("CurStep", "FinishedChuChu")
             SunCat.UnhookChuChu()
         else:
-            time.sleep(1.5)
+            print("Talking to enter")
             Npc.ClearSelection()
-            Npc.RegisterSelection("Enter ")
-            if chuChuHardMode:
-                Npc.RegisterSelection("Hard")
-            else:
-                Npc.RegisterSelection("Normal")
+            Npc.RegisterSelection("Enter")
+            Npc.RegisterSelection("Hard")
             Character.TalkToNpc(ccNpc)
             time.sleep(5)
             
@@ -1287,13 +2052,45 @@ def doSS():
         SCLib.UpdateVar("CurDaily", "Return")
         SCLib.UpdateVar("RetryCount", 0)
 
+def dungeonTeleport():
+    prefield = Field.GetID()
+    Terminal.SetCheckBox("Kami Vac",False)
+    time.sleep(1)
+    Key.Press(0x08)
+    time.sleep(1)
+    Character.EnterPortal()
+    time.sleep(1)
+    newfield = Field.GetID()
+    if newfield != prefield:
+        print("Successfully entered portal")
+        Terminal.SetCheckBox("Kami Vac",True)
+    else:
+        print("Failed to enter portal")
+
 if GameState.IsInGame() and accountData['changing_mule'] and not accountData['daily_done']:
     initAttack()
     accountData['changing_mule'] = False
     writeJson(accountData,accountId)
 
-if not Terminal.IsRushing() and not accountData['daily_done'] and not accountData['changing_mule'] and not SCLib.GetVar("ToggleAttack"): #only need to do this if daily is not done
-    if SCLib.CheckVersion(22):
+if GameState.IsInGame() and not accountData['daily_done'] and not accountData['changing_mule'] and not SCLib.GetVar("ToggleAttack"): #only need to do this if daily is not done
+    if GameState.IsInGame() and Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
+        print("Need to buy a hyper teleport rock")
+        if Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
+            nEmptySlotPOS = 0
+            for i in range(1, Inventory.GetItemSlotCount(5)):
+                pItem = Inventory.GetItem(5, i)
+                if not pItem.valid:
+                    nEmptySlotPOS = i
+                    break
+            Terminal.EnterCashShop()
+            CashItemResLoadLockerDone()
+    elif Quest.GetQuestState(34120) != 2 and level >= 200:
+        VJprequest()
+    elif Quest.GetQuestState(34218) != 2 and level >= 211:
+        Chuchuprequest()
+    else:
+        if Field.GetID() in [450002021,450001250,450001240]:
+            dungeonTeleport()
         if SCLib.GetVar("CurDaily") is None:
             initAttack()
             time.sleep(2)
@@ -1315,7 +2112,7 @@ if not Terminal.IsRushing() and not accountData['daily_done'] and not accountDat
             elif curDaily == "Return":
                 SCLib.UpdateVar("CurDaily", None)
                 SCLib.UpdateVar("CurStep", "StartingVJ")
-                print("Done! Back to botting...")
+                print("Done with this character...")
                 if SCLib.GetVar("UsingKami"):
                     Terminal.SetCheckBox("Kami Vac", True)
                 if SCLib.GetVar("UsingSI"):
@@ -1330,7 +2127,8 @@ if not Terminal.IsRushing() and not accountData['daily_done'] and not accountDat
                 accountData['done_char'].append(Terminal.GetLineEdit("LoginChar"))
                 accountData['changing_mule'] = True
                 writeJson(accountData,accountId)
-                Terminal.Logout()
+                if GameState.IsInGame():
+                    Terminal.Logout()
             else:
                 SCLib.StartVars()
         else:
@@ -1345,6 +2143,7 @@ if not Terminal.IsRushing() and not accountData['daily_done'] and not accountDat
 if job == -1 and not accountData['changing_mule'] and GameState.GetLoginStep() == 1:
     print("Not logged in yet")
     Terminal.SetLineEdit("LoginChar",accountData["cur_pos"])
+    Terminal.SetCheckBox("Auto Login",True)
     time.sleep(5)
 
 if accountData['changing_mule'] and GameState.GetLoginStep() == 2 and not accountData['daily_done']:
@@ -1372,10 +2171,21 @@ if accountData['daily_done'] and GameState.IsInGame() and accountData['changing_
     accountData['changing_mule'] = False
     writeJson(accountData,accountId)
 
-if Field.GetID() == ccExitMap:
+
+if Field.GetID() == ccExitMap and SCLib.GetVar("CurDaily") != "ChuChu":
     print("Leaving chuchu exit map")
     time.sleep(1)
     Npc.ClearSelection()
     Npc.RegisterSelection("Claim")
     Character.TalkToNpc(3003166)
     time.sleep(1)
+    Npc.ClearSelection()
+
+if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switch
+    attack_key = 0x44
+    if Character.HasBuff(2,20040216): #Light Mode
+        Key.Set(attack_key,1,27121100)
+    elif Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219): #Equi Mode
+        Key.Set(attack_key,1,27111303)
+    else:                              #Dark Mode
+        Key.Set(attack_key,1,27121202)
