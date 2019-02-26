@@ -41,7 +41,7 @@ getSpider = False
 DoBlackGate = False
 doSleepyWood = False
 doBeach = False
-get_pensalir = False
+get_pensalir = True
 #Key to restart pers. variables
 HotKey = 0x7A
 
@@ -1130,10 +1130,10 @@ def has_pensalir():
     shoe_list = [pensalir_warrior_shoes,pensalir_mage_shoes,pensalir_bowman_shoes,pensalir_thief_shoes,pensalir_pirate_shoes]
     overall_list = [pensalir_warrior_overall,pensalir_mage_overall,pensalir_bowman_overall,pensalir_thief_overall,pensalir_pirate_overall]
 
-    if len(accountData['done_links']) >= 25:
-        get_pensalir = True
-    else:
-        get_pensalir = False
+    #if len(accountData['done_links']) >= 25:
+    #    get_pensalir = True
+    #else:
+    #    get_pensalir = False
     print("Has shoe : {}".format(Character.GetEquippedItemIDBySlot(shoe_slot) in shoe_list))
     print("Has cape : {}".format(Character.GetEquippedItemIDBySlot(cape_slot) in cape_list))
     print("Has helmet : {}".format(Character.GetEquippedItemIDBySlot(helmet_slot) in helmet_list))
