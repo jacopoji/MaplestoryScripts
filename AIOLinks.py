@@ -837,15 +837,20 @@ def buy_potion(): #00F4 [00] 000D 001E8C67 05DC 00000000 00000ED8
         elif field_id == 600000000 and Character.GetPos().x !=4291:
             Character.Teleport(4291,21)
         else:
-            if Character.GetMeso() > 5700000:
+            if Character.GetMeso() > 38000:
                 time.sleep(1)
                 Character.TalkToNpc(9201060)
                 time.sleep(1)
-                print("Buying spear via packet")
+                print("Buying potion via packet")
                 Packet.BlockRecvHeader(BlockBuyHeader)
                 time.sleep(0.5)
                 BuyKey = Packet.COutPacket(BuyItemHeader)
-                BuyKey.EncodeBuffer("00 000D 001E8C67 05DC 00000000 00000ED8")
+                if Character.GetMeso() > 5700000:
+                    BuyKey.EncodeBuffer("00 000D 001E8C67 05DC 00000000 00000ED8")
+                    print("Have enough money to buy 1500 potions")
+                else:
+                    BuyKey.EncodeBuffer("00 000D 001E8C67 {} 00000000 00000ED8".format(hex(int(Character.GetMeso()/3800))[2:].zfill(4)))
+                    print("Only have enough money to buy {} potions".format(int(Character.GetMeso()/3800)))
                 Packet.SendPacket(BuyKey)
                 time.sleep(0.5)
                 Packet.UnBlockRecvHeader(BlockBuyHeader)
@@ -9615,7 +9620,7 @@ elif job == ShadeJobs[0] or job == ShadeJobs[1]:
     ShadeFirst()
 
 #buy potion
-if not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv") and Character.GetMeso() >= 5700000 and Inventory.FindItemByID(2002023).count == 0 and not Inventory.FindItemByID(2001582).valid:
+if not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv") and Character.GetMeso() >= 38000 and Inventory.FindItemByID(2002023).count == 0 and not Inventory.FindItemByID(2001582).valid:
     buy_potion()
     Terminal.SetPushButton("Leave shop",True)
     time.sleep(1)
