@@ -14,14 +14,15 @@ except:
 #--------------------------------------------------
 dailyVJ = True
 dailyChuChu = True
-dailyDD = False
+dailyDD = True
 dailySS = True
 
 SCLib.StartVars()
 ###persist variables
 if SCLib.GetVar("ToggleAttack") is None:
     SCLib.PersistVar("ToggleAttack", False)
-
+if SCLib.GetVar("SpiritCoin") is None:
+    SCLib.PersistVar("SpiritCoin", Inventory.GetItemCount(4310235))
 if GameState.IsInGame():
     if Quest.GetQuestState(34120) != 2:
         #print("You havn't completed VJ storyline quests yet. Disable VJ daily")
@@ -847,6 +848,8 @@ def Chuchuprequest():
                 else:
                     if fieldid != 450002251 and fieldid != 450002250:
                         Terminal.Rush(450002010)
+                    elif fieldid == 450002251 or fieldid == 450002250:
+                        Terminal.StopRush()
 
         elif quest17 != 2:
             print("q17")
@@ -975,6 +978,12 @@ def initAttack():
     Terminal.SetComboBox("Familiar0",1)
     Terminal.SetCheckBox("Mob Falldown",False)
     toggle_rush_by_level(False)
+    if Character.IsOwnFamiliar(9960098):
+        Terminal.SetSlider("sliderMP", 100)
+        Terminal.SetComboBox("MPKey",4)
+    else:
+        Terminal.SetSlider("sliderMP", 10)
+        Terminal.SetComboBox("MPKey",6)
     if job == 3712:
         
         Terminal.SetLineEdit("SISkillID","37121003")
@@ -986,11 +995,12 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job ==4212: #4th
         print("Setting up Settings for Kanna")
-        Terminal.SetSpinBox("MonkeySpiritsNDcheck",40)
+        Terminal.SetSpinBox("MonkeySpiritsNDdelay",40)
+        Terminal.SetCheckBox("Grenade Kami",True)
         Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",True)
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
-        Terminal.SetCheckBox("Kami Vac",True)
+        Terminal.SetCheckBox("Kami Vac",False)
         Terminal.SetCheckBox("Auto Attack",True)
         Terminal.SetSpinBox("autoattack_spin",7500)
         Terminal.SetComboBox("AttackKey",36)
@@ -1215,6 +1225,8 @@ def initAttackDone():
     Terminal.SetComboBox("Familiar0",5)
     toggle_rush_by_level(True)
     Terminal.SetCheckBox("Kami Vac",False)
+    Terminal.SetSlider("sliderMP", 10)
+    Terminal.SetComboBox("MPKey",6)
     if job == 3712:
         print("Setting up settings for Blaster")
         Terminal.SetLineEdit("SISkillID","37121003")
@@ -1226,11 +1238,11 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job ==4212: #4th
         print("Setting up Settings for Kanna")
-        Terminal.SetSpinBox("MonkeySpiritsNDcheck",40)
-        Terminal.SetCheckBox("charm_fma",False)
+        Terminal.SetSpinBox("charm_delay",100)
+        Terminal.SetCheckBox("Auto SP",True)
+        Terminal.SetCheckBox("charm_fma",True)
         Terminal.SetCheckBox("Summon Kishin",True)
-        Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
-        Terminal.SetCheckBox("Kami Vac",True)
+        Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
         Terminal.SetCheckBox("Auto Attack",True)
         Terminal.SetSpinBox("autoattack_spin",7500)
         Terminal.SetComboBox("AttackKey",36)
@@ -1458,10 +1470,10 @@ if not GameState.IsInGame() and not GameState.IsInCashShop() and not SCLib.GetVa
     SCLib.UpdateVar("ToggleAttack",True)
     print("Enabling TogglaAttack Flag")
 
-if GameState.IsInGame() and accountData['daily_done'] and SCLib.GetVar("ToggleAttack"):
+if GameState.IsInGame() and accountData['daily_done'] and SCLib.GetVar("ToggleAttack") and job != -1:
     initAttackDone()
     SCLib.UpdateVar("ToggleAttack",False)
-if GameState.IsInGame() and not accountData['daily_done'] and SCLib.GetVar("ToggleAttack"):
+if GameState.IsInGame() and not accountData['daily_done'] and SCLib.GetVar("ToggleAttack") and job != -1:
     initAttack()
     SCLib.UpdateVar("ToggleAttack",False)
 
@@ -1469,6 +1481,7 @@ def initVars():
     SCLib.PersistVar("StartingMap", Field.GetID())
     SCLib.PersistVar("UsingKami", Terminal.GetCheckBox("Kami Vac"))
     SCLib.PersistVar("UsingSI", Terminal.GetCheckBox("Skill Injection"))
+    SCLib.PersistVar("UsingAA", Terminal.GetCheckBox("Auto Attack"))
     SCLib.PersistVar("UsingFMA", Terminal.GetCheckBox("Full Map Attack"))
     SCLib.PersistVar("UsingGFMA", Terminal.GetCheckBox("General FMA"))
     SCLib.PersistVar("UsingWhitelist", Terminal.GetPushButton("Whitelist"))
@@ -1781,6 +1794,7 @@ def initChuChu():
         Terminal.SetCheckBox("Kami Vac", False)
         Terminal.SetCheckBox("Full Map Attack", False)
         Terminal.SetCheckBox("General FMA", False)
+        Terminal.SetCheckBox("Grenade Kami", False)
         Terminal.SetPushButton("Whitelist", False)
         
         changeChannel()
@@ -1816,7 +1830,8 @@ def startChuChu():
             elif Field.GetID() in hungryMutoMaps:
                 print("Starting ChuChuPQ!")
                 SCLib.UpdateVar("CurStep", "DoingChuChu")
-                time.sleep(10)
+                time.sleep(7)
+                
 
 def doingChuChu():
     if Field.GetID() != ccExitMap and Field.GetID() != ccStartingMap:
@@ -1846,7 +1861,7 @@ def finishChuChu():
         if SCLib.GetVar("UsingWhitelist"):
             Terminal.SetPushButton("Whitelist", True)
         SCLib.UpdateVar("CurDaily", "DD")
-        SCLib.UpdateVar("CurStep", "StartingDD")
+        SCLib.UpdateVar("CurStep", "InitDD")
         
 def doChuChu():
     if dailyChuChu:
@@ -1865,6 +1880,221 @@ def doChuChu():
         SCLib.UpdateVar("CurStep", "InitDD")
         
 #Dream Defender
+
+##########################
+##########################
+# Dream Defender Daily
+##########################
+##########################
+
+
+NIGHTMARE_BOX = [9833080, 9833081, 9833082, 9833083, 9833084]
+DD_MAP = [921171000, 921171001, 921171002, 921171003, 921171004, 921171005]
+DD_CLOCKMAP = 450003540
+DD_ENTERMAP = 450004000
+DD_EXITMAP = 921171100
+SLEEP_TIME = 0.5
+
+CoinNpc = [9010101, 9010102, 9010103, 9010104, 9010105]
+Lache_Town = 450003000
+
+
+def toggle_attack(flag):
+    if SCLib.GetVar("UsingAA"):
+        Terminal.SetCheckBox("Auto Attack", flag)
+    if SCLib.GetVar("UsingSI"):
+        Terminal.SetCheckBox("Skill Injection", flag)
+    if job in IlliumJobs:
+        Terminal.SetCheckBox("bot/illium/radiant_javelin_delay", flag)
+    if job in KannaJobs: #MonkeySpiritsNDcheck
+        Terminal.SetCheckBox("MonkeySpiritsNDcheck", flag)
+
+def is_in_center(x, y):
+    ptgo_up = Field.FindPortal('ptgo_up')
+    ptgo_down = Field.FindPortal('ptgo_down')
+    ptgo_left = Field.FindPortal('ptgo_left')
+    ptgo_right = Field.FindPortal('ptgo_right')
+    ptback_up = Field.FindPortal('ptback_up')
+    ptback_down = Field.FindPortal('ptback_down')
+    ptback_left = Field.FindPortal('ptback_left')
+    ptback_right = Field.FindPortal('ptback_right')
+    return x >= ptgo_left.x - 50 and x <= ptgo_right.x + 50 and y >= ptgo_up.y - 50 and y <= ptgo_down.y + 50
+
+def is_in_left(x, y):
+    ptgo_up = Field.FindPortal('ptgo_up')
+    ptgo_down = Field.FindPortal('ptgo_down')
+    ptgo_left = Field.FindPortal('ptgo_left')
+    ptgo_right = Field.FindPortal('ptgo_right')
+    ptback_up = Field.FindPortal('ptback_up')
+    ptback_down = Field.FindPortal('ptback_down')
+    ptback_left = Field.FindPortal('ptback_left')
+    ptback_right = Field.FindPortal('ptback_right')
+    return x >= ptback_left.x - 450 and x <= ptback_left.x + 450 and y >= ptback_left.y - 250 and y <= ptback_left.y + 250
+
+def is_in_right(x, y):
+    ptgo_up = Field.FindPortal('ptgo_up')
+    ptgo_down = Field.FindPortal('ptgo_down')
+    ptgo_left = Field.FindPortal('ptgo_left')
+    ptgo_right = Field.FindPortal('ptgo_right')
+    ptback_up = Field.FindPortal('ptback_up')
+    ptback_down = Field.FindPortal('ptback_down')
+    ptback_left = Field.FindPortal('ptback_left')
+    ptback_right = Field.FindPortal('ptback_right')
+    return x >= ptback_right.x - 450 and x <= ptback_right.x + 450 and y >= ptback_right.y - 250 and y <= ptback_right.y + 250
+
+def is_in_up(x, y):
+    ptgo_up = Field.FindPortal('ptgo_up')
+    ptgo_down = Field.FindPortal('ptgo_down')
+    ptgo_left = Field.FindPortal('ptgo_left')
+    ptgo_right = Field.FindPortal('ptgo_right')
+    ptback_up = Field.FindPortal('ptback_up')
+    ptback_down = Field.FindPortal('ptback_down')
+    ptback_left = Field.FindPortal('ptback_left')
+    ptback_right = Field.FindPortal('ptback_right')
+    return x >= ptback_up.x - 450 and x <= ptback_up.x + 450 and y >= ptback_up.y - 250 and y <= ptback_up.y + 250
+
+def is_in_down(x, y):
+    ptgo_up = Field.FindPortal('ptgo_up')
+    ptgo_down = Field.FindPortal('ptgo_down')
+    ptgo_left = Field.FindPortal('ptgo_left')
+    ptgo_right = Field.FindPortal('ptgo_right')
+    ptback_up = Field.FindPortal('ptback_up')
+    ptback_down = Field.FindPortal('ptback_down')
+    ptback_left = Field.FindPortal('ptback_left')
+    ptback_right = Field.FindPortal('ptback_right')
+    return x >= ptback_down.x - 450 and x <= ptback_down.x + 450 and y >= ptback_down.y - 250 and y <= ptback_down.y + 250
+
+def room_of(x, y):
+    if is_in_center(x, y):
+        return 'center'
+    elif is_in_up(x, y):
+        return 'up'
+    elif is_in_down(x, y):
+        return 'down'
+    elif is_in_left(x, y):
+        return 'left'
+    elif is_in_right(x, y):
+        return 'right'
+    else:
+        return None
+
+def find_one_box():
+    print("Searching a Box")
+    flag = False
+    for box_id in NIGHTMARE_BOX:
+        mob = Field.FindMob(box_id)
+        if mob.valid:
+            print("Found Mob", mob, box_id)
+            flag = True
+            return mob
+    print("Found None")
+    return None
+
+def close_enough(x1, y1, x2, y2, distance):
+    if (x1 - x2)**2 + (y1 - y2)**2 < distance**2:
+        return True
+    else:
+        return False
+
+def safe_teleport(x, y):
+    toggle_attack(False)
+    pos = Character.GetPos()
+    if not close_enough(pos.x, pos.y, x, y, 1000):
+        print('TOO FAR. NOT SAFE TO TELEPORT!!!')
+        time.sleep(SLEEP_TIME)
+        return
+    Character.Teleport(x, y - 5)
+    time.sleep(SLEEP_TIME)
+
+def safe_enter_portal():
+    start = Character.GetPos()
+    Character.EnterPortal()
+    time.sleep(SLEEP_TIME)
+    end = Character.GetPos()
+    if close_enough(start.x, start.y, end.x, end.y, 10):
+        Character.EnterPortal()
+
+def moving_to_room(from_room, to_room):
+    ptgo_up = Field.FindPortal('ptgo_up')
+    ptgo_down = Field.FindPortal('ptgo_down')
+    ptgo_left = Field.FindPortal('ptgo_left')
+    ptgo_right = Field.FindPortal('ptgo_right')
+    ptback_up = Field.FindPortal('ptback_up')
+    ptback_down = Field.FindPortal('ptback_down')
+    ptback_left = Field.FindPortal('ptback_left')
+    ptback_right = Field.FindPortal('ptback_right')
+    if from_room is None or to_room is None or from_room == to_room:
+        return
+
+    print('Moving from %s to %s.' % (from_room, to_room))
+    if from_room == 'center':
+        if to_room == 'up' and ptgo_up.valid:
+            safe_teleport(ptgo_up.x, ptgo_up.y)
+        elif to_room == 'down' and ptgo_down.valid:
+            safe_teleport(ptgo_down.x, ptgo_down.y)
+        elif to_room == 'left' and ptgo_left.valid:
+            safe_teleport(ptgo_left.x, ptgo_left.y)
+        elif to_room == 'right' and ptgo_right.valid:
+            safe_teleport(ptgo_right.x, ptgo_right.y)
+        safe_enter_portal()
+    elif to_room == 'center':
+        if from_room == 'up' and ptback_up.valid:
+            safe_teleport(ptback_up.x, ptback_up.y)
+        elif from_room == 'down' and ptback_down.valid:
+            safe_teleport(ptback_down.x, ptback_down.y)
+        elif from_room == 'left' and ptback_left.valid:
+            safe_teleport(ptback_left.x, ptback_left.y)
+        elif from_room == 'right' and ptback_right.valid:
+            safe_teleport(ptback_right.x, ptback_right.y)
+        safe_enter_portal()
+    else:
+        moving_to_room(from_room, 'center')
+
+def start_DD():
+    print("Attempting to join Dream Defender")
+    Party.LeaveParty()
+    Disabler()
+    if Terminal.GetCheckBox("Skill Injection"):
+        Terminal.SetCheckBox("Skill Injection", False)
+    Npc.ClearSelection()
+    Npc.RegisterSelection("Dream")
+    Npc.RegisterSelection("Stage")
+    Character.TalkToNpc(9010100)
+    time.sleep(3)
+
+def leave_DD():
+    print("Get reward and leave")
+    Character.TalkToNpc(9010100)    
+    time.sleep(3)
+
+def GetCoin(npc):
+    print("Receiving coins from", npc)
+    retry=0
+    while SCLib.GetVar("DDCoin") == Inventory.GetItemCount(4310227) and retry<3:
+        Character.TalkToNpc(npc)
+        time.sleep(3)
+        retry+=1
+
+def Disabler():
+    if Terminal.GetCheckBox("General FMA"):
+        Terminal.SetCheckBox("General FMA", False)
+    if Terminal.GetCheckBox("Full Map Attack"):
+        Terminal.SetCheckBox("Full Map Attack", False)
+    if Terminal.GetCheckBox("Grenade Kami"):
+        Terminal.SetCheckBox("Grenade Kami", False)
+    if Terminal.GetCheckBox("Mob Falldown"):
+        Terminal.SetCheckBox("Mob Falldown", False)
+    if Terminal.GetCheckBox("Kami Vac"):
+        Terminal.SetCheckBox("Kami Vac", False)
+    if Terminal.GetCheckBox("bot/kanna_kami"):
+        Terminal.SetCheckBox("bot/kanna_kami", False)
+    
+    if not (Terminal.GetCheckBox("General FMA") or Terminal.GetCheckBox("Full Map Attack") or Terminal.GetCheckBox("Grenade Kami") or Terminal.GetCheckBox("Mob Falldown") or Terminal.GetCheckBox("bot/kanna_kami") or Terminal.GetCheckBox("Kami Vac")):
+        return True
+    else:
+        return False
+
+
 def initDD():
     if Field.GetID() != ddStartingMap:
         Terminal.Rush(ddStartingMap)
@@ -1939,16 +2169,145 @@ def startDD():
             SCLib.UpdateVar("CurDaily", "SS")
             SCLib.UpdateVar("RetryCount", 0)
 
+def Rush(mapid):
+    if Terminal.IsRushing():
+        time.sleep(1)
+    elif Field.GetID() != mapid:
+        time.sleep(1)
+        Terminal.Rush(mapid)
+
+def ToPortal(portal, enter=True):
+    portal = Field.FindPortal(portal)
+    if portal.valid:
+        if not (Character.GetPos().x < portal.x+5 and Character.GetPos().x > portal.x-5):
+            SunCat.Teleport(portal.x, portal.y-5)
+            time.sleep(1)
+            if enter:
+                Character.EnterPortal()
+                time.sleep(1)
+        elif enter:
+            time.sleep(1)
+            Character.EnterPortal()
+
+options = ['General FMA', 'Full Map Attack', 'Grenade Kami', 'Mob Falldown', 'Kami Vac', 'bot/kanna_kami', 'bot/si_no_wait', 'Skill Injection', 'Auto Attack']
+for option in options:
+    if SCLib.GetVar(option) is None:
+        SCLib.PersistVar(option, Terminal.GetCheckBox(option))
+    else:
+        SCLib.UpdateVar(option, Terminal.GetCheckBox(option))
+
+def RestoreSetting():
+    print("restore terminal setting")
+    for option in options:
+        Terminal.SetCheckBox(option, SCLib.GetVar(option))
+
+def doDreamDefenderLevels():
+    while SCLib.GetVar("CurStep") == "InitDD":
+        if Field.GetID() not in DD_MAP+[DD_CLOCKMAP, DD_ENTERMAP, DD_EXITMAP]:
+            Rush(DD_CLOCKMAP)
+        if Field.GetID() == DD_CLOCKMAP:
+            ToPortal("top00")
+            time.sleep(2)
+            
+        retryCount = 0
+        while retryCount < 3 and Field.GetID() == DD_ENTERMAP:
+            start_DD()
+            retryCount += 1
+            
+        if retryCount == 3:
+            print("Finished Dream Defender daily")
+            SCLib.UpdateVar("CurStep", "StartingDD")
+            break
+        
+        flag = True
+        startStage = 0
+        
+        while GameState.IsInGame() and Field.GetID() in DD_MAP and Disabler():
+            ptgo_up = Field.FindPortal('ptgo_up')
+            ptgo_down = Field.FindPortal('ptgo_down')
+            ptgo_left = Field.FindPortal('ptgo_left')
+            ptgo_right = Field.FindPortal('ptgo_right')
+            ptback_up = Field.FindPortal('ptback_up')
+            ptback_down = Field.FindPortal('ptback_down')
+            ptback_left = Field.FindPortal('ptback_left')
+            ptback_right = Field.FindPortal('ptback_right')    
+            print(ptgo_up.valid)
+            if flag:
+                startStage = SunCat.GetDDStage()
+                flag = False
+            
+            if startStage != SunCat.GetDDStage():
+                retreatDD()
+            
+            box = find_one_box()
+            if box is None:
+                print('Can not find any nightmare box. Wait.')
+                toggle_attack(False)
+                time.sleep(SLEEP_TIME*2)
+            else:
+                room_of_box = room_of(box.x, box.y)
+                print(box.x, box.y)
+                print('Found box in room: %s' % room_of_box)
+
+                pos = Character.GetPos()
+                room_of_char = room_of(pos.x, pos.y)
+                print(pos.x, pos.y)
+                print('The character is in room: %s' % room_of_char)
+
+                if room_of_box == room_of_char:
+                    if close_enough(pos.x, pos.y, box.x, box.y, 50):
+                        print('Close enough. Toggle AA. Wait.')
+                        toggle_attack(True)
+                        time.sleep(SLEEP_TIME)
+                    else:
+                        print('Not close enough. Teleport to box.')
+                        safe_teleport(box.x, box.y)
+                        time.sleep(SLEEP_TIME)
+                else:
+                    moving_to_room(room_of_char, room_of_box)
+            time.sleep(SLEEP_TIME)
+        '''
+        while Field.GetID() in DD_MAP:
+            Disabler()
+            print("Cleared the starting floor, wait and fail on purpose to leave the map")
+            time.sleep(3)
+        '''
+        if Field.GetID() == DD_EXITMAP:
+            RestoreSetting()
+            leave_DD()
+
+def doDreamDefenderCoins():
+    while SCLib.GetVar("CurStep") == "StartingDD":
+        print("Returning to Lachelein Main street")
+        if Field.GetID() == DD_ENTERMAP:
+            exitpt = Field.FindPortal("out00")
+            Character.MoveX(exitpt.x+30, 4000)
+            time.sleep(1)
+            Character.EnterPortal()
+            time.sleep(2)
+        elif Field.GetID() != Lache_Town:
+            Rush(Lache_Town)
+            time.sleep(5)
+        elif Field.GetID() == Lache_Town:
+            print("Receiving coins from npcs")
+            for npc in CoinNpc:
+                SCLib.UpdateVar("DDCoin", Inventory.GetItemCount(4310227))
+                GetCoin(npc)
+            SCLib.UpdateVar("CurDaily", "SS")
+            SCLib.UpdateVar("CurStep", "InitSS")
+            print("Finished getting extra coins")
+
 def doDD():
     if dailyDD:
         if SCLib.GetVar("CurStep") == "InitDD":
-            initDD()
+            doDreamDefenderLevels()
         elif SCLib.GetVar("CurStep") == "StartingDD":
-            startDD()
+            doDreamDefenderCoins()
     else:
         SCLib.UpdateVar("CurDaily", "SS")
         SCLib.UpdateVar("CurStep", "InitSS")
     
+
 #Spirit Savior
 def inSS():
     return Field.GetID() >= ssMapStart and Field.GetID() <= ssMapEnd
@@ -1969,7 +2328,7 @@ def initSS():
         
         for mob in enemyMobs:
             SunCat.FilterMob(mob)
-        
+        toggle_attack(True)
         Npc.ClearSelection()
         Npc.RegisterSelection("Attempt")
         Character.TalkToNpc(ssNpc)
@@ -2008,7 +2367,7 @@ def runSS():
             else:
                 print("No mobs left!")
                 time.sleep(3) #Wait for mobs to respawn - this should never be hit
-        
+        time.sleep(1)
         SunCat.KamiTP(ssBaseX, ssBaseY)
         time.sleep(roundWaitTime)
         
@@ -2029,7 +2388,13 @@ def startSS():
     if inSS():
         SCLib.UpdateVar("CurStep", "RunSS")
     else:
-        if SCLib.GetVar("RetryCount") < 3 and SCLib.GetVar("CurSSRuns") < totalRuns:
+        if Inventory.GetItemCount(4310235) == (SCLib.GetVar("SpiritCoin")+30):
+            SCLib.UpdateVar("CurDaily", "Return")
+            SCLib.UpdateVar("RetryCount", 0)
+            print("You earned daily cap for spirit coin")
+            print("Finished Spirit Savior Daily")
+            return
+        elif SCLib.GetVar("RetryCount") < 3 and SCLib.GetVar("CurSSRuns") < totalRuns:
             print("Failed to enter SS... Retrying")
             SCLib.UpdateVar("RetryCount", SCLib.GetVar("RetryCount") + 1)
             SCLib.UpdateVar("CurStep", "InitSS")
@@ -2075,6 +2440,11 @@ if GameState.IsInGame() and accountData['changing_mule'] and not accountData['da
 if GameState.IsInGame() and not accountData['daily_done'] and not accountData['changing_mule'] and not SCLib.GetVar("ToggleAttack"): #only need to do this if daily is not done
     if GameState.IsInGame() and Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
         print("Need to buy a hyper teleport rock")
+        autoAttack = Terminal.GetCheckBox("Auto Attack")
+        skillInject = Terminal.GetCheckBox("Skill Injection")
+        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Skill Injection",False)
+        time.sleep(5)
         if Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
             nEmptySlotPOS = 0
             for i in range(1, Inventory.GetItemSlotCount(5)):
@@ -2084,9 +2454,12 @@ if GameState.IsInGame() and not accountData['daily_done'] and not accountData['c
                     break
             Terminal.EnterCashShop()
             CashItemResLoadLockerDone()
+            time.sleep(1)
+        Terminal.SetCheckBox("Auto Attack",autoAttack)
+        Terminal.SetCheckBox("Skill Injection",skillInject)
     elif Quest.GetQuestState(34120) != 2 and level >= 200:
         VJprequest()
-    elif Quest.GetQuestState(34218) != 2 and level >= 211:
+    elif Quest.GetQuestState(34218) != 2 and level >= 210:
         Chuchuprequest()
     else:
         if Field.GetID() in [450002021,450001250,450001240]:
@@ -2189,3 +2562,5 @@ if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switc
         Key.Set(attack_key,1,27111303)
     else:                              #Dark Mode
         Key.Set(attack_key,1,27121202)
+
+#print(SCLib.GetVar("CurStep"))

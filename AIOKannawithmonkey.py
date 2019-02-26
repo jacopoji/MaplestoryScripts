@@ -1392,6 +1392,9 @@ def find_move_ring():
 					elif item.pos == to_item.pos:
 						print("moving to itself, pos+1")
 						start_pos += 1
+					elif item.grade == to_item.grade:
+						print("Move to next slot")
+						start_pos += 1
 
 def buy_cubes():
 	buy_count = 0
@@ -1596,7 +1599,8 @@ if Character.GetMeso() == 29999999999 and not SCLib.GetVar("DoingMP") and not SC
 		accountData['storing_meso'] = True
 		writeJson_cube(accountData,accountId)
 		print("logging out")
-		Terminal.Logout()
+		if GameState.IsInGame():
+			Terminal.Logout()
 		time.sleep(3)
 		jobid = -1
 #print(GameState.GetLoginStep())
@@ -1624,7 +1628,8 @@ elif accountData['storing_meso'] and jobid == 2700 and Character.GetMeso() == 29
 	accountData['storage_number'] = accountData['storage_number'] + 1
 	accountData['storing_meso'] = False
 	writeJson_cube(accountData,accountId)
-	Terminal.Logout()
+	if GameState.IsInGame():
+		Terminal.Logout()
 	Terminal.SetLineEdit("LoginChar", accountData['kanna_pos'])
 	SCLib.UpdateVar("withdraw_flag",False)
 	print("Logging out and changing to Kanna farmer")
@@ -1633,7 +1638,8 @@ elif accountData['storing_meso'] and jobid == 2700 and Character.GetMeso() != 0 
 	#need to update bank number but did not withdraw mesos
 	accountData['storage_number'] = accountData['storage_number'] + 1
 	writeJson_cube(accountData,accountId)
-	Terminal.Logout()
+	if GameState.IsInGame():
+		Terminal.Logout()
 	print("Logging out and changing to next bank")
 	time.sleep(2)
 
@@ -2053,7 +2059,7 @@ if level > 70 and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum"):
 		Quest.StartQuest(12396, 9010000)
 '''
 ###### Monster park starting at level 143
-if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum") and do_MP and Character.GetHP() > 0 and not (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter):
+if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum") and do_MP and Character.GetHP() > 0 and not (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not accountData['kanna_daily_done']:
 	SCLib.UpdateVar("DoingMP",True)
 	Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
 	toggle_rush_by_level(False)
@@ -2649,6 +2655,7 @@ if not accountData['cubing_done'] and level >=145 and not SCLib.GetVar("DoingMP"
 	elif accountData['ready_for_cube'] and not Inventory.FindItemByID(5062009).valid and not accountData['cubing_done']:
 		print("Attempting to buy cubes")
 		toggle_rush_by_level(False)
+		rush_out_MP()
 		if Character.GetMeso() > 800000000:
 			toggle_rush_by_level(False)
 			SCLib.UpdateVar("cube_lock",True)
@@ -2878,3 +2885,8 @@ if Character.GetMeso() >= 7900000 and accountData["cubing_done"] == True and Inv
 if not KillZakumDaily and SCLib.GetVar("MPDone") and jobid in KannaJobs:
 	accountData['kanna_daily_done'] = True
 	writeJson_cube(accountData,accountId)
+
+if SCLib.GetVar("DoingBG"):
+	Terminal.SetCheckBox("settings/mesologout",False)
+else:
+	Terminal.SetCheckBox("settings/mesologout",True)
