@@ -41,7 +41,7 @@ getSpider = False
 DoBlackGate = False
 doSleepyWood = False
 doBeach = False
-get_pensalir = False
+get_pensalir = True
 #Key to restart pers. variables
 HotKey = 0x7A
 
@@ -8553,12 +8553,12 @@ def toggleAttack(on):
     elif job == 122: #Paladin 1211008
         attackAuto(1221004,on)
     elif job == 130: #Spearman 1301011
-        attackAuto(1301011,on)
+        attackSIND(1301011,on,450)
         Terminal.SetCheckBox("Auto SP",True)
     elif job in DarkknightJobs and field_id in curbrockhideout: #1001005
         attackAuto(1001005,on)
     elif job == 131: #Berserker
-        attackAuto(1301011,on)
+        attackSIND(1301011,on,450)
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 132: #Dark Knight
         attackAuto(1321012,on)
@@ -9777,7 +9777,7 @@ if Character.GetLevel() >= 83 and GameState.IsInGame() and getSpider:
                 Terminal.Rush(310050600)
 
 #auto star force pensalir gear and accessories
-if level >= 60 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and Character.GetMeso()>= 5000000:
+if level >= 61 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and Character.GetMeso()>= 5000000:
     #if level >= 140:
     #    for equips in equip_slot_list:
     #        item = Inventory.GetItem(1,equips)
