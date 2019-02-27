@@ -106,7 +106,7 @@ blackgate_eqp = [1004549, 1012535, 1052952, 1082658, 1102840, 1113185, 1122312, 
 
 MP_Coin = 4310020
 
-mobFalldownBlacklist = [101030500]
+mobFalldownBlacklist = [101030500,105010301]
 import Character,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party,json,Login,datetime
 
 if not any("SunCat" in s for s in sys.path):
@@ -7975,43 +7975,33 @@ def safety_setting():
         else:
             Terminal.SetCheckBox(settings, False)
 
+def set_potion():
+    if job not in DemonAvengerJobs:
+        if Inventory.FindItemByID(2001582).valid:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        else:
+            Key.Set(pgup_key, 2, 2002023)
+    else:
+        Key.Set(pgup_key, 1, 31011001)
+
 def attackAuto(skillid,on):
     attack_key = 0x44
-    pgup_key = 0x21
-    if Inventory.FindItemByID(2001582).valid:
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-    else:
-        Key.Set(pgup_key, 2, 2002023)
     Key.Set(attack_key,1,skillid)
     Terminal.SetCheckBox("Skill Injection", False)
-    #Terminal.SetSpinBox("SkillInjection",100)
     Terminal.SetCheckBox("Melee No Delay",False)
-    Terminal.SetCheckBox("Auto SP",True)
-    #Terminal.SetRadioButton("SIRadioMagic",True)
     Terminal.SetCheckBox("Auto Attack", on)
     Terminal.SetComboBox("AttackKey",33)
     Terminal.SetSpinBox("autoattack_spin",100)
 
-def attackSI(skillid,on,delay=100):
-    attack_key = 0x44
-    pgup_key = 0x21
-    if Inventory.FindItemByID(2001582).valid:
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-    else:
-        Key.Set(pgup_key, 2, 2002023)
+def attackSI(skillid,on,delay=100,siOption = "SIRadioMelee"):
     Terminal.SetLineEdit("SISkillID",str(skillid))
     Terminal.SetSpinBox("SkillInjection",delay)
     Terminal.SetCheckBox("Melee No Delay",False)
     Terminal.SetCheckBox("Auto Attack",False)
     Terminal.SetCheckBox("Skill Injection", on)
+    Terminal.SetRadioButton(siOption,True)
 
 def attackSIND(skillid,on,delay=100):
-    attack_key = 0x44
-    pgup_key = 0x21
-    if Inventory.FindItemByID(2001582).valid:
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-    else:
-        Key.Set(pgup_key, 2, 2002023)
     Terminal.SetLineEdit("SISkillID",str(skillid))
     Terminal.SetSpinBox("SkillInjection",delay)
     Terminal.SetCheckBox("Melee No Delay",on)
@@ -8023,45 +8013,41 @@ def toggleAttack(on):
     attack_key = 0x44
     pgup_key = 0x21
     exploit_map = 224000102
-    if field_id == exploit_map:
+    if field_id == exploit_map:# Do not need to attack in exploit map
         return
     if Character.IsOwnFamiliar(9960098) and level > 15:
-        Terminal.SetSlider("sliderMP", 90)
+        Terminal.SetSlider("sliderMP", 90) #use boogie to regen mana
         Terminal.SetComboBox("MPKey",4)
     else:
-        Terminal.SetSlider("sliderMP", 10)
+        Terminal.SetSlider("sliderMP", 10) #use potion to regen mana
         Terminal.SetComboBox("MPKey",6)
-    if not SCLib.GetVar("DoingZakum"):
+
+    if not SCLib.GetVar("DoingZakum") or not getSpider: #Ocassionaly use big spider (in zakum)
         Terminal.SetComboBox("Familiar0",1)
-    if job in XenonJobs:
-        if Character.GetAP() < 60:
+
+    if job in XenonJobs: #Solve Xenon Auto Ability point issues
+        if Character.GetAP() < 60: 
             Terminal.SetCheckBox("Auto AP",False)
         else:
             Terminal.SetCheckBox("Auto AP",True)
     else:
         Terminal.SetCheckBox("Auto AP",True)
-    if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum"):
+
+    if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum"): # kami control interupt by job adv script and zakum script
         toggle_kami(on)
-        if Terminal.GetCheckBox("Legit Vac") and Terminal.GetCheckBox("Kami Vac") and field_id != 105010301:# and not Terminal.GetCheckBox("Melee No Delay"):
+        if Terminal.GetCheckBox("Legit Vac") and Terminal.GetCheckBox("Kami Vac") and field_id not in mobFalldownBlacklist:# and not Terminal.GetCheckBox("Melee No Delay"):
             Terminal.SetCheckBox("Mob Falldown",on)
         else:
             Terminal.SetCheckBox("Mob Falldown",False)
     else:
         Terminal.SetCheckBox("Mob Falldown",False)
+
     if job == 4200: #kanna first job
-        Terminal.SetCheckBox("Auto SP",True)
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key, 1, 42001000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(42001000,on)
+    elif job in KannaJobs and field_id in curbrockhideout:
+        attackAuto(42001000,on)
     elif job == 4210: #kanna 2nd
         Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Auto SP",True)
         Terminal.SetSpinBox("charm_delay",100)
         Terminal.SetCheckBox("charm_fma",on)
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
@@ -8070,9 +8056,8 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Skill Injection",True)
         Terminal.SetComboBox("AttackKey",33)
         Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 4211:# or job ==4212: #kanna 3rd + 4th
+    elif job == 4211:#kanna 3rd
         Terminal.SetSpinBox("charm_delay",100)
-        Terminal.SetCheckBox("Auto SP",True)
         Terminal.SetCheckBox("charm_fma",on)
         Terminal.SetCheckBox("Summon Kishin",True)
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
@@ -8080,7 +8065,7 @@ def toggleAttack(on):
         Terminal.SetSpinBox("autoattack_spin",7500)
         Terminal.SetComboBox("AttackKey",36)
         Terminal.SetCheckBox("Skill Injection",False)
-        Key.Set(0x47,1,42111003)
+        Key.Set(0x47,1,42111003) #kishin
     elif job == 4212: #kanna 4th 
         Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
         Terminal.SetCheckBox("Grenade Kami",True)
@@ -8092,461 +8077,131 @@ def toggleAttack(on):
         Terminal.SetSpinBox("autoattack_spin",7500)
         Terminal.SetComboBox("AttackKey",36)
         Terminal.SetCheckBox("Skill Injection",False)
-        Key.Set(0x47,1,42111003)
+        Key.Set(0x47,1,42111003) #kishin
     elif job == 2700: #lumi first job
         # 20040217 Dark Mode Buff
         # 20040216 Light Mode
         # 20040220 20040219 Equi Mode
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,27001201)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(27001201,on)
     elif job in LuminousJobs and field_id in curbrockhideout:
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,27001201)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(27001201,on)
     elif job == 2710: #lumi second job
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         if Character.HasBuff(2,20040217): #use dark magic
-            Key.Set(attack_key,1,27001201)
+            attackAuto(27001201,on)
         else:
-            Key.Set(attack_key,1,27101100)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+            attackAuto(27101100,on)
     elif job == 2711: #lumi third job
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         if Character.HasBuff(2,20040216): #Light Mode
-            Key.Set(attack_key,1,27101100)
+            attackAuto(27101100,on)
         elif Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219): #Equi Mode
-            Key.Set(attack_key,1,27111303)
+            attackAuto(27111303,on)
         else:                              #Dark Mode
-            Key.Set(attack_key,1,27111202)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+            attackAuto(27111202,on)
     elif job == 2712: #lumi fourth job
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         if Character.HasBuff(2,20040216): #Light Mode
-            Key.Set(attack_key,1,27121100)
+            attackAuto(27121100,on)
         elif Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219): #Equi Mode
-            Key.Set(attack_key,1,27111303)
+            attackAuto(27111303,on)
         else:                              #Dark Mode
-            Key.Set(attack_key,1,27121202)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+            attackAuto(27121202,on)
     elif job == 3101: #DA first job
-        Key.Set(pgup_key, 1, 31011001)
-        Key.Set(attack_key,1,31011000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(31011000,on)
     elif job in DemonAvengerJobs and field_id in curbrockhideout:
-        Key.Set(pgup_key, 1, 31011001)
-        Key.Set(attack_key,1,31011000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(31011000,on)
     elif job == 3120: #DA 2nd
-        Key.Set(pgup_key, 1, 31011001)
-        Key.Set(attack_key,1,31201000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
+        attackAuto(31201000,on)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 3121 or job == 3122: #DA third job and fourth job
-        Key.Set(pgup_key, 1, 31011001)
-        Key.Set(attack_key,1,31211000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(31211000,on)
     elif job == 3100 or job == 3110 or job == 3111: #DS first - third job
         #Key.Set(attack_key,1,31000004)31001008
-        Terminal.SetLineEdit("SISkillID","31001008")
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(31001008,on,100)
     elif job == 3112: #DS fourth job
-        Terminal.SetLineEdit("SISkillID","31121010")
-        Terminal.SetSpinBox("SkillInjection",0)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(31121010,on,0)
     elif job == 2300: #Mercedes 1st 
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,23001000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(23001000,on)
     elif job in MercedesJobs and field_id in curbrockhideout:
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,23001000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(23001000,on)
     elif job ==2310: #Mercedes 2nd
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,23101000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(23101000,on)
     elif job ==2311 or job == 2312: #Mercedes 3rd + 4th
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,23111000)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(23111000,on)
     elif job == 4100: #Hayato 1st 41001004
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","41001004")
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(41001004,on,100)
     elif job in HayatoJobs and field_id in curbrockhideout:
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","41001004")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(41001004,on,100)
     elif job == 4110: #Hayato 2nd 41101000
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","41101000")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(41101000,on,100)
     elif job == 4111: #Hayato 3rd 41111011
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","41111011")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(41111011,on,100)
     elif job == 4112: #Hayato 4th 41121011
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","41121011")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(41121011,on,100)
     elif job == 3600:#Xenon 1st 36001000
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","36001000")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(36001000,on,150)
     elif job in XenonJobs and field_id in curbrockhideout:
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","36001000")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(36001000,on,150)
     elif job == 3610:#Xenon 2nd 36101000
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","36101000")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(36101000,on,150)
     elif job == 3611:#Xenon 3rd 36111000
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","36111000")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(36111000,on,150)
     elif job == 3612:#Xenon 4th 36121000
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","36121000")
-        Terminal.SetSpinBox("SkillInjection",80)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSI(36121000,on,80)
     elif job == 2400: #Phantom 1st 24001000
-        Key.Set(pgup_key, 2, 2001582)
-        Key.Set(attack_key,1,24001000)
-        Terminal.SetLineEdit("SISkillID","24001000")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",on)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(24001000,on)
     elif job in PhantomJobs and field_id in curbrockhideout:
-        Key.Set(pgup_key, 2, 2001582)
-        Key.Set(attack_key,1,24001000)
-        Terminal.SetLineEdit("SISkillID","24001000")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",on)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(24001000,on)
     elif job == 2410: #Phantom 2nd 24101000
-        Key.Set(pgup_key, 2, 2001582)
-        Key.Set(attack_key,1,24101000)
-        Terminal.SetLineEdit("SISkillID","24101000")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",on)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(24101000,on)
     elif job == 2411: #Phantom 3rd 24111000
-        Key.Set(pgup_key, 2, 2001582)
-        Key.Set(attack_key,1,24111000)
-        Terminal.SetLineEdit("SISkillID","24111000")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",on)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(24111000,on)
     elif job == 2412: #Phantom 4th 24121000
-        Key.Set(pgup_key, 2, 2001582)
-        Terminal.SetLineEdit("SISkillID","24121000")
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Skill Injection", on)
-        Terminal.SetSpinBox("SkillInjection",150)
+        attackSI(24121000,on,150)
     elif job == 15000: #Illium Pre 1st
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",1)
         Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 15200 or job == 15210 or job == 15211 or job == 15212: #Illium 1st+2nd+3rd+4th
-        if Inventory.FindItemByID(2001582).valid:
-            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        else:
-            Key.Set(pgup_key, 2, 2002023)
+    elif job in IlliumJobs: #Illium 1st+2nd+3rd+4th
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Auto SP",True)
+        
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",on)
         Terminal.SetCheckBox("bot/illium/summon_control",on)
         Terminal.SetCheckBox("General FMA",on)
-    elif job == 6400 or job == 6410 or job == 6411 or job == 6412: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
-        if Inventory.FindItemByID(2001582).valid:
-            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        else:
-            Key.Set(pgup_key, 2, 2002023)
+    elif job in CadenaJobs: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
         Terminal.SetLineEdit("SISkillID","64001006")
         Terminal.SetSpinBox("SkillInjection",200)
-        Terminal.SetCheckBox("Auto SP",True)
+        
         Terminal.SetRadioButton("si_cadena",True)
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 6412: # Cadena 4th job 64121016 May want to change this 
-        if Inventory.FindItemByID(2001582).valid:
-            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        else:
-            Key.Set(pgup_key, 2, 2002023)
-        Terminal.SetLineEdit("SISkillID","64121016")
-        Terminal.SetSpinBox("SkillInjection",150)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("si_cadena",True)
-        Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 15500 or job == 15510 or job == 15511 or job == 15512: #Ark 1st + 2nd + 3rd 155001100
-        if Inventory.FindItemByID(2001582).valid:
-            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        else:
-            Key.Set(pgup_key, 2, 2002023)
-        Key.Set(attack_key,1,155001100)
-        Terminal.SetLineEdit("SISkillID", "155001100")
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetSpinBox("SkillInjection",700)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",on)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetSpinBox("autoattack_spin",100)
-    elif job == 15512: #Ark 4th 155121007 @50
-        Terminal.SetLineEdit("SISkillID", "155121007")
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetSpinBox("SkillInjection",50)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Skill Injection", False)
+    elif job in ArkJobs: #Ark 1st + 2nd + 3rd 155001100
+        attackAuto(155001100,on)
     elif job == 2001: #Evan pre 1st job
-        if Inventory.FindItemByID(2001582).valid:
-            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        else:
-            Key.Set(pgup_key, 2, 2002023)
-        Key.Set(attack_key,1,22001010)
         Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",1)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 2200: #Evan 1st 22001010 AA
-        if Inventory.FindItemByID(2001582).valid:
-            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        else:
-            Key.Set(pgup_key, 2, 2002023)
-        Key.Set(attack_key,1,22001010)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(22001010,on)
     elif job in EvanJobs and field_id in curbrockhideout:
         if field_id == 600050020:
-            Terminal.SetLineEdit("SISkillID", "22110010")
-            Terminal.SetCheckBox("Auto Attack",False)
-            Terminal.SetCheckBox("Melee No Delay",True)
-            Terminal.SetSpinBox("SkillInjection",100)
-            Terminal.SetRadioButton("SIRadioMelee",True)
-            Terminal.SetCheckBox("Skill Injection", on)
+            attackSIND(22110010,on,100)
         else:
-            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+            attackAuto(22001010,on)
             Key.Set(attack_key,1,22001010)
-            Terminal.SetCheckBox("Skill Injection", False)
-            #Terminal.SetSpinBox("SkillInjection",100)
-            Terminal.SetCheckBox("Auto SP",True)
-            Terminal.SetCheckBox("Melee No Delay",False)
-            #Terminal.SetRadioButton("SIRadioMagic",True)
-            Terminal.SetCheckBox("Auto Attack", on)
-            Terminal.SetComboBox("AttackKey",33)
-            Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 2211: #Evan 2nd 22110010 SI/ND
-        Terminal.SetLineEdit("SISkillID", "22110010")
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSIND(22110010,on,100)
+        
     elif job == 2214: #Evan 3rd 22140010 SI/ND
-        Terminal.SetLineEdit("SISkillID", "22140010")
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSIND(22140010,on,100)
+        
     elif job == 2217: #Evan 4th 22170061 SI/ND
-        Terminal.SetLineEdit("SISkillID", "22170061")
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSIND(22170061,on,100)
     elif job == 0:
         Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Terminal.SetCheckBox("Skill Injection", False)
@@ -8588,55 +8243,51 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto SP",True)
     elif job == 200: #Mage
         attackAuto(2001008,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job in ILMageJobs and field_id in curbrockhideout: #1001005
         attackAuto(2001008,on)
     elif job == 220: #IL wizard
         attackAuto(2201005,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 221: #IL mage
         attackAuto(2211002,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 222: #IL archmage
         attackAuto(2221006,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job in FPMageJobs and field_id in curbrockhideout: #1001005
         attackAuto(2001008,on)
     elif job == 210: #FP wizard
         attackAuto(2101004,on) 
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 211: #FP mage
         attackAuto(2101004,on) 
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 212: #FP archmage
         attackAuto(2121006,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job in BishopJobs and field_id in curbrockhideout: #1001005
         attackAuto(2001008,on)
     elif job == 230: #cleric
         attackAuto(2301005,on)
-        Terminal.SetCheckBox("Auto SP",True)
     elif job == 231: #priest
         attackAuto(2311004,on)
-        Terminal.SetCheckBox("Auto SP",True)
     elif job == 232: #Bishop
-        attackSI(2321007,on)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("SIRadioMagic",True)
+        attackSI(2321007,on,100,"SIRadioMagic")
     elif job == 300: #Archer
         attackAuto(3001004,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif (job in BowmasterJobs or job in MarksmanJobs) and field_id in curbrockhideout: #1001005
         attackAuto(3001004,on)
     elif job == 310: #Hunter
         attackAuto(3101005,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 311: #Ranger
         attackAuto(3111003,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 312: #Bowmaster
         attackAuto(3121015,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 320: #Crossbowman
         attackAuto(3201005,on)
     elif job == 321: #Sniper
@@ -8648,35 +8299,32 @@ def toggleAttack(on):
             attackAuto(4001013,on)
         else:
             attackAuto(4001334,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 410: #Assassin
         attackSI(4101008,on)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetRadioButton("SIRadioMelee",True)
+        
     elif job in NightlordJobs and field_id in curbrockhideout: #1001005
         attackAuto(4101008,on)
     elif job == 411: #Hermit
         attackSI(4111015,on)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 412:
-        Terminal.SetRadioButton("SIRadioMelee",True)
         if Character.GetSkillLevel(4121017) >= 1:
             attackSI(4121017,on)
         else:
             attackSI(4111015,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 420: #Bandit
         attackAuto(4201012,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job in ShadowerJobs and field_id in curbrockhideout: #1001005
         attackAuto(4001334,on)
     elif job == 421: #Chief Bandit
         attackAuto(4211002,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 422: #Shadower
         attackAuto(4221007,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 430: #dualblade
         attackAuto(4001013,on)
     elif job == 431: #dualblade
@@ -8737,7 +8385,7 @@ def toggleAttack(on):
     elif job == 1200: #BW 1st
         Terminal.SetCheckBox("Full Map Attack",True)
         attackAuto(12001020,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
         toggle_loot(False)
     elif job in BlazeWizardJobs and field_id in curbrockhideout: #1001005
         attackAuto(12001021,on)
@@ -8745,20 +8393,20 @@ def toggleAttack(on):
     elif job == 1210: #BW 2nd
         Terminal.SetCheckBox("Full Map Attack",True)
         attackAuto(12001020,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 1211: #BW 3rd
         Terminal.SetCheckBox("Full Map Attack",True)
         attackAuto(12001020,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 1212: #BW 4th
         if level < 140:
             Terminal.SetCheckBox("Full Map Attack",True)
             attackAuto(12001020,on)
-            Terminal.SetCheckBox("Auto SP",True)
+            
         elif level >= 140:
             Terminal.SetCheckBox("Full Map Attack",False)
             attackSIND(12121055,on,31)
-            Terminal.SetCheckBox("Auto SP",True)
+            
     elif job == 1300: #Wind Archer 1st
         attackAuto(13001020,on)
     elif job in WindArcherJobs and field_id in curbrockhideout: #1001005
@@ -8801,22 +8449,17 @@ def toggleAttack(on):
         attackAuto(33111112,on)
     elif job == 3200: #Battle Mage 1st
         attackSI(32001014,on)
-        Terminal.SetRadioButton("SIRadioMelee",True)
     elif job in BattleMageJobs and field_id in curbrockhideout: #1001005
         attackSI(32001014,on)
-        Terminal.SetRadioButton("SIRadioMelee",True)
     elif job == 3210: #Battle Mage 2nd
         attackSI(32100010,on)
-        Terminal.SetRadioButton("SIRadioMelee",True)
     elif job == 3211: #Batlle Mage 3rd
         attackSI(32110017,on)
-        Terminal.SetRadioButton("SIRadioMelee",True)
     elif job == 3212: #Battle Mage 4th
         if SCLib.GetVar("DoingZakum"):
             attackAuto(32121002,on)
         else:
             attackSI(32120019,on)
-            Terminal.SetRadioButton("SIRadioMelee",True)
     elif job == 3700: #Blaster 1st
         #Terminal.SetCheckBox("General FMA",on)
         attackAuto(37001000,on)
@@ -8842,95 +8485,34 @@ def toggleAttack(on):
         attackAuto(35111006,on)
     elif job == 3512: #Mechanic 4th
         attackSI(35121015,on,250)
-        Terminal.SetRadioButton("SIRadioMelee",True)
         #attackAuto(35111006,on)
     elif job == 11212: #Beast Tamer
         if level <= 17:
-            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-            Key.Set(attack_key,1,112000000)
-            Terminal.SetCheckBox("Auto SP",True)
-            Terminal.SetCheckBox("Skill Injection", False)
-            #Terminal.SetSpinBox("SkillInjection",100)
-            Terminal.SetCheckBox("Melee No Delay",False)
-            #Terminal.SetRadioButton("SIRadioMagic",True)
-            Terminal.SetCheckBox("Auto Attack", on)
-            Terminal.SetComboBox("AttackKey",33)
-            Terminal.SetSpinBox("autoattack_spin",100)
-            Terminal.SetCheckBox("Full Map Attack",False)
-        elif level >17 and level < 50:
-            Key.Set(pgup_key, 2, 2001582)
-            Terminal.SetCheckBox("Auto SP",True)
-            Terminal.SetLineEdit("SISkillID","112000002")
+            attackAuto(112000000,on)
+            
+        elif level >= 17 and (not useExploit or SCLib.GetVar("DoingZakum")):
             Terminal.SetCheckBox("Auto Attack", False)
-            Terminal.SetSpinBox("SkillInjection",200)
             Terminal.SetCheckBox("Skill Injection", False)
             Terminal.SetCheckBox("Melee No Delay",False)
-            Terminal.SetRadioButton("SIRadioMelee",True)
             count = 0
             if on and not Terminal.IsRushing():
-                while count < 100 and len(Field.GetMobs())>0:
+                while count < 100 and len(Field.GetMobs())>0: #constantly presses control to simulate human actions
                     Key.Down(0x11)
                     time.sleep(0.1)
                     Key.Up(0x11)
                     time.sleep(0.1)
                     count += 1
-        elif level >= 104 and (not useExploit or SCLib.GetVar("DoingZakum")):
-            Key.Set(pgup_key, 2, 2001582)
-            Terminal.SetCheckBox("Auto SP",True)
-            Terminal.SetLineEdit("SISkillID","112000002")
-            Terminal.SetCheckBox("Auto Attack", False)
-            Terminal.SetSpinBox("SkillInjection",200)
-            Terminal.SetCheckBox("Skill Injection", False)
-            Terminal.SetCheckBox("Melee No Delay",False)
-            Terminal.SetRadioButton("SIRadioMelee",True)
-            count = 0
-            if on and not Terminal.IsRushing():
-                while count < 100 and len(Field.GetMobs())>0:
-                    Key.Down(0x11)
-                    time.sleep(0.1)
-                    Key.Up(0x11)
-                    time.sleep(0.1)
-                    count += 1
+                    if len(Field.GetMobs())==0:
+                        break
     elif job == 2000:#Aran pre
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",1)
         Terminal.SetSpinBox("autoattack_spin",100)
-        '''
-        elif job == 11212: #beast tamer 4th
-        Terminal.SetLineEdit("SISkillID","112000002")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",200)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        count = 0
-        if on:
-            while count < 50 and Field.GetMobCount()>0:
-                Key.Down(0x44)
-                time.sleep(0.1)
-                Key.Up(0x44)
-                time.sleep(0.1)
-                Key.Press(0x44)
-                count += 1
-        '''
+        
     elif job == 2100 or job == 2110 or job == 2111 or job == 2112: #Aran 1st 21000007
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,21001010)
-        Terminal.SetLineEdit("SISkillID","21000006")
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Skill Injection", on)
-        Terminal.SetSpinBox("SkillInjection",75)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackSI(21000006,on,75)
         '''
         elif job == 2110 or job == 2111 or job == 2112: #Aran 2nd+3rd+4th 21000007
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
@@ -8946,116 +8528,34 @@ def toggleAttack(on):
             Terminal.SetSpinBox("autoattack_spin",100)
         '''
     elif job == 14200:# Kinesis 1st
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,142001001)
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
-    elif (job == 14211 or job == 14212) and field_id in curbrockhideout:
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,142001001)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(142001001,on)
+    elif job in KinesisJobs and field_id in curbrockhideout:
+        attackAuto(142001001,on)
     elif job == 14210: #Kinesis 2nd 142101002
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,142101002)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackAuto(142101002,on)
     elif job == 14211 or job == 14212: #Kinesis 3rd + 4th 142111002
-        #Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,142111002)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Auto SP",True)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", on)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        #
+        attackAuto(142111002,on)
+        
     elif job == 6500: #AB 1st
         attackSIND(60011216,on,150)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-    elif job == 6510: #AB 2nd + 3rd
+    elif job == 6510: #AB 2nd
         attackSI(65001100,on)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-    elif job == 6511:
-        attackSI(65111002,on)
-        Terminal.SetRadioButton("SIRadioMagic",True)
+    elif job == 6511: #AB 3rd
+        attackSI(65111002,on,100,"SIRadioMagic")
     elif job == 6512: #AB 4th
         if SCLib.GetVar("DoingZakum"):
             attackSI(65121008,on)
         else:
-            attackSI(65111002,on)
-        Terminal.SetRadioButton("SIRadioMagic",True)
+            attackSI(65111002,on,100,"SIRadioMagic")
     elif job in KaiserJobs and job != KaiserJobs[3]: #Kaiser 1st 2nd 3rd 4th
         attackSIND(61001005,on,230)
-        Terminal.SetRadioButton("SIRadioMelee",True)
     elif job == KaiserJobs[3]:
         attackSIND(61001005,on,230)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-    elif job == 3512: #mechanic 4th
-        #mech_att(on)
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",1)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Skill Injection",False)
     elif job == 2500: #Shade 1st
         attackAuto(25001000,on)
     elif job == 2512: #Shade 4th
-        Terminal.SetLineEdit("SISkillID","25120003")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-    elif job == 572: #Jett 4th
-        Terminal.SetLineEdit("SISkillID","5710020")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-                Terminal.SetCheckBox("Melee No Delay",on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-                Terminal.SetCheckBox("Melee No Delay",on)
-    elif job == 132 or job == 2412: #DK or phantom
-        Terminal.SetLineEdit("SISkillID","1311011")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        if on:
-            if not Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-                Terminal.SetCheckBox("Melee No Delay",on)
-        else:
-            if Terminal.GetCheckBox("Skill Injection"):
-                Terminal.SetCheckBox("Skill Injection", on)
-                Terminal.SetCheckBox("Melee No Delay",on)
+        attackSI(25120003,on,100)
     else:
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -9064,11 +8564,15 @@ def toggleAttack(on):
     if job not in KannaJobs:
         Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
+        Terminal.SetCheckBox("MonkeySpiritsNDcheck", False)
     if job not in IlliumJobs:
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         Terminal.SetCheckBox("bot/illium/summon_control",False)
+    if job not in EvanJobs:
+
+    set_potion()
     toggle_skill()
-    Terminal.SetCheckBox("MonkeySpiritsNDcheck", False)
+    Terminal.SetCheckBox("Auto SP",True)
 
 def GetEmblem():
     if job == 2311 and Quest.GetQuestState(24105) !=2: #Mercedes
