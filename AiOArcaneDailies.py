@@ -202,20 +202,20 @@ if current_date != accountData['arcane_daily_date']:
         Terminal.Logout()
 
 #check if done doing dailies on all characters
-if len(accountData['done_char']) == accountData['daily_end'] - accountData['daily_start'] + 1 and not accountData['daily_done']:
-    accountData['daily_done'] = True
+if len(accountData['done_char']) == accountData['daily_end'] - accountData['daily_start'] + 1 and not accountData['arcane_daily_done']:
+    accountData['arcane_daily_done'] = True
     Terminal.SetLineEdit("LoginChar",str(accountData['training_char']))
     writeJson(accountData,accountId)
     print("Finished dailies on every char")
 
 #change character to next char
-if accountData["cur_pos"] in accountData['done_char'] and not accountData['daily_done']:
+if accountData["cur_pos"] in accountData['done_char'] and not accountData['arcane_daily_done']:
     if GameState.IsInGame():
         print("Logging out to move to next char")
         Terminal.Logout()
         
 #return to farming char
-if accountData['cur_pos'] != str(accountData['training_char']) and accountData['daily_done'] and GameState.IsInGame():
+if accountData['cur_pos'] != str(accountData['training_char']) and accountData['arcane_daily_done'] and GameState.IsInGame():
     if GameState.IsInGame():
         print("Loggin out ot return to farming char")
         Terminal.Logout()
@@ -1470,10 +1470,10 @@ if not GameState.IsInGame() and not GameState.IsInCashShop() and not SCLib.GetVa
     SCLib.UpdateVar("ToggleAttack",True)
     print("Enabling TogglaAttack Flag")
 
-if GameState.IsInGame() and accountData['daily_done'] and SCLib.GetVar("ToggleAttack") and job != -1:
+if GameState.IsInGame() and accountData['arcane_daily_done'] and SCLib.GetVar("ToggleAttack") and job != -1:
     initAttackDone()
     SCLib.UpdateVar("ToggleAttack",False)
-if GameState.IsInGame() and not accountData['daily_done'] and SCLib.GetVar("ToggleAttack") and job != -1:
+if GameState.IsInGame() and not accountData['arcane_daily_done'] and SCLib.GetVar("ToggleAttack") and job != -1:
     initAttack()
     SCLib.UpdateVar("ToggleAttack",False)
 
@@ -2432,16 +2432,17 @@ def dungeonTeleport():
     else:
         print("Failed to enter portal")
 
-if GameState.IsInGame() and accountData['changing_mule'] and not accountData['daily_done']:
+if GameState.IsInGame() and accountData['changing_mule'] and not accountData['arcane_daily_done']:
     initAttack()
     accountData['changing_mule'] = False
     writeJson(accountData,accountId)
 
-if GameState.IsInGame() and not accountData['daily_done'] and not accountData['changing_mule'] and not SCLib.GetVar("ToggleAttack"): #only need to do this if daily is not done
+if GameState.IsInGame() and not accountData['arcane_daily_done'] and not accountData['changing_mule'] and not SCLib.GetVar("ToggleAttack"): #only need to do this if daily is not done
     if GameState.IsInGame() and Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
         print("Need to buy a hyper teleport rock")
         autoAttack = Terminal.GetCheckBox("Auto Attack")
         skillInject = Terminal.GetCheckBox("Skill Injection")
+        toggle_rush_by_level(False)
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection",False)
         time.sleep(5)
@@ -2452,6 +2453,9 @@ if GameState.IsInGame() and not accountData['daily_done'] and not accountData['c
                 if not pItem.valid:
                     nEmptySlotPOS = i
                     break
+            if Terminal.IsRushing():
+                Terminal.StopRush()
+            time.sleep(1)
             Terminal.EnterCashShop()
             CashItemResLoadLockerDone()
             time.sleep(1)
@@ -2519,7 +2523,7 @@ if job == -1 and not accountData['changing_mule'] and GameState.GetLoginStep() =
     Terminal.SetCheckBox("Auto Login",True)
     time.sleep(5)
 
-if accountData['changing_mule'] and GameState.GetLoginStep() == 2 and not accountData['daily_done']:
+if accountData['changing_mule'] and GameState.GetLoginStep() == 2 and not accountData['arcane_daily_done']:
     Terminal.SetCheckBox("Auto Login",False)
     Terminal.SetLineEdit("LoginChar",str(int(accountData["cur_pos"]) + 1)) #update cur pos to next
     Terminal.SetCheckBox("Auto Login",True)
@@ -2529,7 +2533,7 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2 and not accoun
     writeJson(accountData,accountId)
     KillPersistVarThred() #restart persisten variables
 
-if accountData['daily_done'] and GameState.GetLoginStep() == 2: #returning to farming char
+if accountData['arcane_daily_done'] and GameState.GetLoginStep() == 2: #returning to farming char
     Terminal.SetCheckBox("Auto Login",False)
     Terminal.SetLineEdit("LoginChar",str(accountData['training_char']))
     Terminal.SetCheckBox("Auto Login",True)
@@ -2539,7 +2543,7 @@ if accountData['daily_done'] and GameState.GetLoginStep() == 2: #returning to fa
     writeJson(accountData,accountId)
     print("returning to farming character")
 
-if accountData['daily_done'] and GameState.IsInGame() and accountData['changing_mule'] and job != 0 and job != 1: #set
+if accountData['arcane_daily_done'] and GameState.IsInGame() and accountData['changing_mule'] and job != 0 and job != 1: #set
     initAttackDone()
     accountData['changing_mule'] = False
     writeJson(accountData,accountId)
