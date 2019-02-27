@@ -8202,13 +8202,10 @@ def toggleAttack(on):
         
     elif job == 2217: #Evan 4th 22170061 SI/ND
         attackSIND(22170061,on,100)
+        
     elif job == 0:
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto SP",True)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Auto Attack", on)
         Terminal.SetComboBox("AttackKey",1)
         Terminal.SetSpinBox("autoattack_spin",100)
@@ -8232,15 +8229,15 @@ def toggleAttack(on):
         attackAuto(1221004,on)
     elif job == 130: #Spearman 1301011
         attackSIND(1301011,on,450)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job in DarkknightJobs and field_id in curbrockhideout: #1001005
         attackAuto(1001005,on)
     elif job == 131: #Berserker
         attackSIND(1301011,on,450)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 132: #Dark Knight
         attackAuto(1321012,on)
-        Terminal.SetCheckBox("Auto SP",True)
+        
     elif job == 200: #Mage
         attackAuto(2001008,on)
         
