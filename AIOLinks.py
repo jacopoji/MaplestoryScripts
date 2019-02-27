@@ -8416,7 +8416,7 @@ def toggleAttack(on):
     elif job in NightWalkerJobs and field_id in curbrockhideout: #1001005
         attackAuto(14001020,on)
     elif job == 1410: #Night Walker 2nd
-        attackAuto(14101020,on)
+        attackSI(14101020,on)
     elif job == 1411: #Night Walker 3rd
         attackAuto(14111022,on)
     elif job == 1412: #Night Walker 4th
