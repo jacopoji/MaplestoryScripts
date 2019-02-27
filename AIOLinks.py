@@ -8925,6 +8925,17 @@ elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.FindItemByID
     Terminal.SetPushButton("Leave shop",True)
     time.sleep(1)
     Terminal.SetPushButton("Leave shop",False)
+elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.GetItemCount(2070000) < 100 and not SCLib.GetVar("DoingJobAdv"):
+    print("Recharge stars")
+    if field_id != 100000102:
+        Terminal.Rush(100000102) # rush to store (Henessys gral store)
+        time.sleep(1)
+    elif field_id == 100000102:
+        Character.TalkToNpc(1011100) #open the store
+        time.sleep(7) #Recharge time
+        Terminal.SetPushButton("Leave shop",True)
+        time.sleep(1)
+        Terminal.SetPushButton("Leave shop",False)
 elif (job == 200 or job == BlazeWizardJobs[0]) and level < 11:
     wand = Inventory.FindItemByID(1372043)
     if wand.valid:
