@@ -190,7 +190,7 @@ writeJson(accountData,accountId)
 
 current_date = str(datetime.datetime.utcnow().date())
 #check if date changed
-if current_date != accountData['date']:
+if current_date != accountData['arcane_daily_date']:
     accountData['arcane_daily_date'] = current_date
     accountData['arcane_daily_done'] = False
     accountData['done_char'][:] = []
