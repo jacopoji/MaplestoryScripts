@@ -10743,4 +10743,7 @@ if level < 140 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("G
 elif level < 50 or not Inventory.FindItemByID(5040004).valid or not useExploit:
     Terminal.SetComboBox("eva_cmb",3)
     Terminal.SetComboBox("HackingOpt",0)
-    Terminal.SetCheckBox("Legit Vac",True)
+    if field_id == 130030106:
+        Terminal.SetCheckBox("Legit Vac",False)
+    else:
+        Terminal.SetCheckBox("Legit Vac",True)
