@@ -5000,7 +5000,10 @@ def CygnusFirst():
         quest2 = Quest.GetQuestState(20860)
 
         done_list = accountData['done_links']
-        if "Blaze Wizard" not in done_list:
+        if "Night Walker" not in done_list:
+            targetJobQuest = 20864
+            Instructor = 1101006
+        elif "Blaze Wizard" not in done_list:
             targetJobQuest =  20862
             Instructor = 1101004
         elif "Dawn Warrior" not in done_list:
@@ -5009,9 +5012,6 @@ def CygnusFirst():
         elif "Wind Archer" not in done_list:
             targetJobQuest = 20863
             Instructor = 1101005
-        elif "Night Walker" not in done_list:
-            targetJobQuest = 20864
-            Instructor = 1101006
         elif "Thunder Breaker" not in done_list:
             targetJobQuest = 20865
             Instructor = 1101007
