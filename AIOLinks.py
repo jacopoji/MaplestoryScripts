@@ -831,36 +831,38 @@ def buy_spear():
 def buy_potion(): #00F4 [00] 000D 001E8C67 05DC 00000000 00000ED8
     toggle_rush_by_level(False)
     toggle_kami(False)
-    while True:
-        if field_id != 600000000:
-            rush(600000000)
-        elif field_id == 600000000 and Character.GetPos().x !=4291:
-            Character.Teleport(4291,21)
+    if field_id != 600000000:
+        if not Terminal.IsRushing():
+            Terminal.Rush(600000000)
         else:
-            if Character.GetMeso() > 38000:
-                time.sleep(1)
-                Character.TalkToNpc(9201060)
-                time.sleep(1)
-                print("Buying potion via packet")
-                Packet.BlockRecvHeader(BlockBuyHeader)
-                time.sleep(0.5)
-                BuyKey = Packet.COutPacket(BuyItemHeader)
-                if Character.GetMeso() > 5700000:
-                    BuyKey.EncodeBuffer("00 000D 001E8C67 05DC 00000000 00000ED8")
-                    print("Have enough money to buy 1500 potions")
-                else:
-                    BuyKey.EncodeBuffer("00 000D 001E8C67 {} 00000000 00000ED8".format(hex(int(Character.GetMeso()/3800))[2:].zfill(4)))
-                    print("Only have enough money to buy {} potions".format(int(Character.GetMeso()/3800)))
-                Packet.SendPacket(BuyKey)
-                time.sleep(0.5)
-                Packet.UnBlockRecvHeader(BlockBuyHeader)
-                CloseShop = Packet.COutPacket(BuyItemHeader)
-                CloseShop.EncodeBuffer("[03]")
-                Packet.SendPacket(CloseShop)
-                time.sleep(0.5)
-                toggle_rush_by_level(True)
-                toggle_kami(True)
-                break
+            time.sleep(1)
+    elif field_id == 600000000 and Character.GetPos().x !=4291:
+        Character.Teleport(4291,21)
+        time.sleep(2)
+    else:
+        if Character.GetMeso() > 38000:
+            time.sleep(1)
+            Character.TalkToNpc(9201060)
+            time.sleep(1)
+            print("Buying potion via packet")
+            Packet.BlockRecvHeader(BlockBuyHeader)
+            time.sleep(0.5)
+            BuyKey = Packet.COutPacket(BuyItemHeader)
+            if Character.GetMeso() > 5700000:
+                BuyKey.EncodeBuffer("00 000D 001E8C67 05DC 00000000 00000ED8")
+                print("Have enough money to buy 1500 potions")
+            else:
+                BuyKey.EncodeBuffer("00 000D 001E8C67 {} 00000000 00000ED8".format(hex(int(Character.GetMeso()/3800))[2:].zfill(4)))
+                print("Only have enough money to buy {} potions".format(int(Character.GetMeso()/3800)))
+            Packet.SendPacket(BuyKey)
+            time.sleep(0.5)
+            Packet.UnBlockRecvHeader(BlockBuyHeader)
+            CloseShop = Packet.COutPacket(BuyItemHeader)
+            CloseShop.EncodeBuffer("[03]")
+            Packet.SendPacket(CloseShop)
+            time.sleep(0.5)
+            toggle_rush_by_level(True)
+            toggle_kami(True)
 
 def buy_crossbow():
     toggle_rush_by_level(False)
@@ -8002,11 +8004,11 @@ def attackSI(skillid,on,delay=100,siOption = "SIRadioMelee"):
     Terminal.SetCheckBox("Skill Injection", on)
     Terminal.SetRadioButton(siOption,True)
 
-def attackSIND(skillid,on,delay=100):
+def attackSIND(skillid,on,delay=100,siOption = "SIRadioMelee"):
     Terminal.SetLineEdit("SISkillID",str(skillid))
     Terminal.SetSpinBox("SkillInjection",delay)
     Terminal.SetCheckBox("Melee No Delay",on)
-    Terminal.SetRadioButton("SIRadioMelee",True)
+    Terminal.SetRadioButton(siOption,True)
     Terminal.SetCheckBox("Auto Attack",False)
     Terminal.SetCheckBox("Skill Injection", on)
 
@@ -8172,13 +8174,7 @@ def toggleAttack(on):
         Terminal.SetCheckBox("bot/illium/summon_control",on)
         Terminal.SetCheckBox("General FMA",on)
     elif job in CadenaJobs: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
-        Terminal.SetLineEdit("SISkillID","64001006")
-        Terminal.SetSpinBox("SkillInjection",200)
-        
-        Terminal.SetRadioButton("si_cadena",True)
-        Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSIND(64001006,on,200,"si_cadena")
     elif job in ArkJobs: #Ark 1st + 2nd + 3rd 155001100
         attackAuto(155001100,on)
     elif job == 2001: #Evan pre 1st job
