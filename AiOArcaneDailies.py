@@ -166,10 +166,10 @@ def handleReady(data):
         data['cur_pos'] = Terminal.GetLineEdit("LoginChar")
     if 'changing_mule' not in data:
         data['changing_mule'] = False
-    if 'date' not in data:
-        data['date'] = str(datetime.datetime.utcnow().date())
-    if 'daily_done' not in data:
-        data['daily_done'] = False
+    if 'arcane_daily_date' not in data:
+        data['arcane_daily_date'] = str(datetime.datetime.utcnow().date())
+    if 'arcane_daily_done' not in data:
+        data['arcane_daily_done'] = False
     if 'done_char' not in data:
         data['done_char'] = []
     if 'training_done' not in data:
@@ -191,8 +191,8 @@ writeJson(accountData,accountId)
 current_date = str(datetime.datetime.utcnow().date())
 #check if date changed
 if current_date != accountData['date']:
-    accountData['date'] = current_date
-    accountData['daily_done'] = False
+    accountData['arcane_daily_date'] = current_date
+    accountData['arcane_daily_done'] = False
     accountData['done_char'][:] = []
     accountData['cur_pos'] = str(accountData['daily_start'])
     writeJson(accountData,accountId)
