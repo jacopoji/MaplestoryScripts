@@ -8724,7 +8724,7 @@ elif (job == 6400 or job == 6002 or job == 6410) and Quest.GetQuestState(34625) 
     print("Completing Cadena First Job and Second Job")
     SCLib.UpdateVar("DoingJobAdv",True)
     CadenaFirst()
-elif job == 6410 and Quest.GetQuestState(34625) == 2:
+elif job == 6410 and Quest.GetQuestState(34625) == 2 and level <50:
     print("Cadena Job Pre done")
     SCLib.UpdateVar("DoingJobAdv",False)
 elif job == 6410 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
