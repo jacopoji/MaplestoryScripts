@@ -8420,7 +8420,10 @@ def toggleAttack(on):
         Terminal.SetComboBox("AttackKey",1)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 15200 or job == 15210 or job == 15211 or job == 15212: #Illium 1st+2nd+3rd+4th
-        Key.Set(pgup_key, 2, 2001582)
+        if Inventory.FindItemByID(2001582).valid:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        else:
+            Key.Set(pgup_key, 2, 2002023)
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetCheckBox("Auto Attack",False)
@@ -8429,7 +8432,10 @@ def toggleAttack(on):
         Terminal.SetCheckBox("bot/illium/summon_control",on)
         Terminal.SetCheckBox("General FMA",on)
     elif job == 6400 or job == 6410 or job == 6411 or job == 6412: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
-        Key.Set(pgup_key, 2, 2001582)
+        if Inventory.FindItemByID(2001582).valid:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        else:
+            Key.Set(pgup_key, 2, 2002023)
         Terminal.SetLineEdit("SISkillID","64001006")
         Terminal.SetSpinBox("SkillInjection",200)
         Terminal.SetCheckBox("Auto SP",True)
@@ -8438,7 +8444,10 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection", on)
     elif job == 6412: # Cadena 4th job 64121016 May want to change this 
-        Key.Set(pgup_key, 2, 2001582)
+        if Inventory.FindItemByID(2001582).valid:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        else:
+            Key.Set(pgup_key, 2, 2002023)
         Terminal.SetLineEdit("SISkillID","64121016")
         Terminal.SetSpinBox("SkillInjection",150)
         Terminal.SetCheckBox("Auto SP",True)
@@ -8447,7 +8456,10 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection", on)
     elif job == 15500 or job == 15510 or job == 15511 or job == 15512: #Ark 1st + 2nd + 3rd 155001100
-        Key.Set(pgup_key, 2, 2001582)
+        if Inventory.FindItemByID(2001582).valid:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        else:
+            Key.Set(pgup_key, 2, 2002023)
         Key.Set(attack_key,1,155001100)
         Terminal.SetLineEdit("SISkillID", "155001100")
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -8466,7 +8478,10 @@ def toggleAttack(on):
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", False)
     elif job == 2001: #Evan pre 1st job
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        if Inventory.FindItemByID(2001582).valid:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        else:
+            Key.Set(pgup_key, 2, 2002023)
         Key.Set(attack_key,1,22001010)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
@@ -8476,7 +8491,10 @@ def toggleAttack(on):
         Terminal.SetComboBox("AttackKey",1)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 2200: #Evan 1st 22001010 AA
-        Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        if Inventory.FindItemByID(2001582).valid:
+            Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+        else:
+            Key.Set(pgup_key, 2, 2002023)
         Key.Set(attack_key,1,22001010)
         Terminal.SetCheckBox("Skill Injection", False)
         #Terminal.SetSpinBox("SkillInjection",100)
