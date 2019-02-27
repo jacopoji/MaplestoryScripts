@@ -7976,6 +7976,7 @@ def safety_setting():
             Terminal.SetCheckBox(settings, False)
 
 def set_potion():
+    pgup_key = 0x21
     if job not in DemonAvengerJobs:
         if Inventory.FindItemByID(2001582).valid:
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
