@@ -8565,7 +8565,6 @@ def toggleAttack(on):
     if job not in IlliumJobs:
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         Terminal.SetCheckBox("bot/illium/summon_control",False)
-    if job not in EvanJobs:
 
     set_potion()
     toggle_skill()
