@@ -9431,9 +9431,9 @@ if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
                     Character.TalkToNpc(2030010)
                     time.sleep(1)
                     SCLib.UpdateVar("KillZakumDaily", False)
-                    if accountData['cur_link_pos'] == '11':
-                        accountData['daily_done'] = True
-                        writeJson(accountData,accountId)
+                    #if accountData['cur_link_pos'] == '11':
+                    #    accountData['daily_done'] = True
+                    #    writeJson(accountData,accountId)
                     ResetSpawn()
                     ResetNowLockedFunction()
                     if field_id == TheDoorToZakum:
@@ -9489,7 +9489,7 @@ if accountData['daily_done'] and not SCLib.GetVar("DoingZakum"):
         writeJson(accountData,accountId)
         Terminal.Logout()
 '''
-if level >= 140 and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv"):
+if ((level >= 140 and job not in NightWalkerJobs) or (level >= 150 and job in NightWalkerJobs)) and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv"):
     if has_pensalir():
         if field_id != 240000000:
             rush(240000000)
