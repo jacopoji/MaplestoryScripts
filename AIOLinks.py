@@ -61,6 +61,7 @@ BlockBuyHeader = 0x0684
 BuyItemHeader = 0x00F4
 useExpansionHeader = 0x0121
 level_skill_header = 0x014F
+dialogue_header = 0x00F3
 
 #equip slot numbers
 helmet_slot = -1
@@ -473,6 +474,33 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+    elif job == CorsairJobs[2]: #or job == CorsairJobs[3]:
+        buff = 5211014
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+    elif job == CorsairJobs[3]: #5220014
+        buff = 5220014
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, 5211007)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+    elif job in IlliumJobs and job != IlliumJobs[0]:
+        buff = 152101000
+        if Character.GetSkillLevel(152101003) > 0:
+            Key.Set(skill_key, 1, 152101003)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
 def teleport_enter(x,y):
     prefield = field_id
     toggle_kami(False)
@@ -792,6 +820,7 @@ def forfeit_quest(questid):
     oPacket = Packet.COutPacket(0x0166)
     tohex = hex(questid)[2:].zfill(4)
     oPacket.EncodeBuffer("03 {} {} 00 00".format(tohex[2:4],tohex[0:2])) #0166 [0328CD0000]
+    print("Packet to forfeit is: 03 {} {} 00 00".format(tohex[2:4],tohex[0:2]))
     Packet.SendPacket(oPacket)
 
 def doQuest(questid,questnpc_start,questnpc_end=0):
@@ -1333,8 +1362,25 @@ def LumiFourth():
 
 #00F3 [1A0100000000] choose DA
 #0098 663E3907 D99F894C 1BE264A4 EE5FB23A 197D999D 00000000 00000000 1574B793
+#demonS 00F3 [1A0101000000] 02A0 [458EB8030000]
+#demonA 00F3 [1A0100000000] 02A0 [CD5FB9030000]
+def chooseDA():
+    oPacket = Packet.COutPacket(dialogue_header)
+    oPacket.EncodeBuffer("[1A0100000000]")
+    Packet.SendPacket(oPacket)
+def chooseDS():
+    oPacket = Packet.COutPacket(dialogue_header)
+    oPacket.EncodeBuffer("[1A0101000000]")
+    Packet.SendPacket(oPacket)
+def DemonFirst():
+    if "Demon Avenger" not in accountData['done_links']:
+        chooseDA()
+        time.sleep(2)
+    elif "Demon Slayer" not in accountData['done_links']:
+        chooseDS()
+        time.sleep(2)
 
-def DAFirst():
+def DASecond():
     Terminal.SetCheckBox("Kami Vac",False)
     toggleAttack(False)
     SCLib.UpdateVar("DoingJobAdv",True)
@@ -1381,7 +1427,7 @@ def DAFirst():
                 Terminal.SetCheckBox("Kami Vac",True)
                 SCLib.UpdateVar("DoingJobAdv",False)
 
-def DASecond():
+def DAThird():
     Terminal.SetCheckBox("Kami Vac",False)
     toggleAttack(False)
     SCLib.UpdateVar("DoingJobAdv",True)
@@ -1436,7 +1482,7 @@ def DASecond():
                     toggle_kami(True)
                     toggle_rush_by_level(True)
                     SCLib.UpdateVar("DoingJobAdv",False)
-def DAThird():
+def DAFourth():
     CalmBeforeTheStorm = 23221
     quest = Quest.GetQuestState(CalmBeforeTheStorm)
     SCLib.UpdateVar("DoingJobAdv",True)
@@ -1466,7 +1512,7 @@ def DAThird():
                 toggle_kami(True)
                 toggleAttack(True)
 
-def DSThird():
+def DSFourth():
     TrueAwakening = 23219
     quest = Quest.GetQuestState(TrueAwakening)
     SCLib.UpdateVar("DoingJobAdv",True)
@@ -1580,6 +1626,11 @@ def HayatoFirst():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+
+def PressControl():
+    oPacket = Packet.COutPacket(dialogue_header)
+    oPacket.EncodeBuffer("[35]")
+    Packet.SendPacket(oPacket)
 
 def IlliumZero():
     pet = Inventory.FindItemByID(2434265)
@@ -1717,9 +1768,9 @@ def IlliumFirst():
                 rush(402000527)
             print("Pressing Control Key")
             time.sleep(1)
-            Key.Press(0x11)
+            PressControl()
             time.sleep(3.5)
-            Key.Press(0x11)
+            PressControl()
             print("Done Pressing")
             Quest.StartQuest(34803, 3001333)
          
@@ -3340,6 +3391,12 @@ def XenonSecond():
     quest2 = Quest.GetQuestState(VeritasFinest)
     profDreamboat = 2300001
     veritas = 230050000
+    pet = Inventory.FindItemByID(2434265)
+    if pet.valid:
+        Key.Set(0x41, 2, 2001582)
+        time.sleep(2)
+        Inventory.UseItem(2434265)
+        time.sleep(2)
     if quest1 != 2:
         if quest1 == 0:
             print("Starting quest1")
@@ -4151,7 +4208,7 @@ def ExplorerFirst():
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     pet = Inventory.FindItemByID(2434265)
-    if pet.valid:
+    if pet.valid and not SCLib.GetVar("Cannoneer"):
         Key.Set(0x41, 2, 2001582)
         time.sleep(2)
         Inventory.UseItem(2434265)
@@ -4333,7 +4390,7 @@ def ExplorerSecond():
     mageMap2 = 910140000
     archerMap2 = 910070000
     pirateMap2 = 912040000
-    
+    hunting_maps = [thiefMap2,warriorMap2,mageMap2,archerMap2,pirateMap2]
 
     done_list = accountData['done_links']
     if job == ShadowerJobs[0]:
@@ -4403,7 +4460,7 @@ def ExplorerSecond():
             elif quest == 1:
                 completeQuest(toDoQuest,Instructor,toGoMap,toGoMap,field_id)
         elif quest2 !=2:
-            print("2")
+            #print("2")
             if quest2 == 0:
                 acceptQuest(cannoneerQuest2,Instructor,toGoMap,field_id)
             elif quest2 == 1:
@@ -4421,8 +4478,12 @@ def ExplorerSecond():
                         SCLib.UpdateVar("DoingJobAdv",False)
                         toggle_rush_by_level(True)
                 else:
-                    toggle_kami(True)
-                    print("not done")
+                    if len(Field.GetMobs()) > 0:
+                        toggle_kami(True)
+                        print("not done")
+                    elif field_id != pirateMap2:
+                        forfeit_quest(cannoneerQuest2)
+                        print("Not in map, need to forfeit quest")
     if job in explorerFirstJobs:
         if quest != 2:
             if quest == 0:
@@ -4430,7 +4491,7 @@ def ExplorerSecond():
             elif quest == 1:
                 completeQuest(toDoQuest,Instructor,toGoMap,toGoMap,field_id)
         elif quest2 !=2:
-            print("2")
+            #print("2")
             if quest2 == 0:
                 acceptQuest(targetJob,Instructor,toGoMap,field_id)
             elif quest2 == 1:
@@ -4452,7 +4513,8 @@ def ExplorerSecond():
                     if len(Field.GetMobs()) > 0:
                         toggle_kami(True)
                         print("not done")
-                    else:
+                    elif field_id not in hunting_maps:
+                        forfeit_quest(targetJob)
                         print("Not in map, need to forfeit quest")
 
 def ExplorerThird():
@@ -6315,6 +6377,7 @@ def CannoneerFirst():
     JobAdv2 = Quest.GetQuestState(1428)
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
+    Terminal.SetCheckBox("Pet Item Teleport",False)
     if field_id == 3000600 and Quest1 == 0:
         Quest.StartQuest(2573, 1096000)
         time.sleep(30)
@@ -6504,6 +6567,7 @@ def CannoneerFirst():
                 toggle_kami(True)
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                Terminal.SetCheckBox("Pet Item Teleport",True)
 
 def ShadeFirst():
     toggle_rush_by_level(False)
@@ -6574,9 +6638,9 @@ def ShadeFirst():
                 Character.Teleport(x, y - 10)
             
     def toggleKill(switch, iSwitch):
-        Terminal.SetSpinBox("KamiOffsetX", -75)
+        Terminal.SetSpinBox("KamiOffsetX", -45)
         Terminal.SetSpinBox("KamiOffsetY", -10)
-        Terminal.SetSpinBox("KamiLoot", 4)
+        Terminal.SetSpinBox("KamiLoot", 0)
         Terminal.SetSpinBox("autoattack_spin", 50)
         Terminal.SetComboBox("AttackKey", 1)
         Terminal.SetCheckBox("Kami Loot", iSwitch)
@@ -8417,7 +8481,7 @@ def startupCheck(accountId):
 def handleReady(data):
     if 'link_start' not in data:
         if 'storage_number' in data:
-            data['link_start'] = data['storage_number']
+            data['link_start'] = data['storage_number']+1
         else:
             data['link_start'] = 0
     if 'link_end' not in data:
@@ -8992,7 +9056,8 @@ def toggleAttack(on):
     elif job == 500: #Pirate
         attackAuto(5001002,on)
     elif job == 501: #Cannoneer Pirate
-        attackAuto(5011000,on)
+        #attackAuto(5011000,on)
+        attackSIND(5011002,on,200)
     elif job in BuccaneerJobs and field_id in curbrockhideout: #1001005
         attackAuto(5101012,on)
     elif job in CorsairJobs and field_id in curbrockhideout: #1001005
@@ -9009,9 +9074,10 @@ def toggleAttack(on):
     elif job == 521: #Outlaw
         attackAuto(5211008,on)
     elif job == 522: #Corsair
-        attackSIND(5221017,on,150)
+        attackSIND(5221017,on,350)
     elif job == 530: #Cannoneer
-        attackAuto(5301001,on)
+        #attackAuto(5301001,on)
+        attackSIND(5011002,on,200)
     elif job in CannoneerJobs and field_id in curbrockhideout: #1001005
         attackAuto(5301001,on)
     elif job == 531: #Cannon Trooper
@@ -9170,7 +9236,7 @@ def toggleAttack(on):
         Terminal.SetSpinBox("autoattack_spin",100)
         
     elif job == 2100 or job == 2110 or job == 2111 or job == 2112: #Aran 1st 21000007
-        attackSIND(21000006,on,125)
+        attackSIND(21000006,on,200)
 
     elif job == 2111 or job == 2112: #Aran 3rd
         if Character.HasBuff(2,21110016):
@@ -9333,19 +9399,22 @@ elif job == 2711 and level >=100 and not SCLib.GetVar("DoingCurbrock") and not S
     toggle_rush_by_level(True)
     toggle_kami(True)
     time.sleep(2)
+elif job == 3001:
+    print("Choosing")
+    DemonFirst()
 elif (job == 3101 or job == 3100) and level == 10:
     toggle_rush_by_level(True)
     toggle_kami(True)
     toggle_loot(False)
     time.sleep(2)
 elif (job == 3101 or job ==3100) and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
-    print("Completing Demon Avenger first job")
-    toggle_rush_by_level(False)
-    DAFirst()
-elif (job == 3120 or job == 3110) and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
-    print("Completing Demon Avenger second job")
+    print("Completing Demon Avenger Second job")
     toggle_rush_by_level(False)
     DASecond()
+elif (job == 3120 or job == 3110) and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
+    print("Completing Demon Avenger Third job")
+    toggle_rush_by_level(False)
+    DAThird()
 elif (job == 3121 or job == 3111) and level < 100 and SCLib.GetVar("DoingJobAdv"):
     print("Done third job and now resetting vars")
     SCLib.UpdateVar("DoingJobAdv",False)
@@ -9357,10 +9426,10 @@ elif (job == 3121 or job == 3111) and field_id == 931050110 and level >= 60 and 
     toggle_kami(True)
 elif job == 3121 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
     toggle_rush_by_level(False)
-    DAThird()
+    DAFourth()
 elif job == 3111 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
     toggle_rush_by_level(False)
-    DSThird()
+    DSFourth()
 elif job == 2300 and level <= 13:
     quest = Quest.GetQuestState(29952)
     if quest == 0:
@@ -9395,6 +9464,8 @@ elif job == 15210 and Quest.GetQuestState(34820) != 2:
 elif job == 15210 and level < 40 and field_id == 400000001:
     Quest.StartQuest(5500, 1061005)
     SCLib.UpdateVar("DoingCurbrock",True)
+elif job == 15210 and level < 60 and SCLib.GetVar("DoingJobAdv"):
+    SCLib.UpdateVar("DoingJobAdv",False)
 elif job == 15210 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
     print("Completing Illium Third Job")
     IlliumThird()
@@ -9651,6 +9722,10 @@ elif job == 501 and level < 15:
     cannon = Inventory.FindItemByID(1532000)
     if cannon.valid:
         Inventory.SendChangeSlotPositionRequest(1,cannon.pos,weapon_slot,-1)
+elif job == 530 and level < 60 and field_id == 120000101:
+    toggle_rush_by_level(True)
+    toggle_kami(True)
+    SCLib.UpdateVar("DoingJobAdv",False)
 elif job == CorsairJobs[1] and level < 31:
     pistol = Inventory.FindItemByID(1492014)
     if pistol.valid:
@@ -9964,7 +10039,6 @@ def getBoogie():
             else:
                 # rush to the map
                 Terminal.Rush(102010000)
-
 if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
     # Jr. Boogie
     if job in IlliumJobs:
