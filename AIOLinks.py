@@ -8870,7 +8870,7 @@ def toggleAttack(on):
     elif job == 3611:#Xenon 3rd 36111000
         attackSI(36111000,on,150)
     elif job == 3612:#Xenon 4th 36121000
-        attackSI(36121000,on,80)
+        attackSI(36121000,on,110)
     elif job == 2400: #Phantom 1st 24001000
         attackAuto(24001000,on)
     elif job in PhantomJobs and field_id in curbrockhideout:
