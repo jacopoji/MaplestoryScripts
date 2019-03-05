@@ -109,7 +109,7 @@ blackgate_eqp = [1004549, 1012535, 1052952, 1082658, 1102840, 1113185, 1122312, 
 MP_Coin = 4310020
 
 mobFalldownBlacklist = [101030500,105010301]
-SpeedyGonzalesList = [21111021,51121009]
+SpeedyGonzalesList = [21111021,51121009,5011002]
 import Character,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party,json,Login,datetime
 
 if not any("SunCat" in s for s in sys.path):
@@ -350,6 +350,7 @@ def toggle_skill():
             Key.Press(skill_key)
             time.sleep(short_sleep)
             toggle_kami(True)
+            Terminal.SetCheckBox("Auto Attack",True)
     elif job in MechanicJobs:
         humanoid = 35001002
         Key.Set(skill_key, 1, humanoid)
@@ -360,6 +361,7 @@ def toggle_skill():
             Key.Press(skill_key)
             time.sleep(short_sleep)
             toggle_kami(True)
+            Terminal.SetCheckBox("Auto Attack",True)
     elif job in FPMageJobs or job in ILMageJobs or job in BishopJobs:
         buff = 2001002
         if Character.GetSkillLevel(buff) > 0:
@@ -369,6 +371,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
     elif job == DawnWarriorJobs[3]:
         buff = 11121005
         if Character.GetSkillLevel(buff) > 0:
@@ -378,6 +381,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
     elif job == ThunderBreakerJobs[3]:
         buff = 15121004
         if Character.GetSkillLevel(buff) > 0:
@@ -387,6 +391,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
     elif job == BattleMageJobs[3]:
         buff = 32121017
         if Character.GetSkillLevel(buff) > 0:
@@ -396,6 +401,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
     elif job == AngelicBusterJobs[3]:
         buff = 65121011
         if Character.GetSkillLevel(buff) > 0:
@@ -405,6 +411,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
     elif job in DarkknightJobs and job != DarkknightJobs[0]:
         buff = 1301013
         if Character.GetSkillLevel(buff) > 0:
@@ -414,6 +421,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
     elif job in HeroJobs and job != HeroJobs[0]:
         buff = 1101013
         if Character.GetSkillLevel(buff) > 0:
@@ -423,6 +431,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
     elif job in ShadeJobs and job >=2510:
         buff = 25101009
         if Character.GetSkillLevel(buff) > 0:
@@ -432,6 +441,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
     elif job == 531: #Cannon Trooper 5311005
         buff = 5311005
         if Character.GetSkillLevel(buff) > 0:
@@ -441,6 +451,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
         buff3 = 5311004
         if Character.GetSkillLevel(buff3) > 0:
             Key.Set(skill_key, 1, buff3)
@@ -449,6 +460,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
     elif job == 532: #Cannoneer
         buff = 5321004
         if Character.GetSkillLevel(buff) > 0:
@@ -458,6 +470,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
         buff2 = 5320007
         if Character.GetSkillLevel(buff2) > 0:
             Key.Set(skill_key, 1, 5311005)
@@ -466,6 +479,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
         buff3 = 5311004
         if Character.GetSkillLevel(buff3) > 0:
             Key.Set(skill_key, 1, buff3)
@@ -474,6 +488,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
     elif job == CorsairJobs[2]: #or job == CorsairJobs[3]:
         buff = 5211014
         if Character.GetSkillLevel(buff) > 0:
@@ -483,6 +498,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
     elif job == CorsairJobs[3]: #5220014
         buff = 5220014
         if Character.GetSkillLevel(buff) > 0:
@@ -492,6 +508,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
     elif job in IlliumJobs and job != IlliumJobs[0]:
         buff = 152101000
         if Character.GetSkillLevel(152101003) > 0:
@@ -501,6 +518,7 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Key.Press(skill_key)
                 time.sleep(short_sleep)
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
 def teleport_enter(x,y):
     prefield = field_id
     toggle_kami(False)
@@ -1628,9 +1646,10 @@ def HayatoFirst():
         SCLib.UpdateVar("DoingJobAdv",False)
 
 def PressControl():
-    oPacket = Packet.COutPacket(dialogue_header)
-    oPacket.EncodeBuffer("[35]")
-    Packet.SendPacket(oPacket)
+    if GameState.IsInGame():
+        oPacket = Packet.COutPacket(dialogue_header)
+        oPacket.EncodeBuffer("[35]")
+        Packet.SendPacket(oPacket)
 
 def IlliumZero():
     pet = Inventory.FindItemByID(2434265)
@@ -1766,12 +1785,15 @@ def IlliumFirst():
         if combat == 0:
             if field_id != 402000527:
                 rush(402000527)
-            print("Pressing Control Key")
-            time.sleep(1)
-            PressControl()
-            time.sleep(3.5)
-            PressControl()
-            print("Done Pressing")
+                time.sleep(4)
+            else:
+                time.sleep(8)
+                print("Pressing Control Key")
+                PressControl()
+                time.sleep(6)
+                PressControl()
+                time.sleep(6)
+                print("Done Pressing")
             Quest.StartQuest(34803, 3001333)
          
         elif Quest.CheckCompleteDemand(34803, 3001333) != 0:
@@ -8249,6 +8271,10 @@ def id2str(jobid):
         return "Angelic Buster"
     elif jobid in KaiserJobs:
         return "Kaiser"
+    elif jobid in MihileJobs:
+        return "Mihile"
+    elif jobid in ShadeJobs:
+        return "Shade"
     else:
         return "Unkown Job jobid ="+str(jobid)
 
@@ -8727,7 +8753,7 @@ def toggleAttack(on):
         Terminal.SetComboBox("Familiar0",1)
 
     if job in XenonJobs: #Solve Xenon Auto Ability point issues
-        if Character.GetAP() < 60: 
+        if Character.GetAP() < 70: 
             if Terminal.GetCheckBox("Auto AP"):
                 Terminal.SetCheckBox("Auto AP",False)
         else:
@@ -9077,15 +9103,37 @@ def toggleAttack(on):
         attackSIND(5221017,on,350)
     elif job == 530: #Cannoneer
         #attackAuto(5301001,on)
-        attackSIND(5011002,on,200)
+        #attackSIND(5011002,on,200)
+        attack_key = 0x44
+        Key.Set(attack_key,1,5301001)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",400)
+        Terminal.SetLineEdit("SISkillID",str(5011002))
+        Terminal.SetSpinBox("SkillInjection",200)
+        Terminal.SetCheckBox("Melee No Delay",on)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",on)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job in CannoneerJobs and field_id in curbrockhideout: #1001005
         attackAuto(5301001,on)
     elif job == 531: #Cannon Trooper
+        '''
         if Terminal.GetCheckBox("Mob Falldown"):
             attackAuto(5311000,on)
         else:
             attackAuto(5301001,on)
             Terminal.SetCheckBox("Speedy Gonzales",True)
+        '''
+        attack_key = 0x44
+        Key.Set(attack_key,1,5301001)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",400)
+        Terminal.SetLineEdit("SISkillID",str(5011002))
+        Terminal.SetSpinBox("SkillInjection",200)
+        Terminal.SetCheckBox("Melee No Delay",on)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",on)
+        Terminal.SetCheckBox("Skill Injection", on)
     elif job == 532: #Cannon Master
         attackAuto(5321000,on)
     elif job == 508: #Jett 1st

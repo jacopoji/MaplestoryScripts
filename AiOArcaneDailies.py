@@ -116,22 +116,72 @@ headMap = [863010600]
 KannaJobs = [4200, 4210, 4211, 4212]
 LuminousJobs = [2700, 2710, 2711, 2712]
 ArkJobs = [15500, 15510, 15511, 15512]
-BlasterJobs = [3700, 3710, 3711, 3712]
+
 DemonAvengerJobs = [3101, 3120, 3121, 3122]
 DemonSlayerJobs = [3100, 3110, 3111, 3112]
 AranJobs = [2000,2100, 2110, 2111, 2112]
 MercedesJobs = [2300, 2310, 2311, 2312]
 HayatoJobs = [4100, 4110, 4111, 4112]
-BattleMageJobs = [3200, 3210, 3211, 3212]
-WildHunterJobs = [3300, 3310, 3311, 3312]
+
 KaiserJobs = [6100, 6110, 6111, 6112]
 MihileJobs = [5100, 5110, 5111, 5112]
 AngelicBusterJobs = [6500, 6510, 6511, 6512]
 XenonJobs = [3600, 3610, 3611, 3612]
 PhantomJobs = [2400, 2410, 2411, 2412]
 EvanJobs = [2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218]
+ShadeJobs =[2005,2500,2510,2511,2512]
 IlliumJobs = [15200,15210,15211,15212]
 CadenaJobs = [6400,6410,6411,6412]
+KinesisJobs = [14200,14210,14211,14212]
+#explorer jobs
+#thief
+ShadowerJobs = [400,420,421,422]
+NightlordJobs = [400,410,411,412]
+DualbladeJobs = [400,430,431,432,433,434]
+#warrior
+HeroJobs = [100,110,111,112]
+PaladinJobs = [100,120,121,122]
+DarkknightJobs = [100,130,131,132]
+#archer
+BowmasterJobs = [300,310,311,312]
+MarksmanJobs = [300,320,321,322]
+#magician
+ILMageJobs = [200,220,221,222]
+FPMageJobs = [200,210,211,212]
+BishopJobs = [200,230,231,232]
+#pirate
+BuccaneerJobs = [500,510,511,512]
+CorsairJobs = [500,520,521,522]
+CannoneerJobs = [501,530,531,532]
+JettJobs = [508,570,571,572]
+
+explorerFirstJobs = [100,200,300,400,500,501]
+explorerSecondJobs = [110,120,130,210,220,230,310,320,410,420,430,510,520,530]
+explorerThirdJobs = [111,121,131,211,221,231,311,321,411,421,431,511,521,531]
+explorerFourthJobs = [112,122,132,212,222,232,312,322,412,422,432,434,512,522,532]
+
+#Cygnus Jobs
+DawnWarriorJobs = [1100,1110,1111,1112]
+BlazeWizardJobs = [1200,1210,1211,1212]
+WindArcherJobs  = [1300,1310,1311,1312]
+NightWalkerJobs = [1400,1410,1411,1412]
+ThunderBreakerJobs=[1500,1510,1511,1512]
+
+cygnusFirstJobs = [1100,1200,1300,1400,1500]
+cygnusSecondJobs= [1110,1210,1310,1410,1510]
+cygnusThirdJobs = [1111,1211,1311,1411,1511]
+cygnusFourthJobs= [1112,1212,1312,1412,1512]
+
+#Resistance Jobs
+BattleMageJobs = [3200, 3210, 3211, 3212]
+WildHunterJobs = [3300, 3310, 3311, 3312]
+BlasterJobs = [3700, 3710, 3711, 3712]
+MechanicJobs = [3500,3510,3511,3512]
+
+resistanceFirstJobs = [3200,3300,3500,3700]
+resistanceSecondJobs = [3210,3310,3510,3710]
+resistanceThirdJobs = [3211,3311,3511,3711]
+resistanceFourthJobs= [3212,3312,3512,3712]
 job = Character.GetJob()
 level = Character.GetLevel()
 HotKey = 0x79
@@ -212,7 +262,9 @@ if len(accountData['done_char']) == accountData['daily_end'] - accountData['dail
 if accountData["cur_pos"] in accountData['done_char'] and not accountData['arcane_daily_done']:
     if GameState.IsInGame():
         print("Logging out to move to next char")
+        accountData['changing_mule'] = True
         Terminal.Logout()
+        writeJson(accountData,accountId)
         
 #return to farming char
 if accountData['cur_pos'] != str(accountData['training_char']) and accountData['arcane_daily_done'] and GameState.IsInGame():
@@ -1005,6 +1057,189 @@ def CashItemInfoDecode(iPacket):
     iPacket.ReadLong(4) # aOption[1]
     iPacket.ReadLong(4) # aOption[2]
 
+def toggle_skill():
+    skill_key = 0x39
+    short_sleep = 0.5
+    if job in WildHunterJobs:
+        ride = 33001001
+        Key.Set(skill_key, 1, ride)
+        if Character.HasBuff(2, ride) == False:
+            Terminal.SetCheckBox("Auto Attack",False)
+            toggle_kami(False)
+            time.sleep(short_sleep)
+            Key.Press(skill_key)
+            time.sleep(short_sleep)
+            toggle_kami(True)
+            Terminal.SetCheckBox("Auto Attack",True)
+    elif job in MechanicJobs:
+        humanoid = 35001002
+        Key.Set(skill_key, 1, humanoid)
+        if Character.HasBuff(2, humanoid) == False:
+            Terminal.SetCheckBox("Auto Attack",False)
+            toggle_kami(False)
+            time.sleep(short_sleep)
+            Key.Press(skill_key)
+            time.sleep(short_sleep)
+            toggle_kami(True)
+            Terminal.SetCheckBox("Auto Attack",True)
+    elif job in FPMageJobs or job in ILMageJobs or job in BishopJobs:
+        buff = 2001002
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+    elif job == DawnWarriorJobs[3]:
+        buff = 11121005
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+    elif job == ThunderBreakerJobs[3]:
+        buff = 15121004
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+    elif job == BattleMageJobs[3]:
+        buff = 32121017
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+    elif job == AngelicBusterJobs[3]:
+        buff = 65121011
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
+    elif job in DarkknightJobs and job != DarkknightJobs[0]:
+        buff = 1301013
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
+    elif job in HeroJobs and job != HeroJobs[0]:
+        buff = 1101013
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
+    elif job in ShadeJobs and job >=2510:
+        buff = 25101009
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
+    elif job == 531: #Cannon Trooper 5311005
+        buff = 5311005
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+        buff3 = 5311004
+        if Character.GetSkillLevel(buff3) > 0:
+            Key.Set(skill_key, 1, buff3)
+            if Character.HasBuff(2, buff3) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+    elif job == 532: #Cannoneer
+        buff = 5321004
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+        buff2 = 5320007
+        if Character.GetSkillLevel(buff2) > 0:
+            Key.Set(skill_key, 1, 5311005)
+            if Character.HasBuff(2, buff2) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+        buff3 = 5311004
+        if Character.GetSkillLevel(buff3) > 0:
+            Key.Set(skill_key, 1, buff3)
+            if Character.HasBuff(2, buff3) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+    elif job == CorsairJobs[2]: #or job == CorsairJobs[3]:
+        buff = 5211014
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, buff)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+    elif job == CorsairJobs[3]: #5220014
+        buff = 5220014
+        if Character.GetSkillLevel(buff) > 0:
+            Key.Set(skill_key, 1, 5211007)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("Auto Attack",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",True)
+    elif job in IlliumJobs and job != IlliumJobs[0]:
+        buff = 152101000
+        if Character.GetSkillLevel(152101003) > 0:
+            Key.Set(skill_key, 1, 152101003)
+            if Character.HasBuff(2, buff) == False:
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+                time.sleep(short_sleep)
+                Key.Press(skill_key)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
+
 def initAttack():
     print("Initializing attack settings for this character")
     attack_key = 0x44
@@ -1133,7 +1368,7 @@ def initAttack():
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
         Terminal.SetCheckBox("bot/illium/summon_control",True)
         Terminal.SetCheckBox("General FMA",True)
-        Terminal.SetCheckBox("Kami Vac",False)
+        Terminal.SetCheckBox("Kami Vac",True)
     elif job == 6412: # Cadena 4th job
         print("Setting up Settings for Cadena")
         Terminal.SetLineEdit("SISkillID","64001006")
@@ -1867,7 +2102,7 @@ def startChuChu():
             elif Field.GetID() in hungryMutoMaps:
                 print("Starting ChuChuPQ!")
                 SCLib.UpdateVar("CurStep", "DoingChuChu")
-                time.sleep(7)
+                time.sleep(8)
                 
 
 def doingChuChu():
@@ -2608,4 +2843,5 @@ if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switc
         Key.Set(attack_key,1,27121202)
 
 event_quests()
+toggle_skill()
 #print(SCLib.GetVar("CurStep"))
