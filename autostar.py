@@ -13,7 +13,7 @@ import GameState
 
 # change this to the maximum number of stars you want.
 # set it to 100 if you want to go to the maximum number of stars
-starTo = 17
+starTo = 10
 
 # change this to true if you want to use safeguard for stars 13-17
 safeguard = True

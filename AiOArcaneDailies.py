@@ -874,7 +874,41 @@ def Chuchuprequest():
                 elif fieldid == 450002021:
                     Quest.StartQuest(34218, 3003156)
 
+def event_quests():
+    #StartQuest(52516, 9330195)
+    #StartQuest(52517, 9330195)
+    #StartQuest(52518, 9330196)
+    #StartQuest(52519, 9330197)
+    #StartQuest(52520, 9330198)
+    quest1 = Quest.GetQuestState(52516)
+    #print(quest1)
+    if quest1 != 1:
+        Quest.StartQuest(52516, 9330195)
+    elif quest1 ==1:
+        doQuest(52516,9330195)
+        doQuest(52517,9330195)
+        doQuest(52518,9330196)
+        doQuest(52519,9330197)
+        doQuest(52520,9330198)
+        if Quest.GetQuestState(52520) == 1 and not Inventory.FindItemByID(3994619).valid:
+            forfeit_quest(52520)
+            print("Forfeiting quest because dced")
 
+def forfeit_quest(questid):
+    oPacket = Packet.COutPacket(0x0166)
+    tohex = hex(questid)[2:].zfill(4)
+    oPacket.EncodeBuffer("03 {} {} 00 00".format(tohex[2:4],tohex[0:2])) #0166 [0328CD0000]
+    Packet.SendPacket(oPacket)
+
+def doQuest(questid,questnpc_start,questnpc_end=0):
+    if questnpc_end == 0:
+        questnpc_end = questnpc_start
+    quest_state = Quest.GetQuestState(questid)
+    if quest_state != 1:
+        Quest.StartQuest(questid,questnpc_start)
+    elif quest_state == 1:
+        if Quest.CheckCompleteDemand(questid,questnpc_end) == 0:
+            Quest.CompleteQuest(questid,questnpc_end)
 
 class CashItemInfo:
     def __init__(self):
@@ -998,7 +1032,7 @@ def initAttack():
         Terminal.SetSpinBox("MonkeySpiritsNDdelay",40)
         Terminal.SetCheckBox("Grenade Kami",True)
         Terminal.SetCheckBox("charm_fma",False)
-        Terminal.SetCheckBox("Summon Kishin",True)
+        Terminal.SetCheckBox("Summon Kishin",False)
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
         Terminal.SetCheckBox("Kami Vac",False)
         Terminal.SetCheckBox("Auto Attack",True)
@@ -1222,7 +1256,10 @@ def initAttackDone():
     print("Initializing done attack settings for this character")
     attack_key = 0x44
     pgup_key = 0x21
-    Terminal.SetComboBox("Familiar0",5)
+    if job == 1212:
+        Terminal.SetComboBox("Familiar0",1)
+    else:
+        Terminal.SetComboBox("Familiar0",5)
     toggle_rush_by_level(True)
     Terminal.SetCheckBox("Kami Vac",False)
     Terminal.SetSlider("sliderMP", 10)
@@ -1241,7 +1278,7 @@ def initAttackDone():
         Terminal.SetSpinBox("charm_delay",100)
         Terminal.SetCheckBox("Auto SP",True)
         Terminal.SetCheckBox("charm_fma",True)
-        Terminal.SetCheckBox("Summon Kishin",True)
+        Terminal.SetCheckBox("Summon Kishin",False)
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
         Terminal.SetCheckBox("Auto Attack",True)
         Terminal.SetSpinBox("autoattack_spin",7500)
@@ -2558,6 +2595,9 @@ if Field.GetID() == ccExitMap and SCLib.GetVar("CurDaily") != "ChuChu":
     time.sleep(1)
     Npc.ClearSelection()
 
+if Field.GetID() == ssExitMap and SCLib.GetVar("CurDaily") != "SS":
+    Character.TalkToNpc(ssNpc)
+    
 if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switch
     attack_key = 0x44
     if Character.HasBuff(2,20040216): #Light Mode
@@ -2567,4 +2607,5 @@ if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switc
     else:                              #Dark Mode
         Key.Set(attack_key,1,27121202)
 
+event_quests()
 #print(SCLib.GetVar("CurStep"))

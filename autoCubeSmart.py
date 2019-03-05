@@ -32,12 +32,12 @@ endSlot     = 9
 statThreshold           = 27
 stopAtStatThreshold     = True
 autoStat                = True      # Automatically set whichever highest stat you have
-isLvl160                = 1
+isLvl160                = 0
 
 #For drop&meso rate
-dropStatThreshold       = 12        # Work only with Single Meso or Drop rate
-stopAtMesoRate          = True
-stopAtDropRate          = False
+dropStatThreshold       = 18        # Work only with Single Meso or Drop rate
+stopAtMesoRate          = False
+stopAtDropRate          = True
 stopAtDoubleMesoRate    = True
 stopAtDoubleDropRate    = True
 stopAtMesoAndDropRate   = True
