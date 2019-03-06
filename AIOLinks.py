@@ -22,7 +22,7 @@ Beast Tamer     DONE
 #demonA 00F3 [1A0100000000] 02A0 [CD5FB9030000]
 curbrockhideout = [600050000,600050010,600050020]
 useExploit = False
-doEvent = True
+doEvent = False
 #do Monster park how many times?
 do_MP = True
 do_MP_count = 2
