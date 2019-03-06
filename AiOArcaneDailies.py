@@ -2865,6 +2865,6 @@ if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switc
     else:                              #Dark Mode
         Key.Set(attack_key,1,27121202)
 
-event_quests()
+#event_quests()
 toggle_skill()
 #print(SCLib.GetVar("CurStep"))
