@@ -1240,6 +1240,31 @@ def toggle_skill():
                 time.sleep(short_sleep)
                 Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
 
+def attackAuto(skillid,on):
+    attack_key = 0x44
+    Key.Set(attack_key,1,skillid)
+    Terminal.SetCheckBox("Skill Injection", False)
+    Terminal.SetCheckBox("Melee No Delay",False)
+    Terminal.SetCheckBox("Auto Attack", on)
+    Terminal.SetComboBox("AttackKey",33)
+    Terminal.SetSpinBox("autoattack_spin",100)
+
+def attackSI(skillid,on,delay=100,siOption = "SIRadioMelee"):
+    Terminal.SetLineEdit("SISkillID",str(skillid))
+    Terminal.SetSpinBox("SkillInjection",delay)
+    Terminal.SetCheckBox("Melee No Delay",False)
+    Terminal.SetCheckBox("Auto Attack",False)
+    Terminal.SetCheckBox("Skill Injection", on)
+    Terminal.SetRadioButton(siOption,True)
+
+def attackSIND(skillid,on,delay=100,siOption = "SIRadioMelee"):
+    Terminal.SetLineEdit("SISkillID",str(skillid))
+    Terminal.SetSpinBox("SkillInjection",delay)
+    Terminal.SetCheckBox("Melee No Delay",on)
+    Terminal.SetRadioButton(siOption,True)
+    Terminal.SetCheckBox("Auto Attack",False)
+    Terminal.SetCheckBox("Skill Injection", on)
+
 def initAttack():
     print("Initializing attack settings for this character")
     attack_key = 0x44
@@ -1332,7 +1357,7 @@ def initAttack():
         print("Setting up Settings for Hayato")
         
         Terminal.SetLineEdit("SISkillID","41121011")
-        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
         
         Terminal.SetRadioButton("SIRadioMelee",True)
@@ -1368,16 +1393,10 @@ def initAttack():
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
         Terminal.SetCheckBox("bot/illium/summon_control",True)
         Terminal.SetCheckBox("General FMA",True)
-        Terminal.SetCheckBox("Kami Vac",True)
+        Terminal.SetCheckBox("Kami Vac",False)
     elif job == 6412: # Cadena 4th job
         print("Setting up Settings for Cadena")
-        Terminal.SetLineEdit("SISkillID","64001006")
-        Terminal.SetSpinBox("SkillInjection",150)
-        
-        Terminal.SetRadioButton("si_cadena",True)
-        Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", True)
+        attackSIND(64001001,True,160,"si_cadena")
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15512: #Ark 4th 155121007 @50
         print("Setting up Settings for Ark")
@@ -1475,6 +1494,13 @@ def initAttack():
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Melee No Delay",True)
+    elif job == ThunderBreakerJobs[3]:
+        attackSI(400051007,on,100,"SIRadioMagic")
+        Terminal.SetCheckBox("General FMA",True)
+        Terminal.SetCheckBox("Kami Vac",False)
+    elif job == WildHunterJobs[3]:
+        attackSI(400031033,on,100,"SIRadioShoot")
+        Terminal.SetCheckBox("Kami Vac",True)
     if job not in KannaJobs:
         Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
@@ -1482,7 +1508,7 @@ def initAttack():
     if job not in IlliumJobs:
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         Terminal.SetCheckBox("bot/illium/summon_control",False)
-        if job not in AngelicBusterJobs:
+        if job not in AngelicBusterJobs and job not in ThunderBreakerJobs:
             Terminal.SetCheckBox("General FMA",False)
         #if job not in LuminousJobs:
         #    Terminal.SetCheckBox("Full Map Attack",False)
@@ -1574,7 +1600,7 @@ def initAttackDone():
         print("Setting up Settings for Hayato")
         
         Terminal.SetLineEdit("SISkillID","41121011")
-        Terminal.SetSpinBox("SkillInjection",150)
+        Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetCheckBox("Melee No Delay",False)
         
         Terminal.SetRadioButton("SIRadioMelee",True)
@@ -1616,14 +1642,7 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",False)
     elif job == 6412: # Cadena 4th job
         print("Setting up Settings for Cadena")
-        
-        Terminal.SetLineEdit("SISkillID","64001006")
-        Terminal.SetSpinBox("SkillInjection",150)
-        
-        Terminal.SetRadioButton("si_cadena",True)
-        Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", True)
+        attackSIND(64001001,True,160,"si_cadena")
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15512: #Ark 4th 155121007 @50
         print("Setting up Settings for Ark")
@@ -1679,10 +1698,10 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 6512: #AB 4th
         print("Setting up Settings for AB")
-        Terminal.SetLineEdit("SISkillID","65121100")
+        Terminal.SetLineEdit("SISkillID","400051011")
         Terminal.SetCheckBox("Auto Attack", False)
         
-        Terminal.SetSpinBox("SkillInjection",100)
+        Terminal.SetSpinBox("SkillInjection",0)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMagic",True)
         Terminal.SetCheckBox("Skill Injection", True)
@@ -1712,7 +1731,7 @@ def initAttackDone():
         print("Setting up Settings for Blaze Wizard")
         Terminal.SetLineEdit("SISkillID","12121055")
         Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",0)
+        Terminal.SetSpinBox("SkillInjection",31)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Melee No Delay",True)
@@ -1726,6 +1745,10 @@ def initAttackDone():
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Melee No Delay",True)
+    elif job == ThunderBreakerJobs[3]:
+        attackSI(400051007,on,100,"SIRadioMagic")
+        Terminal.SetCheckBox("General FMA",True)
+        Terminal.SetCheckBox("Kami Vac",False)
     if job not in KannaJobs:
         Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
