@@ -28,17 +28,17 @@ storage_map_id = 550000000
 storage_npc_id = 9270054
 
 #headers that might need to be updated every game update
-#headers updated for v202
+#headers updated for v203
 store_header = 0x00F5
-block_header = 0x069D
-buy_ticket_header = 0x0540
-recv = 0x06D3
+block_header = 0x06AC #check this v203
+buy_ticket_header = 0x0546
+recv = 0x06E2
 SF_header = 0x0138
-StarForceRecv = 0x014D
+StarForceRecv = 0x0150
 collide_header = 0x0104
 potential_header = 0x013E
-potential_recv = 0x0274
-BlockBuyHeader = 0x0684
+potential_recv = 0x027C
+BlockBuyHeader = 0x0693
 useExpansionHeader = 0x0121
 BuyItemHeader = 0x00F4
 CashItemRequestOpcode = 1337
