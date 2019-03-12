@@ -386,7 +386,7 @@ def toggle_skill():
             buff = 32121017 #dark aura
             toggle_buffs(buff)
             buff2 = 32120019 #reaper 4
-            toggle_buffs(buff,skillid)
+            toggle_buffs(buff2,skillid)
     elif job == AngelicBusterJobs[3]:
         buff = 65121011
         toggle_buffs(buff)
@@ -464,7 +464,7 @@ def toggle_skill():
         buff = 60001217
         toggle_buffs(buff)
 def toggle_buffs(buffid,skillid = None,toggleKami = False):
-    short_sleep = 0.75
+    short_sleep = 0.25
     if skillid is None:
         skillid = buffid
     if Character.GetSkillLevel(buffid) > 0:
