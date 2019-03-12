@@ -62,6 +62,7 @@ BuyItemHeader = 0x00F4
 useExpansionHeader = 0x0121
 level_skill_header = 0x014F 
 dialogue_header = 0x00F3
+quest_header = 0x0166
 #updated for v203
 CashItemRequestOpcode = 0x0546
 CashItemResultOpcode = 0x06E2
@@ -345,168 +346,59 @@ def toggle_loot(indicator):
     Terminal.SetCheckBox("Auto Loot",indicator)
 
 def toggle_skill():
-    skill_key = 0x39
-    short_sleep = 0.5
     if job in WildHunterJobs and level > 11:
-        ride = 33001001
-        Key.Set(skill_key, 1, ride)
-        if Character.HasBuff(2, ride) == False:
-            Terminal.SetCheckBox("Auto Attack",False)
-            toggle_kami(False)
-            time.sleep(short_sleep)
-            Key.Press(skill_key)
-            time.sleep(short_sleep)
-            if Character.HasBuff(2, ride) == True:
-                toggle_kami(True)
-                Terminal.SetCheckBox("Auto Attack",True)
+        #Rige Jaguar
+        buff = 33001001
+        toggle_buffs(buff,buff,True)
     elif job in MechanicJobs:
-        humanoid = 35001002
-        Key.Set(skill_key, 1, humanoid)
-        if Character.HasBuff(2, humanoid) == False:
-            Terminal.SetCheckBox("Auto Attack",False)
-            toggle_kami(False)
-            time.sleep(short_sleep)
-            Key.Press(skill_key)
-            time.sleep(short_sleep)
-            toggle_kami(True)
-            Terminal.SetCheckBox("Auto Attack",True)
+        #Mount Mechanic machine
+        buff = 35001002
+        toggle_buffs(buff,buff,True)
     elif job in FPMageJobs or job in ILMageJobs or job in BishopJobs:
+        #magic guard
         buff = 2001002
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
+    elif job in EvanJobs:
+        #magic guard
+        buff = 22001012
+        toggle_buffs(buff)
     elif job == DawnWarriorJobs[3]:
         buff = 11121005
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
     elif job == ThunderBreakerJobs[3]:
         buff = 15121004
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
     elif job == BattleMageJobs[3]:
         buff = 32121017
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
     elif job == AngelicBusterJobs[3]:
         buff = 65121011
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Skill Injection",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Skill Injection",True)
+        toggle_buffs(buff)
     elif job in DarkknightJobs and job != DarkknightJobs[0]:
         buff = 1301013
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Skill Injection",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Skill Injection",True)
+        toggle_buffs(buff)
     elif job in HeroJobs and job != HeroJobs[0]:
         buff = 1101013
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Skill Injection",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Skill Injection",True)
+        toggle_buffs(buff)
     elif job in ShadeJobs and job >=2510:
         buff = 25101009
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Skill Injection",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Skill Injection",True)
+        toggle_buffs(buff)
     elif job == 531: #Cannon Trooper 5311005
         buff = 5311005
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
         buff3 = 5311004
-        if Character.GetSkillLevel(buff3) > 0:
-            Key.Set(skill_key, 1, buff3)
-            if Character.HasBuff(2, buff3) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff3)
     elif job == 532: #Cannoneer
         buff = 5321004
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
         buff2 = 5320007
-        if Character.GetSkillLevel(buff2) > 0:
-            Key.Set(skill_key, 1, 5311005)
-            if Character.HasBuff(2, buff2) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        skill2= 5311005
+        toggle_buffs(buff2,skill2)
         buff3 = 5311004
-        if Character.GetSkillLevel(buff3) > 0:
-            Key.Set(skill_key, 1, buff3)
-            if Character.HasBuff(2, buff3) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff3)
     elif job == CorsairJobs[2]: #or job == CorsairJobs[3]:
         buff = 5211014
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
     elif job == CorsairJobs[3]: #5220014
         buff = 5220014
         skill = 5211007
@@ -540,12 +432,23 @@ def toggle_skill():
     elif job in KinesisJobs:
         buff = 142121004
         timeout_buffs(buff)
-
-def toggle_buffs(buffid,skillid = None):
+    elif job == ShadowerJobs[3] and level >= 140:
+        buff = 4221054
+        timeout_buffs(buff)
+        #buffs = Character.GetBuffs()
+        #for buffa in buffs:
+        #    print("Current Buff Id: {}; Remaining Time: {}".format(buff.id,buff.timeLeft))
+    elif job in NightlordJobs and job != NightlordJobs[0]:
+        buff = 4101011
+        toggle_buffs(buff)
+        if job == NightlordJobs[3] and level >= 140:
+            buff = 4121054
+            timeout_buffs(buff)
+def toggle_buffs(buffid,skillid = None,toggleKami = False):
     short_sleep = 0.75
     if skillid is None:
         skillid = buffid
-    if Character.GetSkillLevel(skillid) > 0:
+    if Character.GetSkillLevel(buffid) > 0:
         if Character.HasBuff(2, buffid) == False:
             autoAttack = Terminal.GetCheckBox("Auto Attack")
             skillInject = Terminal.GetCheckBox("Skill Injection")
@@ -553,12 +456,14 @@ def toggle_buffs(buffid,skillid = None):
             Terminal.SetCheckBox("Auto Attack",False)
             Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
             Terminal.SetCheckBox("Skill Injection",False)
-            toggle_kami(False)
+            if toggleKami:
+                toggle_kami(False)
             time.sleep(short_sleep)
             Character.UseSkill(skillid)
             time.sleep(short_sleep)
             if Character.HasBuff(2, buffid) == True:
-                toggle_kami(True)
+                if toggleKami:
+                    toggle_kami(True)
                 Terminal.SetCheckBox("Auto Attack",autoAttack)
                 Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
                 Terminal.SetCheckBox("Skill Injection",skillInject)
@@ -1018,7 +923,7 @@ def event_quests():
             print("Forfeiting quest because dced")
 
 def forfeit_quest(questid):
-    oPacket = Packet.COutPacket(0x0166)
+    oPacket = Packet.COutPacket(quest_header)
     tohex = hex(questid)[2:].zfill(4)
     oPacket.EncodeBuffer("03 {} {} 00 00".format(tohex[2:4],tohex[0:2])) #0166 [0328CD0000]
     print("Packet to forfeit is: 03 {} {} 00 00".format(tohex[2:4],tohex[0:2]))
@@ -1325,7 +1230,8 @@ def teleport_to_mobs():
     for mob in mobs:
         if (Character.GetPos().x - mob.x) not in range(-100,0):
             time.sleep(1)
-            Character.Teleport(mob.x,mob.y)
+            Character.Teleport(mob.x-20,mob.y)
+        break
 
 def catch_jaguar():
     print("Catching jaguar")
@@ -6183,8 +6089,9 @@ def ResistanceThird():
                                 Terminal.Rush(310040000)
                                 
                             else:
-                                Character.Teleport(1614, -812)
-                                time.sleep(1)
+                                if pos.x != 1614:
+                                    Character.Teleport(1614, -812)
+                                    time.sleep(1)
                         
                     else:
                         buyHat = Quest.GetQuestState(23947)
@@ -6331,21 +6238,38 @@ def ResistanceFourth():
                     time.sleep(1) # sleep 1 second
                     
                 else:
-                    if field_id != 310040000:
-                        Terminal.Rush(310040000)
-                    else:
-                        toggle_kami(False)
-                        Character.Teleport(1614, -812)
-                    # don't have the hat, so lets do the quest to get it
-                    buyHat = Quest.GetQuestState(23947)
-                    if buyHat == 0:
-                        Quest.StartQuest(23947, 2153000)
+                     # don't have the hat, so lets do the quest to get it
+                    hatQuest = Quest.GetQuestState(23946)
+                    if hatQuest != 2:
+                        if hatQuest == 0:
+                            if field_id != 310040000:
+                                Terminal.Rush(310040000)
+                                
+                            else:
+                                Character.Teleport(1614, -812)
+                                time.sleep(1)
+                                Quest.StartQuest(23946, 2153000)
+                                
+                        elif Quest.CheckCompleteDemand(23946, 2153000) == 0:
+                            Quest.CompleteQuest(23946, 2153000)
+                            
+                        else:
+                            if field_id != 310040000:
+                                Terminal.Rush(310040000)
+                                
+                            else:
+                                if pos.x != 1614:
+                                    Character.Teleport(1614, -812)
+                                    time.sleep(1)
                         
-                    elif buyHat == 1:
-                        Quest.CompleteQuest(23947, 2153000)
-                        
                     else:
-                        print("No money")
+                        buyHat = Quest.GetQuestState(23947)
+                        if buyHat == 0:
+                            Quest.StartQuest(23947, 2153000)
+                        elif buyHat == 1:
+                            Quest.CompleteQuest(23947, 2153000)
+                        else:
+                            print("Not enough money")
             
     elif weapon !=2:
         # need to kill the machine thing
@@ -6371,11 +6295,13 @@ def ResistanceFourth():
             elif field_id == 310060220:
                 # enter the field_id that requires a keycard
                 teleport_enter(1613,-284)
-            elif field_id != 310060220 and field_id != 931000321:
+            elif not (field_id >= 931000320 and field_id <= 931000323):
                 # if we don't have the keycard and we aren't in 
                 # Gelimer's field_id, then rush to it
                 Terminal.Rush(310060220)
             else:
+                print("Find mob")
+                Terminal.StopRush()
                 teleport_to_mobs()
                 #toggle_kami(True)
         
@@ -6648,7 +6574,7 @@ def CannoneerFirst():
                     Quest.CompleteQuest(2561, 1096003)
                 else:
                     print('this mean yo dum ass dropped the apple, gonna forfeit quest')
-                    oPacket = Packet.COutPacket(0x0166)
+                    oPacket = Packet.COutPacket(quest_header)
                     oPacket.EncodeBuffer("03 01 0A 00 00")
                     Packet.SendPacket(oPacket)
     elif Quest3 != 2:
@@ -6826,6 +6752,7 @@ def CannoneerFirst():
 def ShadeFirst():
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
+    Terminal.SetCheckBox("Mob Falldown",False)
     moonbeam = 3002000
     chieffox = 3002005
     compass = 3002006
@@ -7044,7 +6971,7 @@ def ShadeFirst():
         if Quest.CheckCompleteDemand(38998, 3002101):
             mob = Field.FindMob(9300877)
             if mob.valid:
-                Terminal.SetCheckBox("Kami Vac", True)
+                teleport_to_mobs()
                 Terminal.SetSpinBox("KamiOffsetX", -30)
                 Terminal.SetSpinBox("KamiOffsetY", -10)
                 Character.BasicAttack()
@@ -7115,7 +7042,7 @@ def ShadeFirst():
             tp(881, -20)
             Quest.CompleteQuest(38010, 3002005)
     elif q15 == 0:
-        Quest.StartQuest(38011, 3002000)
+        acceptQuest(38011,moonbeam,FoxPointVillage,field_id)
     elif q15 == 1:
         rush_to(410000002)
     elif q16 == 0:
@@ -9000,7 +8927,7 @@ def toggleAttack(on):
 
     if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBeach") and not SCLib.GetVar("DoingSleepy"): # kami control interupt by job adv script and zakum script
         toggle_kami(on)
-        
+    #print(SCLib.GetVar("DoingJobAdv"))
     if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum"):
         if Terminal.GetCheckBox("Legit Vac") and Terminal.GetCheckBox("Kami Vac") and field_id not in mobFalldownBlacklist:# and not Terminal.GetCheckBox("Melee No Delay"):
             Terminal.SetCheckBox("Mob Falldown",on)
@@ -10056,7 +9983,7 @@ elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.FindItemByID
     Terminal.SetPushButton("Leave shop",True)
     time.sleep(1)
     Terminal.SetPushButton("Leave shop",False)
-elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.GetItemCount(2070000) < 100 and not SCLib.GetVar("DoingJobAdv"):
+elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.GetItemCount(2070000) < 100  and Inventory.FindItemByID(2070000).valid == 1 and not SCLib.GetVar("DoingJobAdv"):
     print("Recharge stars")
     if field_id != 100000102:
         Terminal.Rush(100000102) # rush to store (Henessys gral store)
