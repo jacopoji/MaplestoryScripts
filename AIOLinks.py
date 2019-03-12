@@ -478,7 +478,9 @@ def toggle_buffs(buffid,skillid = None,toggleKami = False):
             Character.UseSkill(skillid)
             time.sleep(short_sleep)
             if job in BattleMageJobs:
+                time.sleep(short_sleep)
                 Character.UseSkill(32001014)
+                time.sleep(short_sleep)
             if Character.HasBuff(2, buffid) == True:
                 if toggleKami:
                     toggle_kami(True)
