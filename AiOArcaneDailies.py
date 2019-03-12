@@ -8,6 +8,8 @@ try:
 except:
     print("Couldn't find SunCat module")
 
+if not SCLib.CheckVersion():
+    print("Need to update SCLib")
 #SunCat's All-in-one Dailies
 
 #Change these
@@ -55,8 +57,9 @@ roundWaitTime = 0.5 #How long to wait when handing in spirits
 roundsPerRun = 15 #How many times you want to collect 5 spirits per run
 totalRuns = 1 #How many times you want to enter spirit savior
 
-CashItemRequestOpcode = 0x0540
-CashItemResultOpcode = 0x06D3
+#updated for v203
+CashItemRequestOpcode = 0x0546
+CashItemResultOpcode = 0x06E2
 BuyByMesoRequest = 85
 LoadLockerDoneResult = 2
 MoveLToSRequest = 15
@@ -1271,6 +1274,7 @@ def initAttack():
     pgup_key = 0x21
     Terminal.SetComboBox("Familiar0",1)
     Terminal.SetCheckBox("Mob Falldown",False)
+    Terminal.SetCheckBox("eliteCC",True)
     toggle_rush_by_level(False)
     if Character.IsOwnFamiliar(9960098):
         Terminal.SetSlider("sliderMP", 100)
@@ -1289,7 +1293,7 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job ==4212: #4th
         print("Setting up Settings for Kanna")
-        Terminal.SetSpinBox("MonkeySpiritsNDdelay",40)
+        Terminal.SetSpinBox("MonkeySpiritsNDdelay",0)
         Terminal.SetCheckBox("Grenade Kami",True)
         Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
@@ -1525,6 +1529,7 @@ def initAttackDone():
     Terminal.SetCheckBox("Kami Vac",False)
     Terminal.SetSlider("sliderMP", 10)
     Terminal.SetComboBox("MPKey",6)
+    Terminal.SetCheckBox("eliteCC",False)
     if job == 3712:
         print("Setting up settings for Blaster")
         Terminal.SetLineEdit("SISkillID","37121003")

@@ -125,7 +125,8 @@ try:
 	import SunCat,SCLib, SCHotkey
 except:
 	print("Couldn't find SunCat module")
-
+if not SCLib.CheckVersion():
+    print("Need to update SCLib")
 SCLib.StartVars()
 ###persist variables
 if SCLib.GetVar("MPDone") is None:
@@ -455,10 +456,10 @@ def settings_fourth_job():
 	level = Character.GetLevel()
 	if not Terminal.GetCheckBox("Auto Attack"):
 		Terminal.SetCheckBox("Auto Attack",True)
-		Terminal.SetSpinBox("autoattack_spin",2500)
+		Terminal.SetSpinBox("autoattack_spin",12500)
 		Terminal.SetComboBox("AttackKey",36)
 	if Terminal.GetComboBox("AttackKey") != 36:
-		Terminal.SetSpinBox("autoattack_spin",2500)
+		Terminal.SetSpinBox("autoattack_spin",12500)
 		Terminal.SetComboBox("AttackKey",36)
 	Terminal.SetCheckBox("Legit Vac",True)
 	if Terminal.GetCheckBox("charm_fma"):

@@ -122,8 +122,8 @@ class KeyType:
     Skill = 1
     Item = 2
 
-USER_HYPER_SKILL_UP_REQUEST = 496
-CHANGE_SKILL_RECORD_RESULT = 95
+USER_HYPER_SKILL_UP_REQUEST = 513
+CHANGE_SKILL_RECORD_RESULT = 97
 
 def bind_skill(skill):
     oPacket = Packet.COutPacket(USER_HYPER_SKILL_UP_REQUEST)
