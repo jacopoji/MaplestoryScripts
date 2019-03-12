@@ -372,21 +372,18 @@ def toggle_skill():
         buff = 13101022
         toggle_buffs(buff)
     elif job in BattleMageJobs:
-        skillid = 32001014
         if job == BattleMageJobs[0]:
-            buff = 32001014
-            toggle_buffs(buff,skillid)
+            buff = 32001016 #hasty aura
+            toggle_buffs(buff)
         elif job == BattleMageJobs[1]:
-            buff = 32100010 #reaper 2
-            toggle_buffs(buff,skillid)
+            buff = 32101009 #yellow aura
+            toggle_buffs(buff)
         elif job == BattleMageJobs[2]:
-            buff = 32110017 #reaper 3
-            toggle_buffs(buff,skillid)
+            buff = 32111012 #blue aura
+            toggle_buffs(buff)
         elif job == BattleMageJobs[3]:
             buff = 32121017 #dark aura
             toggle_buffs(buff)
-            buff2 = 32120019 #reaper 4
-            toggle_buffs(buff2,skillid)
     elif job == AngelicBusterJobs[3]:
         buff = 65121011
         toggle_buffs(buff)
@@ -480,13 +477,15 @@ def toggle_buffs(buffid,skillid = None,toggleKami = False):
             time.sleep(short_sleep)
             Character.UseSkill(skillid)
             time.sleep(short_sleep)
+            if job in BattleMageJobs:
+                Character.UseSkill(32001014)
             if Character.HasBuff(2, buffid) == True:
                 if toggleKami:
                     toggle_kami(True)
                 Terminal.SetCheckBox("Auto Attack",autoAttack)
                 Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
                 Terminal.SetCheckBox("Skill Injection",skillInject)
-
+    
 def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True):
     if need_sleep:
         short_sleep = 0.75
