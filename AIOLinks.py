@@ -372,20 +372,21 @@ def toggle_skill():
         buff = 13101022
         toggle_buffs(buff)
     elif job in BattleMageJobs:
+        skillid = 32001014
         if job == BattleMageJobs[0]:
             buff = 32001014
-            toggle_buffs(buff)
+            toggle_buffs(buff,skillid)
         elif job == BattleMageJobs[1]:
-            buff = 32100010
-            toggle_buffs(buff)
+            buff = 32100010 #reaper 2
+            toggle_buffs(buff,skillid)
         elif job == BattleMageJobs[2]:
-            buff = 32110017
-            toggle_buffs(buff)
+            buff = 32110017 #reaper 3
+            toggle_buffs(buff,skillid)
         elif job == BattleMageJobs[3]:
-            buff = 32121017
+            buff = 32121017 #dark aura
             toggle_buffs(buff)
-            buff2 = 32120019
-            toggle_buffs(buff)
+            buff2 = 32120019 #reaper 4
+            toggle_buffs(buff,skillid)
     elif job == AngelicBusterJobs[3]:
         buff = 65121011
         toggle_buffs(buff)
