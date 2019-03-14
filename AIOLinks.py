@@ -460,6 +460,9 @@ def toggle_skill():
     elif job in KaiserJobs:
         buff = 60001217
         toggle_buffs(buff)
+    elif job in PhantomJobs:
+        buff = 20031210
+        toggle_buffs(buff)
 def toggle_buffs(buffid,skillid = None,toggleKami = False):
     short_sleep = 0.25
     if skillid is None:
@@ -8976,6 +8979,9 @@ def toggleAttack(on):
         Terminal.SetSpinBox("FilterMeso",50000)
         if level < 140:
             toggle_loot(False)
+    elif job == BuccaneerJobs[1]:
+        if not Terminal.GetCheckBox("Speedy Gonzales"):
+            Terminal.SetCheckBox("Speedy Gonzales",True)
     else:
         if Terminal.GetCheckBox("Speedy Gonzales"):
             Terminal.SetCheckBox("Speedy Gonzales",False)
