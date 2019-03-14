@@ -6951,12 +6951,14 @@ def ShadeFirst():
     '''
     if q15 == 2: 
         Key.Set(0x11, 1, 25001002)
+        Terminal.SetCheckBox("Auto SP",True)
     else:
         SkillLevel = Character.GetSkillLevel(25001000)
         if SkillLevel < 1:
             print("Skill level is {},continue".format(SkillLevel))
             LevelSkill(25001000)
         Key.Set(0x11, 1, 25001000)
+        Terminal.SetCheckBox("Auto SP",False)
         
       
     if q1 != 2:
@@ -9660,9 +9662,9 @@ safety_setting()
 if GameState.IsInGame():
     if not (SCLib.GetVar("DoingJobAdv") and (job == ShadeJobs[0] or job == ShadeJobs[1])):
         toggleAttack(True)
+        Terminal.SetCheckBox("Auto SP",True)
     set_potion()
     toggle_skill()
-    Terminal.SetCheckBox("Auto SP",True)
     GetEmblem()
     if level == 60:
         pet = Inventory.FindItemByID(2434265)
