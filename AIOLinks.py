@@ -6775,6 +6775,13 @@ def CannoneerFirst():
                 SCLib.UpdateVar("DoingJobAdv",False)
                 Terminal.SetCheckBox("Pet Item Teleport",True)
 
+def LevelSkill(id):
+    qPacket = Packet.COutPacket(level_skill_header)
+    skillid = hex(id)[2:].zfill(8)
+    qPacket.EncodeBuffer("8D 47 8D 00 {0} {1} {2} {3} 01 00 00 00".format(skillid[6:8],skillid[4:6],skillid[2:4],skillid[0:2]))
+    Packet.SendPacket(qPacket)
+    time.sleep(1)
+
 def ShadeFirst():
     toggle_rush_by_level(False)
     SCLib.UpdateVar("DoingJobAdv",True)
@@ -6945,7 +6952,12 @@ def ShadeFirst():
     if q15 == 2: 
         Key.Set(0x11, 1, 25001002)
     else:
+        SkillLevel = Character.GetSkillLevel(25001000)
+        if SkillLevel < 1:
+            print("Skill level is {},continue".format(SkillLevel))
+            LevelSkill(25001000)
         Key.Set(0x11, 1, 25001000)
+        
       
     if q1 != 2:
         enterportal(940200060, pos, 1100, -161)
