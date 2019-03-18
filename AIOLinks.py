@@ -9127,7 +9127,10 @@ def toggleAttack(on):
             toggle_loot(False)
     elif job == BuccaneerJobs[1]:
         if not Terminal.GetCheckBox("Speedy Gonzales"):
-            Terminal.SetCheckBox("Speedy Gonzales",True) 
+            Terminal.SetCheckBox("Speedy Gonzales",True)
+    #elif job == NightWalkerJobs[2] or job == NightWalkerJobs[3]:
+    #    if not Terminal.GetCheckBox("Speedy Gonzales"):
+    #        Terminal.SetCheckBox("Speedy Gonzales",True)
     else:
         if Terminal.GetCheckBox("Speedy Gonzales"):
             Terminal.SetCheckBox("Speedy Gonzales",False)
@@ -9137,10 +9140,6 @@ def toggleAttack(on):
             Terminal.SetCheckBox("filter_use",False)
         if level < 140:
             Terminal.SetSpinBox("FilterMeso",0)
-            
-    #elif job == NightWalkerJobs[2] or job == NightWalkerJobs[3]:
-    #    if not Terminal.GetCheckBox("Speedy Gonzales"):
-    #        Terminal.SetCheckBox("Speedy Gonzales",True)
     if level > 60 and level < 120 and not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBeach") and not SCLib.GetVar("DoingSleepy"):
         Terminal.SetCheckBox("Kami Loot",False)
         Terminal.SetCheckBox("Auto Loot",True)
