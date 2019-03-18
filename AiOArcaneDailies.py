@@ -1059,189 +1059,247 @@ def CashItemInfoDecode(iPacket):
     iPacket.ReadLong(4) # aOption[0]
     iPacket.ReadLong(4) # aOption[1]
     iPacket.ReadLong(4) # aOption[2]
-
 def toggle_skill():
-    skill_key = 0x39
-    short_sleep = 0.5
-    if job in WildHunterJobs:
-        ride = 33001001
-        Key.Set(skill_key, 1, ride)
-        if Character.HasBuff(2, ride) == False:
-            Terminal.SetCheckBox("Auto Attack",False)
-            toggle_kami(False)
-            time.sleep(short_sleep)
-            Key.Press(skill_key)
-            time.sleep(short_sleep)
-            toggle_kami(True)
-            Terminal.SetCheckBox("Auto Attack",True)
+    if job in WildHunterJobs and level > 11:
+        #Rige Jaguar
+        buff = 33001001
+        toggle_buffs(buff,buff,True)
     elif job in MechanicJobs:
-        humanoid = 35001002
-        Key.Set(skill_key, 1, humanoid)
-        if Character.HasBuff(2, humanoid) == False:
-            Terminal.SetCheckBox("Auto Attack",False)
-            toggle_kami(False)
-            time.sleep(short_sleep)
-            Key.Press(skill_key)
-            time.sleep(short_sleep)
-            toggle_kami(True)
-            Terminal.SetCheckBox("Auto Attack",True)
+        #Mount Mechanic machine
+        buff = 35001002
+        toggle_buffs(buff,buff,True)
     elif job in FPMageJobs or job in ILMageJobs or job in BishopJobs:
+        #magic guard
         buff = 2001002
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
+        if job == BishopJobs[3]:
+            summon_dragon = 2321003
+            toggle_buffs(summon_dragon)
+    elif job in EvanJobs:
+        #magic guard
+        buff = 22001012
+        toggle_buffs(buff)
     elif job == DawnWarriorJobs[3]:
         buff = 11121005
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
     elif job == ThunderBreakerJobs[3]:
         buff = 15121004
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
-    elif job == BattleMageJobs[3]:
-        buff = 32121017
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        toggle_buffs(buff)
+    elif job in WindArcherJobs and job != WindArcherJobs[0]:
+        buff = 13101022
+        toggle_buffs(buff)
+    elif job in BattleMageJobs:
+        if job == BattleMageJobs[0]:
+            buff = 32001016 #hasty aura
+            toggle_buffs(buff)
+        elif job == BattleMageJobs[1]:
+            buff = 32101009 #yellow aura
+            toggle_buffs(buff)
+        elif job == BattleMageJobs[2]:
+            buff = 32111012 #blue aura
+            toggle_buffs(buff)
+        elif job == BattleMageJobs[3]:
+            buff = 32121017 #dark aura
+            toggle_buffs(buff)
     elif job == AngelicBusterJobs[3]:
         buff = 65121011
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Skill Injection",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Skill Injection",True)
+        toggle_buffs(buff)
     elif job in DarkknightJobs and job != DarkknightJobs[0]:
         buff = 1301013
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Skill Injection",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Skill Injection",True)
+        toggle_buffs(buff)
     elif job in HeroJobs and job != HeroJobs[0]:
         buff = 1101013
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Skill Injection",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Skill Injection",True)
+        toggle_buffs(buff)
     elif job in ShadeJobs and job >=2510:
         buff = 25101009
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Skill Injection",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Skill Injection",True)
+        toggle_buffs(buff)
     elif job == 531: #Cannon Trooper 5311005
         buff = 5311005
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        timeout_buffs(buff)
         buff3 = 5311004
-        if Character.GetSkillLevel(buff3) > 0:
-            Key.Set(skill_key, 1, buff3)
-            if Character.HasBuff(2, buff3) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        timeout_buffs(buff3)
     elif job == 532: #Cannoneer
         buff = 5321004
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        timeout_buffs(buff)
         buff2 = 5320007
-        if Character.GetSkillLevel(buff2) > 0:
-            Key.Set(skill_key, 1, 5311005)
-            if Character.HasBuff(2, buff2) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        skill2= 5311005
+        timeout_buffs(buff2,skill2)
         buff3 = 5311004
-        if Character.GetSkillLevel(buff3) > 0:
-            Key.Set(skill_key, 1, buff3)
-            if Character.HasBuff(2, buff3) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        timeout_buffs(buff3)
     elif job == CorsairJobs[2]: #or job == CorsairJobs[3]:
         buff = 5211014
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, buff)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        timeout_buffs(buff)
     elif job == CorsairJobs[3]: #5220014
         buff = 5220014
-        if Character.GetSkillLevel(buff) > 0:
-            Key.Set(skill_key, 1, 5211007)
-            if Character.HasBuff(2, buff) == False:
-                Terminal.SetCheckBox("Auto Attack",False)
-                time.sleep(short_sleep)
-                Key.Press(skill_key)
-                time.sleep(short_sleep)
-                Terminal.SetCheckBox("Auto Attack",True)
+        skill = 5211007
+        timeout_buffs(buff,skill)
+    elif job == BuccaneerJobs[2]: #or job == CorsairJobs[3]:
+        buff = 5111007
+        timeout_buffs(buff)
+    elif job == BuccaneerJobs[3]: #5220014
+        buff = 5120012
+        skill = 5111007
+        timeout_buffs(buff,skill)
+
+        buff2 = 5121013
+        timeout_buffs(buff2,buff2,30,True,True)
     elif job in IlliumJobs and job != IlliumJobs[0]:
         buff = 152101000
-        if Character.GetSkillLevel(152101003) > 0:
-            Key.Set(skill_key, 1, 152101003)
-            if Character.HasBuff(2, buff) == False:
+        skill = 152101003
+        toggle_buffs(buff,skill)
+    elif job in HayatoJobs:
+        buff = 40011289
+        timeout_buffs(buff)
+        '''
+        if Character.HasBuff(2,buff) == False:
+            timeout = time.time() + 30
+            if not Terminal.GetProperty("skill_timeout",False):
+                Terminal.SetProperty("skill_timeout",timeout)
+                print("Summer rain: Initialize")
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                Character.UseSkill(buff)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
+            elif time.time() > Terminal.GetProperty("skill_timeout",False):
+                Terminal.SetProperty("skill_timeout",timeout)
+                print("Summer rain: Continued")
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                Character.UseSkill(buff)
+                time.sleep(short_sleep)
+        '''
+    elif job in KinesisJobs:
+        buff = 142121004
+        timeout_buffs(buff)
+    elif job == ShadowerJobs[3] and level >= 140:
+        buff = 4221054
+        timeout_buffs(buff)
+        #buffs = Character.GetBuffs()
+        #for buffa in buffs:
+        #    print("Current Buff Id: {}; Remaining Time: {}".format(buff.id,buff.timeLeft))
+    elif job in NightlordJobs and job != NightlordJobs[0]:
+        buff = 4101011
+        toggle_buffs(buff)
+        if job == NightlordJobs[3] and level >= 140:
+            buff = 4121054
+            timeout_buffs(buff,buff,30,False)
+    elif job in KaiserJobs:
+        buff = 60001217
+        toggle_buffs(buff)
+        if job == KaiserJobs[2] or job == KaiserJobs[3]:
+            buff = 61111002
+            toggle_buffs(buff)
+    elif job in PhantomJobs:
+        buff = 20031210
+        toggle_buffs(buff)
+    elif job in BowmasterJobs:
+        if job == BowmasterJobs[2]:
+            buff = 3111011
+            toggle_buffs(buff)
+        elif job == BowmasterJobs[3]:
+            buff = 3111011
+            toggle_buffs(buff)
+            buff2=3121054
+            timeout_buffs(buff2,buff2,30,False)
+    elif job in DemonSlayerJobs:
+        if job == DemonSlayerJobs[3]:
+            buff = 31121054
+            timeout_buffs(buff,timer=10)
+    elif job in DemonAvengerJobs:
+        if job == DemonAvengerJobs[3]:
+            if level >= 140:
+                buff = 31221054
+                timeout_buffs(buff,buff,30,False)
+            if level >= 200:
+                buff = 31221053
+                timeout_buffs(buff,buff,30,False)
+    elif job in MercedesJobs:
+        if level >= 140:
+            buff = 23121054
+            timeout_buffs(buff)
+def toggle_buffs(buffid,skillid = None,toggleKami = False):
+    short_sleep = 0.75
+    if skillid is None:
+        skillid = buffid
+    if Character.GetSkillLevel(buffid) > 0:
+        if Character.HasBuff(2, buffid) == False:
+            autoAttack = Terminal.GetCheckBox("Auto Attack")
+            skillInject = Terminal.GetCheckBox("Skill Injection")
+            javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
+            Terminal.SetCheckBox("Auto Attack",False)
+            Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+            Terminal.SetCheckBox("Skill Injection",False)
+            if toggleKami:
+                toggle_kami(False)
+            time.sleep(short_sleep)
+            Character.UseSkill(skillid)
+            #time.sleep(short_sleep)
+            if job in BattleMageJobs:
+                time.sleep(short_sleep)
+                Character.UseSkill(32001014)
+                #time.sleep(short_sleep)
+            if Character.HasBuff(2, buffid) == True:
+                if toggleKami:
+                    toggle_kami(True)
+            Terminal.SetCheckBox("Auto Attack",autoAttack)
+            Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+            Terminal.SetCheckBox("Skill Injection",skillInject)
+    
+def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True,injectSkill = False):
+    if need_sleep:
+        short_sleep = 0.75
+    else:
+        short_sleep = 0.05
+    if skillid is None:
+        skillid = buffid
+    if Character.GetSkillLevel(skillid) > 0:
+        if Character.HasBuff(2,buffid) == False and len(Field.GetMobs()) > 0:
+            timeout = time.time() + timer
+            if not Terminal.GetProperty("skill_timeout{}".format(str(buffid)),False):
+                Terminal.SetProperty("skill_timeout{}".format(str(buffid)),timeout)
+                print("Skill {}: Initialize".format(buffid))
+                autoAttack = Terminal.GetCheckBox("Auto Attack")
+                skillInject = Terminal.GetCheckBox("Skill Injection")
+                javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
+                Terminal.SetCheckBox("Auto Attack",False)
                 Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+                Terminal.SetCheckBox("Skill Injection",False)
                 time.sleep(short_sleep)
-                Key.Press(skill_key)
+                if not injectSkill:
+                    Character.UseSkill(skillid)
+                else:
+                    Terminal.SetLineEdit("SISkillID",str(skillid))
+                    Terminal.SetSpinBox("SkillInjection",300)
+                    Terminal.SetCheckBox("Skill Injection",True)
+                    time.sleep(short_sleep*2)
+                    Terminal.SetCheckBox("Skill Injection",False)
+                #time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",autoAttack)
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+                Terminal.SetCheckBox("Skill Injection",skillInject)
+            elif time.time() > Terminal.GetProperty("skill_timeout{}".format(str(buffid)),False):
+                Terminal.SetProperty("skill_timeout{}".format(str(buffid)),timeout)
+                print("Skill {}: Continued".format(buffid))
+                autoAttack = Terminal.GetCheckBox("Auto Attack")
+                skillInject = Terminal.GetCheckBox("Skill Injection")
+                javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
+                Terminal.SetCheckBox("Auto Attack",False)
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+                Terminal.SetCheckBox("Skill Injection",False)
                 time.sleep(short_sleep)
-                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
+                if not injectSkill:
+                    Character.UseSkill(skillid)
+                else:
+                    Terminal.SetLineEdit("SISkillID",str(skillid))
+                    Terminal.SetSpinBox("SkillInjection",300)
+                    Terminal.SetCheckBox("Skill Injection",True)
+                    time.sleep(short_sleep*2)
+                    Terminal.SetCheckBox("Skill Injection",False)
+                #time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",autoAttack)
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+                Terminal.SetCheckBox("Skill Injection",skillInject)
 
 def attackAuto(skillid,on):
     attack_key = 0x44
@@ -1499,12 +1557,14 @@ def initAttack():
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Melee No Delay",True)
     elif job == ThunderBreakerJobs[3]:
-        attackSI(400051007,on,100,"SIRadioMagic")
+        attackSI(400051007,True,100,"SIRadioMagic")
         Terminal.SetCheckBox("General FMA",True)
         Terminal.SetCheckBox("Kami Vac",False)
     elif job == WildHunterJobs[3]:
-        attackSI(400031033,on,100,"SIRadioShoot")
+        attackSI(400031033,True,100,"SIRadioShoot")
         Terminal.SetCheckBox("Kami Vac",True)
+    elif job == 434: #dual blade
+        attackSIND(400040006,True,16)
     if job not in KannaJobs:
         Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
@@ -1751,9 +1811,14 @@ def initAttackDone():
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Melee No Delay",True)
     elif job == ThunderBreakerJobs[3]:
-        attackSI(400051007,on,100,"SIRadioMagic")
+        attackSI(400051007,True,100,"SIRadioMagic")
         Terminal.SetCheckBox("General FMA",True)
         Terminal.SetCheckBox("Kami Vac",False)
+    elif job == WildHunterJobs[3]:
+        attackSI(400031033,True,100,"SIRadioShoot")
+        Terminal.SetCheckBox("Kami Vac",True)
+    elif job == 434: #dual blade
+        attackSIND(400040006,True,16)
     if job not in KannaJobs:
         Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
@@ -1794,7 +1859,8 @@ def initVars():
     SCLib.PersistVar("CurStep", "StartingVJ")
 
     SCLib.PersistVar("RetryCount", 0)
-
+    #print("Initializing Dailies")
+    #print(SCLib.GetVar("CurDaily"))
     SCLib.StartVars()
 
 def useSymbol(symbol):
@@ -2010,7 +2076,9 @@ class Ingredient:
                 if curMob is not None:
                     SunCat.KamiTP(curMob.x + kamiOffsetX, curMob.y + kamiOffsetY)
             
+            toggle_skill()
             time.sleep(0.1)
+
         
         self.HandIn()
 
@@ -2086,7 +2154,10 @@ def leaveParty():
     
 def initChuChu():
     if Field.GetID() != ccStartingMap:
-        Terminal.Rush(ccStartingMap)
+        if Field.GetID() == ccExitMap:
+            Character.TalkToNpc(ccNpc)
+        else:
+            Terminal.Rush(ccStartingMap)
     else:
         SunCat.HookChuChu()
         
@@ -2105,6 +2176,8 @@ def initChuChu():
 def startChuChu():
     if Field.GetID() != ccStartingMap:
         SCLib.UpdateVar("CurStep", "InitChuChu")
+    elif Field.GetID() == ccExitMap:
+        Character.TalkToNpc(ccNpc)
     else:
         retryCount = SCLib.GetVar("RetryCount")
         
@@ -2114,6 +2187,7 @@ def startChuChu():
             SCLib.UpdateVar("CurStep", "FinishedChuChu")
             SunCat.UnhookChuChu()
         else:
+            Terminal.StopRush()
             print("Talking to enter")
             Npc.ClearSelection()
             Npc.RegisterSelection("Enter")
@@ -2154,7 +2228,7 @@ def doingChuChu():
         print("Done! Sleeping for a few seconds to check for another run...")
         SCLib.UpdateVar("CurStep", "InitChuChu")
         time.sleep(5)
-
+#print(SCLib.GetVar("CurStep"))
 def finishChuChu():
     chuchuSymbol = Inventory.FindItemByID(1712002)
     if not useSymbol(chuchuSymbol):
@@ -2742,9 +2816,11 @@ if GameState.IsInGame() and not accountData['arcane_daily_done'] and not account
         print("Need to buy a hyper teleport rock")
         autoAttack = Terminal.GetCheckBox("Auto Attack")
         skillInject = Terminal.GetCheckBox("Skill Injection")
+        javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
         toggle_rush_by_level(False)
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection",False)
+        Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         time.sleep(5)
         if Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
             nEmptySlotPOS = 0
@@ -2761,6 +2837,7 @@ if GameState.IsInGame() and not accountData['arcane_daily_done'] and not account
             time.sleep(1)
         Terminal.SetCheckBox("Auto Attack",autoAttack)
         Terminal.SetCheckBox("Skill Injection",skillInject)
+        Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
     elif Quest.GetQuestState(34120) != 2 and level >= 200:
         VJprequest()
     elif Quest.GetQuestState(34218) != 2 and level >= 210:
@@ -2770,6 +2847,7 @@ if GameState.IsInGame() and not accountData['arcane_daily_done'] and not account
             dungeonTeleport()
         if SCLib.GetVar("CurDaily") is None:
             initAttack()
+            print("Cur daily is none")
             time.sleep(2)
         initVars()
         curDaily = SCLib.GetVar("CurDaily")
@@ -2871,5 +2949,6 @@ if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switc
         Key.Set(attack_key,1,27121202)
 
 #event_quests()
-toggle_skill()
+if GameState.IsInGame():
+    toggle_skill()
 #print(SCLib.GetVar("CurStep"))

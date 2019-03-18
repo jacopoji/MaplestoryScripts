@@ -35,7 +35,7 @@ safeguard = True
 whitelist = []
 
 #Zakum
-DoZakumDaily=False
+DoZakumDaily=True
 
 getSpider = False
 
@@ -69,6 +69,9 @@ CashItemResultOpcode = 0x06E2
 BuyByMesoRequest = 85
 LoadLockerDoneResult = 2
 MoveLToSRequest = 15
+
+CP_UserHyperSkillUpRequest = 513
+LP_ChangeSkillRecordResult = 97
 
 #equip slot numbers
 helmet_slot = -1
@@ -344,12 +347,26 @@ def toggle_kami(indicator):
 def toggle_loot(indicator):
     Terminal.SetCheckBox("Kami Loot",indicator)
     Terminal.SetCheckBox("Auto Loot",indicator)
+#print(Character.GetMP())
 
+def bind_skill(skill):
+   oPacket = Packet.COutPacket(CP_UserHyperSkillUpRequest)
+   oPacket.Encode4(int(time.monotonic() * 1000))
+   oPacket.Encode4(skill)
+   Packet.SendPacket(oPacket)
+
+   Packet.WaitForRecv(LP_ChangeSkillRecordResult, 10000)
+   print("Received {}.".format(skill))
+
+   Key.Set(0xDD, 1, skill)
 def toggle_skill():
     if job in WildHunterJobs and level > 11:
         #Rige Jaguar
         buff = 33001001
         toggle_buffs(buff,buff,True)
+        if level >= 140:
+            buff = 33121054
+            timeout_buffs(buff)
     elif job in MechanicJobs:
         #Mount Mechanic machine
         buff = 35001002
@@ -358,6 +375,9 @@ def toggle_skill():
         #magic guard
         buff = 2001002
         toggle_buffs(buff)
+        if job == BishopJobs[3]:
+            summon_dragon = 2321003
+            toggle_buffs(summon_dragon)
     elif job in EvanJobs:
         #magic guard
         buff = 22001012
@@ -368,9 +388,21 @@ def toggle_skill():
     elif job == ThunderBreakerJobs[3]:
         buff = 15121004
         toggle_buffs(buff)
+    elif job == NightWalkerJobs[3]:
+        buff = 14121003
+        timeout_buffs(buff,timer=10)
     elif job in WindArcherJobs and job != WindArcherJobs[0]:
-        buff = 13101022
-        toggle_buffs(buff)
+        if job == WindArcherJobs[1]:
+            buff = 13101022
+            toggle_buffs(buff)
+        elif job == WindArcherJobs[2]:
+            buff = 13110022
+            skill = 13101022
+            toggle_buffs(buff,skill)
+        elif job == WindArcherJobs[3]:
+            buff = 13120003
+            skill = 13101022
+            toggle_buffs(buff,skill)
     elif job in BattleMageJobs:
         if job == BattleMageJobs[0]:
             buff = 32001016 #hasty aura
@@ -390,32 +422,48 @@ def toggle_skill():
     elif job in DarkknightJobs and job != DarkknightJobs[0]:
         buff = 1301013
         toggle_buffs(buff)
+        if level >= 140:
+            buff = 1321054
+            timeout_buffs(buff)
     elif job in HeroJobs and job != HeroJobs[0]:
         buff = 1101013
         toggle_buffs(buff)
     elif job in ShadeJobs and job >=2510:
         buff = 25101009
         toggle_buffs(buff)
+        if job == ShadeJobs[4] and level >= 140:
+            buff2 = 25121131
+            timeout_buffs(buff2)
     elif job == 531: #Cannon Trooper 5311005
         buff = 5311005
-        toggle_buffs(buff)
+        timeout_buffs(buff)
         buff3 = 5311004
-        toggle_buffs(buff3)
+        timeout_buffs(buff3)
     elif job == 532: #Cannoneer
         buff = 5321004
-        toggle_buffs(buff)
+        timeout_buffs(buff)
         buff2 = 5320007
         skill2= 5311005
-        toggle_buffs(buff2,skill2)
+        timeout_buffs(buff2,skill2)
         buff3 = 5311004
-        toggle_buffs(buff3)
+        timeout_buffs(buff3)
     elif job == CorsairJobs[2]: #or job == CorsairJobs[3]:
         buff = 5211014
-        toggle_buffs(buff)
+        timeout_buffs(buff)
     elif job == CorsairJobs[3]: #5220014
         buff = 5220014
         skill = 5211007
-        toggle_buffs(buff,skill)
+        timeout_buffs(buff,skill)
+    elif job == BuccaneerJobs[2]: #or job == CorsairJobs[3]:
+        buff = 5111007
+        timeout_buffs(buff)
+    elif job == BuccaneerJobs[3]: #5220014
+        buff = 5120012
+        skill = 5111007
+        timeout_buffs(buff,skill)
+
+        buff2 = 5121013
+        timeout_buffs(buff2,buff2,30,True,True)
     elif job in IlliumJobs and job != IlliumJobs[0]:
         buff = 152101000
         skill = 152101003
@@ -443,8 +491,10 @@ def toggle_skill():
                 time.sleep(short_sleep)
         '''
     elif job in KinesisJobs:
-        buff = 142121004
-        timeout_buffs(buff)
+        if job == KinesisJobs[3]:
+            buff = 142121004
+            timeout_buffs(buff)
+            
     elif job == ShadowerJobs[3] and level >= 140:
         buff = 4221054
         timeout_buffs(buff)
@@ -460,11 +510,52 @@ def toggle_skill():
     elif job in KaiserJobs:
         buff = 60001217
         toggle_buffs(buff)
+        if job == KaiserJobs[2] or job == KaiserJobs[3]:
+            buff = 61111002
+            toggle_buffs(buff)
     elif job in PhantomJobs:
         buff = 20031210
         toggle_buffs(buff)
+    elif job in BowmasterJobs:
+        if job == BowmasterJobs[2]:
+            buff = 3111011
+            toggle_buffs(buff)
+        elif job == BowmasterJobs[3]:
+            buff = 3111011
+            toggle_buffs(buff)
+            buff2=3121054
+            timeout_buffs(buff2,buff2,30,False)
+    elif job in MarksmanJobs:
+        if job == MarksmanJobs[2]:
+            buff = 3211012
+            toggle_buffs(buff)
+        elif job == MarksmanJobs[3]:
+            buff = 3211012
+            toggle_buffs(buff)
+            buff2 = 3221054
+            timeout_buffs(buff2,need_sleep = True)
+    elif job in DemonSlayerJobs:
+        if job == DemonSlayerJobs[3]:
+            buff = 31121054
+            timeout_buffs(buff)
+    elif job in DemonAvengerJobs:
+        if job == DemonAvengerJobs[3]:
+            if level >= 140:
+                buff = 31221054
+                timeout_buffs(buff,buff,30,False)
+            if level >= 200:
+                buff = 31221053
+                timeout_buffs(buff,buff,30,False)
+    elif job in MercedesJobs:
+        if level >= 140:
+            buff = 23121054
+            timeout_buffs(buff)
+    elif job in DualbladeJobs:
+        if level >= 140:
+            buff = 4341054
+            timeout_buffs(buff)
 def toggle_buffs(buffid,skillid = None,toggleKami = False):
-    short_sleep = 0.25
+    short_sleep = 0.75
     if skillid is None:
         skillid = buffid
     if Character.GetSkillLevel(buffid) > 0:
@@ -479,19 +570,19 @@ def toggle_buffs(buffid,skillid = None,toggleKami = False):
                 toggle_kami(False)
             time.sleep(short_sleep)
             Character.UseSkill(skillid)
-            time.sleep(short_sleep)
+            #time.sleep(short_sleep)
             if job in BattleMageJobs:
                 time.sleep(short_sleep)
                 Character.UseSkill(32001014)
-                time.sleep(short_sleep)
+                #time.sleep(short_sleep)
             if Character.HasBuff(2, buffid) == True:
                 if toggleKami:
                     toggle_kami(True)
-                Terminal.SetCheckBox("Auto Attack",autoAttack)
-                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
-                Terminal.SetCheckBox("Skill Injection",skillInject)
+            Terminal.SetCheckBox("Auto Attack",autoAttack)
+            Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+            Terminal.SetCheckBox("Skill Injection",skillInject)
     
-def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True):
+def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True,injectSkill = False):
     if need_sleep:
         short_sleep = 0.75
     else:
@@ -501,9 +592,9 @@ def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True):
     if Character.GetSkillLevel(skillid) > 0:
         if Character.HasBuff(2,buffid) == False and len(Field.GetMobs()) > 0:
             timeout = time.time() + timer
-            if not Terminal.GetProperty("skill_timeout",False):
-                Terminal.SetProperty("skill_timeout",timeout)
-                print("Skill {}: Initialize".format(skillid))
+            if not Terminal.GetProperty("skill_timeout{}".format(str(buffid)),False):
+                Terminal.SetProperty("skill_timeout{}".format(str(buffid)),timeout)
+                print("Skill {}: Initialize".format(buffid))
                 autoAttack = Terminal.GetCheckBox("Auto Attack")
                 skillInject = Terminal.GetCheckBox("Skill Injection")
                 javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
@@ -511,14 +602,21 @@ def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True):
                 Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
                 Terminal.SetCheckBox("Skill Injection",False)
                 time.sleep(short_sleep)
-                Character.UseSkill(skillid)
-                time.sleep(short_sleep)
+                if not injectSkill:
+                    Character.UseSkill(skillid)
+                else:
+                    Terminal.SetLineEdit("SISkillID",str(skillid))
+                    Terminal.SetSpinBox("SkillInjection",300)
+                    Terminal.SetCheckBox("Skill Injection",True)
+                    time.sleep(short_sleep*2)
+                    Terminal.SetCheckBox("Skill Injection",False)
+                #time.sleep(short_sleep)
                 Terminal.SetCheckBox("Auto Attack",autoAttack)
                 Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
                 Terminal.SetCheckBox("Skill Injection",skillInject)
-            elif time.time() > Terminal.GetProperty("skill_timeout",False):
-                Terminal.SetProperty("skill_timeout",timeout)
-                print("Skill {}: Continued".format(skillid))
+            elif time.time() > Terminal.GetProperty("skill_timeout{}".format(str(buffid)),False):
+                Terminal.SetProperty("skill_timeout{}".format(str(buffid)),timeout)
+                print("Skill {}: Continued".format(buffid))
                 autoAttack = Terminal.GetCheckBox("Auto Attack")
                 skillInject = Terminal.GetCheckBox("Skill Injection")
                 javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
@@ -526,8 +624,18 @@ def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True):
                 Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
                 Terminal.SetCheckBox("Skill Injection",False)
                 time.sleep(short_sleep)
-                Character.UseSkill(skillid)
-                time.sleep(short_sleep)
+                if not injectSkill:
+                    Character.UseSkill(skillid)
+                else:
+                    Terminal.SetLineEdit("SISkillID",str(skillid))
+                    Terminal.SetSpinBox("SkillInjection",300)
+                    Terminal.SetCheckBox("Skill Injection",True)
+                    time.sleep(short_sleep*2)
+                    Terminal.SetCheckBox("Skill Injection",False)
+                if job == KinesisJobs[3]:
+                    time.sleep(short_sleep*2)
+                    Character.UseSkill(142121005)
+                #time.sleep(short_sleep)
                 Terminal.SetCheckBox("Auto Attack",autoAttack)
                 Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
                 Terminal.SetCheckBox("Skill Injection",skillInject)
@@ -623,6 +731,7 @@ def CashItemResLoadLockerDone():
             Terminal.LeaveCashShop()
     else:
         Terminal.LeaveCashShop()
+        toggle_rush_by_level(True)
  
 def CashItemInfoDecode(iPacket):
     pCashItemInfo.liSN = iPacket.ReadLong(8)
@@ -1188,11 +1297,11 @@ def buy_arrow():
             toggle_kami(True)
 
 def buy_stars():
-    toggle_rush_by_level(False)
-    toggle_kami(False)
     print("Buying stars")
     count = 0
     if Character.GetMeso() > 10000:
+        toggle_rush_by_level(False)
+        toggle_kami(False)
         if field_id != 100000102:
             rush(100000102)
         else:
@@ -8948,7 +9057,7 @@ def toggleAttack(on):
         Terminal.SetSlider("sliderMP", 90) #use boogie to regen mana
         Terminal.SetComboBox("MPKey",4)
     else:
-        Terminal.SetSlider("sliderMP", 10) #use potion to regen mana
+        Terminal.SetSlider("sliderMP", 20) #use potion to regen mana
         Terminal.SetComboBox("MPKey",6)
 
     if not SCLib.GetVar("DoingZakum") or not getSpider: #Ocassionaly use big spider (in zakum)
@@ -8994,6 +9103,9 @@ def toggleAttack(on):
         if level < 140:
             toggle_loot(False)
     elif job == BuccaneerJobs[1]:
+        if not Terminal.GetCheckBox("Speedy Gonzales"):
+            Terminal.SetCheckBox("Speedy Gonzales",True)
+    elif job == NightWalkerJobs[2] or job == NightWalkerJobs[3]:
         if not Terminal.GetCheckBox("Speedy Gonzales"):
             Terminal.SetCheckBox("Speedy Gonzales",True)
     else:
@@ -9146,7 +9258,7 @@ def toggleAttack(on):
     elif job in PhantomJobs and field_id in curbrockhideout:
         attackAuto(24001000,on)
     elif job == 2410: #Phantom 2nd 24101000
-        attackSIND(24101000,on,600)
+        attackAuto(24101000,on)
     elif job == 2411: #Phantom 3rd 24111000
         attackSIND(24111000,on,650)
     elif job == 2412: #Phantom 4th 24121000
@@ -9225,8 +9337,8 @@ def toggleAttack(on):
         attackSIND(1301011,on,450)
         
     elif job == 132: #Dark Knight
-        attackAuto(1321012,on)
-        
+        #attackAuto(1321012,on)
+        attackSIND(1321012,on,450)
     elif job == 200: #Mage
         attackAuto(2001008,on)
         
@@ -9239,7 +9351,14 @@ def toggleAttack(on):
         attackAuto(2211002,on)
         
     elif job == 222: #IL archmage
-        attackAuto(2221006,on)
+        if level >= 140:
+            if level >= 140 and Character.GetSkillLevel(12121054) == 1:
+                attackSIND(12121055,16)
+            elif level >= 140 and Character.GetSkillLevel(12121054) == 0:
+                bind_skill(12121054)
+        else:
+            attackAuto(2221006,on)
+
         
     elif job in FPMageJobs and field_id in curbrockhideout: #1001005
         attackSI(2101004,on,100,"SIRadioMagic") 
@@ -9250,7 +9369,13 @@ def toggleAttack(on):
         attackSI(2101004,on,100,"SIRadioMagic") 
         
     elif job == 212: #FP archmage
-        attackAuto(2121006,on)
+        if level >= 140:
+            if level >= 140 and Character.GetSkillLevel(12121054) == 1:
+                attackSIND(12121055,16)
+            elif level >= 140 and Character.GetSkillLevel(12121054) == 0:
+                bind_skill(12121054)
+        else:
+            attackAuto(2121006,on)
         
     elif job in BishopJobs and field_id in curbrockhideout: #1001005
         attackAuto(2001008,on)
@@ -9259,7 +9384,13 @@ def toggleAttack(on):
     elif job == 231: #priest
         attackAuto(2311004,on)
     elif job == 232: #Bishop
-        attackSI(2321007,on,100,"SIRadioMagic")
+        if level >= 140:
+            if level >= 140 and Character.GetSkillLevel(12121054) == 1:
+                attackSIND(12121055,16)
+            elif level >= 140 and Character.GetSkillLevel(12121054) == 0:
+                bind_skill(12121054)
+        else:
+            attackSI(2321007,on,100,"SIRadioMagic")
     elif job == 300: #Archer
         attackAuto(3001004,on)
         
@@ -9337,14 +9468,14 @@ def toggleAttack(on):
     elif job == 511: #Marauder
         attackAuto(5111002,on)
     elif job == 512: #Buccaneer
-        attackAuto(5121007,on)
-        #attackSI(5121017,on)
+        #attackAuto(5121007,on)
+        attackSI(5121017,on)
     elif job == 520: #Gunslinger
         attackAuto(5201001,on)
     elif job == 521: #Outlaw
         attackAuto(5211008,on)
     elif job == 522: #Corsair
-        attackSIND(5221017,on,350)
+        attackSIND(5221017,on,150)
     elif job == 530: #Cannoneer
         #attackAuto(5301001,on)
         #attackSIND(5011002,on,200)
@@ -9428,11 +9559,13 @@ def toggleAttack(on):
     elif job in WindArcherJobs and field_id in curbrockhideout: #1001005
         attackAuto(13001020,on)
     elif job == 1310: #Wind Archer 2nd
-        attackAuto(13101021,on)
+        attackSI(13101020,on)
     elif job == 1311: #Wind Archer 3rd
-        attackAuto(13111020,on)
+        #attackAuto(13111020,on)
+        attackSI(13101020,on)
     elif job == 1312: #Wind Archer 4th
-        attackAuto(13121002,on)
+        #attackAuto(13121002,on)
+        attackSI(13121002,on,siOption = "SIRadioShoot")
     elif job == 1400: #Night Walker 1st
         attackAuto(14001020,on)
     elif job in NightWalkerJobs and field_id in curbrockhideout: #1001005
@@ -9476,12 +9609,18 @@ def toggleAttack(on):
         #attackSI(32110017,on)
         attackSIND(32101001,on,250)
     elif job == 3212: #Battle Mage 4th
-        if SCLib.GetVar("DoingZakum"):
-            #attackAuto(32121002,on)
-            attackSIND(32101001,on,250)
+        if level >= 140:
+            if level >= 140 and Character.GetSkillLevel(12121054) == 1:
+                attackSIND(12121055,16)
+            elif level >= 140 and Character.GetSkillLevel(12121054) == 0:
+                bind_skill(12121054)
         else:
-            #attackSI(32120019,on)
-            attackSIND(32101001,on,250)
+            if SCLib.GetVar("DoingZakum"):
+                #attackAuto(32121002,on)
+                attackSIND(32101001,on,250)
+            else:
+                #attackSI(32120019,on)
+                attackSIND(32101001,on,250)
     elif job == 3700: #Blaster 1st
         Terminal.SetCheckBox("General FMA",False)
         attackAuto(37001000,on)
@@ -9673,10 +9812,10 @@ if GameState.IsInGame():
             time.sleep(2)
             Inventory.UseItem(2434265)
             time.sleep(2)
-    if level > 140 and accountData['phase_one']:
+    if level > 140 and accountData['phase_one'] and not Terminal.IsRushing():
         if Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
             print("Need to buy a hyper teleport rock")
-            toggle_rush_by_level(False)
+            #toggle_rush_by_level(False)
             Terminal.SetCheckBox("Auto Attack",False)
             Terminal.SetCheckBox("Skill Injection",False)
             time.sleep(5)
@@ -9693,7 +9832,7 @@ if GameState.IsInGame():
                 Terminal.EnterCashShop()
                 CashItemResLoadLockerDone()
                 time.sleep(1)
-            toggle_rush_by_level(True)
+            
     #print("Toggling attack")
 ############################Job Advancements###############################
 if job == 4200 and level < 13:
@@ -10016,7 +10155,7 @@ elif job == 400 and level < 11:
         else:
             Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinks.xml")
         Terminal.SetProperty("checked", 1)
-elif (job == 410 or job == 1400) and level < 31:
+elif (job == 410 or job == 1400) and level < 31 and not Inventory.GetItem(1,weapon_slot).id == 1472061:
     claw = Inventory.FindItemByID(1472061)
     if claw.valid:
         Inventory.SendChangeSlotPositionRequest(1,claw.pos,weapon_slot,-1)
@@ -10032,8 +10171,9 @@ elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.GetItemCount
         Terminal.Rush(100000102) # rush to store (Henessys gral store)
         time.sleep(1)
     elif field_id == 100000102:
+        time.sleep(0.5)
         Character.TalkToNpc(1011100) #open the store
-        time.sleep(7) #Recharge time
+        time.sleep(10) #Recharge time
         Terminal.SetPushButton("Leave shop",True)
         time.sleep(1)
         Terminal.SetPushButton("Leave shop",False)
@@ -10161,6 +10301,7 @@ elif job in cygnusSecondJobs and level <60 and field_id == 130000000:
     SCLib.UpdateVar("DoingJobAdv",False)
     toggle_kami(True)
 elif job in cygnusSecondJobs and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
+    print("Doing Cygnus Knights Third job")
     CygnusThird()
 elif job in cygnusThirdJobs and level < 100 and field_id == 130000000:
     toggle_rush_by_level(True)
@@ -10286,6 +10427,7 @@ elif job == MihileJobs[2] and level >= 100:
     print("Doing Mihile Fourth Job")
     MihileFourth()
 #buy potion
+#print( SCLib.GetVar("DoingJobAdv"))
 if not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv") and Character.GetMeso() >= 48000 and level > 50 and Inventory.FindItemByID(2002023).count == 0 and not Inventory.FindItemByID(2001582).valid:
     buy_potion()
     Terminal.SetPushButton("Leave shop",True)
@@ -10470,12 +10612,14 @@ if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == Entran
         toggle_kami(False)
         teleport_enter(-3003,-220)
         toggle_rush_by_level(True)
+        toggle_loot(False)
         Terminal.SetCheckBox("Kami Vac",True)
         Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
         SCLib.UpdateVar("DoingZakum",False)
     elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
         toggle_kami(False)
         teleport_enter(-1599,-331)
+        toggle_loot(False)
         SCLib.UpdateVar("DoingZakum",False)
 
 if KillZakumDaily and level >= 105 and not SCLib.GetVar("DoingMP"):
@@ -11909,3 +12053,9 @@ elif level < 50 or not Inventory.FindItemByID(5040004).valid or not useExploit:
 
 if level >= 33 and doEvent and not SCLib.GetVar("GettingBoogie") and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
     event_quests()
+
+
+if level >= 106 and Terminal.GetCheckBox("Rush By Level") and not SCLib.GetVar("GettingBoogie") and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
+    Terminal.SetCheckBox("timedCCCheck",True)
+else:
+    Terminal.SetCheckBox("timedCCCheck",False)
