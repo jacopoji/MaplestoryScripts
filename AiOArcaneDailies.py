@@ -2953,5 +2953,5 @@ if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switc
 #event_quests()
 if GameState.IsInGame():
     toggle_skill()
-print(SCLib.GetVar("CurDaily"))
+#print(SCLib.GetVar("CurDaily"))
 #print(SCLib.GetVar("CurStep"))

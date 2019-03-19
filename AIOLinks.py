@@ -9555,11 +9555,11 @@ def toggleAttack(on):
     elif job == 572: #Jett 4th
         attackSIND(5710020,on,150)
     elif job == 1100: #Dawn warrior 1st
-        attackAuto(11001020,on)
+        attackSI(11001020,on)
     elif job in DawnWarriorJobs and field_id in curbrockhideout: #1001005
-        attackAuto(11001020,on)
+        attackSI(11001020,on)
     elif job == 1110: #Dawn Warrior 2nd
-        attackAuto(11101120,on)
+        attackSIND(11101120,on,450)
     elif job == 1111: #Dawn Warrior 3rd
         attackAuto(11111220,on)
     elif job == 1112: #Dawn Warrior 4th
@@ -9873,6 +9873,9 @@ if GameState.IsInGame():
                 CashItemResLoadLockerDone()
                 time.sleep(1)
             
+    if Terminal.GetCheckBox("Skill Injection"):
+        if not Terminal.GetCheckBox("Auto Loot"):
+            Terminal.SetCheckBox("Auto Loot",True)
     #print("Toggling attack")
 ############################Job Advancements###############################
     if job == 4200 and level < 13:
