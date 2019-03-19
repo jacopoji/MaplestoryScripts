@@ -129,8 +129,8 @@ try:
     import SunCat,SCLib, SCHotkey
 except:
     print("Couldn't find SunCat module")
-if not SCLib.CheckVersion():
-    print("Need to update SCLib")
+#if not SCLib.CheckVersion(): #This would cause crash, disable when not needed
+#    print("Need to update SCLib")
 SCLib.StartVars()
 ###persist variables
 if SCLib.GetVar("MPDone") is None:
@@ -6584,7 +6584,11 @@ def JettThird():
 
     if quest != 2:
         if quest == 0:
-            acceptQuest(toDoQuest,thunderhammer,field_id,field_id)
+            if field_id == 552000071:
+                dungeonTeleport()
+            else:
+                acceptQuest(toDoQuest,thunderhammer,field_id,field_id)
+
         elif quest == 1:
             if Quest.CheckCompleteDemand(toDoQuest,thunderhammer) == 0:
                 if field_id != toGoMap:
@@ -6595,6 +6599,9 @@ def JettThird():
                 mobs = Field.GetMobs()
                 if len(mobs) != 0:
                     toggle_kami(True)
+                elif field_id == 552000071:
+                    forfeit_quest(toDoQuest)
+                    dungeonTeleport()
 
 def JettFourth():
     print("Jett Fourth")
@@ -9537,9 +9544,13 @@ def toggleAttack(on):
         attackSI(5321000,on)
     elif job == 508: #Jett 1st
         attackAuto(5081020,on)
+    elif job in JettJobs and field_id in curbrockhideout:
+        attackAuto(5081020,on)
     elif job == 570: #Jett 2nd
+        #attackAuto(5081020,on)
         attackSIND(5701011,on,150)
     elif job == 571: #Jett 3rd
+        #attackSIND(5701011,on,150)
         attackSIND(5710020,on,150)
     elif job == 572: #Jett 4th
         attackSIND(5710020,on,150)

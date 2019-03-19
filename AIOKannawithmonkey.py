@@ -125,8 +125,8 @@ try:
 	import SunCat,SCLib, SCHotkey
 except:
 	print("Couldn't find SunCat module")
-if not SCLib.CheckVersion():
-    print("Need to update SCLib")
+#if not SCLib.CheckVersion():
+#    print("Need to update SCLib")
 SCLib.StartVars()
 ###persist variables
 if SCLib.GetVar("MPDone") is None:

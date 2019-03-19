@@ -8,8 +8,8 @@ try:
 except:
     print("Couldn't find SunCat module")
 
-if not SCLib.CheckVersion():
-    print("Need to update SCLib")
+#if not SCLib.CheckVersion():
+#    print("Need to update SCLib")
 #SunCat's All-in-one Dailies
 
 #Change these
@@ -2936,9 +2936,11 @@ if Field.GetID() == ccExitMap and SCLib.GetVar("CurDaily") != "ChuChu":
     time.sleep(1)
     Npc.ClearSelection()
 
+
 if Field.GetID() == ssExitMap and SCLib.GetVar("CurDaily") != "SS":
     Character.TalkToNpc(ssNpc)
-    
+elif Field.GetID() == ssExitMap and SCLib.GetVar("CurDaily") == "SS":
+    finishSS()
 if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switch
     attack_key = 0x44
     if Character.HasBuff(2,20040216): #Light Mode
@@ -2951,4 +2953,5 @@ if job == 2712 and not SCLib.GetVar("ToggleAttack"): #lumi fourth job kill switc
 #event_quests()
 if GameState.IsInGame():
     toggle_skill()
+print(SCLib.GetVar("CurDaily"))
 #print(SCLib.GetVar("CurStep"))
