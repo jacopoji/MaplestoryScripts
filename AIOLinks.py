@@ -402,9 +402,17 @@ def toggle_skill():
         #magic guard
         buff = 22001012
         toggle_buffs(buff)
-    elif job == DawnWarriorJobs[3]:
-        buff = 11121005
-        toggle_buffs(buff)
+    elif job in DawnWarriorJobs:
+        if job == DawnWarriorJobs[1]:
+            buff = 11101022 #moon 
+            toggle_buffs(buff)
+        elif job == DawnWarriorJobs[2]:
+            #buff = 11111022 #sun
+            buff = 11101022 #moon 
+            toggle_buffs(buff)
+        elif job == DawnWarriorJobs[3]:
+            buff = 11121005
+            toggle_buffs(buff)
     elif job == ThunderBreakerJobs[3]:
         buff = 15121004
         toggle_buffs(buff)
@@ -576,6 +584,10 @@ def toggle_skill():
     elif job in DualbladeJobs:
         if level >= 140:
             buff = 4341054
+            timeout_buffs(buff)
+    elif job in XenonJobs:
+        if job == XenonJobs[3]:
+            buff = 36121002
             timeout_buffs(buff)
 def toggle_buffs(buffid,skillid = None,toggleKami = False):
     short_sleep = 0.75
@@ -6919,7 +6931,6 @@ def LevelSkill(id):
     skillid = hex(id)[2:].zfill(8)
     qPacket.EncodeBuffer("8D 47 8D 00 {0} {1} {2} {3} 01 00 00 00".format(skillid[6:8],skillid[4:6],skillid[2:4],skillid[0:2]))
     Packet.SendPacket(qPacket)
-    time.sleep(1)
 
 def ShadeFirst():
     toggle_rush_by_level(False)
@@ -9445,10 +9456,17 @@ def toggleAttack(on):
     elif job == 322: #Marksman
         attackAuto(3221017,on)
     elif job == 400: #Thief
+        
         if SCLib.GetVar("DualBlade"):
+            if Character.GetSkillLevel(4001013) == 0:
+                LevelSkill(4001013)
             attackAuto(4001013,on)
         else:
             attackAuto(4001334,on)
+        if Character.GetSkillLevel(4001013) >= 1:
+            SCLib.UpdateVar("DualBlade",True)
+        else:
+            SCLib.UpdateVar("DualBlade",False)
         
     elif job == 410: #Assassin
         attackSI(4101008,on)
@@ -9476,13 +9494,24 @@ def toggleAttack(on):
         attackAuto(4221007,on)
         
     elif job == 430: #dualblade
+        if Character.GetSkillLevel(4001013) == 0:
+            LevelSkill(4001013)
+        elif Character.GetSkillLevel(4000012) < 10:
+            LevelSkill(4000012)
+        elif Character.GetSkillLevel(4001011) < 5:
+            LevelSkill(4001011)
+        elif Character.GetSkillLevel(4001003) < 10:
+            LevelSkill(4001003)
+        elif Character.GetSkillLevel(4001013) < 10:
+            LevelSkill(4001013)
         attackAuto(4001013,on)
     elif job == 431: #dualblade
         attackAuto(4001013,on)
     elif job == 432:
-        attackAuto(4321004,on)
+        attackSIND(4321004,on,450)
     elif job == 433:
-        attackAuto(4321004,on)
+        #attackAuto(4321004,on)
+        attackSIND(4321004,on,450)
     elif job == 434:
         attackAuto(4341004,on)
     elif job == 500: #Pirate
@@ -9557,11 +9586,13 @@ def toggleAttack(on):
     elif job == 1100: #Dawn warrior 1st
         attackSI(11001020,on)
     elif job in DawnWarriorJobs and field_id in curbrockhideout: #1001005
-        attackSI(11001020,on)
+        attackAuto(11001020,on)
     elif job == 1110: #Dawn Warrior 2nd
-        attackSIND(11101120,on,450)
+        #attackAuto(11101120,on)
+        attackSIND(11101120,on,600)
     elif job == 1111: #Dawn Warrior 3rd
-        attackAuto(11111220,on)
+        attackSI(11111120,on)
+        #attackAuto(11111220,on)
     elif job == 1112: #Dawn Warrior 4th
         attackAuto(11121203,on)
     elif job == 1200: #BW 1st
@@ -9612,11 +9643,13 @@ def toggleAttack(on):
     elif job == 1412: #Night Walker 4th
         attackAuto(14111022,on)
     elif job == 1500: #Thunder breaker 1st
-        attackAuto(15001020,on)
+        #attackAuto(15001020,on)
+        attackSIND(15001021,on,600)
     elif job in ThunderBreakerJobs and field_id in curbrockhideout: #1001005
         attackAuto(15001020,on)
     elif job == 1510: #Thunder breaker 2nd
-        attackAuto(15101020,on)
+        #attackAuto(15101020,on)
+        attackSIND(15101020,on,600)
     elif job == 1511: #Thunder breaker 3rd
         #attackAuto(15111020,on)
         attackSIND(15111020,on,300)
@@ -10198,6 +10231,10 @@ if GameState.IsInGame():
             else:
                 Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinks.xml")
             Terminal.SetProperty("checked", 1)
+        if SCLib.GetVar("DualBlade"):
+            Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinksDB.xml")
+        else:
+            Terminal.LoadProfile("C:/Users/Jacopo/Desktop/TerminalManager/terminalProfiles/AIOLinks.xml")
     elif (job == 410 or job == 1400) and level < 31 and not Inventory.GetItem(1,weapon_slot).id == 1472061:
         claw = Inventory.FindItemByID(1472061)
         if claw.valid:
@@ -10857,7 +10894,7 @@ if ((level >= 140 and job not in NightWalkerJobs) or (level >= 150 and job in Ni
         Terminal.SetSpinBox("FilterMeso",50000)
         Terminal.SetCheckBox("settings/expcrash",False)
         Terminal.SetCheckBox("Instant Final Smash",False)
-if level >= 160 and accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
+if level >= 180 and accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
     if field_id != 240000000:
         rush(240000000)
         toggle_rush_by_level(False)
