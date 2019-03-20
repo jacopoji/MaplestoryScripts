@@ -9625,7 +9625,10 @@ def toggleAttack(on):
     elif job in WindArcherJobs and field_id in curbrockhideout: #1001005
         attackAuto(13001020,on)
     elif job == 1310: #Wind Archer 2nd
-        attackSI(13101020,on)
+        if Character.GetSkillLevel(13101020) >= 1:
+            attackSI(13101020,on)
+        else:
+            attackAuto(13001020,on)
     elif job == 1311: #Wind Archer 3rd
         #attackAuto(13111020,on)
         attackSI(13101020,on)
