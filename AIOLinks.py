@@ -9647,7 +9647,10 @@ def toggleAttack(on):
         attackAuto(14111022,on)
     elif job == 1500: #Thunder breaker 1st
         #attackAuto(15001020,on)
-        attackSIND(15001021,on,600)
+        if Character.GetSkillLevel(15001021) >= 1:
+            attackSIND(15001021,on,600)
+        else:
+            attackAuto(15001020,on)
     elif job in ThunderBreakerJobs and field_id in curbrockhideout: #1001005
         attackAuto(15001020,on)
     elif job == 1510: #Thunder breaker 2nd
