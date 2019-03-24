@@ -9364,7 +9364,7 @@ def toggleAttack(on):
     elif job == 100: #Swordman
         attackAuto(1001005,on)
     elif job == 110: #fighter 1101011
-        attackAuto(1101011,on)
+        attackSIND(1101011,on,450)
     elif job in HeroJobs and field_id in curbrockhideout: #1001005
         attackAuto(1001005,on)
     elif job == 111: #crusader 1111010
@@ -10702,7 +10702,7 @@ if level >= 61 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetV
     #            starItem(accessories, item.currentStar, item.maxStar, star_force_level, item.id)
     for x in range(-100, 0):
         item = Inventory.GetItem(1, x)
-        if item.valid and item.currentStar != star_force_level and item.currentStar != item.maxStar:
+        if item.valid and item.currentStar != star_force_level and item.currentStar != item.maxStar and (level < 130 or item.maxStar != 20):
             starItem(x, item.currentStar, item.maxStar, star_force_level, item.id)
 #print(SCLib.GetVar("DoingZakum"))
 #ZAKUM DAILY
