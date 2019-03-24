@@ -1200,13 +1200,13 @@ def RerollIA():
 ########Potentials
 def startupCheck_cube(accountId):
     split_id = accountId.split("@")[0]
-    if os.path.exists('info/{}.json'.format(split_id)):
+    if os.path.exists('C:/Users/Jacopo/Desktop/TerminalManager/info/{}.json'.format(split_id)):
         #print("Loading")
-        with open('info/{}.json'.format(split_id)) as f:
+        with open('C:/Users/Jacopo/Desktop/TerminalManager/info/{}.json'.format(split_id)) as f:
             return json.load(f)
     else:
         print("Creating")
-        with open('info/{}.json'.format(split_id), "w+") as db_file:
+        with open('C:/Users/Jacopo/Desktop/TerminalManager/info/{}.json'.format(split_id), "w+") as db_file:
             db_file.write(json.dumps({}))
             return {}
 
@@ -1256,7 +1256,7 @@ def initializeEquips(data):
 
 def writeJson_cube(data,accountId):
     split_id = accountId.split("@")[0]
-    with open('info/{}.json'.format(split_id), 'w') as outfile:
+    with open('C:/Users/Jacopo/Desktop/TerminalManager/info/{}.json'.format(split_id), 'w') as outfile:
         parsed = json.dumps(data, indent=4, sort_keys=True)
         outfile.write(parsed)
         outfile.close()

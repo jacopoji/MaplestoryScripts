@@ -1738,7 +1738,13 @@ def DAThird():
         print("2")
         if job == 3120:
             if Quest.GetQuestState(23218) == 0:
-                Quest.StartQuest(23218, 2153006)
+                if field_id != 931050110:
+                    if field_id != 310020100:
+                        Terminal.Rush(310020100)
+                    else:
+                        teleport_enter(515,-14)
+                else:
+                    Quest.StartQuest(23218, 2153006)
             elif Quest.GetQuestState(23218) == 1:
                 if Quest.CheckCompleteDemand(23218,2153006) != 0:
                     if len(Field.GetMobs()) > 0:
@@ -1799,8 +1805,9 @@ def DAFourth():
                     SCLib.UpdateVar("DoingJobAdv",False)
                     time.sleep(1)
             else:
-
-                toggle_kami(True)
+                toggle_kami(False)
+                time.sleep(5)
+                teleport_to_mobs()
                 toggleAttack(True)
 
 def DSFourth():
@@ -1832,7 +1839,9 @@ def DSFourth():
                 if field_id == 220050300:
                     Character.TalkToNpc(2159331)
                 else:
-                    toggle_kami(True)
+                    toggle_kami(False)
+                    time.sleep(5)
+                    teleport_to_mobs()
                     toggleAttack(True)
 def MercedesFirst():
     Quest.StartQuest(29952, 1033210)
@@ -8845,14 +8854,14 @@ def GetToTheDoorToZakum():
 
 def startupCheck(accountId):
     split_id = accountId.split("@")[0]
-    if os.path.exists('info/{}.json'.format(split_id)):
+    if os.path.exists('C:/Users/Jacopo/Desktop/TerminalManager/info/{}.json'.format(split_id)):
         #print("Loading")
         #print(split_id)
-        with open('info/{}.json'.format(split_id)) as f:
+        with open('C:/Users/Jacopo/Desktop/TerminalManager/info/{}.json'.format(split_id)) as f:
             return json.load(f)
     else:
         print("Creating")
-        with open('info/{}.json'.format(split_id), "w+") as db_file:
+        with open('C:/Users/Jacopo/Desktop/TerminalManager/info/{}.json'.format(split_id), "w+") as db_file:
             db_file.write(json.dumps({}))
             return {}
 
@@ -8889,7 +8898,7 @@ def handleReady(data):
         data['used_slots'] = 0
 def writeJson(data,accountId):
     split_id = accountId.split("@")[0]
-    with open('info/{}.json'.format(split_id), 'w') as outfile:
+    with open('C:/Users/Jacopo/Desktop/TerminalManager/info/{}.json'.format(split_id), 'w') as outfile:
         parsed = json.dumps(data, indent=4, sort_keys=True)
         outfile.write(parsed)
         outfile.close()
@@ -9003,7 +9012,7 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
 if accountData['training_done'] and GameState.GetLoginStep() == 2:
     Terminal.SetCheckBox("Auto Login",False)
     chars = Login.GetChars()
-    with open('info/output/links_{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
+    with open('C:/Users/Jacopo/Desktop/TerminalManager/info/output/links_{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
         for char in chars:
             charInfo.write("{} {}\n".format(id2str(char.jobid),char.level))
         charInfo.close()
@@ -9235,12 +9244,12 @@ def toggleAttack(on):
         attackSIND(31201000,on,100)
         #attackAuto(31011000,on)
     elif job == 3121 or job == 3122: #DA third job and fourth job
-        attackAuto(31211000,on)
+        attackSI(31211010,on)
     elif job == 3100 or job == 3110 or job == 3111: #DS first - third job
         #Key.Set(attack_key,1,31000004)31001008
         attackSI(31001008,on,100)
     elif job == 3112: #DS fourth job
-        attackSI(31121010,on,0)
+        attackSI(31121010,on,16)
     elif job == 2300: #Mercedes 1st 
         attackAuto(23001000,on)
     elif job in MercedesJobs and field_id in curbrockhideout:
@@ -9483,12 +9492,12 @@ def toggleAttack(on):
             attackSI(4111015,on)
         
     elif job == 420: #Bandit
-        attackAuto(4201012,on)
+        attackSI(4201012,on)
         
     elif job in ShadowerJobs and field_id in curbrockhideout: #1001005
         attackAuto(4001334,on)
     elif job == 421: #Chief Bandit
-        attackAuto(4211002,on)
+        attackSI(4211002,on)
         
     elif job == 422: #Shadower
         attackAuto(4221007,on)
@@ -10342,6 +10351,10 @@ if GameState.IsInGame():
             Terminal.SetPushButton("Leave shop",True)
             time.sleep(1)
             Terminal.SetPushButton("Leave shop",False)
+    elif job in explorerSecondJobs and level == 30 and SCLib.GetVar("DoingJobAdv"):
+        toggle_rush_by_level(True)
+        toggle_kami(True)
+        SCLib.UpdateVar("DoingJobAdv",False)
     elif job in explorerSecondJobs and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
         print("Doing Explorer Third Job")
         ExplorerThird()
@@ -10691,9 +10704,9 @@ if level >= 61 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetV
         item = Inventory.GetItem(1, x)
         if item.valid and item.currentStar != star_force_level and item.currentStar != item.maxStar:
             starItem(x, item.currentStar, item.maxStar, star_force_level, item.id)
-
+#print(SCLib.GetVar("DoingZakum"))
 #ZAKUM DAILY
-if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
+if KillZakumDaily == False and (field_id == 211042200 or field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
     if field_id == TheDoorToZakum:
         toggle_kami(False)
         teleport_enter(-3003,-220)
@@ -10707,6 +10720,10 @@ if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == Entran
         teleport_enter(-1599,-331)
         toggle_loot(False)
         SCLib.UpdateVar("DoingZakum",False)
+        if field_id == TheCaveOfTrials3Zakum:
+            toggle_rush_by_level(True)
+            toggle_loot(False)
+            SCLib.UpdateVar("DoingZakum",False)
 
 runebuff_id = 80002280
 if KillZakumDaily and level >= 105 and (Character.HasBuff(2,runebuff_id) or SCLib.GetVar("DoingZakum")) and not SCLib.GetVar("DoingMP"):
