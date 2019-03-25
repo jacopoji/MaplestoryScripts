@@ -118,7 +118,7 @@ blackgate_eqp = [1004549, 1012535, 1052952, 1082658, 1102840, 1113185, 1122312, 
 
 MP_Coin = 4310020
 
-mobFalldownBlacklist = [101030500,105010301]
+mobFalldownBlacklist = [105010301]#101030500
 SpeedyGonzalesList = [21111021,51121009,5011002,23100004]
 import Character,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party,json,Login,datetime
 
@@ -524,17 +524,22 @@ def toggle_skill():
             timeout_buffs(buff)
             
     elif job == ShadowerJobs[3] and level >= 140:
-        buff = 4221054
-        timeout_buffs(buff)
+        buff = 1
+        skill = 4221054 #coin
+        timeout_buffs(buff,skill,timer = 40)
+        buff2 = 4221052 #shadow veil
+        timeout_buffs(buff2,timer=15)
         #buffs = Character.GetBuffs()
         #for buffa in buffs:
         #    print("Current Buff Id: {}; Remaining Time: {}".format(buff.id,buff.timeLeft))
     elif job in NightlordJobs and job != NightlordJobs[0]:
         buff = 4101011
         toggle_buffs(buff)
+        buff2 = 4111007
+        timeout_buffs(buff2,timer = 60)
         if job == NightlordJobs[3] and level >= 140:
             buff = 4121054
-            timeout_buffs(buff,buff,30,False)
+            timeout_buffs(buff,buff,30)
     elif job in KaiserJobs:
         buff = 60001217
         toggle_buffs(buff)
@@ -586,6 +591,8 @@ def toggle_skill():
             buff = 4341054
             timeout_buffs(buff)
     elif job in XenonJobs:
+        buff = 36001005
+        toggle_buffs(buff)
         if job == XenonJobs[3]:
             buff = 36121002
             timeout_buffs(buff)
@@ -619,7 +626,7 @@ def toggle_buffs(buffid,skillid = None,toggleKami = False):
     
 def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True,injectSkill = False):
     if need_sleep:
-        short_sleep = 0.75
+        short_sleep = 0.85
     else:
         short_sleep = 0.05
     if skillid is None:
@@ -638,6 +645,10 @@ def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True,injectSkill
                 Terminal.SetCheckBox("Skill Injection",False)
                 time.sleep(short_sleep)
                 if not injectSkill:
+                    Character.UseSkill(skillid)
+                    time.sleep(0.01)
+                    Character.UseSkill(skillid)
+                    time.sleep(0.01)
                     Character.UseSkill(skillid)
                 else:
                     Terminal.SetLineEdit("SISkillID",str(skillid))
@@ -660,6 +671,10 @@ def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True,injectSkill
                 Terminal.SetCheckBox("Skill Injection",False)
                 time.sleep(short_sleep)
                 if not injectSkill:
+                    Character.UseSkill(skillid)
+                    time.sleep(0.01)
+                    Character.UseSkill(skillid)
+                    time.sleep(0.01)
                     Character.UseSkill(skillid)
                 else:
                     Terminal.SetLineEdit("SISkillID",str(skillid))
@@ -1585,6 +1600,88 @@ def has_pensalir():
             return True
     
     utgard_fan = 1552102
+
+def equip_item(item_pos,equip_slot,throw_old = False):
+    target_equip = Inventory.GetItem(1,item_pos).id
+    equip_success = False
+    Terminal.SetCheckBox("Auto Equip",False)
+    autoAttack = Terminal.GetCheckBox("Auto Attack")
+    skillInject = Terminal.GetCheckBox("Skill Injection")
+    javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
+    Terminal.SetCheckBox("Auto Attack",False)
+    Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+    Terminal.SetCheckBox("Skill Injection",False)
+    time.sleep(5)
+    Inventory.SendChangeSlotPositionRequest(1,item_pos,equip_slot,-1)
+    Terminal.SetCheckBox("Auto Attack",autoAttack)
+    Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+    Terminal.SetCheckBox("Skill Injection",skillInject)
+    time.sleep(1)
+    if Inventory.GetItem(1,item_pos).id != target_equip:#Equip change request success
+        print("Successfully equipped item")
+        equip_success = True
+    if throw_old and equip_success:
+        time.sleep(2)
+        Terminal.SetCheckBox("Auto Loot",False)
+        Inventory.SendChangeSlotPositionRequest(1,item_pos,0,-1) #Dropping weaker item
+    Terminal.SetCheckBox("Auto Equip",True)
+
+
+def equip_pensalir():
+    #pensalir gear
+    pensalir_warrior_cape = 1102718
+    pensalir_mage_cape = 1102719
+    pensalir_bowman_cape = 1102720
+    pensalir_thief_cape = 1102721
+    pensalir_pirate_cape = 1102722
+
+    pensalir_warrior_helmet = 1004229
+    pensalir_mage_helmet = 1004230
+    pensalir_bowman_helmet = 1004231
+    pensalir_thief_helmet = 1004232
+    pensalir_pirate_helmet = 1004233
+
+    pensalir_warrior_gloves = 1082608
+    pensalir_mage_gloves = 1082609
+    pensalir_bowman_gloves = 1082610
+    pensalir_thief_gloves = 1082611
+    pensalir_pirate_gloves = 1082612
+
+    pensalir_warrior_shoes = 1072967
+    pensalir_mage_shoes = 1072968
+    pensalir_bowman_shoes = 1072969
+    pensalir_thief_shoes = 1072970
+    pensalir_pirate_shoes = 1072971
+
+    pensalir_warrior_overall = 1052799
+    pensalir_mage_overall = 1052800
+    pensalir_bowman_overall = 1052801
+    pensalir_thief_overall = 1052802
+    pensalir_pirate_overall = 1052803
+
+    cape_list = [pensalir_mage_cape,pensalir_warrior_cape,pensalir_bowman_cape,pensalir_thief_cape,pensalir_pirate_cape]
+    helmet_list = [pensalir_warrior_helmet,pensalir_mage_helmet,pensalir_bowman_helmet,pensalir_thief_helmet,pensalir_pirate_helmet]
+    glove_list = [pensalir_warrior_gloves,pensalir_mage_gloves,pensalir_bowman_gloves,pensalir_thief_gloves,pensalir_pirate_gloves]
+    shoe_list = [pensalir_warrior_shoes,pensalir_mage_shoes,pensalir_bowman_shoes,pensalir_thief_shoes,pensalir_pirate_shoes]
+    overall_list = [pensalir_warrior_overall,pensalir_mage_overall,pensalir_bowman_overall,pensalir_thief_overall,pensalir_pirate_overall]
+
+    items = Inventory.GetItems(1)
+    for item in items:
+        if item.id in cape_list:
+            if Character.GetEquippedItemIDBySlot(cape_slot) not in cape_list:
+                equip_item(item.pos,cape_slot,throw_old = True)
+        elif item.id in helmet_list:
+            if Character.GetEquippedItemIDBySlot(helmet_slot) not in helmet_list:
+                equip_item(item.pos,helmet_slot,throw_old = True)
+        elif item.id in glove_list:
+            if Character.GetEquippedItemIDBySlot(glove_slot) not in glove_list:
+                equip_item(item.pos,glove_slot,throw_old = True)
+        elif item.id in shoe_list:
+            if Character.GetEquippedItemIDBySlot(shoe_slot) not in shoe_list:
+                equip_item(item.pos,shoe_slot,throw_old = True)
+        elif item.id in overall_list:
+            if Character.GetEquippedItemIDBySlot(top_slot) not in overall_list:
+                equip_item(item.pos,top_slot,throw_old = True)
 
 #########Job specific advancements##########
 def kannaFirst():
@@ -8988,10 +9085,10 @@ def BossCheck():
 
 
 if job == -1 and not accountData['changing_mule'] and GameState.GetLoginStep() == 1:
-    print("Not logged in yet")
+    #print("Not logged in yet")
     Terminal.SetLineEdit("LoginChar",accountData["cur_link_pos"])
     Terminal.SetCheckBox("Auto Login",True)
-    time.sleep(15)
+    time.sleep(10)
 
 if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     Terminal.SetCheckBox("Auto Login",False)
@@ -9012,13 +9109,18 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
 if accountData['training_done'] and GameState.GetLoginStep() == 2:
     Terminal.SetCheckBox("Auto Login",False)
     chars = Login.GetChars()
-    with open('C:/Users/Jacopo/Desktop/TerminalManager/info/output/links_{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
-        for char in chars:
-            charInfo.write("{} {}\n".format(id2str(char.jobid),char.level))
-        charInfo.close()
-    Terminal.ChangeStatus("#################Training Done##############")
-    print("Detected that training is done")
-    time.sleep(30)
+    count = 0
+    if not Terminal.GetProperty("OutputInfo",False):
+        with open('C:/Users/Jacopo/Desktop/TerminalManager/info/output/links_{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
+            for char in chars:
+                if char.level > 100:
+                    count += char.level
+                    charInfo.write("{} {}\n".format(id2str(char.jobid),char.level))
+            charInfo.write("Total Legion: {}".format(count))
+            charInfo.close()
+        Terminal.ChangeStatus("#################Training Done##############")
+        print("Detected that training is done")
+        Terminal.SetProperty("OutputInfo",True)
 
 if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     accountData['total_slots'] = Login.GetCharSlot()
@@ -9043,9 +9145,9 @@ if len(accountData["done_links"]) >= 43 and not accountData['phase_one']:
     if GameState.IsInGame():
         Terminal.Logout()
         time.sleep(2)
-elif len(accountData["done_links"]) < 20 and accountData['training_done']:
-    accountData['training_done'] = False
-    print("Completed {} links, need more".format(len(accountData["done_links"])))
+elif len(accountData["done_links"]) == 19 and not accountData['training_done']:
+    accountData['training_done'] = True
+    print("Completed {} links".format(len(accountData["done_links"])))
     writeJson(accountData,accountId)
 
 
@@ -9066,8 +9168,13 @@ def set_potion():
     pgup_key = 0x21
     if job not in DemonAvengerJobs:
         if Inventory.FindItemByID(2001582).valid:
+            hpSlider = int((Character.GetMaxHP()-1000)/Character.GetMaxHP()*100)
+            if hpSlider <= 50:
+                hpSlider = 50
+            Terminal.SetSlider("sliderHP", hpSlider)
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         else:
+            Terminal.SetSlider("sliderHP",50)
             Key.Set(pgup_key, 2, 2002023)
     else:
         Key.Set(pgup_key, 1, 31011001)
@@ -9364,13 +9471,13 @@ def toggleAttack(on):
     elif job == 100: #Swordman
         attackAuto(1001005,on)
     elif job == 110: #fighter 1101011
-        attackSIND(1101011,on,450)
+        attackAuto(1101011,on)
     elif job in HeroJobs and field_id in curbrockhideout: #1001005
         attackAuto(1001005,on)
     elif job == 111: #crusader 1111010
-        attackAuto(1111010,on)
+        attackSIND(1111010,on,450)
     elif job == 112: #Hero 1120017
-        attackSIND(1120017,on,300)
+        attackSIND(1120017,on,400)
     elif job == 120: #Page 1201011
         attackAuto(1201011,on)
     elif job in PaladinJobs and field_id in curbrockhideout: #1001005
@@ -9485,7 +9592,8 @@ def toggleAttack(on):
     elif job == 411: #Hermit
         attackSI(4111015,on)
         
-    elif job == 412:
+    elif job == 412: #nightlord
+        Terminal.SetSpinBox("KamiOffsetX", -85)
         if Character.GetSkillLevel(4121017) >= 1:
             attackSI(4121017,on)
         else:
@@ -9500,7 +9608,7 @@ def toggleAttack(on):
         attackSI(4211002,on)
         
     elif job == 422: #Shadower
-        attackAuto(4221007,on)
+        attackSI(4221007,on)
         
     elif job == 430: #dualblade
         if Character.GetSkillLevel(4001013) == 0:
@@ -9832,7 +9940,7 @@ def toggleAttack(on):
     elif job == 5110: #Mihile 2nd
         attackSIND(51101005,on,800)
     elif job == 5111: #Mihile 3rd
-        attackAuto(51111006,on)
+        attackSIND(51111006,on,600)
     elif job == 5112: #Mihile 4th
         attackSIND(51121009,on,400)
     else:
@@ -10262,6 +10370,7 @@ if GameState.IsInGame():
         Terminal.SetPushButton("Leave shop",False)
     elif (job in NightlordJobs or job in NightWalkerJobs) and Inventory.GetItemCount(2070000) < 100  and Inventory.FindItemByID(2070000).valid == 1 and not SCLib.GetVar("DoingJobAdv"):
         print("Recharge stars")
+        toggle_rush_by_level(False)
         if field_id != 100000102:
             Terminal.Rush(100000102) # rush to store (Henessys gral store)
             time.sleep(1)
@@ -10269,9 +10378,11 @@ if GameState.IsInGame():
             time.sleep(0.5)
             Character.TalkToNpc(1011100) #open the store
             time.sleep(10) #Recharge time
-            Terminal.SetPushButton("Leave shop",True)
-            time.sleep(1)
-            Terminal.SetPushButton("Leave shop",False)
+            if Inventory.GetItemCount(2070000) >= 100:
+                Terminal.SetPushButton("Leave shop",True)
+                time.sleep(1)
+                Terminal.SetPushButton("Leave shop",False)
+                toggle_rush_by_level(True)
     elif (job == 200 or job == BlazeWizardJobs[0]) and level < 11:
         wand = Inventory.FindItemByID(1372043)
         if wand.valid:
@@ -10687,166 +10798,16 @@ if Character.GetLevel() >= 83 and GameState.IsInGame() and getSpider:
                     Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
                 Terminal.Rush(310050600)
 
-#auto star force pensalir gear and accessories
-if level >= 61 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and Character.GetMeso()>= 5000000:
-    #if level >= 140:
-    #    for equips in equip_slot_list:
-    #        item = Inventory.GetItem(1,equips)
-    #        if item.valid and item.currentStar != star_force_level:
-    #            #print("Starforcing item {}".format(item.id))
-    #            starItem(equips, item.currentStar, item.maxStar, star_force_level, item.id)
-    #    for accessories in accessory_slot_list:
-    #        item = Inventory.GetItem(1,accessories)
-    #        if item.valid and item.id in accessory_list and item.currentStar != star_force_level:
-    #            #print("Starforcing item {}".format(item.id))
-    #            starItem(accessories, item.currentStar, item.maxStar, star_force_level, item.id)
-    for x in range(-100, 0):
-        item = Inventory.GetItem(1, x)
-        if item.valid and item.currentStar != star_force_level and item.currentStar != item.maxStar and (level < 130 or item.maxStar != 20):
-            starItem(x, item.currentStar, item.maxStar, star_force_level, item.id)
-#print(SCLib.GetVar("DoingZakum"))
-#ZAKUM DAILY
-if KillZakumDaily == False and (field_id == 211042200 or field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
-    if field_id == TheDoorToZakum:
-        toggle_kami(False)
-        teleport_enter(-3003,-220)
-        toggle_rush_by_level(True)
-        toggle_loot(False)
-        Terminal.SetCheckBox("Kami Vac",True)
-        Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
-        SCLib.UpdateVar("DoingZakum",False)
-    elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
-        toggle_kami(False)
-        teleport_enter(-1599,-331)
-        toggle_loot(False)
-        SCLib.UpdateVar("DoingZakum",False)
-        if field_id == TheCaveOfTrials3Zakum:
-            toggle_rush_by_level(True)
-            toggle_loot(False)
-            SCLib.UpdateVar("DoingZakum",False)
 
-runebuff_id = 80002280
-if KillZakumDaily and level >= 105 and (Character.HasBuff(2,runebuff_id) or SCLib.GetVar("DoingZakum")) and not SCLib.GetVar("DoingMP"):
-    print("Doing Zakum")
-    Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
-    if Terminal.GetCheckBox("Kami Vac"):
-        Terminal.SetCheckBox("Kami Vac",False)
-    if getSpider:
-        Terminal.SetComboBox("Familiar0",2)
-    else:
-        Terminal.SetComboBox("Familiar0",1)
-    toggle_rush_by_level(False)
-    Terminal.SetCheckBox('filter_equip',False)
-    SCLib.UpdateVar("DoingZakum",True)
-    pos = Character.GetPos()
-    if field_id not in ZakumsAltar:
-        if field_id != EntranceToZakumAlter:
-            if field_id != TheDoorToZakum:
-                GetToTheDoorToZakum()
-            else:
-                if pos.x not in range(-725,-715):
-                    NewY = pos.y -5
-                    Character.Teleport(-720, NewY)
-                elif Inventory.GetItemCount(4001017) < 1:
-                    print("Getting offer")
-                    Npc.ClearSelection()
-                    Npc.RegisterSelection("Receive an offering for Zakum.")
-                    time.sleep(1)
-                    Npc.RegisterSelection("Normal/Chaos Zakum")
-                    Character.TalkToNpc(2030008)
-                    time.sleep(1)
-                elif Inventory.GetItemCount(4001017) >= 1:
-                    print("Entering Portal to EntranceToZakumAlter")
-                    Npc.ClearSelection()
-                    Npc.RegisterSelection("Normal Zakum")
-                    time.sleep(1)
-                    Character.EnterPortal()
-                    time.sleep(1)
-        else:
-            if not NowLockedVar:
-                if SCLib.GetVar("zakum_retry_count") >= 7:
-                    SCLib.UpdateVar("KillZakumDaily",False)
-                    ResetNowLockedFunction()
-                else:
-                    Party.CreateParty()
-                    print("Talking to Adobis to enter ZakumsAltar")
-                    Character.TalkToNpc(2030013)
-                    SCLib.UpdateVar("zakum_retry_count",SCLib.GetVar("zakum_retry_count")+1)
-                    time.sleep(1)
-
-            else:
-                print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                SCLib.UpdateVar("KillZakumDaily", False)
-                SCLib.UpdateVar("DoingZakum",False)
-                ResetNowLockedFunction()
-    else:
-        print("In zakum altar")
-        NowLockedFunction()
-        boss2 = Field.FindMob(NormalZakumv2)
-        boss1 = Field.FindMob(NormalZakumv1)
-        boss = Field.FindMob(NormalZakum)
-        if boss.valid or boss1.valid or boss2.valid:
-            print("Boss valid")
-            DidSpawn()
-            if pos.x != -260:
-                Character.Teleport(-260, 84)
-            else:
-                print("Fighting Zakum StandBy")
-        else:
-            if HasSpawned:
-                toggle_loot(True)
-                print("Zakum is dead, waiting 10 sec before continue")
-                time.sleep(5)
-                face_drop = Field.FindItem(condensed_power_crystal)
-                if face_drop.valid:
-                    print("Found condensed power crystal")
-                    Character.Teleport(face_drop.x,face_drop.y)
-                    Terminal.SetCheckBox("Auto Loot",True)
-                    time.sleep(3)
-                eye_drop = Field.FindItem(aquatic_letter_eye)
-                if eye_drop.valid:
-                    print("Found aquatic letter eye")
-                    Character.Teleport(eye_drop.x,eye_drop.y)
-                    Terminal.SetCheckBox("Auto Loot",True)
-                    time.sleep(3)
-                face_check = Field.FindItem(condensed_power_crystal)
-                eye_check = Field.FindItem(aquatic_letter_eye)
-                time.sleep(5)
-                if not face_check.valid and not eye_check.valid:
-                    print("Did not find accessory, leaving.")
-                    Terminal.SetComboBox("Familiar0",1)
-                    Character.TalkToNpc(2030010)
-                    time.sleep(1)
-                    SCLib.UpdateVar("KillZakumDaily", False)
-                    #if accountData['cur_link_pos'] == '11':
-                    #    accountData['daily_done'] = True
-                    #    writeJson(accountData,accountId)
-                    ResetSpawn()
-                    ResetNowLockedFunction()
-                    if field_id == TheDoorToZakum:
-                        if pos.x != -3003:
-                            Character.Teleport(-3003, -220)
-                            time.sleep(1)
-                            Character.EnterPortal()
-                            SCLib.UpdateVar("DoingZakum",False)
-            else:
-                print("Finding item in inventory to drop")
-                stone = Inventory.FindItemByID(4001017)
-                if stone.valid:
-                    if pos.x != -25:
-                        Character.Teleport(-25, 84)
-                    else:
-                        print("Dropping stone to spawn Zakum")
-                        Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
 
 if level >= 150 and job not in NightWalkerJobs and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
     if field_id != 240000000:
         rush(240000000)
     else:
-        if accountData['cur_link_pos'] == "16": #finished training all link to level 110
+        if accountData['cur_link_pos'] == "20": #finished training all link to level 140
             print("Phase one end")
             accountData['phase_one'] = True
-            accountData['cur_link_pos'] = '-1'
+            accountData['cur_link_pos'] = str(accountData['storage_number']+1)
             accountData['changing_mule'] = True
             writeJson(accountData,accountId)
             toggle_rush_by_level(True)
@@ -10906,7 +10867,9 @@ if ((level >= 140 and job not in NightWalkerJobs) or (level >= 150 and job in Ni
                     Terminal.Logout()
                     time.sleep(2)
     else:
-        toggle_rush_by_level(True)
+        if field_id != 224000142:
+            rush(224000142)
+        toggle_rush_by_level(False)
         toggle_loot(True)
         pet = Inventory.FindItemByID(2434265)
         if pet.valid:
@@ -10917,6 +10880,7 @@ if ((level >= 140 and job not in NightWalkerJobs) or (level >= 150 and job in Ni
         Terminal.SetSpinBox("FilterMeso",50000)
         Terminal.SetCheckBox("settings/expcrash",False)
         Terminal.SetCheckBox("Instant Final Smash",False)
+        equip_pensalir()
 if level >= 180 and accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
     if field_id != 240000000:
         rush(240000000)
@@ -12151,7 +12115,157 @@ if GameState.IsInGame() and doSleepyWood and not Terminal.IsRushing() and level 
                     else:
                         Character.TalkToNpc(1063002)
                         time.sleep(1)
+#auto star force pensalir gear and accessories
+if level >= 61 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and Character.GetMeso()>= 5000000:
+    #if level >= 140:
+    #    for equips in equip_slot_list:
+    #        item = Inventory.GetItem(1,equips)
+    #        if item.valid and item.currentStar != star_force_level:
+    #            #print("Starforcing item {}".format(item.id))
+    #            starItem(equips, item.currentStar, item.maxStar, star_force_level, item.id)
+    #    for accessories in accessory_slot_list:
+    #        item = Inventory.GetItem(1,accessories)
+    #        if item.valid and item.id in accessory_list and item.currentStar != star_force_level:
+    #            #print("Starforcing item {}".format(item.id))
+    #            starItem(accessories, item.currentStar, item.maxStar, star_force_level, item.id)
+    for x in range(-100, 0):
+        item = Inventory.GetItem(1, x)
+        if item.valid and item.currentStar != star_force_level and item.currentStar != item.maxStar and (level < 130 or item.maxStar != 20):
+            starItem(x, item.currentStar, item.maxStar, star_force_level, item.id)
+#print(SCLib.GetVar("DoingZakum"))
+#ZAKUM DAILY
+if KillZakumDaily == False and (field_id == 211042200 or field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
+    if field_id == TheDoorToZakum:
+        toggle_kami(False)
+        teleport_enter(-3003,-220)
+        toggle_rush_by_level(True)
+        toggle_loot(False)
+        Terminal.SetCheckBox("Kami Vac",True)
+        Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
+        SCLib.UpdateVar("DoingZakum",False)
+    elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
+        toggle_kami(False)
+        teleport_enter(-1599,-331)
+        toggle_loot(False)
+        SCLib.UpdateVar("DoingZakum",False)
+        if field_id == TheCaveOfTrials3Zakum:
+            toggle_rush_by_level(True)
+            toggle_loot(False)
+            SCLib.UpdateVar("DoingZakum",False)
 
+runebuff_id = 80002280
+if KillZakumDaily and level >= 105 and (Character.HasBuff(2,runebuff_id) or SCLib.GetVar("DoingZakum")) and not SCLib.GetVar("DoingMP"):
+    print("Doing Zakum")
+    Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
+    if Terminal.GetCheckBox("Kami Vac"):
+        Terminal.SetCheckBox("Kami Vac",False)
+    if getSpider:
+        Terminal.SetComboBox("Familiar0",2)
+    else:
+        Terminal.SetComboBox("Familiar0",1)
+    toggle_rush_by_level(False)
+    Terminal.SetCheckBox('filter_equip',False)
+    SCLib.UpdateVar("DoingZakum",True)
+    pos = Character.GetPos()
+    if field_id not in ZakumsAltar:
+        if field_id != EntranceToZakumAlter:
+            if field_id != TheDoorToZakum:
+                GetToTheDoorToZakum()
+            else:
+                if pos.x not in range(-725,-715):
+                    NewY = pos.y -5
+                    Character.Teleport(-720, NewY)
+                elif Inventory.GetItemCount(4001017) < 1:
+                    print("Getting offer")
+                    Npc.ClearSelection()
+                    Npc.RegisterSelection("Receive an offering for Zakum.")
+                    time.sleep(1)
+                    Npc.RegisterSelection("Normal/Chaos Zakum")
+                    Character.TalkToNpc(2030008)
+                    time.sleep(1)
+                elif Inventory.GetItemCount(4001017) >= 1:
+                    print("Entering Portal to EntranceToZakumAlter")
+                    Npc.ClearSelection()
+                    Npc.RegisterSelection("Normal Zakum")
+                    time.sleep(1)
+                    Character.EnterPortal()
+                    time.sleep(1)
+        else:
+            if not NowLockedVar:
+                if SCLib.GetVar("zakum_retry_count") >= 7:
+                    SCLib.UpdateVar("KillZakumDaily",False)
+                    ResetNowLockedFunction()
+                else:
+                    Party.CreateParty()
+                    print("Talking to Adobis to enter ZakumsAltar")
+                    Character.TalkToNpc(2030013)
+                    SCLib.UpdateVar("zakum_retry_count",SCLib.GetVar("zakum_retry_count")+1)
+                    time.sleep(1)
+
+            else:
+                print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
+                SCLib.UpdateVar("KillZakumDaily", False)
+                SCLib.UpdateVar("DoingZakum",False)
+                ResetNowLockedFunction()
+    else:
+        print("In zakum altar")
+        NowLockedFunction()
+        boss2 = Field.FindMob(NormalZakumv2)
+        boss1 = Field.FindMob(NormalZakumv1)
+        boss = Field.FindMob(NormalZakum)
+        if boss.valid or boss1.valid or boss2.valid:
+            print("Boss valid")
+            DidSpawn()
+            if pos.x != -260:
+                Character.Teleport(-260, 84)
+            else:
+                print("Fighting Zakum StandBy")
+        else:
+            if HasSpawned:
+                toggle_loot(True)
+                print("Zakum is dead, waiting 10 sec before continue")
+                time.sleep(5)
+                face_drop = Field.FindItem(condensed_power_crystal)
+                if face_drop.valid:
+                    print("Found condensed power crystal")
+                    Character.Teleport(face_drop.x,face_drop.y)
+                    Terminal.SetCheckBox("Auto Loot",True)
+                    time.sleep(3)
+                eye_drop = Field.FindItem(aquatic_letter_eye)
+                if eye_drop.valid:
+                    print("Found aquatic letter eye")
+                    Character.Teleport(eye_drop.x,eye_drop.y)
+                    Terminal.SetCheckBox("Auto Loot",True)
+                    time.sleep(3)
+                face_check = Field.FindItem(condensed_power_crystal)
+                eye_check = Field.FindItem(aquatic_letter_eye)
+                time.sleep(5)
+                if not face_check.valid and not eye_check.valid:
+                    print("Did not find accessory, leaving.")
+                    Terminal.SetComboBox("Familiar0",1)
+                    Character.TalkToNpc(2030010)
+                    time.sleep(1)
+                    SCLib.UpdateVar("KillZakumDaily", False)
+                    #if accountData['cur_link_pos'] == '11':
+                    #    accountData['daily_done'] = True
+                    #    writeJson(accountData,accountId)
+                    ResetSpawn()
+                    ResetNowLockedFunction()
+                    if field_id == TheDoorToZakum:
+                        if pos.x != -3003:
+                            Character.Teleport(-3003, -220)
+                            time.sleep(1)
+                            Character.EnterPortal()
+                            SCLib.UpdateVar("DoingZakum",False)
+            else:
+                print("Finding item in inventory to drop")
+                stone = Inventory.FindItemByID(4001017)
+                if stone.valid:
+                    if pos.x != -25:
+                        Character.Teleport(-25, 84)
+                    else:
+                        print("Dropping stone to spawn Zakum")
+                        Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
 if GameState.IsInGame() and SCLib.GetVar("BuyExpansion") and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
     buy_expansion()
 
@@ -12194,3 +12308,10 @@ if GameState.IsInGame() and level >= 106 and Terminal.GetCheckBox("Rush By Level
     Terminal.SetCheckBox("timedCCCheck",True)
 else:
     Terminal.SetCheckBox("timedCCCheck",False)
+
+if job in KannaJobs:
+    toggle_rush_by_level(False)
+    if field_id != 240000000:
+        rush(240000000)
+    else:
+        sleep(5)
