@@ -1624,6 +1624,8 @@ def equip_item(item_pos,equip_slot,throw_old = False):
         time.sleep(2)
         Terminal.SetCheckBox("Auto Loot",False)
         Inventory.SendChangeSlotPositionRequest(1,item_pos,0,-1) #Dropping weaker item
+        time.sleep(1)
+        Terminal.SetCheckBox("Auto Loot",True)
     Terminal.SetCheckBox("Auto Equip",True)
 
 
@@ -12128,10 +12130,15 @@ if level >= 61 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetV
     #        if item.valid and item.id in accessory_list and item.currentStar != star_force_level:
     #            #print("Starforcing item {}".format(item.id))
     #            starItem(accessories, item.currentStar, item.maxStar, star_force_level, item.id)
+    count = 0
     for x in range(-100, 0):
         item = Inventory.GetItem(1, x)
         if item.valid and item.currentStar != star_force_level and item.currentStar != item.maxStar and (level < 130 or item.maxStar != 20):
+            count += 1
             starItem(x, item.currentStar, item.maxStar, star_force_level, item.id)
+            if count >= 10:
+                print("Starred 10 times, break for now")
+                break
 #print(SCLib.GetVar("DoingZakum"))
 #ZAKUM DAILY
 if KillZakumDaily == False and (field_id == 211042200 or field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
