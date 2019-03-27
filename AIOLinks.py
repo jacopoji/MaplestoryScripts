@@ -4879,6 +4879,7 @@ def ExplorerSecond():
             #print("2")
             if quest2 == 0:
                 acceptQuest(cannoneerQuest2,Instructor,toGoMap,field_id)
+                time.sleep(2)
             elif quest2 == 1:
                 print(Inventory.FindItemByID(4031013).count)
                 if Quest.CheckCompleteDemand(cannoneerQuest2,Instructor) == 0 or Inventory.FindItemByID(4031013).count >= 30:
@@ -4910,6 +4911,7 @@ def ExplorerSecond():
             #print("2")
             if quest2 == 0:
                 acceptQuest(targetJob,Instructor,toGoMap,field_id)
+                time.sleep(2)
             elif quest2 == 1:
                 print(Inventory.FindItemByID(4031013).count)
                 if Quest.CheckCompleteDemand(targetJob,Instructor) == 0 or Inventory.FindItemByID(4031013).count >= 30:
@@ -5109,8 +5111,6 @@ def ExplorerThird():
             elif field_id in DimensionalWorld:
                 print("In demensional world")
                 mobs = Field.GetMobs()
-                toggleAttack(False)
-                time.sleep(6)
                 toggleAttack(True)
                 toggle_loot(True)
                 if len(mobs) == 0:
@@ -6708,6 +6708,7 @@ def JettThird():
                 dungeonTeleport()
             else:
                 acceptQuest(toDoQuest,thunderhammer,field_id,field_id)
+                time.sleep(2)
 
         elif quest == 1:
             if Quest.CheckCompleteDemand(toDoQuest,thunderhammer) == 0:
@@ -9481,13 +9482,14 @@ def toggleAttack(on):
     elif job == 112: #Hero 1120017
         attackSIND(1120017,on,400)
     elif job == 120: #Page 1201011
-        attackAuto(1201011,on)
+        attackSI(1201011,on)
     elif job in PaladinJobs and field_id in curbrockhideout: #1001005
         attackAuto(1001005,on)
     elif job == 121: #White knight 1211008
-        attackAuto(1211008,on)
+        #attackAuto(1211008,on)
+        attackSI(1201011,on)
     elif job == 122: #Paladin 1211008
-        attackAuto(1221004,on)
+        attackSI(1221004,on)
     elif job == 130: #Spearman 1301011
         attackSIND(1301011,on,450)
         
@@ -9498,7 +9500,8 @@ def toggleAttack(on):
         
     elif job == 132: #Dark Knight
         #attackAuto(1321012,on)
-        attackSIND(1321012,on,450)
+        #attackSIND(1321012,on,450)
+        attackSI(1321012,on)
     elif job == 200: #Mage
         attackAuto(2001008,on)
         
@@ -9654,7 +9657,7 @@ def toggleAttack(on):
     elif job == 521: #Outlaw
         attackAuto(5211008,on)
     elif job == 522: #Corsair
-        attackSIND(5221017,on,450)
+        attackSIND(5221017,on,550)
     elif job == 530: #Cannoneer
         #attackAuto(5301001,on)
         #attackSIND(5011002,on,200)
@@ -9696,10 +9699,15 @@ def toggleAttack(on):
         attackAuto(5081020,on)
     elif job == 570: #Jett 2nd
         #attackAuto(5081020,on)
-        attackSIND(5701011,on,150)
+        if Character.GetSkillLevel(5701011) >= 1:
+            attackSIND(5701011,on,150)
+        else:
+            attackAuto(5701010,on)
     elif job == 571: #Jett 3rd
-        #attackSIND(5701011,on,150)
-        attackSIND(5710020,on,150)
+        if Character.GetSkillLevel(5710020) >= 1:
+            attackSIND(5710020,on,150)
+        else:
+            attackSIND(5701011,on,150)
     elif job == 572: #Jett 4th
         attackSIND(5710020,on,150)
     elif job == 1100: #Dawn warrior 1st
@@ -9849,23 +9857,24 @@ def toggleAttack(on):
         attackSI(35121015,on,250)
         #attackAuto(35111006,on)
     elif job == 11212: #Beast Tamer
-        if level <= 17:
-            attackAuto(112000000,on)
-            
-        elif level >= 17 and (not useExploit or SCLib.GetVar("DoingZakum")):
-            Terminal.SetCheckBox("Auto Attack", False)
-            Terminal.SetCheckBox("Skill Injection", False)
-            Terminal.SetCheckBox("Melee No Delay",False)
-            count = 0
-            if on and not Terminal.IsRushing():
-                while count < 100 and len(Field.GetMobs())>0: #constantly presses control to simulate human actions
-                    Key.Down(0x11)
-                    time.sleep(0.1)
-                    Key.Up(0x11)
-                    time.sleep(0.1)
-                    count += 1
-                    if len(Field.GetMobs())==0:
-                        break
+        if Character.HasBuff(2,110001501):
+            if level <= 17:
+                attackAuto(112000000,on)
+                
+            elif level >= 17 and (not useExploit or SCLib.GetVar("DoingZakum")):
+                Terminal.SetCheckBox("Auto Attack", False)
+                Terminal.SetCheckBox("Skill Injection", False)
+                Terminal.SetCheckBox("Melee No Delay",False)
+                count = 0
+                if on and not Terminal.IsRushing():
+                    while count < 100 and len(Field.GetMobs())>0: #constantly presses control to simulate human actions
+                        Key.Down(0x11)
+                        time.sleep(0.1)
+                        Key.Up(0x11)
+                        time.sleep(0.1)
+                        count += 1
+                        if len(Field.GetMobs())==0:
+                            break
     elif job == 2000:#Aran pre
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)

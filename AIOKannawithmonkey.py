@@ -293,6 +293,90 @@ def CashItemResLoadLockerDone():
     else:
         Terminal.LeaveCashShop()
 
+def equip_pensalir():
+    #pensalir gear
+    pensalir_warrior_cape = 1102718
+    pensalir_mage_cape = 1102719
+    pensalir_bowman_cape = 1102720
+    pensalir_thief_cape = 1102721
+    pensalir_pirate_cape = 1102722
+
+    pensalir_warrior_helmet = 1004229
+    pensalir_mage_helmet = 1004230
+    pensalir_bowman_helmet = 1004231
+    pensalir_thief_helmet = 1004232
+    pensalir_pirate_helmet = 1004233
+
+    pensalir_warrior_gloves = 1082608
+    pensalir_mage_gloves = 1082609
+    pensalir_bowman_gloves = 1082610
+    pensalir_thief_gloves = 1082611
+    pensalir_pirate_gloves = 1082612
+
+    pensalir_warrior_shoes = 1072967
+    pensalir_mage_shoes = 1072968
+    pensalir_bowman_shoes = 1072969
+    pensalir_thief_shoes = 1072970
+    pensalir_pirate_shoes = 1072971
+
+    pensalir_warrior_overall = 1052799
+    pensalir_mage_overall = 1052800
+    pensalir_bowman_overall = 1052801
+    pensalir_thief_overall = 1052802
+    pensalir_pirate_overall = 1052803
+
+    cape_list = [pensalir_mage_cape,pensalir_warrior_cape,pensalir_bowman_cape,pensalir_thief_cape,pensalir_pirate_cape]
+    helmet_list = [pensalir_warrior_helmet,pensalir_mage_helmet,pensalir_bowman_helmet,pensalir_thief_helmet,pensalir_pirate_helmet]
+    glove_list = [pensalir_warrior_gloves,pensalir_mage_gloves,pensalir_bowman_gloves,pensalir_thief_gloves,pensalir_pirate_gloves]
+    shoe_list = [pensalir_warrior_shoes,pensalir_mage_shoes,pensalir_bowman_shoes,pensalir_thief_shoes,pensalir_pirate_shoes]
+    overall_list = [pensalir_warrior_overall,pensalir_mage_overall,pensalir_bowman_overall,pensalir_thief_overall,pensalir_pirate_overall]
+
+    items = Inventory.GetItems(1)
+    for item in items:
+        if item.id in cape_list:
+            if Character.GetEquippedItemIDBySlot(cape_slot) not in cape_list:
+                equip_item(item.pos,cape_slot,throw_old = True)
+        elif item.id in helmet_list:
+            if Character.GetEquippedItemIDBySlot(helmet_slot) not in helmet_list:
+                equip_item(item.pos,helmet_slot,throw_old = True)
+        elif item.id in glove_list:
+            if Character.GetEquippedItemIDBySlot(glove_slot) not in glove_list:
+                equip_item(item.pos,glove_slot,throw_old = True)
+        elif item.id in shoe_list:
+            if Character.GetEquippedItemIDBySlot(shoe_slot) not in shoe_list:
+                equip_item(item.pos,shoe_slot,throw_old = True)
+        elif item.id in overall_list:
+            if Character.GetEquippedItemIDBySlot(top_slot) not in overall_list:
+                equip_item(item.pos,top_slot,throw_old = True)
+def equip_item(item_pos,equip_slot,throw_old = False):
+	target_equip = Inventory.GetItem(1,item_pos).id
+	equip_success = False
+	Terminal.SetCheckBox("Auto Equip",False)
+	autoAttack = Terminal.GetCheckBox("Auto Attack")
+	skillInject = Terminal.GetCheckBox("Skill Injection")
+	javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
+	monkey = Terminal.GetCheckBox("MonkeySpiritsNDcheck")
+	Terminal.SetCheckBox("Auto Attack",False)
+	Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+	Terminal.SetCheckBox("Skill Injection",False)
+	Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
+	time.sleep(5)
+	Inventory.SendChangeSlotPositionRequest(1,item_pos,equip_slot,-1)
+	Terminal.SetCheckBox("Auto Attack",autoAttack)
+	Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+	Terminal.SetCheckBox("Skill Injection",skillInject)
+	Terminal.SetCheckBox("MonkeySpiritsNDcheck",monkey)
+	time.sleep(1)
+	if Inventory.GetItem(1,item_pos).id != target_equip:#Equip change request success
+		print("Successfully equipped item")
+		equip_success = True
+	if throw_old and equip_success:
+		time.sleep(2)
+		Terminal.SetCheckBox("Auto Loot",False)
+		Inventory.SendChangeSlotPositionRequest(1,item_pos,0,-1) #Dropping weaker item
+		time.sleep(1)
+		Terminal.SetCheckBox("Auto Loot",True)
+	Terminal.SetCheckBox("Auto Equip",True)
 def getMesoBuff():
 	buffmap_id = 701100015
 	xpbonus = 2023532
@@ -357,6 +441,17 @@ def CashItemInfoDecode(iPacket):
 def toggle_rush_by_level(indicator):
 	Terminal.SetCheckBox("Rush By Level",indicator)
 	Terminal.SetRushByLevel(indicator)
+def toggle_loot(indicator):
+    Terminal.SetCheckBox("Kami Loot",indicator)
+    Terminal.SetCheckBox("Auto Loot",indicator)
+
+def use_pet():
+	pet = Inventory.FindItemByID(2434265)
+	if pet.valid:
+		Key.Set(0x41, 2, 2001582)
+		time.sleep(2)
+		Inventory.UseItem(2434265)
+		time.sleep(2)
 
 def settings_first_job():
 	if Terminal.GetCheckBox("Auto Attack"):
@@ -469,9 +564,9 @@ def settings_fourth_job():
 	if not Terminal.GetCheckBox("Grenade Kami"):
 		Terminal.SetCheckBox("Grenade Kami",True)
 	if accountData['ready_for_cube']:
-		Terminal.SetSpinBox("MonkeySpiritsNDdelay",450)
+		Terminal.SetSpinBox("MonkeySpiritsNDdelay",500)
 	else:
-		Terminal.SetSpinBox("MonkeySpiritsNDdelay",40)
+		Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
 	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
 	if Terminal.GetCheckBox("Skill Injection"):
 		Terminal.SetCheckBox("Skill Injection",False)
@@ -488,30 +583,26 @@ def settings_fourth_job():
 		Terminal.SetSpinBox("FilterMeso",50000)
 		if not Terminal.GetCheckBox("Auto Equip"):
 			Terminal.SetCheckBox("Auto Equip",True)
-	elif level > 100 and level < 121:
-		Terminal.SetSpinBox("FilterMeso",50000)
-		if Terminal.GetCheckBox('filter_equip'):
-			Terminal.SetCheckBox('filter_equip',False)
-		if not Terminal.GetCheckBox('Kami Loot'):
-			Terminal.SetCheckBox('Kami Loot',True)
-		if not Terminal.GetCheckBox('Auto Loot'):
-			Terminal.SetCheckBox('Auto Loot',True)
-	elif level >= 149:
-		Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
-		Terminal.SetSpinBox("FilterMeso",1000)
-	elif level >= 121 and level < 149:
-		Terminal.SetSpinBox("FilterMeso",1000)
+	elif level > 100 and level < 145:
+		Terminal.SetSpinBox("FilterMeso",0)
 		if not Terminal.GetCheckBox("Auto Equip"):
 			Terminal.SetCheckBox("Auto Equip",True)
 		if not Terminal.GetCheckBox("map/maprusher/hypertelerock"):
 			Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
 		if Terminal.GetCheckBox('filter_equip'):
 			Terminal.SetCheckBox('filter_equip',False)
-		if not Terminal.GetCheckBox('Kami Loot'):
-			Terminal.SetCheckBox('Kami Loot',True)
-		if not Terminal.GetCheckBox('Auto Loot'):
-			Terminal.SetCheckBox('Auto Loot',True)
+		toggle_loot(False)
+		use_pet()
+		Terminal.SetCheckBox("Auto Pet",True)
+	elif level >= 145 and level < 149 and SCLib.GetVar("DoingBG"):
+		Terminal.SetCheckBox("Auto Pet",False)
+		toggle_loot(True)
+	elif level >= 149:
+		Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
+		Terminal.SetSpinBox("FilterMeso",1000)
 	Key.Set(0x47,1,42111003)
+	if level >= 140:
+		equip_pensalir()
 def mapID(id):
     if type(id) is int:
         return Field.GetID() == id
@@ -1767,6 +1858,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		settings_fourth_job()
 		toggle_rush_by_level(True)
 		get_pet() #here
+		Terminal.SetCheckBox("Auto Pet",True)
 		Terminal.SetCheckBox('filter_equip',True)
 		Terminal.SetCheckBox("Auto Equip",False)
 		Terminal.SetCheckBox("Kami Loot",False)
@@ -2110,12 +2202,12 @@ if level >= 140 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.Get
 	if accountData["cubing_done"]:
 		for x in range(-100, 0):
 			item = Inventory.GetItem(1, x)
-			if item.valid and item.currentStar != star_force_level:
+			if item.valid and item.currentStar != star_force_level and (level < 130 or item.maxStar != 20):
 				starItem(x, item.currentStar, item.maxStar, star_force_level, item.id) 
 	else:
 		for equips in equip_slot_list:
 			item = Inventory.GetItem(1,equips)
-			if item.valid and item.id in equip_valid_list and item.currentStar != star_force_level:
+			if item.valid and item.id in equip_valid_list and item.currentStar != star_force_level and (level < 130 or item.maxStar != 20):
 				#print("Starforcing item {}".format(item.id))
 				starItem(equips, item.currentStar, item.maxStar, star_force_level, item.id)
 		for accessories in accessory_slot_list:
