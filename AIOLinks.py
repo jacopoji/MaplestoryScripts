@@ -9177,7 +9177,7 @@ def set_potion():
             Terminal.SetSlider("sliderHP", hpSlider)
             Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
         else:
-            Terminal.SetSlider("sliderHP",50)
+            Terminal.SetSlider("sliderHP",60)
             Key.Set(pgup_key, 2, 2002023)
     else:
         Key.Set(pgup_key, 1, 31011001)
@@ -9657,7 +9657,10 @@ def toggleAttack(on):
     elif job == 521: #Outlaw
         attackAuto(5211008,on)
     elif job == 522: #Corsair
-        attackSIND(5221017,on,550)
+        if level < 160:
+            attackSIND(5221017,on,350)
+        else:
+            attackSI(5221017,on)
     elif job == 530: #Cannoneer
         #attackAuto(5301001,on)
         #attackSIND(5011002,on,200)
@@ -9858,23 +9861,26 @@ def toggleAttack(on):
         #attackAuto(35111006,on)
     elif job == 11212: #Beast Tamer
         if Character.HasBuff(2,110001501):
-            if level <= 17:
-                attackAuto(112000000,on)
-                
-            elif level >= 17 and (not useExploit or SCLib.GetVar("DoingZakum")):
-                Terminal.SetCheckBox("Auto Attack", False)
-                Terminal.SetCheckBox("Skill Injection", False)
-                Terminal.SetCheckBox("Melee No Delay",False)
-                count = 0
-                if on and not Terminal.IsRushing():
-                    while count < 100 and len(Field.GetMobs())>0: #constantly presses control to simulate human actions
-                        Key.Down(0x11)
-                        time.sleep(0.1)
-                        Key.Up(0x11)
-                        time.sleep(0.1)
-                        count += 1
-                        if len(Field.GetMobs())==0:
-                            break
+            if Character.GetSkillLevel(112000003) >= 1:
+                attackSIND(112000003,on,450)
+            else:
+                if level <= 17:
+                    attackAuto(112000000,on)
+                    
+                elif level >= 17 and (not useExploit or SCLib.GetVar("DoingZakum")):
+                    Terminal.SetCheckBox("Auto Attack", False)
+                    Terminal.SetCheckBox("Skill Injection", False)
+                    Terminal.SetCheckBox("Melee No Delay",False)
+                    count = 0
+                    if on and not Terminal.IsRushing():
+                        while count < 100 and len(Field.GetMobs())>0: #constantly presses control to simulate human actions
+                            Key.Down(0x11)
+                            time.sleep(0.1)
+                            Key.Up(0x11)
+                            time.sleep(0.1)
+                            count += 1
+                            if len(Field.GetMobs())==0:
+                                break
     elif job == 2000:#Aran pre
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
