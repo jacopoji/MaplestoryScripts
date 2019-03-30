@@ -564,7 +564,7 @@ def settings_fourth_job():
 	if not Terminal.GetCheckBox("Grenade Kami"):
 		Terminal.SetCheckBox("Grenade Kami",True)
 	if accountData['ready_for_cube']:
-		Terminal.SetSpinBox("MonkeySpiritsNDdelay",500)
+		Terminal.SetSpinBox("MonkeySpiritsNDdelay",480)
 	else:
 		Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
 	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
@@ -1901,7 +1901,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetCheckBox("Auto Loot",False)
 		Terminal.SetSpinBox("AutoDieExp",90)
 		Terminal.SetSpinBox("AutoDieLevel",level)
-		Terminal.SetComboBox("Familiar0",2)
+		Terminal.SetComboBox("Familiar0",7)
 		Terminal.SetCheckBox("settings/mesologout",True)
 		if not SCLib.GetVar("EquipMesoDone"):
 			Terminal.SetCheckBox('MonkeySpiritsNDcheck',False)

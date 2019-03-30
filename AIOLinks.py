@@ -475,6 +475,8 @@ def toggle_skill():
         timeout_buffs(buff2,skill2)
         buff3 = 5311004
         timeout_buffs(buff3)
+        buff4 = 5321052
+        timeout_buffs(buff4,timer = 30)
     elif job == CorsairJobs[2]: #or job == CorsairJobs[3]:
         buff = 5211014
         timeout_buffs(buff)
@@ -587,6 +589,11 @@ def toggle_skill():
             buff = 23121054
             timeout_buffs(buff)
     elif job in DualbladeJobs:
+        if job == DualbladeJobs[-1]:
+            #buff = 4341002
+            #timeout_buffs(buff)
+            buff2= 4341011
+            timeout_buffs(buff2,timer=50)
         if level >= 140:
             buff = 4341054
             timeout_buffs(buff)
@@ -596,6 +603,9 @@ def toggle_skill():
         if job == XenonJobs[3]:
             buff = 36121002
             timeout_buffs(buff)
+            buff2= 36121003
+            timeout_buffs(buff2)
+            
 def toggle_buffs(buffid,skillid = None,toggleKami = False):
     short_sleep = 0.75
     if skillid is None:
@@ -645,11 +655,19 @@ def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True,injectSkill
                 Terminal.SetCheckBox("Skill Injection",False)
                 time.sleep(short_sleep)
                 if not injectSkill:
-                    Character.UseSkill(skillid)
-                    time.sleep(0.01)
-                    Character.UseSkill(skillid)
-                    time.sleep(0.01)
-                    Character.UseSkill(skillid)
+                    if skillid == 4341002:
+                        Key.Set(0x44, 1, skillid)
+                        Character.UseSkill(skillid)
+                        time.sleep(0.01)
+                        Key.Down(0x44)
+                        time.sleep(0.7)
+                        Key.Up(0x44)
+                    else:
+                        Character.UseSkill(skillid)
+                        time.sleep(0.01)
+                        Character.UseSkill(skillid)
+                        time.sleep(0.01)
+                        Character.UseSkill(skillid)
                 else:
                     Terminal.SetLineEdit("SISkillID",str(skillid))
                     Terminal.SetSpinBox("SkillInjection",300)
@@ -1812,6 +1830,9 @@ def DASecond():
                 Terminal.Rush(310010000)
                 print("Rush to hide")
             else:
+                toggle_rush_by_level(True)
+                Terminal.SetCheckBox("Kami Vac",True)
+                SCLib.UpdateVar("DoingJobAdv",False)
                 Quest.CompleteQuest(23212, 2151009)
                 toggle_rush_by_level(True)
                 Terminal.SetCheckBox("Kami Vac",True)
@@ -8984,12 +9005,16 @@ def handleReady(data):
         data['changing_mule'] = False
     if 'date' not in data:
         data['date'] = str(datetime.datetime.utcnow().date())
+    if 'zakum_date' not in data:
+        data['zakum_date'] = str(datetime.datetime.utcnow().date())
     if 'daily_done' not in data:
         data['daily_done'] = False
     if 'phase_one' not in data:
         data['phase_one'] = False
     if 'done_links' not in data:
         data['done_links'] = []
+    if 'done_zakum' not in data:
+        data['done_zakum'] = []
     if 'training_done' not in data:
         data['training_done'] = False
     if 'total_slots' not in data:
@@ -9019,6 +9044,7 @@ elif field_id in range(103050900,103050900+100) or job in DualbladeJobs[1::]:
 current_date = str(datetime.datetime.utcnow().date())
 if current_date != accountData['date']:
     accountData['date'] = current_date
+    accountData['zakum_date'] = current_date
     accountData['daily_done'] = False
     writeJson(accountData,accountId)
 
@@ -9634,7 +9660,7 @@ def toggleAttack(on):
     elif job == 433:
         #attackAuto(4321004,on)
         attackSIND(4321004,on,450)
-    elif job == 434:
+    elif job == 434: #dual blade 4th
         attackAuto(4341004,on)
     elif job == 500: #Pirate
         attackAuto(5001002,on)
@@ -12176,7 +12202,7 @@ if KillZakumDaily == False and (field_id == 211042200 or field_id == TheDoorToZa
             SCLib.UpdateVar("DoingZakum",False)
 
 runebuff_id = 80002280
-if KillZakumDaily and level >= 105 and (Character.HasBuff(2,runebuff_id) or SCLib.GetVar("DoingZakum")) and not SCLib.GetVar("DoingMP"):
+if KillZakumDaily and level >= 105 and Terminal.GetLineEdit("LoginChar") not in accountData['done_zakum'] and (Character.HasBuff(2,runebuff_id) or SCLib.GetVar("DoingZakum")) and not SCLib.GetVar("DoingMP"):
     print("Doing Zakum")
     Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
     if Terminal.GetCheckBox("Kami Vac"):
@@ -12216,6 +12242,8 @@ if KillZakumDaily and level >= 105 and (Character.HasBuff(2,runebuff_id) or SCLi
             if not NowLockedVar:
                 if SCLib.GetVar("zakum_retry_count") >= 7:
                     SCLib.UpdateVar("KillZakumDaily",False)
+                    accountData['done_zakum'].append(Terminal.GetLineEdit("LoginChar"))
+                    writeJson(accountData,accountId)
                     ResetNowLockedFunction()
                 else:
                     Party.CreateParty()
@@ -12228,6 +12256,8 @@ if KillZakumDaily and level >= 105 and (Character.HasBuff(2,runebuff_id) or SCLi
                 print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
                 SCLib.UpdateVar("KillZakumDaily", False)
                 SCLib.UpdateVar("DoingZakum",False)
+                accountData['done_zakum'].append(Terminal.GetLineEdit("LoginChar"))
+                writeJson(accountData,accountId)
                 ResetNowLockedFunction()
     else:
         print("In zakum altar")
@@ -12279,6 +12309,9 @@ if KillZakumDaily and level >= 105 and (Character.HasBuff(2,runebuff_id) or SCLi
                             time.sleep(1)
                             Character.EnterPortal()
                             SCLib.UpdateVar("DoingZakum",False)
+                            accountData['done_zakum'].append(Terminal.GetLineEdit("LoginChar"))
+                            writeJson(accountData,accountId)
+
             else:
                 print("Finding item in inventory to drop")
                 stone = Inventory.FindItemByID(4001017)
