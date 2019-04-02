@@ -30,13 +30,13 @@ endSlot     = 9
 
 #Stat threshold
 statThreshold           = 27
-stopAtStatThreshold     = True
+stopAtStatThreshold     = False
 autoStat                = True      # Automatically set whichever highest stat you have
 isLvl160                = 0
 
 #For drop&meso rate
 dropStatThreshold       = 18        # Work only with Single Meso or Drop rate
-stopAtMesoRate          = False
+stopAtMesoRate          = True
 stopAtDropRate          = True
 stopAtDoubleMesoRate    = True
 stopAtDoubleDropRate    = True
@@ -63,7 +63,7 @@ wepPotentialLines       = 3         # Set 0 if you are not going to use it
 if FindHighestStat() == "INT":
     wepPotentialOptions     = [["MATT","MATT","BOSS"],["MATT","BOSS","BOSS"],["MATT","IED","BOSS"],["MATT","MATT","MATT"],["MATT","MATT","IED"],["MATT","IED","IED"]]
 else:
-    wepPotentialOptions     = [["ATT","ATT","BOSS"],["ATT","BOSS","BOSS"],["ATT","IED","BOSS"],["ATT","ATT","ATT"],["ATT","ATT","IED"],["ATT","IED","IED"]]      # Always keep end squre bracket
+    wepPotentialOptions     = [["ATT","ATT","BOSS"],["ATT","BOSS","BOSS"],["ATT","IED","BOSS"],["ATT","ATT","ATT"],["ATT","ATT","IED"],["ATT","IED","IED"],["IED","IED","IED"],["IED","IED","BOSS"]]      # Always keep end squre bracket
 #Change delay if you want (seconds)
 delay = 0.3
 

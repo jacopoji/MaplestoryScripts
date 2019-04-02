@@ -13,7 +13,7 @@ import GameState
 
 # change this to the maximum number of stars you want.
 # set it to 100 if you want to go to the maximum number of stars
-starTo = 10
+starTo = 17
 
 # change this to true if you want to use safeguard for stars 13-17
 safeguard = True
@@ -33,7 +33,7 @@ whitelist = []
 
 # sf header and recv
 StarForceHeader = 0x0138
-StarForceRecv = 0x014D
+StarForceRecv = 0x0150
 StarForceOpcode = 0x34
 StarCatchingOpcode = 0x35
 

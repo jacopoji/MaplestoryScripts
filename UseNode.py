@@ -10,8 +10,8 @@ AmountCrafted = 0
 
 if GameState.IsInGame:
     Packet.BlockRecvHeader(0x006C)
-    Packet.BlockRecvHeader(0x032A)
-    Packet.BlockRecvHeader(0x0192)
+    Packet.BlockRecvHeader(0x0332)
+    Packet.BlockRecvHeader(0x0196)
     if Inventory.GetItemCount(2436324) >= AmountDropped:
         for i in range(AmountDropped):
             useNode = Packet.COutPacket(0x0111)
@@ -30,5 +30,5 @@ if GameState.IsInGame:
             time.sleep(0.05)
     time.sleep(15)
     Packet.UnBlockRecvHeader(0x006C)
-    Packet.UnBlockRecvHeader(0x032A)
-    Packet.UnBlockRecvHeader(0x0192)
+    Packet.UnBlockRecvHeader(0x0332)
+    Packet.UnBlockRecvHeader(0x0196)
