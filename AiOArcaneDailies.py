@@ -1173,7 +1173,7 @@ def Lacheleinprequest():
             TeleQuest(450003100, 450003330, 450003330, oldMusicBox, 34310, 3003209, 3003203, 0, 0, 2232, 78)
 
         elif elizabeth1 != 2:
-            TeleQuest(450003330, 450003330, 450003330, elizabeth1, 34311, 3003239, 3003235, 0, 0, 1437, 78)
+            TeleQuest(450003330, 450003330, 450003330, elizabeth1, 34311, 3003239, 3003235, 1437, 78, 1437, 78)
 
         elif elizabeth2 != 2:
             TeleQuest(450003330, 450003300, 450003330, elizabeth2, 34312, 3003235, 3003235, 0, 0, 1437, 78)
@@ -1644,6 +1644,72 @@ def attackSIND(skillid,on,delay=100,siOption = "SIRadioMelee"):
     Terminal.SetCheckBox("Auto Attack",False)
     Terminal.SetCheckBox("Skill Injection", on)
 
+def SemiNDAA(siSkill,dummySkill,delay,on,breakOption = True):
+    Terminal.SetCheckBox("Auto Attack",False)
+    Terminal.SetCheckBox("Skill Injection",False)
+    Terminal.SetCheckBox("Melee No Delay",True)
+    Terminal.SetRadioButton("SIRadioMelee",True)
+    count = 0
+    while Field.GetCharacterCount()<=1 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and on and breakOption:
+        for x in range(1,9,1):
+            Character.UseSkill(siSkill)
+            time.sleep(0.02)
+        time.sleep(0.02)
+        Character.UseSkill(dummySkill)
+        time.sleep(delay)
+        if Terminal.IsRushing() or not breakOption:
+            break
+        if count >= 30:
+            break
+        count += 1
+
+def attackSemiND(siSkill,dummySkill,delay,on):
+    try:
+        SCLib.ThreadedFunction(SemiNDAA(siSkill,dummySkill,delay,on))
+    except:
+        x = 1
+
+def attackSemiNDOnce(siSkill,dummySkill,delay,on):
+    Terminal.SetCheckBox("Auto Attack",False)
+    Terminal.SetRadioButton("SIRadioMelee",True)
+    if Field.GetCharacterCount()<=1 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame()and on:
+        Terminal.SetCheckBox("Skill Injection",True)
+        Terminal.SetLineEdit("SISkillID",str(siSkill))
+        Terminal.SetCheckBox("Melee No Delay",True)
+        Terminal.SetSpinBox("SkillInjection",15)
+        time.sleep(0.08)
+        Terminal.SetCheckBox("Skill Injection",False)
+        time.sleep(0.02)
+        Character.UseSkill(dummySkill)
+        time.sleep(delay)
+
+def SemiNDSi(siSkill,dummySkill,delay,on):
+    Terminal.SetCheckBox("Auto Attack",False)
+    Terminal.SetRadioButton("SIRadioMelee",True)
+    count = 0
+    while Field.GetCharacterCount()<=1 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and on:
+        Terminal.SetCheckBox("Skill Injection",True)
+        Terminal.SetLineEdit("SISkillID",str(siSkill))
+        Terminal.SetCheckBox("Melee No Delay",True)
+        Terminal.SetSpinBox("SkillInjection",15)
+        time.sleep(0.08)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetLineEdit("SISkillID",str(dummySkill))
+        time.sleep(0.02)
+        Terminal.SetCheckBox("Skill Injection",False)
+        time.sleep(delay)
+        if Terminal.IsRushing():
+            break
+        if count >= 30:
+            break
+        count += 1
+
+def attackSemiNDMagic(siSkill,dummySkill,delay,on):
+    try:
+        SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on))
+    except:
+        x = 1
+
 def initAttack():
     print("Initializing attack settings for this character")
     attack_key = 0x44
@@ -1895,6 +1961,24 @@ def initAttack():
         #if job not in LuminousJobs:
         #    Terminal.SetCheckBox("Full Map Attack",False)
 
+def initSemiND():
+    print("Initializing done attack settings for this character")
+    attack_key = 0x44
+    pgup_key = 0x21
+    if job == 1212 or job == 2312:
+        Terminal.SetComboBox("Familiar0",1)
+    else:
+        Terminal.SetComboBox("Familiar0",5)
+    toggle_rush_by_level(True)
+    Terminal.SetCheckBox("Kami Vac",False)
+    Terminal.SetSlider("sliderMP", 10)
+    Terminal.SetComboBox("MPKey",6)
+    Terminal.SetCheckBox("eliteCC",False)
+    if job == 3112: #DS fourth job
+        print("Setting up Settings for DS")
+        Terminal.SetCheckBox("Kami Vac",True)
+        attackSemiNDMagic(400011018,400011018,0.40,True)
+
 def initAttackDone():
     print("Initializing done attack settings for this character")
     attack_key = 0x44
@@ -1958,13 +2042,7 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 3112: #DS fourth job
         print("Setting up Settings for DS")
-        Terminal.SetLineEdit("SISkillID","31121010")
-        Terminal.SetSpinBox("SkillInjection",0)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", True)
+        attackSemiNDMagic(400011018,400011018,0.45,True)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2312: #Mercedes 4th
         print("Setting up Settings for Mercedes")
@@ -2146,13 +2224,16 @@ def initAttackDone():
         #if job not in LuminousJobs:
         #    Terminal.SetCheckBox("Full Map Attack",False)
 
-if not GameState.IsInGame() and not GameState.IsInCashShop() and not SCLib.GetVar("ToggleAttack"):
+if not GameState.IsInGame() and not GameState.IsInCashShop() and not Terminal.IsRushing() and not SCLib.GetVar("ToggleAttack"):
     SCLib.UpdateVar("ToggleAttack",True)
     print("Enabling TogglaAttack Flag")
 
 if GameState.IsInGame() and accountData['arcane_daily_done'] and SCLib.GetVar("ToggleAttack") and job != -1:
     initAttackDone()
     SCLib.UpdateVar("ToggleAttack",False)
+elif GameState.IsInGame() and accountData['arcane_daily_done'] and not SCLib.GetVar("ToggleAttack"):
+    initSemiND()
+
 if GameState.IsInGame() and not accountData['arcane_daily_done'] and SCLib.GetVar("ToggleAttack") and job != -1:
     initAttack()
     SCLib.UpdateVar("ToggleAttack",False)
