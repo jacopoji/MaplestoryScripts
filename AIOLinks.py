@@ -601,11 +601,11 @@ def toggle_skill():
             buff = 23121054
             timeout_buffs(buff)
     elif job in DualbladeJobs:
-        if job == DualbladeJobs[-1]:
+        #if job == DualbladeJobs[-1]:
             #buff = 4341002
             #timeout_buffs(buff)
-            buff2= 4341011
-            timeout_buffs(buff2,timer=50)
+            #buff2= 4341011
+            #timeout_buffs(buff2,timer=50)
         if level >= 140:
             buff = 4341054
             timeout_buffs(buff)
@@ -1647,6 +1647,7 @@ def equip_item(item_pos,equip_slot,throw_old = False):
     Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
     Terminal.SetCheckBox("Skill Injection",skillInject)
     time.sleep(1)
+    Terminal.SetCheckBox("Auto Equip",False)
     if Inventory.GetItem(1,item_pos).id != target_equip:#Equip change request success
         print("Successfully equipped item")
         equip_success = True
@@ -9260,10 +9261,10 @@ def SemiNDAA(siSkill,dummySkill,delay,on):
         for x in range(8):
             Character.UseSkill(siSkill)
             time.sleep(0.02)
-        time.sleep(0.02)
+        time.sleep(0.015)
         Character.UseSkill(dummySkill)
         time.sleep(delay)
-        if Terminal.IsRushing() or not breakOption:
+        if Terminal.IsRushing():
             break
         if count >= 30:
             break
@@ -9299,11 +9300,11 @@ def SemiNDSi(siSkill,dummySkill,delay,on):
         Terminal.SetCheckBox("Skill Injection",True)
         Terminal.SetLineEdit("SISkillID",str(siSkill))
         Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetSpinBox("SkillInjection",15)
-        time.sleep(0.08)
+        Terminal.SetSpinBox("SkillInjection",10)
+        time.sleep(0.09)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetLineEdit("SISkillID",str(dummySkill))
-        time.sleep(0.03)
+        time.sleep(0.015)
         Terminal.SetCheckBox("Skill Injection",False)
         time.sleep(delay)
         if Terminal.IsRushing():
@@ -9541,7 +9542,7 @@ def toggleAttack(on):
         attackSI(41111011,on,100)
     elif job == 4112: #Hayato 4th 41121011
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            attackSemiNDMagic(32120055,32120055,0.85,on)
+            attackSemiNDMagic(32120055,32120055,0.40,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
@@ -9859,7 +9860,7 @@ def toggleAttack(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            attackAuto(4341004,on)
+            attackSemiND(4341004,4341004,0.74,on)
     elif job == 500: #Pirate
         attackAuto(5001002,on)
     elif job == 501: #Cannoneer Pirate
@@ -10130,7 +10131,12 @@ def toggleAttack(on):
     elif job == 3712: #Blaster 4th
         #attackAuto(37001000,on)
         Terminal.SetCheckBox("General FMA",False)
-        attackSIND(37121000,on,80)
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.40,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSIND(37121000,on,80)
     elif job == 3500: #Mechanic 1st
         attackAuto(35001004,on)
     elif job in MechanicJobs and field_id in curbrockhideout: #1001005
@@ -10262,7 +10268,7 @@ def toggleAttack(on):
     elif job == 2500: #Shade 1st
         attackAuto(25001000,on)
     elif job == 2510: #Shade 2nd
-        attackSIND(25101000,on,600)
+        attackSemiNDMagic(25101000,25101000,0.95,on)
     elif job == 2511: #Shade 3rd
         attackSIND(25110001,on,300)
         #attackSIND(25111000,on,800)
@@ -10276,20 +10282,25 @@ def toggleAttack(on):
             #attackSemiNDMagic(25110001,25110001,0.9,on)
             attackSIND(25110001,on,300)
     elif job == 5100: #Mihile 1st
-        attackAuto(51001004,on)
+        #attackAuto(51001004,on)
+        attackSemiND(51001004,51001004,0.96,on)
     elif job in MihileJobs and field_id in curbrockhideout:
         attackAuto(51001004,on)
     elif job == 5110: #Mihile 2nd
-        attackSIND(51101005,on,800)
+        #attackSIND(51101005,on,800)
+        attackSemiND(51101005,51001004,0.96,on)
     elif job == 5111: #Mihile 3rd
-        attackSIND(51111006,on,600)
+        attackSemiND(51111006,51111006,0.84,on)
+        #attackSIND(51111006,on,600)
     elif job == 5112: #Mihile 4th
+        delay = 0.84
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
             attackSemiNDMagic(32120055,32120055,0.40,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            attackSIND(51121009,on,400)
+            attackSemiNDMagic(51121009,51111006,0.84,on)
+            #attackSIND(51121009,on,400)
     else:
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -12629,7 +12640,7 @@ if KillZakumDaily == False and (field_id == 211042200 or field_id == TheDoorToZa
             SCLib.UpdateVar("DoingZakum",False)
 
 runebuff_id = 80002280
-if KillZakumDaily and level >= 105 and level < 160 and Terminal.GetLineEdit("LoginChar") not in accountData['done_zakum'] and (Character.HasBuff(2,runebuff_id) or SCLib.GetVar("DoingZakum")) and not SCLib.GetVar("DoingMP"):
+if KillZakumDaily and level >= 105 and (Character.GetEquippedItemIDBySlot(face_slot) != condensed_power_crystal or Character.GetEquippedItemIDBySlot(eye_slot) != aquatic_letter_eye) and Terminal.GetLineEdit("LoginChar") not in accountData['done_zakum'] and (Character.HasBuff(2,runebuff_id) or SCLib.GetVar("DoingZakum")) and not SCLib.GetVar("DoingMP"):
     print("Doing Zakum")
     Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
     if Terminal.GetCheckBox("Kami Vac"):
@@ -12697,6 +12708,7 @@ if KillZakumDaily and level >= 105 and level < 160 and Terminal.GetLineEdit("Log
             DidSpawn()
             if pos.x != -260:
                 Character.Teleport(-260, 84)
+                toggleAttack(True)
             else:
                 print("Fighting Zakum StandBy")
         else:
@@ -12748,6 +12760,46 @@ if KillZakumDaily and level >= 105 and level < 160 and Terminal.GetLineEdit("Log
                     else:
                         print("Dropping stone to spawn Zakum")
                         Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
+                        toggleAttack(False)
+                        time.sleep(4)
+                elif not stone.valid:
+                    toggle_loot(True)
+                    print("Zakum is dead, waiting 10 sec before continue")
+                    time.sleep(5)
+                    face_drop = Field.FindItem(condensed_power_crystal)
+                    if face_drop.valid:
+                        print("Found condensed power crystal")
+                        Character.Teleport(face_drop.x,face_drop.y)
+                        Terminal.SetCheckBox("Auto Loot",True)
+                        time.sleep(3)
+                    eye_drop = Field.FindItem(aquatic_letter_eye)
+                    if eye_drop.valid:
+                        print("Found aquatic letter eye")
+                        Character.Teleport(eye_drop.x,eye_drop.y)
+                        Terminal.SetCheckBox("Auto Loot",True)
+                        time.sleep(3)
+                    face_check = Field.FindItem(condensed_power_crystal)
+                    eye_check = Field.FindItem(aquatic_letter_eye)
+                    time.sleep(5)
+                    if not face_check.valid and not eye_check.valid:
+                        print("Did not find accessory, leaving.")
+                        Terminal.SetComboBox("Familiar0",1)
+                        Character.TalkToNpc(2030010)
+                        time.sleep(1)
+                        SCLib.UpdateVar("KillZakumDaily", False)
+                        #if accountData['cur_link_pos'] == '11':
+                        #    accountData['daily_done'] = True
+                        #    writeJson(accountData,accountId)
+                        ResetSpawn()
+                        ResetNowLockedFunction()
+                        if field_id == TheDoorToZakum:
+                            if pos.x != -3003:
+                                Character.Teleport(-3003, -220)
+                                time.sleep(1)
+                                Character.EnterPortal()
+                                SCLib.UpdateVar("DoingZakum",False)
+                                accountData['done_zakum'].append(Terminal.GetLineEdit("LoginChar"))
+                                writeJson(accountData,accountId)
 if GameState.IsInGame() and SCLib.GetVar("BuyExpansion") and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv"):
     buy_expansion()
 

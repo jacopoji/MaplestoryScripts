@@ -102,11 +102,78 @@ eye_list = [aquatic_letter_eye]
 earring_list = [half_earrings,rose_earrings,horntail_earrings]
 necklace_list = [greed_pendant,blackgate_necklace,chaos_horntail_necklace,horntail_necklace]
 blackgate_eqp = [1004549, 1012535, 1052952, 1082658, 1102840, 1113185, 1122312, 1132289, 1152191]
-KannaJobs = [4200, 4210, 4211, 4212]
+
 snail_pet_box = 2434265 
 #no potential, item.grade = 0
 #rare, item.grade = 1
 runebuff_id = 80002280
+
+
+###Jobs, Jobs[0] = 1st job, Jobs[1] = 2nd job etc###
+KannaJobs = [4200, 4210, 4211, 4212]
+LuminousJobs = [2700, 2710, 2711, 2712]
+ArkJobs = [15500, 15510, 15511, 15512]
+
+DemonAvengerJobs = [3101, 3120, 3121, 3122]
+DemonSlayerJobs = [3100, 3110, 3111, 3112]
+AranJobs = [2000,2100, 2110, 2111, 2112]
+MercedesJobs = [2300, 2310, 2311, 2312]
+HayatoJobs = [4100, 4110, 4111, 4112]
+
+KaiserJobs = [6100, 6110, 6111, 6112]
+MihileJobs = [5100, 5110, 5111, 5112]
+AngelicBusterJobs = [6500, 6510, 6511, 6512]
+XenonJobs = [3600, 3610, 3611, 3612]
+PhantomJobs = [2400, 2410, 2411, 2412]
+EvanJobs = [2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218]
+ShadeJobs =[2005,2500,2510,2511,2512]
+IlliumJobs = [15200,15210,15211,15212]
+CadenaJobs = [6400,6410,6411,6412]
+KinesisJobs = [14200,14210,14211,14212]
+#explorer jobs
+#thief
+ShadowerJobs = [400,420,421,422]
+NightlordJobs = [400,410,411,412]
+DualbladeJobs = [400,430,431,432,433,434]
+#warrior
+HeroJobs = [100,110,111,112]
+PaladinJobs = [100,120,121,122]
+DarkknightJobs = [100,130,131,132]
+#archer
+BowmasterJobs = [300,310,311,312]
+MarksmanJobs = [300,320,321,322]
+#magician
+ILMageJobs = [200,220,221,222]
+FPMageJobs = [200,210,211,212]
+BishopJobs = [200,230,231,232]
+#pirate
+BuccaneerJobs = [500,510,511,512]
+CorsairJobs = [500,520,521,522]
+CannoneerJobs = [501,530,531,532]
+JettJobs = [508,570,571,572]
+
+explorerFirstJobs = [100,200,300,400,500,501]
+explorerSecondJobs = [110,120,130,210,220,230,310,320,410,420,430,510,520,530]
+explorerThirdJobs = [111,121,131,211,221,231,311,321,411,421,431,511,521,531]
+explorerFourthJobs = [112,122,132,212,222,232,312,322,412,422,432,434,512,522,532]
+
+#Cygnus Jobs
+DawnWarriorJobs = [1100,1110,1111,1112]
+BlazeWizardJobs = [1200,1210,1211,1212]
+WindArcherJobs  = [1300,1310,1311,1312]
+NightWalkerJobs = [1400,1410,1411,1412]
+ThunderBreakerJobs=[1500,1510,1511,1512]
+
+cygnusFirstJobs = [1100,1200,1300,1400,1500]
+cygnusSecondJobs= [1110,1210,1310,1410,1510]
+cygnusThirdJobs = [1111,1211,1311,1411,1511]
+cygnusFourthJobs= [1112,1212,1312,1412,1512]
+
+#Resistance Jobs
+BattleMageJobs = [3200, 3210, 3211, 3212]
+WildHunterJobs = [3300, 3310, 3311, 3312]
+BlasterJobs = [3700, 3710, 3711, 3712]
+MechanicJobs = [3500,3510,3511,3512]
 
 ####TODO LIST:
 ####Auto buy ticket					done
@@ -1975,24 +2042,27 @@ def print_info():
 		os.makedirs(directory)
 		print("Creating folder")
 	else:
+		filelist = [ f for f in os.listdir(directory) if f.endswith(".txt") ]
+		if len(filelist) > 1:
+			for f in filelist:
+				os.remove(os.path.join(directory, f))
 		print("Writing to file")
 		with open('C:/Users/Jacopo/Pictures/MapleStoryMerch/ready_to_sell/{0}/{1}b_{0}.txt'.format(Terminal.GetLineEdit("LoginID"),accountData['total_meso']),'w') as f:
-			f.write("[Premade Meso Account] Lv149 Kanna with {}b+ and meso gear \n".format(int(accountData['total_meso'])))
+			f.write("[Reboot NA] Lv149 Kanna with {}b+ and meso gear \n".format(int(accountData['total_meso'])))
 			f.write("\nComes with:\n{}b+ Mesos(Spread out among meso mules and Kanna) \n".format(int(accountData['total_meso'])))
 			f.write("110%+ Meso Obtain (check screenshots below)\n")
 			f.write("{} Monster Park coins (Use them to buy extreme potions)\n".format(Inventory.FindItemByID(4310020).count))
-			f.write("{} Epic Potential Scrolls".format(Inventory.FindItemByID(2049705).count))
+			f.write("{} Epic Potential Scrolls\n".format(Inventory.FindItemByID(2049705).count))
 			f.write("Reboot Box Stage 1 (untouched)")
 			f.write(
 	'''\nOriginal Email that was used to create this account
-If you think the price is too high or you want to buy multiple accounts, please send me your offer, it is negotiable.
 Please do not hesitate to message me if you have any questions, I will be as responsive as possible. 
 Will provide all information that was used to create the accounts including the original email.
 I'm in the EST time zone.
 	''')
 			f.close()
 
-if accountData['pet_expire']:
+if accountData['pet_expire'] and GameState.IsInGame():
 	general_store = 240000002
 	
 	toggle_rush_by_level(False)
@@ -2014,12 +2084,11 @@ if accountData['pet_expire']:
 			CPU_hack(False)
 			Terminal.ChangeChannel(0)
 		Terminal.SetCheckBox("settings/mesologout",False)
-		print_info()
+		if not Terminal.GetProperty("SaleInfo",False):
+			print_info()
+			Terminal.SetProperty("SaleInfo",True)
 		if accountData['total_slots'] <= 20 and buy_character_expansion:
 			buy_expansion()
-		else:
-			print("Done buying expansion, sleep")
-			time.sleep(60)
 
 ###### lvl 50 hyper rock #######
 if Quest.GetQuestState(61589) !=2 and Character.GetLevel() >= 50:
@@ -2983,3 +3052,109 @@ if SCLib.GetVar("DoingBG"):
 	Terminal.SetCheckBox("settings/mesologout",False)
 else:
 	Terminal.SetCheckBox("settings/mesologout",True)
+
+def id2str(jobid):
+    if jobid in LuminousJobs:
+        return "Luminous"
+    elif jobid in DemonAvengerJobs:
+        return "Demon Avenger"
+    elif jobid in DemonSlayerJobs:
+        return "Demon Slayer"
+    elif jobid in MercedesJobs:
+        return "Mercedes"
+    elif jobid in HayatoJobs:
+        return "Hayato"
+    elif jobid in XenonJobs:
+        return "Xenon"
+    elif jobid in PhantomJobs:
+        return "Phantom"
+    elif jobid in ArkJobs:
+        return "Ark"
+    elif jobid in EvanJobs:
+        return "Evan"
+    elif jobid in IlliumJobs:
+        return "Illium"
+    elif jobid in CadenaJobs:
+        return "Cadena"
+    elif jobid == 11212:
+        return "Beast Tamer"
+    elif jobid in AranJobs:
+        return "Aran"
+    elif jobid in KinesisJobs:
+        return "Kinesis"
+    elif jobid in BlazeWizardJobs:
+        return "Blaze Wizard"
+    elif jobid in KannaJobs:
+        return "Kanna"
+    elif jobid in BlasterJobs:
+        return "Blaster"
+    elif jobid in ShadowerJobs:
+        return "Shadower"
+    elif jobid in NightlordJobs:
+        return "Night Lord"
+    elif jobid in DualbladeJobs:
+        return "Dual Blade"
+    elif jobid in HeroJobs:
+        return "Hero"
+    elif jobid in PaladinJobs:
+        return "Paladin"
+    elif jobid in DarkknightJobs:
+        return "Dark Knight"
+    elif jobid in ILMageJobs:
+        return "Ice/Lightning Archmage"
+    elif jobid in FPMageJobs:
+        return "Fire/Poison Archmage"
+    elif jobid in BishopJobs:
+        return "Bishop"
+    elif jobid in MarksmanJobs:
+        return "Marksman"
+    elif jobid in BowmasterJobs:
+        return "Bowmaster"
+    elif jobid in CorsairJobs:
+        return "Corsair"
+    elif jobid in BuccaneerJobs:
+        return "Buccaneer"
+    elif jobid in CannoneerJobs:
+        return "Cannoneer"
+    elif jobid in JettJobs:
+        return "Jett"
+    elif jobid in DawnWarriorJobs:
+        return "Dawn Warrior"
+    elif jobid in NightWalkerJobs:
+        return "Night Walker"
+    elif jobid in WindArcherJobs:
+        return "Wind Archer"
+    elif jobid in ThunderBreakerJobs:
+        return "Thunder Breaker"
+    elif jobid in WildHunterJobs:
+        return "Wild Hunter"
+    elif jobid in BattleMageJobs:
+        return "Battle Mage"
+    elif jobid in MechanicJobs:
+        return "Mechanic"
+    elif jobid in AngelicBusterJobs:
+        return "Angelic Buster"
+    elif jobid in KaiserJobs:
+        return "Kaiser"
+    elif jobid in MihileJobs:
+        return "Mihile"
+    elif jobid in ShadeJobs:
+        return "Shade"
+    else:
+        return "Unkown Job jobid ="+str(jobid)
+
+if accountData['training_done'] and GameState.GetLoginStep() == 2:
+    Terminal.SetCheckBox("Auto Login",False)
+    chars = Login.GetChars()
+    count = 0
+    if not Terminal.GetProperty("OutputInfo",False):
+        with open('C:/Users/Jacopo/Desktop/TerminalManager/info/output/links_{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
+            for char in chars:
+                if char.level > 100:
+                    count += char.level
+                    charInfo.write("{} {}\n".format(id2str(char.jobid),char.level))
+            charInfo.write("Total Legion: {}".format(count))
+            charInfo.close()
+        Terminal.ChangeStatus("#################Training Done##############")
+        print("Detected that training is done")
+        Terminal.SetProperty("OutputInfo",True)
