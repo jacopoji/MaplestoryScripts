@@ -1405,6 +1405,8 @@ def handleReady(data):
 		data['total_slots'] = 1
 	if 'used_slots' not in data:
 		data['used_slots'] = 0
+	if 'training_done' not in data:
+		data['training_done'] = False
 
 def initializeEquips(data):
 	if 'equips' not in data:
@@ -2047,7 +2049,7 @@ def print_info():
 			for f in filelist:
 				os.remove(os.path.join(directory, f))
 		print("Writing to file")
-		with open('C:/Users/Jacopo/Pictures/MapleStoryMerch/ready_to_sell/{0}/{1}b_{0}.txt'.format(Terminal.GetLineEdit("LoginID"),accountData['total_meso']),'w') as f:
+		with open('C:/Users/Jacopo/Pictures/MapleStoryMerch/ready_to_sell/{0}/{1}b_{0}.txt'.format(Terminal.GetLineEdit("LoginID"),int(accountData['total_meso'])),'w') as f:
 			f.write("[Reboot NA] Lv149 Kanna with {}b+ and meso gear \n".format(int(accountData['total_meso'])))
 			f.write("\nComes with:\n{}b+ Mesos(Spread out among meso mules and Kanna) \n".format(int(accountData['total_meso'])))
 			f.write("110%+ Meso Obtain (check screenshots below)\n")
@@ -2504,6 +2506,7 @@ if not accountData['cubing_done'] and level >=145 and not SCLib.GetVar("DoingMP"
 	#then buy
 	SCLib.UpdateVar("DoingBG",False)
 	el_nath = 211000000
+	kumpang = 551000000
 	necklace = "necklace"
 	eye = 'eye'
 	face = 'face'
@@ -2589,8 +2592,8 @@ if not accountData['cubing_done'] and level >=145 and not SCLib.GetVar("DoingMP"
 		SCLib.UpdateVar("cube_lock",True)
 		toggle_rush_by_level(False)
 		cube_sleep_time = 0.75
-		if curr_map != el_nath:
-			Terminal.Rush(el_nath)
+		if curr_map != kumpang:
+			Terminal.Rush(kumpang)
 			time.sleep(1)
 		elif not SCLib.GetVar("took_off"):
 			take_off_equip()
@@ -2821,14 +2824,14 @@ if not accountData['cubing_done'] and level >=145 and not SCLib.GetVar("DoingMP"
 		if Character.GetMeso() > 800000000:
 			toggle_rush_by_level(False)
 			SCLib.UpdateVar("cube_lock",True)
-			if curr_map != el_nath:
+			if curr_map != kumpang:
 				if Terminal.IsRushing():
 					print("Still rushing")
 					time.sleep(3)
-				print("Rush to el_nath")
-				Terminal.Rush(el_nath)
+				print("Rush to kumpang")
+				Terminal.Rush(kumpang)
 				time.sleep(3)
-			elif curr_map == el_nath and Terminal.IsRushing():
+			elif curr_map == kumpang and Terminal.IsRushing():
 				Terminal.StopRush()
 				time.sleep(1)
 			else:
