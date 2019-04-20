@@ -2089,6 +2089,7 @@ if accountData['pet_expire'] and GameState.IsInGame():
 		if not Terminal.GetProperty("SaleInfo",False):
 			print_info()
 			Terminal.SetProperty("SaleInfo",True)
+		#print_info()
 		if accountData['total_slots'] <= 20 and buy_character_expansion:
 			buy_expansion()
 
@@ -2892,7 +2893,7 @@ if DoBlackGate and not SCLib.GetVar("cube_lock") and SCLib.GetVar("checked_equip
     # IF AT BDF MAIN MAP
     elif map == 610050000:
         time.sleep(2)
-        if channel == 30:
+        if channel == 20:
             channel = 1
         else:
             channel += 1

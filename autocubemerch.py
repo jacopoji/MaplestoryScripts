@@ -28,7 +28,7 @@ stopAtDoubleCritDamage = False
 stopAtThreshold = True
 
 #Change to minimum %age of same stat it should stop on
-threshold = 24
+threshold = 21
 
 #Allowed stats above threshold, change to False if need to ignore it
 STRcheck = False
