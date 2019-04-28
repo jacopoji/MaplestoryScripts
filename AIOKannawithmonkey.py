@@ -26,23 +26,27 @@ buy_character_expansion = True
 #store mesos
 storage_map_id = 550000000
 storage_npc_id = 9270054
+import sys
+sys.path.append('C:/Users/Jacopo/Desktop/Scripts')
+import headers
+store_header = headers.bank_header
+block_header = headers.bank_block_header
+buy_ticket_header = headers.cash_item_header
+recv = headers.cash_recv_header
+SF_header = headers.SF_header
+StarForceRecv = headers.SF_recv_header
+collide_header = headers.collide_header
+potential_header = headers.potential_header
+potential_recv = headers.potential_recv_header
+BlockBuyHeader = headers.buy_block_header
+BuyItemHeader = headers.buy_header
+useExpansionHeader = headers.use_expansion_header
+level_skill_header = headers.level_skill_header 
+dialogue_header = headers.dialogue_header
+quest_header = headers.quest_header
+CashItemRequestOpcode = headers.cash_item_header
+CashItemResultOpcode = headers.cash_recv_header
 
-#headers that might need to be updated every game update
-#headers updated for v203
-store_header = 0x00F5
-block_header = 0x06AC #check this v203
-buy_ticket_header = 0x0546
-recv = 0x06E2
-SF_header = 0x0138
-StarForceRecv = 0x0150
-collide_header = 0x0104
-potential_header = 0x013E
-potential_recv = 0x027C
-BlockBuyHeader = 0x0693
-useExpansionHeader = 0x0121
-BuyItemHeader = 0x00F4
-CashItemRequestOpcode = 1337
-CashItemResultOpcode = 1739
 BuyByMesoRequest = 85
 LoadLockerDoneResult = 2
 MoveLToSRequest = 15

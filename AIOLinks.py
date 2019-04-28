@@ -49,24 +49,27 @@ HotKey = 0x7A
 
 #headers that might need to be updated every game update
 #headers updated for v203
-store_header = 0x00F5
-block_header = 0x06AC
-buy_ticket_header = 0x0546
-recv = 0x06E2
-SF_header = 0x0138
-StarForceRecv = 0x0150
-collide_header = 0x0104
-potential_header = 0x013E
-potential_recv = 0x027C
-BlockBuyHeader = 0x0693
-BuyItemHeader = 0x00F4
-useExpansionHeader = 0x0121
-level_skill_header = 0x014F 
-dialogue_header = 0x00F3
-quest_header = 0x0166
+import sys
+sys.path.append('C:/Users/Jacopo/Desktop/Scripts')
+import headers
+store_header = headers.bank_header
+block_header = headers.bank_block_header
+buy_ticket_header = headers.cash_item_header
+recv = headers.cash_recv_header
+SF_header = headers.SF_header
+StarForceRecv = headers.SF_recv_header
+collide_header = headers.collide_header
+potential_header = headers.potential_header
+potential_recv = headers.potential_recv_header
+BlockBuyHeader = headers.buy_block_header
+BuyItemHeader = headers.buy_header
+useExpansionHeader = headers.use_expansion_header
+level_skill_header = headers.level_skill_header 
+dialogue_header = headers.dialogue_header
+quest_header = headers.quest_header
 #updated for v203
-CashItemRequestOpcode = 0x0546
-CashItemResultOpcode = 0x06E2
+CashItemRequestOpcode = headers.cash_item_header
+CashItemResultOpcode = headers.cash_recv_header
 BuyByMesoRequest = 85
 LoadLockerDoneResult = 2
 MoveLToSRequest = 15
@@ -7632,73 +7635,87 @@ def ShadeFourth():
 
 def MihileSecond():
     toggle_rush_by_level(False)
-    toggle_kami(False)
-    pet = Inventory.FindItemByID(2434265)
     SCLib.UpdateVar("DoingJobAdv",True)
-    if pet.valid:
-        Key.Set(0x41, 2, 2001582)
-        time.sleep(2)
-        Inventory.UseItem(2434265)
-        time.sleep(2)
+    
     quest = Quest.GetQuestState(20806)
     quest2 = Quest.GetQuestState(20807)
     quest3 = Quest.GetQuestState(20808)
     quest4 = Quest.GetQuestState(20809)
     quest5 = Quest.GetQuestState(20810)
-    if quest == 0:
+    field_id = Field.GetID()
+    if quest != 2:
         print("1")
         Quest.StartQuest(20806, 1101002)
-    elif quest2 == 0:
-        print("2,0")
-        Quest.StartQuest(20807, 1102000)
-    elif quest2 == 1:
+    elif quest2 != 2:
         print("2,1")
-        if Quest.CheckCompleteDemand(20807,1102000) == 0:
-            if field_id in range(913070800,913070800+20):
-                dungeonTeleport()
-            elif field_id ==103000000:
-                Quest.CompleteQuest(20807,1102000)
-        else:
-            if field_id ==103000000:
-                npc = Field.FindNpc(1103002)
-                if close_enough(pos.x,pos.y,npc.x,npc.y):
-                    Character.TalkToNpc(1103002)
+        if quest2 == 0:
+            print("2,0")
+            Quest.StartQuest(20807, 1102000)
+        elif quest2 == 1:
+            if Quest.CheckCompleteDemand(20807,1102000) == 0:
+                if field_id in range(913070800,913070800+20):
+                    dungeonTeleport()
+                elif field_id ==103000000:
+                    Quest.CompleteQuest(20807,1102000)
+            else:
+                if field_id ==103000000:
+                    npc = Field.FindNpc(1103002)
+                    if close_enough(pos.x,pos.y,npc.x,npc.y):
+                        Character.TalkToNpc(1103002)
+                    else:
+                        Character.Teleport(npc.x,npc.y)
+                elif field_id in range(913070800,913070800+20):
+                    if pos.x != -3298:
+                        print("teleporting to enemy")
+                        Character.Teleport(-3298,88)
+                    toggleAttack(True)
                 else:
-                    Character.Teleport(npc.x,npc.y)
-            elif field_id in range(913070800,913070800+20):
-                toggleAttack(True)
-                teleport_to_mobs()
-            else:
-                Terminal.Rush(103000000)
-    elif quest3 == 0:
-        print("3")
-        Quest.StartQuest(20808, 1102000)
-    elif quest3 == 1: #101030300
+                    Terminal.Rush(103000000)
+    elif quest3 != 2: #101030300
         print("3,1")
-        if Quest.CheckCompleteDemand(20808,1102000) == 0:
-            toggle_loot(False)
-            Quest.CompleteQuest(20808,1102000)
+        pet = Inventory.FindItemByID(2434265)
+        if pet.valid:
+            Key.Set(0x41, 2, 2001582)
+            time.sleep(2)
+            Inventory.UseItem(2434265)
+            time.sleep(2)
+        if quest3 == 0:
+            print("3")
+            Quest.StartQuest(20808, 1102000)
         else:
-            if field_id ==101030300:
-                toggleAttack(True)
-                toggle_kami(True)
-                toggle_loot(True)
+            if Quest.CheckCompleteDemand(20808,1102000) == 0:
+                toggle_loot(False)
+                Quest.CompleteQuest(20808,1102000)
             else:
-                Terminal.Rush(101030300)
-    elif quest4 == 0:
-        print("4")
-        Quest.StartQuest(20809, 1102000)
-    elif quest4 == 1:
+                if field_id ==101030300:
+                    print("Enabling attack settings")
+                    toggle_kami(True)
+                    toggle_loot(True)
+                    toggleAttack(True)
+                else:
+                    Terminal.Rush(101030300)
+    elif quest4 != 2:
         print("4,1")
-        if Quest.CheckCompleteDemand(20809,1102000) == 0:
-            Quest.CompleteQuest(20809,1102000)
+        if quest4 == 0:
+            print("4")
+            Quest.StartQuest(20809, 1102000)
         else:
-            if field_id ==102020500:
-                toggle_kami(True)
-                toggleAttack(True)
+            if Quest.CheckCompleteDemand(20809,1102000) == 0:
+                Quest.CompleteQuest(20809,1102000)
             else:
-                Terminal.Rush(102020500)
-    elif quest5 == 0:
+                if field_id == 102020500:
+                    print("Enable attack settings")
+                    stumpy = Field.FindMob(3220000)
+                    if stumpy.valid:
+                        if Character.GetPos().x not in range(stumpy.x-200,stumpy.x):
+                            toggle_kami(False)
+                            Character.Teleport(stumpy.x-100,stumpy.y)
+                        toggleAttack(True)
+                    else:
+                        Character.ChangeChannel(0)
+                else:
+                    Terminal.Rush(102020500)
+    elif quest5 != 2:
         print("5")
         Quest.StartQuest(20810, 1101000)
         toggle_rush_by_level(True)
@@ -7738,28 +7755,31 @@ def MihileFourth():
     SCLib.UpdateVar("DoingJobAdv",True)
     quest = Quest.GetQuestState(20410)
     quest2 = Quest.GetQuestState(20411)
-    if quest == 0:
+    if quest != 2:
         Quest.StartQuest(20410, 1101002)
-    elif quest2 == 0:
-        Quest.StartQuest(20411, 1101002)
-    elif quest2 == 1:
-        if Quest.CheckCompleteDemand(20411,1101002) == 0:
-            if field_id == 913070100:
-                dungeonTeleport()
-            elif field_id == 130000000:
-                Quest.CompleteQuest(20411, 1101002)
-                toggle_rush_by_level(True)
-                toggle_kami(True)
-                SCLib.UpdateVar("DoingJobAdv",False)
+    elif quest2 != 2:
+        if quest2 == 0:
+            Quest.StartQuest(20411, 1101002)
         else:
-            if field_id != 913070100:
-                if field_id == 130000000:
-                    Quest.StartQuest(20412, 1101002)
+            if Quest.CheckCompleteDemand(20411,1101002) == 0:
+                if field_id == 913070100:
+                    dungeonTeleport()
+                elif field_id == 130000000:
+                    Quest.CompleteQuest(20411, 1101002)
+                    toggle_rush_by_level(True)
+                    toggle_kami(True)
+                    SCLib.UpdateVar("DoingJobAdv",False)
                 else:
                     Terminal.Rush(130000000)
             else:
-                toggle_kami(True)
-                toggleAttack(True)
+                if field_id != 913070100:
+                    if field_id == 130000000:
+                        Quest.StartQuest(20412, 1101002)
+                    else:
+                        Terminal.Rush(130000000)
+                else:
+                    toggle_kami(True)
+                    toggleAttack(True)
 
 def DualbladeFirst():
     print("Check1")
@@ -9332,7 +9352,7 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
         Terminal.SetLineEdit("SISkillID",str(siSkill))
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetSpinBox("SkillInjection",10)
-        time.sleep(0.081)
+        time.sleep(0.085)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetLineEdit("SISkillID",str(dummySkill))
         time.sleep(0.03)
@@ -10001,12 +10021,12 @@ def toggleAttack(on):
     elif job == 570: #Jett 2nd
         #attackAuto(5081020,on)
         if Character.GetSkillLevel(5701011) >= 1:
-            attackSIND(5701011,on,150)
+            attackSemiNDMagic(5701011,5701011,0.2,on,attackSpeed=4)
         else:
             attackAuto(5701010,on)
     elif job == 571: #Jett 3rd
         if Character.GetSkillLevel(5710020) >= 1:
-            attackSIND(5710020,on,150)
+            attackSemiNDMagic(5710020,5710020,0.9,on,attackSpeed=4)
         else:
             attackSIND(5701011,on,150)
     elif job == 572: #Jett 4th
@@ -10015,6 +10035,7 @@ def toggleAttack(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
+            #attackSemiNDMagic(5710020,5710020,0.4,on,attackSpeed=4)
             attackSIND(5710020,on,150)
     elif job == 1100: #Dawn warrior 1st
         attackSI(11001020,on)
@@ -10345,15 +10366,15 @@ def toggleAttack(on):
             else:
                 attackSIND(25110001,on,300)
     elif job == 5100: #Mihile 1st
-        #attackAuto(51001004,on)
-        attackSemiND(51001004,51001004,0.96,on)
+        attackAuto(51001004,on)
+        #attackSemiNDMagic(51001004,51001004,0.96,on)
     elif job in MihileJobs and field_id in curbrockhideout:
         attackAuto(51001004,on)
     elif job == 5110: #Mihile 2nd
         #attackSIND(51101005,on,800)
-        attackSemiND(51101005,51001004,0.96,on)
+        attackSemiNDMagic(51101005,51001004,0.96,on)
     elif job == 5111: #Mihile 3rd
-        attackSemiND(51111006,51111006,0.84,on)
+        attackSemiNDMagic(51111006,51111006,0.84,on)
         #attackSIND(51111006,on,600)
     elif job == 5112: #Mihile 4th
         delay = 0.84
@@ -11349,7 +11370,7 @@ if level >= 150 and job not in NightWalkerJobs and not accountData['phase_one'] 
     if field_id != 240000000:
         rush(240000000)
     else:
-        if accountData['cur_link_pos'] == "20": #finished training all link to level 140
+        if len(accountData['done_links']) == 21: #finished training all link to level 140
             print("Phase one end")
             accountData['phase_one'] = True
             accountData['cur_link_pos'] = str(accountData['storage_number']+1)
@@ -11369,7 +11390,7 @@ if level >= 150 and job not in NightWalkerJobs and not accountData['phase_one'] 
                 time.sleep(2)
 if ((level >= 140 and job not in ThunderBreakerJobs) or (level >= 150 and job in ThunderBreakerJobs)) and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv") and not accountData['phase_one']:
     if has_pensalir():
-        if job not in cygnusFourthJobs:
+        if job not in ThunderBreakerJobs:
             if field_id != 240000000:
                 rush(240000000)
                 toggle_rush_by_level(False)
@@ -11381,7 +11402,7 @@ if ((level >= 140 and job not in ThunderBreakerJobs) or (level >= 150 and job in
                     Terminal.Logout()
                     time.sleep(2)
                     toggle_rush_by_level(True)
-        elif job in cygnusFourthJobs:
+        elif job in ThunderBreakerJobs:
             if Quest.GetQuestState(20766) != 2:
                 q1 = Quest.GetQuestState(20761)
                 q2 = Quest.GetQuestState(20762)
@@ -13001,7 +13022,8 @@ def get_next_char(current_list):
                 return autoChar_cygnus
         if "Dual Blade" not in current_list:
             return autoChar_dualblade
-
+    else:
+        return 0
 
 if int(Terminal.GetLineEdit("LoginChar")) >= Login.GetCharCount() and GameState.GetLoginStep() == 2:
     all_jobs = [
@@ -13058,8 +13080,12 @@ if int(Terminal.GetLineEdit("LoginChar")) >= Login.GetCharCount() and GameState.
     print("Missing {} jobs {}".format(len(list(current)),str(current)))
     Terminal.SetComboBox("settings/autochar_job",get_next_char(done_jobs))
     print(get_next_char(done_jobs))
-    Terminal.SetCheckBox("Auto Login",True)
-    Terminal.SetCheckBox("settings/autochar",True)
+    if get_next_char(done_jobs) == 0:
+        Terminal.SetCheckBox("Auto Login",False)
+        Terminal.SetCheckBox("settings/autochar",False)
+    else:
+        Terminal.SetCheckBox("Auto Login",True)
+        Terminal.SetCheckBox("settings/autochar",True)
     time.sleep(4)
     
     
