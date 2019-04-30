@@ -634,10 +634,6 @@ def settings_fourth_job():
 	#	Terminal.SetCheckBox("Summon Kishin",True)
 	if not Terminal.GetCheckBox("Grenade Kami"):
 		Terminal.SetCheckBox("Grenade Kami",True)
-	if accountData['ready_for_cube']:
-		Terminal.SetSpinBox("MonkeySpiritsNDdelay",480)
-	else:
-		Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
 	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
 	if Terminal.GetCheckBox("Skill Injection"):
 		Terminal.SetCheckBox("Skill Injection",False)
@@ -670,7 +666,15 @@ def settings_fourth_job():
 		toggle_loot(True)
 	elif level >= 149:
 		Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
-		Terminal.SetSpinBox("FilterMeso",1000)
+		if accountData['cubing_done']:
+			Terminal.SetSpinBox("FilterMeso",11500)
+			Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
+		elif accountData['ready_for_cube']:
+			Terminal.SetSpinBox("FilterMeso",1000)
+			Terminal.SetSpinBox("MonkeySpiritsNDdelay",480)
+		else:
+			Terminal.SetSpinBox("FilterMeso",1000)
+			Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
 	Key.Set(0x47,1,42111003)
 	if level >= 140:
 		equip_pensalir()
@@ -1685,6 +1689,7 @@ def withdraw_mesos():
 ######Black gate
 def BossCheck():
 	print("Waiting for boss to spawn...")
+	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
 	time.sleep(10)
 	for mob in blackgate_boss:
 		print("Checking for boss: " + str(mob) + "...")
@@ -1721,6 +1726,7 @@ def BossCheck():
 			time.sleep(9)
 	print("no boss found or boss killed")
 	time.sleep(2)
+	Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
 
 
 def EnterPortal(name):

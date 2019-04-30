@@ -74,8 +74,8 @@ BuyByMesoRequest = 85
 LoadLockerDoneResult = 2
 MoveLToSRequest = 15
 
-CP_UserHyperSkillUpRequest = 513
-LP_ChangeSkillRecordResult = 97
+CP_UserHyperSkillUpRequest = 513 # 0x0201
+LP_ChangeSkillRecordResult = 97 # 0x0061
 
 #equip slot numbers
 helmet_slot = -1
@@ -3505,6 +3505,7 @@ def EvanFirst():
     lushforest = 900020100
     lostforest = 900020220
     pet = Inventory.FindItemByID(2434265)
+    Terminal.SetCheckBox("settings/loginwait",False)
     if pet.valid and quest5 == 2:
         Key.Set(0x41, 2, 2001582)
         time.sleep(2)
@@ -3841,6 +3842,7 @@ def EvanFirst():
     magicwand = Inventory.FindItemByID(1372043)
     if magicwand.valid:
         Inventory.SendChangeSlotPositionRequest(1,magicwand.pos,weapon_slot,-1)
+        Terminal.SetCheckBox("settings/loginwait",True)
         SCLib.UpdateVar("EvanLogout",False)
     if Quest.GetQuestState(LetterDelivery) == 2:
         toggle_rush_by_level(True)
@@ -4676,12 +4678,17 @@ def AranFourth():
         if quest2 == 0:
             acceptQuest(TrainingThePolearm,Maha,Rien,field_id)
         elif quest2 == 1:
-            if len(Field.GetMobs())>0:
-                toggle_kami(True)
-            elif field_id != Rien:
-                dungeonTeleport()
+            if Quest.CheckCompleteDemand(TrainingThePolearm,Maha) == 0:
+                if field_id != Rien:
+                    dungeonTeleport()
+                else:
+                    completeQuest(TrainingThePolearm,Maha,Rien,Rien,field_id)
             else:
-                completeQuest(TrainingThePolearm,Maha,Rien,Rien,field_id)
+                if len(Field.GetMobs())>0 or field_id == 914020000:
+                    toggle_kami(True)
+        if quest2 == 1 and field_id != 914020000 and Quest.CheckCompleteDemand(TrainingThePolearm,Maha) != 0:
+            forfeit_quest(TrainingThePolearm)
+            time.sleep(2)
 
 def ExplorerFirst():
     print("Doing explorer job adv")
@@ -9324,6 +9331,12 @@ def attackSemiND(siSkill,dummySkill,delay,on):
     except:
         x = 1
 
+def setSIND(siSkill,delay,on):
+    Terminal.SetLineEdit("SISkillID",siSkill)
+    Terminal.SetCheckBox("Skill Injection",on)
+    Terminal.SetCheckBox("Melee No Delay",on)
+    Terminal.SetSpinBox("SkillInjection",delay)
+
 def attackSemiNDOnce(siSkill,dummySkill,delay,on):
     Terminal.SetCheckBox("Auto Attack",False)
     Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
@@ -9351,13 +9364,13 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
         Terminal.SetCheckBox("Skill Injection",True)
         Terminal.SetLineEdit("SISkillID",str(siSkill))
         Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetSpinBox("SkillInjection",10)
-        time.sleep(0.085)
-        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetSpinBox("SkillInjection",17)
+        time.sleep(0.206)
+        #Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetLineEdit("SISkillID",str(dummySkill))
-        time.sleep(0.03)
+        time.sleep(0.043)
         Terminal.SetCheckBox("Skill Injection",False)
-        time.sleep(delay)
+        time.sleep(delay+0.05)
         #if Terminal.IsRushing():
         #    break
         if count >= 30:
@@ -9646,7 +9659,8 @@ def toggleAttack(on):
             bind_skill(32121052)
         else:
             if Character.GetSkillLevel(24121010) >= 1:
-                attackSemiNDMagic(24121010,24121010,1.08,on)
+                #attackSemiNDMagic(24121010,24121010,1.08,on)
+                setSIND("24121010;24121000",150,on)
             else:
                 attackSI(24121000,on,150)
     elif job == 15000: #Illium Pre 1st
@@ -10588,9 +10602,10 @@ if GameState.IsInGame():
     if level >= 180 and level < 185 and Quest.GetQuestState(31125) != 2 and not has_htr() and not SCLib.GetVar("DoingZakum"):
         stronghold()
         print("Doing stronghold")
-    elif Quest.GetQuestState(31125) == 2 and SCLib.GetVar("DoingJobAdv") and level < 200 and level >= 180:
+    elif (Quest.GetQuestState(31125) == 2 or has_htr) and SCLib.GetVar("DoingJobAdv") and level < 200 and level >= 180:
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_rush_by_level(True)
+    
     if Terminal.GetCheckBox("Skill Injection"):
         if not Terminal.GetCheckBox("Auto Loot"):
             Terminal.SetCheckBox("Auto Loot",True)
@@ -10755,6 +10770,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        Terminal.SetCheckBox("settings/loginwait",True)
     elif job == 3600 and level < 30 and field_id == 310010000:
         print("Xenon leave home")
         toggle_rush_by_level(True)
