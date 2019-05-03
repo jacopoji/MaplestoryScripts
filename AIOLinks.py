@@ -123,7 +123,7 @@ blackgate_eqp = [1004549, 1012535, 1052952, 1082658, 1102840, 1113185, 1122312, 
 MP_Coin = 4310020
 
 mobFalldownBlacklist = [105010301]#101030500
-SpeedyGonzalesList = [51121009,5011002,23100004,24001000,24101000]
+SpeedyGonzalesList = ["51121009","5011002","23100004","24001000","24101000"]
 import Character,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party,json,Login,datetime,math
 
 if not any("SunCat" in s for s in sys.path):
@@ -1584,7 +1584,7 @@ def buy_expansion():
         toggle_rush_by_level(True)
         toggle_kami(True)
 
-def has_pensalir():
+def has_pensalir(printInfo = True):
     #pensalir gear
     pensalir_warrior_cape = 1102718
     pensalir_mage_cape = 1102719
@@ -1626,13 +1626,15 @@ def has_pensalir():
     #    get_pensalir = True
     #else:
     #    get_pensalir = False
-    print("Has shoe : {}".format(Character.GetEquippedItemIDBySlot(shoe_slot) in shoe_list))
-    print("Has cape : {}".format(Character.GetEquippedItemIDBySlot(cape_slot) in cape_list))
-    print("Has helmet : {}".format(Character.GetEquippedItemIDBySlot(helmet_slot) in helmet_list))
-    print("Has glove : {}".format(Character.GetEquippedItemIDBySlot(glove_slot) in glove_list))
-    print("Has overall : {}".format(Character.GetEquippedItemIDBySlot(top_slot) in overall_list))
+    if printInfo:
+        print("Has shoe : {}".format(Character.GetEquippedItemIDBySlot(shoe_slot) in shoe_list))
+        print("Has cape : {}".format(Character.GetEquippedItemIDBySlot(cape_slot) in cape_list))
+        print("Has helmet : {}".format(Character.GetEquippedItemIDBySlot(helmet_slot) in helmet_list))
+        print("Has glove : {}".format(Character.GetEquippedItemIDBySlot(glove_slot) in glove_list))
+        print("Has overall : {}".format(Character.GetEquippedItemIDBySlot(top_slot) in overall_list))
     if Character.GetEquippedItemIDBySlot(shoe_slot) in shoe_list and Character.GetEquippedItemIDBySlot(cape_slot) in cape_list and Character.GetEquippedItemIDBySlot(helmet_slot) in helmet_list and Character.GetEquippedItemIDBySlot(glove_slot) in glove_list and Character.GetEquippedItemIDBySlot(top_slot) in overall_list:
-        print("Has pensalir gear now")
+        if printInfo:
+            print("Has pensalir gear now")
         return True
     else:
         if get_pensalir:
@@ -1883,63 +1885,63 @@ def DAThird():
                 Quest.CompleteQuest(23213, 2153006)
     elif (Quest.GetQuestState(23218) != 2 and job in DemonSlayerJobs) or (Quest.GetQuestState(23214) != 2 and job in DemonAvengerJobs):
         print("2")
-        if job == 3120:
-            if Quest.GetQuestState(23214) == 0:
+        #if job == 3120:
+        if Quest.GetQuestState(23214) == 0:
+            if field_id != 931050110:
+                if field_id != 310020100:
+                    Terminal.Rush(310020100)
+                else:
+                    teleport_enter(515,-14)
+            else:
+                Quest.StartQuest(23214, 2153006)
+        elif Quest.GetQuestState(23214) == 1:
+            if Quest.CheckCompleteDemand(23214,2153006) != 0:
+                if len(Field.GetMobs()) > 0:
+                    Terminal.StopRush()
+                    toggleAttack(True)
+                    toggle_kami(True)
+                    time.sleep(5)
+                elif field_id == 931050120:
+                    toggle_kami(False)
+                    teleport_enter(109,-14)
+            else:
+                time.sleep(1)
+                Quest.CompleteQuest(23214, 2153006)
+                toggleAttack(True)
+                toggle_kami(True)
+                SCLib.UpdateVar("DoingJobAdv",False)
+    #else:
+        elif Quest.GetQuestState(23218) == 0:
+            if field_id != 931050110:
+                if field_id != 310020100:
+                    Terminal.Rush(310020100)
+                else:
+                    teleport_enter(515,-14)
+            else:
+                Quest.StartQuest(23218, 2153006)
+        elif Quest.GetQuestState(23218) == 1:
+            if Quest.CheckCompleteDemand(23218,2153006) != 0:
+                if len(Field.GetMobs()) > 0:
+                    Terminal.StopRush()
+                    toggleAttack(True)
+                    toggle_kami(True)
+                    time.sleep(5)
+                elif field_id == 931050120:
+                    toggle_kami(False)
+                    teleport_enter(109,-14)
+            else:
                 if field_id != 931050110:
                     if field_id != 310020100:
                         Terminal.Rush(310020100)
                     else:
                         teleport_enter(515,-14)
                 else:
-                    Quest.StartQuest(23214, 2153006)
-            elif Quest.GetQuestState(23214) == 1:
-                if Quest.CheckCompleteDemand(23214,2153006) != 0:
-                    if len(Field.GetMobs()) > 0:
-                        Terminal.StopRush()
-                        toggleAttack(True)
-                        toggle_kami(True)
-                        time.sleep(5)
-                    elif field_id == 931050120:
-                        toggle_kami(False)
-                        teleport_enter(109,-14)
-                else:
                     time.sleep(1)
-                    Quest.CompleteQuest(23214, 2153006)
+                    Quest.CompleteQuest(23218, 2153006)
+                    time.sleep(1)
                     toggleAttack(True)
                     toggle_kami(True)
                     SCLib.UpdateVar("DoingJobAdv",False)
-        else:
-            if Quest.GetQuestState(23218) == 0:
-                if field_id != 931050110:
-                    if field_id != 310020100:
-                        Terminal.Rush(310020100)
-                    else:
-                        teleport_enter(515,-14)
-                else:
-                    Quest.StartQuest(23218, 2153006)
-            elif Quest.GetQuestState(23218) == 1:
-                if Quest.CheckCompleteDemand(23218,2153006) != 0:
-                    if len(Field.GetMobs()) > 0:
-                        Terminal.StopRush()
-                        toggleAttack(True)
-                        toggle_kami(True)
-                        time.sleep(5)
-                    elif field_id == 931050120:
-                        toggle_kami(False)
-                        teleport_enter(109,-14)
-                else:
-                    if field_id != 931050110:
-                        if field_id != 310020100:
-                            Terminal.Rush(310020100)
-                        else:
-                            teleport_enter(515,-14)
-                    else:
-                        time.sleep(1)
-                        Quest.CompleteQuest(23218, 2153006)
-                        time.sleep(1)
-                        toggleAttack(True)
-                        toggle_kami(True)
-                        SCLib.UpdateVar("DoingJobAdv",False)
 def DAFourth():
     CalmBeforeTheStorm = 23221
     quest = Quest.GetQuestState(CalmBeforeTheStorm)
@@ -3898,6 +3900,7 @@ def XenonThird():
     quest1 = Quest.GetQuestState(OnlyTheBrave)
     quest2 = Quest.GetQuestState(BlackWingsHat1)
     quest3 = Quest.GetQuestState(BlackWingsHat2)
+    quest4 = Quest.GetQuestState(GettingCaught)
     roadtothemine1 = 310040000
     instancedmine1 = 931060030
     veritas = 230050000
@@ -3920,21 +3923,34 @@ def XenonThird():
                 elif quest2 == 1:
                     completeQuest(BlackWingsHat1,stephan,roadtothemine1,roadtothemine1,field_id)
             elif quest3 != 2:
+                print("quest3")
                 acceptQuest(BlackWingsHat2,stephan,roadtothemine1,field_id)
-            elif field_id == 931060030:
-                if len(Field.GetMobs()) >= 1:
-                    toggle_kami(True)
-                    Character.UseSkill(36101000)
-                else:
-                    toggle_kami(False)
-                    toggleAttack(False)
-                    time.sleep(5)
-                    Quest.CompleteQuest(23615, 2159421)
-                    time.sleep(1)
-                    dungeonTeleport()
-                    time.sleep(1)
-                    dungeonTeleport()
+            elif quest4 != 2:
+                print("Quest4")
+                if quest4 == 0:
+                    if field_id != roadtothemine1:
+                        rush(roadtothemine1)
+                    else:
+                        Quest.StartQuest(GettingCaught,stephan)
+                        time.sleep(1)
+                elif quest4 == 1:
+                    if Quest.CheckCompleteDemand(23615,2159421) == 0:
+                        toggle_kami(False)
+                        toggleAttack(False)
+                        time.sleep(5)
+                        Quest.CompleteQuest(23615, 2159421)
+                        time.sleep(1)
+                        dungeonTeleport()
+                        time.sleep(1)
+                        dungeonTeleport()
+                    else:
+                        if len(Field.GetMobs()) >= 1 and field_id == 931060030:
+                            toggle_kami(True)
+                            Character.UseSkill(36101000)
+                        else:
+                            forfeit_quest(23615)
             else:
+                print("else")
                 completeQuest(OnlyTheBrave,promathus,veritas,roadtothemine1,field_id)
                 if Quest.GetQuestState(OnlyTheBrave) == 2:
                     SCLib.UpdateVar("DoingJobAdv",False)
@@ -9332,6 +9348,7 @@ def attackSemiND(siSkill,dummySkill,delay,on):
         x = 1
 
 def setSIND(siSkill,delay,on):
+    Terminal.SetRadioButton("SIRadioMelee",True)
     Terminal.SetLineEdit("SISkillID",siSkill)
     Terminal.SetCheckBox("Skill Injection",on)
     Terminal.SetCheckBox("Melee No Delay",on)
@@ -9360,12 +9377,16 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
     if siSkill != 32120055:
         delay = 30*math.ceil(delay*1000 * (10+attackSpeed)/480)/1000
     print("The delay for skill {} is {}, starting si".format(siSkill,delay))
+    if siSkill not in [25101000,25121000]:
+        sleepTime = 0.231
+    else:
+        sleepTime = 0.101
     while Field.GetCharacterCount()<=1 and Field.GetEliteState() !=2 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and not Terminal.GetRadioButton("SIRadioDragon") and on:
         Terminal.SetCheckBox("Skill Injection",True)
         Terminal.SetLineEdit("SISkillID",str(siSkill))
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetSpinBox("SkillInjection",17)
-        time.sleep(0.206)
+        time.sleep(sleepTime)
         #Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetLineEdit("SISkillID",str(dummySkill))
         time.sleep(0.043)
@@ -9423,7 +9444,7 @@ def toggleAttack(on):
                 Terminal.SetCheckBox("Mob Falldown",False)
     else:
         Terminal.SetCheckBox("Mob Falldown",False)
-    if int(Terminal.GetLineEdit("SISkillID")) in SpeedyGonzalesList and Terminal.GetCheckBox("Skill Injection") and Terminal.GetCheckBox("Melee No Delay"):
+    if Terminal.GetLineEdit("SISkillID") in SpeedyGonzalesList and Terminal.GetCheckBox("Skill Injection") and Terminal.GetCheckBox("Melee No Delay"):
         #print("In list")
         if not Terminal.GetCheckBox("Speedy Gonzales"):
             Terminal.SetCheckBox("Speedy Gonzales",True)
@@ -9440,7 +9461,7 @@ def toggleAttack(on):
         Terminal.SetSpinBox("FilterMeso",50000)
         if level < 140:
             toggle_loot(False)
-    elif int(Terminal.GetLineEdit("SISkillID")) in SpeedyGonzalesList:
+    elif Terminal.GetLineEdit("SISkillID") in SpeedyGonzalesList:
         Terminal.SetCheckBox("Speedy Gonzales",True)
     elif job == BuccaneerJobs[1]:
         if not Terminal.GetCheckBox("Speedy Gonzales"):
@@ -9658,9 +9679,11 @@ def toggleAttack(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            if Character.GetSkillLevel(24121010) >= 1:
+            if Character.GetSkillLevel(24121010) >= 1 and Character.GetSkillLevel(24121000) >= 1:
                 #attackSemiNDMagic(24121010,24121010,1.08,on)
                 setSIND("24121010;24121000",150,on)
+            elif Character.GetSkillLevel(24121010) >= 1:
+                attackSemiNDMagic(24121010,24121010,1.08,on)
             else:
                 attackSI(24121000,on,150)
     elif job == 15000: #Illium Pre 1st
@@ -10139,7 +10162,8 @@ def toggleAttack(on):
     elif job == 1500: #Thunder breaker 1st
         #attackAuto(15001020,on)
         if Character.GetSkillLevel(15001021) >= 1:
-            attackSIND(15001021,on,600)
+            #attackSIND(15001021,on,600)
+            attackSemiNDMagic(15001021,15001021,0.8,on)
         else:
             attackAuto(15001020,on)
     elif job in ThunderBreakerJobs and field_id in curbrockhideout: #1001005
@@ -10249,32 +10273,33 @@ def toggleAttack(on):
             #attackSI(35121015,on,250)
         #attackAuto(35111006,on)
     elif job == 11212: #Beast Tamer
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            attackSemiNDMagic(32120055,32120055,0.45,on)
-        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
-            bind_skill(32121052)
-        else:
-            if Character.HasBuff(2,110001501):
-                if Character.GetSkillLevel(112000003) >= 1:
-                    attackSIND(112000003,on,450)
-                else:
-                    if level <= 17:
-                        attackAuto(112000000,on)
-                        
-                    elif level >= 17 and (not useExploit or SCLib.GetVar("DoingZakum")):
-                        Terminal.SetCheckBox("Auto Attack", False)
-                        Terminal.SetCheckBox("Skill Injection", False)
-                        Terminal.SetCheckBox("Melee No Delay",False)
-                        count = 0
-                        if on and not Terminal.IsRushing():
-                            while count < 100 and len(Field.GetMobs())>0: #constantly presses control to simulate human actions
-                                Key.Down(0x11)
-                                time.sleep(0.1)
-                                Key.Up(0x11)
-                                time.sleep(0.1)
-                                count += 1
-                                if len(Field.GetMobs())==0:
-                                    break
+        #if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        #    attackSemiNDMagic(32120055,32120055,0.45,on)
+        #elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+        #    bind_skill(32121052)
+        #else:
+        if Character.HasBuff(2,110001501):
+            if Character.GetSkillLevel(112000003) >= 1:
+                #attackSIND(112000003,on,450)
+                attackSemiNDMagic(112000003,112001008,0.38,on)
+            else:
+                if level <= 17:
+                    attackAuto(112000000,on)
+                    
+                elif level >= 17 and (not useExploit or SCLib.GetVar("DoingZakum")):
+                    Terminal.SetCheckBox("Auto Attack", False)
+                    Terminal.SetCheckBox("Skill Injection", False)
+                    Terminal.SetCheckBox("Melee No Delay",False)
+                    count = 0
+                    if on and not Terminal.IsRushing():
+                        while count < 100 and len(Field.GetMobs())>0: #constantly presses control to simulate human actions
+                            Key.Down(0x11)
+                            time.sleep(0.1)
+                            Key.Up(0x11)
+                            time.sleep(0.1)
+                            count += 1
+                            if len(Field.GetMobs())==0:
+                                break
     elif job == 2000:#Aran pre
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -10363,7 +10388,7 @@ def toggleAttack(on):
     elif job == 2500: #Shade 1st
         attackAuto(25001000,on)
     elif job == 2510: #Shade 2nd
-        attackSemiNDMagic(25101000,25101000,0.99,on)
+        attackSemiNDMagic(25101000,25101000,1.19,on)
     elif job == 2511: #Shade 3rd
         attackSIND(25110001,on,300)
         #attackSemiNDMagic(25110001,2511001,0.99,on)
@@ -11463,6 +11488,17 @@ if ((level >= 140 and job not in ThunderBreakerJobs) or (level >= 150 and job in
         Terminal.SetCheckBox("settings/expcrash",False)
         Terminal.SetCheckBox("Instant Final Smash",False)
         equip_pensalir()
+elif level >= 140 and not has_pensalir(False) and GameState.IsInGame() and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv"):
+    if field_id != 224000142:
+        rush(224000142)
+    toggle_rush_by_level(False)
+    toggle_loot(True)
+    equip_pensalir()
+    Terminal.SetProperty("CheckEquip",True)
+elif level >= 140 and has_pensalir(False) and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv") and Terminal.GetProperty("CheckEquip",True) or Terminal.GetCheckBox("Kami Loot"):
+    toggle_rush_by_level(True)
+    Terminal.SetCheckBox("Kami Loot",False)
+    Terminal.SetProperty("CheckEquip",False)
 if level >= 200 and accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
     if field_id != 240000000:
         rush(240000000)
@@ -12727,7 +12763,8 @@ if level >= 61 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetV
                 break
 #print(SCLib.GetVar("DoingZakum"))
 #ZAKUM DAILY
-if KillZakumDaily == False and (field_id == 211042200 or field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
+#print(KillZakumDaily)
+if (KillZakumDaily == False or not SCLib.GetVar("DoingZakum")) and (field_id == 211042200 or field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not SCLib.GetVar("DoingMP"):
     if field_id == TheDoorToZakum:
         toggle_kami(False)
         teleport_enter(-3003,-220)
@@ -13103,5 +13140,4 @@ if int(Terminal.GetLineEdit("LoginChar")) >= Login.GetCharCount() and GameState.
         Terminal.SetCheckBox("Auto Login",True)
         Terminal.SetCheckBox("settings/autochar",True)
     time.sleep(4)
-    
     
