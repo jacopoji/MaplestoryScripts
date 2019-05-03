@@ -1,4 +1,4 @@
-import Character,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party,json,Login,datetime
+import Character,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party,json,Login,datetime,math
 
 if not any("SunCat" in s for s in sys.path):
     sys.path.append(os.getcwd() + "\SunCat")
@@ -1683,30 +1683,36 @@ def attackSemiNDOnce(siSkill,dummySkill,delay,on):
         Character.UseSkill(dummySkill)
         time.sleep(delay)
 
-def SemiNDSi(siSkill,dummySkill,delay,on):
+def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
     Terminal.SetCheckBox("Auto Attack",False)
     Terminal.SetRadioButton("SIRadioMelee",True)
+    Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
     count = 0
-    while Field.GetCharacterCount()<=1 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and on:
+    if siSkill != 32120055:
+        delay = 30*math.ceil(delay*1000 * (10+attackSpeed)/480)/1000
+    print("The delay for skill {} is {}, starting si".format(siSkill,delay))
+    while Field.GetCharacterCount()<=1 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and not Terminal.GetRadioButton("SIRadioDragon") and on:
         Terminal.SetCheckBox("Skill Injection",True)
         Terminal.SetLineEdit("SISkillID",str(siSkill))
         Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetSpinBox("SkillInjection",15)
-        time.sleep(0.08)
+        Terminal.SetSpinBox("SkillInjection",10)
+        time.sleep(0.081)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetLineEdit("SISkillID",str(dummySkill))
-        time.sleep(0.02)
+        time.sleep(0.03)
         Terminal.SetCheckBox("Skill Injection",False)
         time.sleep(delay)
-        if Terminal.IsRushing():
-            break
+        #if Terminal.IsRushing():
+        #    break
         if count >= 30:
             break
+        if siSkill == 27111303 and not(Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219)):
+            break
         count += 1
-
-def attackSemiNDMagic(siSkill,dummySkill,delay,on):
+    print("Si ended due to break options")
+def attackSemiNDMagic(siSkill,dummySkill,delay,on,attackSpeed = 4):
     try:
-        SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on))
+        SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed))
     except:
         x = 1
 
@@ -1924,6 +1930,9 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 1212: #BW 4th
         print("Setting up Settings for Blaze Wizard")
+        Terminal.SetCheckBox("Full Map Attack",True)
+        attackAuto(12001020,True)
+        '''
         Terminal.SetLineEdit("SISkillID","12121055")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",31)
@@ -1931,6 +1940,7 @@ def initAttack():
         Terminal.SetCheckBox("Skill Injection", True)
         Terminal.SetCheckBox("Melee No Delay",True)
         Terminal.SetCheckBox("Kami Vac",True)
+        '''
     elif job == 572: #Jett 4th
         print("Setting up Settings for Jett")
         Terminal.SetCheckBox("Kami Vac",True)
@@ -1967,17 +1977,22 @@ def initSemiND():
     pgup_key = 0x21
     if job == 1212 or job == 2312:
         Terminal.SetComboBox("Familiar0",1)
+        Terminal.SetSlider("sliderMP", 90)
+        Terminal.SetComboBox("MPKey",4)
     else:
         Terminal.SetComboBox("Familiar0",5)
-    toggle_rush_by_level(True)
+        Terminal.SetSlider("sliderMP", 10)
+        Terminal.SetComboBox("MPKey",6)
+    #toggle_rush_by_level(True)
     Terminal.SetCheckBox("Kami Vac",False)
-    Terminal.SetSlider("sliderMP", 10)
-    Terminal.SetComboBox("MPKey",6)
     Terminal.SetCheckBox("eliteCC",False)
     if job == 3112: #DS fourth job
         print("Setting up Settings for DS")
         Terminal.SetCheckBox("Kami Vac",True)
-        attackSemiNDMagic(400011018,400011018,0.40,True)
+        attackSemiNDMagic(400011018,400011018,0.40,True,attackSpeed = 6)
+    elif job == 2312: #Mercedes 4th
+        print("Setting up Settings for Mercedes")
+        attackSemiNDMagic(400031024,400031024,0.20,True,attackSpeed = 6)
 
 def initAttackDone():
     print("Initializing done attack settings for this character")
@@ -2042,7 +2057,7 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 3112: #DS fourth job
         print("Setting up Settings for DS")
-        attackSemiNDMagic(400011018,400011018,0.45,True)
+        attackSemiNDMagic(400011018,400011018,0.40,True,attackSpeed = 6)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2312: #Mercedes 4th
         print("Setting up Settings for Mercedes")
@@ -2187,13 +2202,8 @@ def initAttackDone():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 1212: #BW 4th
         print("Setting up Settings for Blaze Wizard")
-        Terminal.SetLineEdit("SISkillID","12121055")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",31)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetCheckBox("Kami Vac",True)
+        Terminal.SetCheckBox("Full Map Attack",True)
+        attackAuto(12001020,True)
     elif job == 572: #Jett 4th
         print("Setting up Settings for Jett")
         Terminal.SetCheckBox("Kami Vac",True)

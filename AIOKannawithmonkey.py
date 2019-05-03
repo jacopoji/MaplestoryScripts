@@ -26,23 +26,27 @@ buy_character_expansion = True
 #store mesos
 storage_map_id = 550000000
 storage_npc_id = 9270054
+import sys
+sys.path.append('C:/Users/Jacopo/Desktop/Scripts')
+import headers
+store_header = headers.bank_header
+block_header = headers.bank_block_header
+buy_ticket_header = headers.cash_item_header
+recv = headers.cash_recv_header
+SF_header = headers.SF_header
+StarForceRecv = headers.SF_recv_header
+collide_header = headers.collide_header
+potential_header = headers.potential_header
+potential_recv = headers.potential_recv_header
+BlockBuyHeader = headers.buy_block_header
+BuyItemHeader = headers.buy_header
+useExpansionHeader = headers.use_expansion_header
+level_skill_header = headers.level_skill_header 
+dialogue_header = headers.dialogue_header
+quest_header = headers.quest_header
+CashItemRequestOpcode = headers.cash_item_header
+CashItemResultOpcode = headers.cash_recv_header
 
-#headers that might need to be updated every game update
-#headers updated for v203
-store_header = 0x00F5
-block_header = 0x06AC #check this v203
-buy_ticket_header = 0x0546
-recv = 0x06E2
-SF_header = 0x0138
-StarForceRecv = 0x0150
-collide_header = 0x0104
-potential_header = 0x013E
-potential_recv = 0x027C
-BlockBuyHeader = 0x0693
-useExpansionHeader = 0x0121
-BuyItemHeader = 0x00F4
-CashItemRequestOpcode = 1337
-CashItemResultOpcode = 1739
 BuyByMesoRequest = 85
 LoadLockerDoneResult = 2
 MoveLToSRequest = 15
@@ -630,10 +634,6 @@ def settings_fourth_job():
 	#	Terminal.SetCheckBox("Summon Kishin",True)
 	if not Terminal.GetCheckBox("Grenade Kami"):
 		Terminal.SetCheckBox("Grenade Kami",True)
-	if accountData['ready_for_cube']:
-		Terminal.SetSpinBox("MonkeySpiritsNDdelay",480)
-	else:
-		Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
 	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
 	if Terminal.GetCheckBox("Skill Injection"):
 		Terminal.SetCheckBox("Skill Injection",False)
@@ -666,7 +666,15 @@ def settings_fourth_job():
 		toggle_loot(True)
 	elif level >= 149:
 		Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
-		Terminal.SetSpinBox("FilterMeso",1000)
+		if accountData['cubing_done']:
+			Terminal.SetSpinBox("FilterMeso",11500)
+			Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
+		elif accountData['ready_for_cube']:
+			Terminal.SetSpinBox("FilterMeso",1000)
+			Terminal.SetSpinBox("MonkeySpiritsNDdelay",480)
+		else:
+			Terminal.SetSpinBox("FilterMeso",1000)
+			Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
 	Key.Set(0x47,1,42111003)
 	if level >= 140:
 		equip_pensalir()
@@ -1405,6 +1413,8 @@ def handleReady(data):
 		data['total_slots'] = 1
 	if 'used_slots' not in data:
 		data['used_slots'] = 0
+	if 'training_done' not in data:
+		data['training_done'] = False
 
 def initializeEquips(data):
 	if 'equips' not in data:
@@ -1679,6 +1689,7 @@ def withdraw_mesos():
 ######Black gate
 def BossCheck():
 	print("Waiting for boss to spawn...")
+	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
 	time.sleep(10)
 	for mob in blackgate_boss:
 		print("Checking for boss: " + str(mob) + "...")
@@ -1715,6 +1726,7 @@ def BossCheck():
 			time.sleep(9)
 	print("no boss found or boss killed")
 	time.sleep(2)
+	Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
 
 
 def EnterPortal(name):
@@ -2047,7 +2059,7 @@ def print_info():
 			for f in filelist:
 				os.remove(os.path.join(directory, f))
 		print("Writing to file")
-		with open('C:/Users/Jacopo/Pictures/MapleStoryMerch/ready_to_sell/{0}/{1}b_{0}.txt'.format(Terminal.GetLineEdit("LoginID"),accountData['total_meso']),'w') as f:
+		with open('C:/Users/Jacopo/Pictures/MapleStoryMerch/ready_to_sell/{0}/{1}b_{0}.txt'.format(Terminal.GetLineEdit("LoginID"),int(accountData['total_meso'])),'w') as f:
 			f.write("[Reboot NA] Lv149 Kanna with {}b+ and meso gear \n".format(int(accountData['total_meso'])))
 			f.write("\nComes with:\n{}b+ Mesos(Spread out among meso mules and Kanna) \n".format(int(accountData['total_meso'])))
 			f.write("110%+ Meso Obtain (check screenshots below)\n")
@@ -2087,6 +2099,7 @@ if accountData['pet_expire'] and GameState.IsInGame():
 		if not Terminal.GetProperty("SaleInfo",False):
 			print_info()
 			Terminal.SetProperty("SaleInfo",True)
+		#print_info()
 		if accountData['total_slots'] <= 20 and buy_character_expansion:
 			buy_expansion()
 
@@ -2504,6 +2517,7 @@ if not accountData['cubing_done'] and level >=145 and not SCLib.GetVar("DoingMP"
 	#then buy
 	SCLib.UpdateVar("DoingBG",False)
 	el_nath = 211000000
+	kumpang = 551000000
 	necklace = "necklace"
 	eye = 'eye'
 	face = 'face'
@@ -2589,8 +2603,8 @@ if not accountData['cubing_done'] and level >=145 and not SCLib.GetVar("DoingMP"
 		SCLib.UpdateVar("cube_lock",True)
 		toggle_rush_by_level(False)
 		cube_sleep_time = 0.75
-		if curr_map != el_nath:
-			Terminal.Rush(el_nath)
+		if curr_map != kumpang:
+			Terminal.Rush(kumpang)
 			time.sleep(1)
 		elif not SCLib.GetVar("took_off"):
 			take_off_equip()
@@ -2821,14 +2835,14 @@ if not accountData['cubing_done'] and level >=145 and not SCLib.GetVar("DoingMP"
 		if Character.GetMeso() > 800000000:
 			toggle_rush_by_level(False)
 			SCLib.UpdateVar("cube_lock",True)
-			if curr_map != el_nath:
+			if curr_map != kumpang:
 				if Terminal.IsRushing():
 					print("Still rushing")
 					time.sleep(3)
-				print("Rush to el_nath")
-				Terminal.Rush(el_nath)
+				print("Rush to kumpang")
+				Terminal.Rush(kumpang)
 				time.sleep(3)
-			elif curr_map == el_nath and Terminal.IsRushing():
+			elif curr_map == kumpang and Terminal.IsRushing():
 				Terminal.StopRush()
 				time.sleep(1)
 			else:
@@ -2889,7 +2903,7 @@ if DoBlackGate and not SCLib.GetVar("cube_lock") and SCLib.GetVar("checked_equip
     # IF AT BDF MAIN MAP
     elif map == 610050000:
         time.sleep(2)
-        if channel == 30:
+        if channel == 20:
             channel = 1
         else:
             channel += 1
