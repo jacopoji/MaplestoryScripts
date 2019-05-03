@@ -9492,7 +9492,8 @@ def toggleAttack(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            attackSI(31121010,on,16)
+            #attackSI(31121010,on,16)
+            attackSemiNDMagic(31121010,31121010,0.66,on)
     elif job == 2300: #Mercedes 1st 
         attackAuto(23001000,on)
     elif job in MercedesJobs and field_id in curbrockhideout:
