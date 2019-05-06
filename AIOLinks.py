@@ -1899,11 +1899,13 @@ def DAThird():
                 if len(Field.GetMobs()) > 0:
                     Terminal.StopRush()
                     toggleAttack(True)
-                    toggle_kami(True)
+                    toggle_kami(False)
                     time.sleep(5)
                 elif field_id == 931050120:
                     toggle_kami(False)
                     teleport_enter(109,-14)
+                else:
+                    forfeit_quest(23214)
             else:
                 time.sleep(1)
                 Quest.CompleteQuest(23214, 2153006)
@@ -1974,7 +1976,7 @@ def DAFourth():
                 toggleAttack(True)
 
 def DSFourth():
-    TrueAwakening = 23219
+    TrueAwakening = 23215
     quest = Quest.GetQuestState(TrueAwakening)
     SCLib.UpdateVar("DoingJobAdv",True)
     if quest != 2:
@@ -7211,6 +7213,7 @@ def ShadeFirst():
     
     def tp(x, y):
         if Character.GetPos().x != x:
+            Terminal.SetCheckBox("Kami Vac",False)
             Character.Teleport(x, y - 10)
     
     
@@ -9576,7 +9579,10 @@ def toggleAttack(on):
             attackSemiNDMagic(31211010,31211010,0.78,on)
     elif job == 3100 or job == 3110 or job == 3111: #DS first - third job
         #Key.Set(attack_key,1,31000004)31001008
-        attackSemiNDMagic(31001008,31001008,0.55,on)
+        if SCLib.GetVar("DoingJobAdv"):
+            attackSI(31001008,100,on)
+        else:
+            attackSemiNDMagic(31001008,31001008,0.55,on)
     elif job == 3112: #DS fourth job
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
             attackSemiNDMagic(32120055,32120055,0.45,on)
@@ -9702,7 +9708,10 @@ def toggleAttack(on):
         Terminal.SetCheckBox("bot/illium/summon_control",on)
         Terminal.SetCheckBox("General FMA",on)
     elif job in CadenaJobs: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
-        attackSIND(64001001,on,160)
+        if job != CadenaJobs[-1]:
+            attackSIND("64001001;64001006",on,100)
+        else:
+            attackSIND("64120000;64001001",on,100)
     elif job in ArkJobs: #Ark 1st + 2nd + 3rd 155001100
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
             attackSemiNDMagic(32120055,32120055,0.45,on)
@@ -10438,7 +10447,1048 @@ def toggleAttack(on):
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         Terminal.SetCheckBox("bot/illium/summon_control",False)
 
-    
+def toggleAttackQuest(on):
+    attack_key = 0x44
+    pgup_key = 0x21
+    exploit_map = 224000102
+    if field_id == exploit_map:# Do not need to attack in exploit map
+        return
+    if Character.IsOwnFamiliar(9960098) and level > 15 and job not in KinesisJobs:
+        Terminal.SetSlider("sliderMP", 90) #use boogie to regen mana
+        Terminal.SetComboBox("MPKey",4)
+    else:
+        Terminal.SetSlider("sliderMP", 20) #use potion to regen mana
+        Terminal.SetComboBox("MPKey",6)
+
+    if not SCLib.GetVar("DoingZakum") or not getSpider: #Ocassionaly use big spider (in zakum)
+        Terminal.SetComboBox("Familiar0",1)
+
+    if job in XenonJobs: #Solve Xenon Auto Ability point issues
+        if Character.GetAP() < 70: 
+            if Terminal.GetCheckBox("Auto AP"):
+                Terminal.SetCheckBox("Auto AP",False)
+        else:
+            if not Terminal.GetCheckBox("Auto AP"):
+                Terminal.SetCheckBox("Auto AP",True)
+    else:
+        if not Terminal.GetCheckBox("Auto AP"):
+            Terminal.SetCheckBox("Auto AP",True)
+
+    if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBeach") and not SCLib.GetVar("DoingSleepy"): # kami control interupt by job adv script and zakum script
+        toggle_kami(on)
+    #print(SCLib.GetVar("DoingJobAdv"))
+    if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum"):
+        if Terminal.GetCheckBox("Legit Vac") and Terminal.GetCheckBox("Kami Vac") and field_id not in mobFalldownBlacklist:# and not Terminal.GetCheckBox("Melee No Delay"):
+            Terminal.SetCheckBox("Mob Falldown",on)
+        else:
+            if Terminal.GetCheckBox("Mob Falldown"):
+                Terminal.SetCheckBox("Mob Falldown",False)
+    else:
+        Terminal.SetCheckBox("Mob Falldown",False)
+    if Terminal.GetLineEdit("SISkillID") in SpeedyGonzalesList and Terminal.GetCheckBox("Skill Injection") and Terminal.GetCheckBox("Melee No Delay"):
+        #print("In list")
+        if not Terminal.GetCheckBox("Speedy Gonzales"):
+            Terminal.SetCheckBox("Speedy Gonzales",True)
+        if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("GettingBoogie") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBeach") and not SCLib.GetVar("DoingSleepy"):
+            if not Terminal.GetCheckBox("filter_etc"):
+                Terminal.SetCheckBox("filter_etc",True)
+            if not Terminal.GetCheckBox("filter_use"):
+                Terminal.SetCheckBox("filter_use",True)
+        else:
+            if Terminal.GetCheckBox("filter_etc"):
+                Terminal.SetCheckBox("filter_etc",False)
+            if Terminal.GetCheckBox("filter_use"):
+                Terminal.SetCheckBox("filter_use",False)
+        Terminal.SetSpinBox("FilterMeso",50000)
+        if level < 140:
+            toggle_loot(False)
+    elif Terminal.GetLineEdit("SISkillID") in SpeedyGonzalesList:
+        Terminal.SetCheckBox("Speedy Gonzales",True)
+    elif job == BuccaneerJobs[1]:
+        if not Terminal.GetCheckBox("Speedy Gonzales"):
+            Terminal.SetCheckBox("Speedy Gonzales",True) 
+    else:
+        if Terminal.GetCheckBox("Speedy Gonzales"):
+            Terminal.SetCheckBox("Speedy Gonzales",False)
+        if Terminal.GetCheckBox("filter_etc"):
+            Terminal.SetCheckBox("filter_etc",False)
+        if Terminal.GetCheckBox("filter_use"):
+            Terminal.SetCheckBox("filter_use",False)
+        if level < 140:
+            Terminal.SetSpinBox("FilterMeso",0)
+            
+    #elif job == NightWalkerJobs[2] or job == NightWalkerJobs[3]:
+    #    if not Terminal.GetCheckBox("Speedy Gonzales"):
+    #        Terminal.SetCheckBox("Speedy Gonzales",True)
+    if level > 60 and level < 120 and not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBeach") and not SCLib.GetVar("DoingSleepy"):
+        Terminal.SetCheckBox("Kami Loot",False)
+        Terminal.SetCheckBox("Auto Loot",True)
+    if job == 4200: #kanna first job
+        attackAuto(42001000,on)
+    elif job in KannaJobs and field_id in curbrockhideout:
+        attackAuto(42001000,on)
+    elif job == 4210: #kanna 2nd
+        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetSpinBox("charm_delay",100)
+        Terminal.SetCheckBox("charm_fma",on)
+        Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
+        Terminal.SetSpinBox("SkillInjection", 100)
+        Terminal.SetLineEdit("SISkillID","42001006")
+        Terminal.SetCheckBox("Skill Injection",True)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 4211:#kanna 3rd
+        Terminal.SetSpinBox("charm_delay",100)
+        Terminal.SetCheckBox("charm_fma",on)
+        Terminal.SetCheckBox("Summon Kishin",False)
+        Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
+        Terminal.SetCheckBox("Auto Attack",on)
+        Terminal.SetSpinBox("autoattack_spin",7500)
+        Terminal.SetComboBox("AttackKey",36)
+        Terminal.SetCheckBox("Skill Injection",False)
+        Key.Set(0x47,1,42111003) #kishin
+    elif job == 4212: #kanna 4th 
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
+            Terminal.SetCheckBox("Grenade Kami",True)
+            Terminal.SetCheckBox("charm_fma",False)
+            Terminal.SetCheckBox("Summon Kishin",False)
+            Terminal.SetCheckBox("MonkeySpiritsNDcheck",on)
+            Terminal.SetCheckBox("Kami Vac",False)
+            Terminal.SetCheckBox("Skill Injection",False)
+        Terminal.SetCheckBox("Auto Attack",on)
+        Terminal.SetSpinBox("autoattack_spin",7500)
+        Terminal.SetComboBox("AttackKey",36)
+        Key.Set(0x47,1,42111003) #kishin
+    elif job == 2700: #lumi first job
+        # 20040217 Dark Mode Buff
+        # 20040216 Light Mode
+        # 20040220 20040219 Equi Mode
+        attackSemiNDMagic(27001201,27001201,0.98,on)
+    elif job in LuminousJobs and field_id in curbrockhideout:
+        attackAuto(27001201,on)
+    elif job == 2710: #lumi second job
+        if Character.HasBuff(2,20040217): #use dark magic
+            #attackAuto(27001201,on)
+            attackSI(27101202,on,200)
+        else:
+            #attackSemiNDMagic(27101100,27101100,0.5,on)
+            attackAuto(27101100,on)
+    elif job == 2711: #lumi third job
+        if Character.HasBuff(2,20040216): #Light Mode
+            attackAuto(27101100,on)
+        elif Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219): #Equi Mode
+            attackSemiNDMagic(27111303,27111303,1.77,on)
+        else:                              #Dark Mode
+            #attackAuto(27111202,on)
+            attackSI(27101202,on,200)
+    elif job == 2712: #lumi fourth job
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            if Character.HasBuff(2,20040216): #Light Mode
+                attackAuto(27121100,on)
+            elif Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219): #Equi Mode
+                attackSemiNDMagic(27111303,27111303,1.77,on)
+                #attackAuto(27111303,on)
+            else:                              #Dark Mode
+                #attackSemiNDOnce(27121202,27001201,0.96,on)
+                attackSI(27101202,on,200)
+    elif job == 3101: #DA first job
+        attackAuto(31011000,on)
+    elif job in DemonAvengerJobs and field_id in curbrockhideout:
+        attackAuto(31011000,on)
+    elif job == 3120: #DA 2nd
+        #attackSemiNDMagic(31201010,31201010,0.66,on)
+        attackSIND(31201010,on,100)
+        #attackAuto(31011000,on)
+    elif job == 3121 or job == 3122: #DA third job and fourth job
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSI(31211010,on)
+    elif job == 3100 or job == 3110 or job == 3111: #DS first - third job
+        #Key.Set(attack_key,1,31000004)31001008
+        if SCLib.GetVar("DoingJobAdv"):
+            attackSI(31001008,100,on)
+        else:
+            attackSI(31001008,on)
+    elif job == 3112: #DS fourth job
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            #attackSI(31121010,on,16)
+            attackSemiNDMagic(31121010,31121010,0.66,on)
+    elif job == 2300: #Mercedes 1st 
+        attackAuto(23001000,on)
+    elif job in MercedesJobs and field_id in curbrockhideout:
+        attackAuto(23001000,on)
+    elif job ==2310: #Mercedes 2nd
+        attackAuto(23101000,on)
+        #attackSIND(23101007,on,250)
+        #attackSIND(23100004,on,300)
+    elif job ==2311: #Mercedes 3rd
+        #attackAuto(23111000,on)
+        '''
+        attack_key = 0x44
+        Key.Set(attack_key,1,23111000)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",100)
+        Terminal.SetLineEdit("SISkillID",str(23111002))
+        Terminal.SetSpinBox("SkillInjection",200)
+        Terminal.SetCheckBox("Melee No Delay",on)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",on)
+        Terminal.SetCheckBox("Skill Injection", on)
+        '''
+        attackAuto(23111000,on)
+        #attackSIND(23111000,on,250)
+    elif job == 2312: #Mercedes 4th
+        #attackAuto(23111000)
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            '''
+            attack_key = 0x44
+            Key.Set(attack_key,1,23111000)
+            Terminal.SetComboBox("AttackKey",33)
+            Terminal.SetSpinBox("autoattack_spin",100)
+            Terminal.SetLineEdit("SISkillID",str(23111002))
+            Terminal.SetSpinBox("SkillInjection",200)
+            Terminal.SetCheckBox("Melee No Delay",on)
+            Terminal.SetRadioButton("SIRadioMelee",True)
+            Terminal.SetCheckBox("Auto Attack",on)
+            Terminal.SetCheckBox("Skill Injection", on)
+            '''
+            #attackAuto(23111000,on)
+            #attackSIND(23120013,on,150)
+            attackSemiNDMagic(23120013,23111002,0.54,on)
+    elif job == 4100: #Hayato 1st 41001004
+        attackSI(41001004,on,100)
+    elif job in HayatoJobs and field_id in curbrockhideout:
+        attackSI(41001004,on,100)
+    elif job == 4110: #Hayato 2nd 41101000
+        attackSI(41101000,on,100)
+    elif job == 4111: #Hayato 3rd 41111011
+        attackSI(41111011,on,100)
+    elif job == 4112: #Hayato 4th 41121011
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiNDMagic(41121011,41121011,0.45,on)
+    elif job == 3600:#Xenon 1st 36001000
+        attackSI(36001000,on)
+    elif job in XenonJobs and field_id in curbrockhideout:
+        attackSI(36001000,on,150)
+    elif job == 3610:#Xenon 2nd 36101000
+        attackSI(36101000,on)
+    elif job == 3611:#Xenon 3rd 36111000
+        #attackSemiNDMagic(36111000,36111000,1.8,on)
+        attackSI(36111009,on)
+        #attackSemiNDMagic(36111010,36111010,0.72,on)
+    elif job == 3612:#Xenon 4th 36121000
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            if Character.GetSkillLevel(36121001) >= 1:
+                attackSemiNDMagic(36121011,36121011,1.38,on)
+            else:
+                attackSI(36121000,on,110)
+    elif job == 2400: #Phantom 1st 24001000
+        attackSI(24001000,on)
+    elif job in PhantomJobs and field_id in curbrockhideout:
+        attackAuto(24001000,on)
+    elif job == 2410: #Phantom 2nd 24101000
+        attackSI(24101000,on)
+    elif job == 2411: #Phantom 3rd 24111000
+        attackSI(24111000,on)
+    elif job == 2412: #Phantom 4th 24121000
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            if Character.GetSkillLevel(24121010) >= 1 and Character.GetSkillLevel(24121000) >= 1:
+                #attackSemiNDMagic(24121010,24121010,1.08,on)
+                setSIND("24121010;24121000",150,on)
+            elif Character.GetSkillLevel(24121010) >= 1:
+                attackSemiNDMagic(24121010,24121010,1.08,on)
+            else:
+                attackSI(24121000,on,150)
+    elif job == 15000: #Illium Pre 1st
+        Terminal.SetCheckBox("Skill Injection", False)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",1)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job in IlliumJobs: #Illium 1st+2nd+3rd+4th
+        Terminal.SetCheckBox("Skill Injection", False)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto Attack",False)
+        
+        Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",on)
+        Terminal.SetCheckBox("bot/illium/summon_control",on)
+        Terminal.SetCheckBox("General FMA",on)
+    elif job in CadenaJobs: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
+        if job != CadenaJobs[-1]:
+            attackSIND("64001001;64001006",on,100)
+        else:
+            attackSIND("64120000;64001001",on,100)
+    elif job in ArkJobs: #Ark 1st + 2nd + 3rd 155001100
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiND(155001100,155001100,0.85,on)
+    elif job == 2001: #Evan pre 1st job
+        Terminal.SetCheckBox("Skill Injection", False)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",1)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 2200: #Evan 1st 22001010 AA
+        attackAuto(22001010,on)
+    elif job in EvanJobs and field_id in curbrockhideout:
+        if field_id == 600050020:
+            attackSIND(22110010,on,100)
+        else:
+            attackAuto(22001010,on)
+            Key.Set(attack_key,1,22001010)
+    elif job == 2211: #Evan 2nd 22110010 SI/ND
+        attackSIND(22110010,on,100)
+        
+    elif job == 2214: #Evan 3rd 22140010 SI/ND
+        attackSIND(22140010,on,100)
+        
+    elif job == 2217: #Evan 4th 22170061 SI/ND
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSIND(22170061,on,100)
+        
+    elif job == 0:
+        Terminal.SetCheckBox("Skill Injection", False)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",1)
+        Terminal.SetSpinBox("autoattack_spin",100)
+    elif job == 100: #Swordman
+        attackAuto(1001005,on)
+    elif job == 110: #fighter 1101011
+        attackAuto(1101011,on)
+    elif job in HeroJobs and field_id in curbrockhideout: #1001005
+        attackAuto(1001005,on)
+    elif job == 111: #crusader 1111010
+        attackSIND(1111010,on,450)
+    elif job == 112: #Hero 1120017
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSIND(1120017,on,400)
+    elif job == 120: #Page 1201011
+        attackSI(1201011,on)
+    elif job in PaladinJobs and field_id in curbrockhideout: #1001005
+        attackAuto(1001005,on)
+    elif job == 121: #White knight 1211008
+        #attackAuto(1211008,on)
+        attackSI(1201011,on)
+    elif job == 122: #Paladin 1211008
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiND(1221004,1221004,0.81,on)
+            '''
+            while Field.GetCharacterCount()<=1 and Field.GetEliteState() !=2 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame():
+                for x in range(1,8,1):
+                    Character.UseSkill(1221004)
+                    time.sleep(0.02)
+                time.sleep(0.02)
+                Character.UseSkill(1221004)
+                time.sleep(0.80)
+            '''
+    elif job == 130: #Spearman 1301011
+        attackSI(1301011,on)
+        
+    elif job in DarkknightJobs and field_id in curbrockhideout: #1001005
+        attackAuto(1001005,on)
+    elif job == 131: #Berserker
+        attackSI(1301011,on)
+        
+    elif job == 132: #Dark Knight
+        #attackAuto(1321012,on)
+        #attackSIND(1321012,on,450)
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiND(1321012,1321012,0.84,on)
+    elif job == 200: #Mage
+        attackAuto(2001008,on)
+        
+    elif job in ILMageJobs and field_id in curbrockhideout: #1001005
+        attackAuto(2001008,on)
+    elif job == 220: #IL wizard
+        attackAuto(2201005,on)
+        
+    elif job == 221: #IL mage
+        attackAuto(2211002,on)
+        
+    elif job == 222: #IL archmage
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        #elif level >= 140:
+        #    if level >= 140 and Character.GetSkillLevel(12121054) == 1:
+        #        attackSIND(12121055,16)
+        #    elif level >= 140 and Character.GetSkillLevel(12121054) == 0:
+        #        bind_skill(12121054)
+        else:
+            attackAuto(2221006,on)
+
+        
+    elif job in FPMageJobs and field_id in curbrockhideout: #1001005
+        attackSI(2101004,on,100,"SIRadioMagic") 
+    elif job == 210: #FP wizard
+        attackSI(2101004,on,100,"SIRadioMagic") 
+        
+    elif job == 211: #FP mage
+        attackSI(2101004,on,100,"SIRadioMagic") 
+        
+    elif job == 212: #FP archmage
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        #elif level >= 140:
+        #    if level >= 140 and Character.GetSkillLevel(12121054) == 1:
+        #        attackSIND(12121055,16)
+        #    elif level >= 140 and Character.GetSkillLevel(12121054) == 0:
+        #        bind_skill(12121054)
+        else:
+            attackAuto(2121006,on)
+        
+    elif job in BishopJobs and field_id in curbrockhideout: #1001005
+        attackAuto(2001008,on)
+    elif job == 230: #cleric
+        attackAuto(2301005,on)
+    elif job == 231: #priest
+        attackAuto(2311004,on)
+    elif job == 232: #Bishop
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        #elif level >= 140:
+        #    if level >= 140 and Character.GetSkillLevel(12121054) == 1:
+        #        attackSIND(12121055,16)
+        #    elif level >= 140 and Character.GetSkillLevel(12121054) == 0:
+        #        bind_skill(12121054)
+        else:
+            attackSI(2321007,on,100,"SIRadioMagic")
+    elif job == 300: #Archer
+        attackAuto(3001004,on)
+        
+    elif (job in BowmasterJobs or job in MarksmanJobs) and field_id in curbrockhideout: #1001005
+        attackAuto(3001004,on)
+    elif job == 310: #Hunter
+        attackAuto(3101005,on)
+        
+    elif job == 311: #Ranger
+        attackAuto(3111003,on)
+        #attackSIND(3111003,on,300)
+        
+    elif job == 312: #Bowmaster
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSIND(3121015,on,600)
+        
+    elif job == 320: #Crossbowman
+        attackAuto(3201005,on)
+    elif job == 321: #Sniper
+        attackAuto(3211009,on)
+        #attackSIND(3211009,on,400)
+    elif job == 322: #Marksman
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackAuto(3221017,on)
+    elif job == 400: #Thief
+        
+        if SCLib.GetVar("DualBlade"):
+            if Character.GetSkillLevel(4001013) == 0:
+                LevelSkill(4001013)
+            attackAuto(4001013,on)
+        else:
+            attackAuto(4001334,on)
+        if Character.GetSkillLevel(4001013) >= 1:
+            SCLib.UpdateVar("DualBlade",True)
+        else:
+            SCLib.UpdateVar("DualBlade",False)
+        
+    elif job == 410: #Assassin
+        attackSI(4101008,on)
+        
+    elif job in NightlordJobs and field_id in curbrockhideout: #1001005
+        attackAuto(4101008,on)
+    elif job == 411: #Hermit
+        attackSI(4111015,on)
+        
+    elif job == 412: #nightlord
+        #print(Character.GetSkillLevel(32121052))
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            Terminal.SetSpinBox("KamiOffsetX", -85)
+            if Character.GetSkillLevel(4121017) >= 1:
+                attackSI(4121017,on)
+            else:
+                attackSI(4111015,on)
+        
+    elif job == 420: #Bandit
+        attackSI(4201012,on)
+        
+    elif job in ShadowerJobs and field_id in curbrockhideout: #1001005
+        attackAuto(4001334,on)
+    elif job == 421: #Chief Bandit
+        attackSI(4211002,on)
+        
+    elif job == 422: #Shadower
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSI(4221007,on)
+        
+    elif job == 430: #dualblade
+        if Character.GetSkillLevel(4001013) == 0:
+            LevelSkill(4001013)
+        elif Character.GetSkillLevel(4000012) < 10:
+            LevelSkill(4000012)
+        elif Character.GetSkillLevel(4001011) < 5:
+            LevelSkill(4001011)
+        elif Character.GetSkillLevel(4001003) < 10:
+            LevelSkill(4001003)
+        elif Character.GetSkillLevel(4001013) < 10:
+            LevelSkill(4001013)
+        attackAuto(4001013,on)
+    elif job == 431: #dualblade
+        attackAuto(4001013,on)
+    elif job == 432:
+        attackSIND(4321004,on,450)
+    elif job == 433:
+        #attackAuto(4321004,on)
+        attackSIND(4321004,on,450)
+    elif job == 434: #dual blade 4th
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiND(4341004,4341004,0.74,on)
+    elif job == 500: #Pirate
+        attackAuto(5001002,on)
+    elif job == 501: #Cannoneer Pirate
+        #attackAuto(5011000,on)
+        attackSIND(5011002,on,200)
+    elif job in BuccaneerJobs and field_id in curbrockhideout: #1001005
+        attackAuto(5101012,on)
+    elif job in CorsairJobs and field_id in curbrockhideout: #1001005
+        attackAuto(5201001,on)
+    elif job == 510: #Brawler
+        attackAuto(5101012,on)
+    elif job == 511: #Marauder
+        attackAuto(5111002,on)
+    elif job == 512: #Buccaneer
+        #attackAuto(5121007,on)
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiNDMagic(5121017,5121007,1.25,on)
+    elif job == 520: #Gunslinger
+        attackAuto(5201001,on)
+    elif job == 521: #Outlaw
+        attackAuto(5211008,on)
+    elif job == 522: #Corsair
+        #if level < 160:
+        #    attackSIND(5221017,on,350)
+        #else:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiNDMagic(5221017,5221017,0.85,on)
+    elif job == 530: #Cannoneer
+        #attackAuto(5301001,on)
+        #attackSIND(5011002,on,200)
+        #if Character.GetSkillLevel(5301000) >= 1:
+        #    attackAuto(5301001,on)
+            #attackSemiNDMagic(5301000,5301000,0.84,on)
+        #else:
+        attack_key = 0x44
+        Key.Set(attack_key,1,5301001)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",400)
+        Terminal.SetLineEdit("SISkillID",str(5011002))
+        Terminal.SetSpinBox("SkillInjection",200)
+        Terminal.SetCheckBox("Melee No Delay",on)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",on)
+        Terminal.SetCheckBox("Skill Injection", on)
+    elif job in CannoneerJobs and field_id in curbrockhideout: #1001005
+        attackAuto(5301001,on)
+    elif job == 531: #Cannon Trooper
+        '''
+        if Terminal.GetCheckBox("Mob Falldown"):
+            attackAuto(5311000,on)
+        else:
+            attackAuto(5301001,on)
+            Terminal.SetCheckBox("Speedy Gonzales",True)
+        '''
+        #if Character.GetSkillLevel(5311000) >= 1:
+        #    attackSemiNDMagic(5311000,5311000,0.96,on)
+        #else:
+        attack_key = 0x44
+        Key.Set(attack_key,1,5301001)
+        Terminal.SetComboBox("AttackKey",33)
+        Terminal.SetSpinBox("autoattack_spin",400)
+        Terminal.SetLineEdit("SISkillID",str(5011002))
+        Terminal.SetSpinBox("SkillInjection",200)
+        Terminal.SetCheckBox("Melee No Delay",on)
+        Terminal.SetRadioButton("SIRadioMelee",True)
+        Terminal.SetCheckBox("Auto Attack",on)
+        Terminal.SetCheckBox("Skill Injection", on)
+    elif job == 532: #Cannon Master
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiNDMagic(5321000,5321000,0.95,on)
+    elif job == 508: #Jett 1sts
+        attackAuto(5081020,on)
+    elif job in JettJobs and field_id in curbrockhideout:
+        attackAuto(5081020,on)
+    elif job == 570: #Jett 2nd
+        #attackAuto(5081020,on)
+        if Character.GetSkillLevel(5701011) >= 1:
+            attackSIND(5701011,on,150)
+        else:
+            attackAuto(5701010,on)
+    elif job == 571: #Jett 3rd
+        if Character.GetSkillLevel(5710020) >= 1:
+            #attackSemiNDMagic(5710020,5710020,0.9,on,attackSpeed=4)
+            attackSIND(5710020,on,150)
+        else:
+            attackSIND(5701011,on,150)
+    elif job == 572: #Jett 4th
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            #attackSemiNDMagic(5710020,5710020,0.4,on,attackSpeed=4)
+            attackSIND(5710020,on,150)
+    elif job == 1100: #Dawn warrior 1st
+        attackSI(11001020,on)
+    elif job in DawnWarriorJobs and field_id in curbrockhideout: #1001005
+        attackAuto(11001020,on)
+    elif job == 1110: #Dawn Warrior 2nd
+        #attackAuto(11101120,on)
+        attackSIND(11101120,on,600)
+    elif job == 1111: #Dawn Warrior 3rd
+        attackSI(11111120,on)
+        #attackAuto(11111220,on)
+    elif job == 1112: #Dawn Warrior 4th
+        dummySkill = 11001020
+        dummyDelay = 0.81
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            if Character.HasBuff(2,11111022):
+                attackSemiNDMagic(11121203,dummySkill,dummyDelay,on)
+    elif job == 1200: #BW 1st
+        Terminal.SetCheckBox("Full Map Attack",True)
+        attackAuto(12001020,on)
+        
+        toggle_loot(False)
+    elif job in BlazeWizardJobs and field_id in curbrockhideout: #1001005
+        attackAuto(12001021,on)
+        Terminal.SetCheckBox("Full Map Attack",False)
+    elif job == 1210: #BW 2nd
+        Terminal.SetCheckBox("Full Map Attack",True)
+        attackAuto(12001020,on)
+        
+    elif job == 1211: #BW 3rd
+        Terminal.SetCheckBox("Full Map Attack",True)
+        attackAuto(12001020,on)
+        
+    elif job == 1212: #BW 4th
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:           
+            #if level < 140:
+            Terminal.SetCheckBox("Full Map Attack",True)
+            attackAuto(12001020,on)
+                
+            #elif level >= 140:
+            #    Terminal.SetCheckBox("Full Map Attack",False)
+            #    attackSIND(12121055,on,31)
+            
+    elif job == 1300: #Wind Archer 1st
+        attackAuto(13001020,on)
+    elif job in WindArcherJobs and field_id in curbrockhideout: #1001005
+        attackAuto(13001020,on)
+    elif job == 1310: #Wind Archer 2nd
+        if Character.GetSkillLevel(13101020) >= 1:
+            attackSI(13101020,on)
+        else:
+            attackAuto(13001020,on)
+    elif job == 1311: #Wind Archer 3rd
+        #attackAuto(13111020,on)
+        attackSI(13101020,on)
+    elif job == 1312: #Wind Archer 4th
+        #attackAuto(13121002,on)
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSI(13121002,on,siOption = "SIRadioShoot")
+    elif job == 1400: #Night Walker 1st
+        attackAuto(14001020,on)
+    elif job in NightWalkerJobs and field_id in curbrockhideout: #1001005
+        attackAuto(14001020,on)
+    elif job == 1410: #Night Walker 2nd
+        attackSI(14101020,on)
+    elif job == 1411: #Night Walker 3rd
+        attackAuto(14111022,on)
+    elif job == 1412: #Night Walker 4th
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackAuto(14111022,on)
+    elif job == 1500: #Thunder breaker 1st
+        #attackAuto(15001020,on)
+        if Character.GetSkillLevel(15001021) >= 1:
+            attackSIND(15001021,on,600)
+            #attackSemiNDMagic(15001021,15001021,0.8,on)
+        else:
+            attackAuto(15001020,on)
+    elif job in ThunderBreakerJobs and field_id in curbrockhideout: #1001005
+        attackAuto(15001020,on)
+    elif job == 1510: #Thunder breaker 2nd
+        attackAuto(15101020,on)
+        #attackSemiNDMagic(15101020,15101020,0.72,on)
+    elif job == 1511: #Thunder breaker 3rd
+        attackAuto(15111020,on)
+        #attackSemiNDMagic(15111020,15111020,0.9,on)
+    elif job == 1512: #Thunder breaker 4th
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiNDMagic(15121002,15121002,1.08,on)
+            #30 * math.ceil(BaseDelay * (14)/480)
+            #attackSIND(15121002,on,500)
+        #attackSIND(15111020,on,300)
+        #attackAuto(15121001,on)
+    elif job == 3300: #Wild Hunter 1st
+        attackAuto(33001105,on)
+    elif job in WildHunterJobs and field_id in curbrockhideout: #1001005
+        attackAuto(33001105,on)
+    elif job == 3310: #Wild Hunter 2nd
+        #attackAuto(33101113,on)
+        attackSI(33101215,on)
+    elif job == 3311: #Wild Hunter 3rd
+        attackAuto(33111112,on)
+        #attackSI(33111010,on,100,"SIRadioMagic")
+    elif job == 3312: #Wild Hunter 4th
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackAuto(33111112,on)
+    elif job == 3200: #Battle Mage 1st
+        attackSI(32001014,on)
+    elif job in BattleMageJobs and field_id in curbrockhideout: #1001005
+        attackSI(32001014,on)
+    elif job == 3210: #Battle Mage 2nd
+        #attackSI(32100010,on)
+        attackSIND(32101001,on,250)
+    elif job == 3211: #Batlle Mage 3rd
+        #attackSI(32110017,on)
+        attackSIND(32101001,on,250)
+    elif job == 3212: #Battle Mage 4th
+        if level >= 160:
+            if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+                attackSemiNDMagic(32120055,32120055,0.45,on)
+            elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+                bind_skill(32121052)
+        #elif level >= 140:
+        #    if level >= 140 and Character.GetSkillLevel(12121054) == 1:
+        #        attackSIND(12121055,16)
+        #    elif level >= 140 and Character.GetSkillLevel(12121054) == 0:
+        #        bind_skill(12121054)
+        else:
+            if SCLib.GetVar("DoingZakum"):
+                #attackAuto(32121002,on)
+                attackSIND(32101001,on,250)
+            else:
+                #attackSI(32120019,on)
+                attackSIND(32101001,on,250)
+    elif job == 3700: #Blaster 1st
+        Terminal.SetCheckBox("General FMA",False)
+        attackAuto(37001000,on)
+    elif job in BlasterJobs and field_id in curbrockhideout: #1001005
+        #Terminal.SetCheckBox("General FMA",on)
+        Terminal.SetCheckBox("General FMA",False)
+        attackAuto(37001000,on)
+    elif job == 3710: #Blaster 2nd
+        #Terminal.SetCheckBox("General FMA",on)
+        Terminal.SetCheckBox("General FMA",False)
+        attackAuto(37001000,on)
+    elif job == 3711: #Blaster 3rd
+        #attackAuto(37001000,on)
+        attackSI(37110006,on,80)
+        Terminal.SetCheckBox("General FMA",on)
+        #Terminal.SetCheckBox("General FMA",on)
+    elif job == 3712: #Blaster 4th
+        #attackAuto(37001000,on)
+        Terminal.SetCheckBox("General FMA",False)
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSIND(37121000,on,80)
+    elif job == 3500: #Mechanic 1st
+        attackAuto(35001004,on)
+    elif job in MechanicJobs and field_id in curbrockhideout: #1001005
+        attackAuto(35001004,on)
+    elif job == 3510: #Mechanic 2nd
+        attackAuto(35101001,on)
+    elif job == 3511: #Mechanic 3rd
+        attackAuto(35111006,on)
+    elif job == 3512: #Mechanic 4th
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiNDMagic(35111015,35111015,0.84,on)
+            #attackSI(35121015,on,250)
+        #attackAuto(35111006,on)
+    elif job == 11212: #Beast Tamer
+        #if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        #    attackSemiNDMagic(32120055,32120055,0.45,on)
+        #elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+        #    bind_skill(32121052)
+        #else:
+        if Character.HasBuff(2,110001501):
+            if Character.GetSkillLevel(112000003) >= 1:
+                #attackSIND(112000003,on,450)
+                attackSemiNDMagic(112000003,112001008,0.38,on)
+            else:
+                if level <= 17:
+                    attackAuto(112000000,on)
+                    
+                elif level >= 17 and (not useExploit or SCLib.GetVar("DoingZakum")):
+                    Terminal.SetCheckBox("Auto Attack", False)
+                    Terminal.SetCheckBox("Skill Injection", False)
+                    Terminal.SetCheckBox("Melee No Delay",False)
+                    count = 0
+                    if on and not Terminal.IsRushing():
+                        while count < 100 and len(Field.GetMobs())>0: #constantly presses control to simulate human actions
+                            Key.Down(0x11)
+                            time.sleep(0.1)
+                            Key.Up(0x11)
+                            time.sleep(0.1)
+                            count += 1
+                            if len(Field.GetMobs())==0:
+                                break
+    elif job == 2000:#Aran pre
+        Terminal.SetCheckBox("Skill Injection", False)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Auto Attack", on)
+        Terminal.SetComboBox("AttackKey",1)
+        Terminal.SetSpinBox("autoattack_spin",100)
+        
+    elif job == 2100 or job == 2110: #Aran 1st 21000007
+        attackSI(21000006,on,80)
+        #attackSemiNDMagic(21000006,21000006,0.4,on)
+            
+
+    elif job == 2111 or job == 2112: #Aran 3rd
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSI(21000006,on,80)
+            #attackSemiNDMagic(21111021,21111021,0.81,on)
+            #if Character.HasBuff(2,21110016):
+            #    attackSIND(21111021,on,450)
+            #else:
+            #    attackSIND(21111021,on,400)
+            #attackSemiNDMagic(21111021,21111021,0.65,on)
+            #Terminal.SetCheckBox("Speedy Gonzales",True)
+            '''
+            elif job == 2110 or job == 2111 or job == 2112: #Aran 2nd+3rd+4th 21000007
+                Key.Set(pgup_key, 2, 2001582) #Assign an Item, reboot potion, to Page up(0x21)
+                Key.Set(attack_key,1,21001010)
+                Terminal.SetLineEdit("SISkillID","21100018")
+                Terminal.SetCheckBox("Skill Injection", on)
+                Terminal.SetSpinBox("SkillInjection",30)
+                Terminal.SetCheckBox("Auto SP",True)
+                Terminal.SetCheckBox("Melee No Delay",on)
+                #Terminal.SetRadioButton("SIRadioMagic",True)
+                Terminal.SetCheckBox("Auto Attack", False)
+                Terminal.SetComboBox("AttackKey",33)
+                Terminal.SetSpinBox("autoattack_spin",100)
+            '''
+    elif job == 14200:# Kinesis 1st
+        attackAuto(142001001,on)
+        #attackSemiNDMagic(142001001,142001001,0.63,on,attackSpeed = 5)
+    elif job in KinesisJobs and field_id in curbrockhideout:
+        attackAuto(142001001,on)
+    elif job == 14210: #Kinesis 2nd 142101002
+        #attackSemiNDMagic(142101002,142101002,0.69,on,attackSpeed = 5)
+        attackAuto(142101002,on)
+    elif job == 14211 or job == 14212: #Kinesis 3rd + 4th 142111002
+        #
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            if job == 14211:
+                Terminal.SetCheckBox("Instant Final Smash",True)
+            else:
+                Terminal.SetCheckBox("Instant Final Smash",False)
+            attackAuto(142111002,on)
+        
+    elif job == 6500: #AB 1st
+        attackSI(60011216,on)
+    elif job == 6510: #AB 2nd
+        attackSI(65001100,on)
+    elif job == 6511: #AB 3rd
+        attackSI(65111002,on,100,"SIRadioMagic")
+        #attackSemiNDMagic(65111002,65111002,1.2,on)
+    elif job == 6512: #AB 4th
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            if SCLib.GetVar("DoingZakum"):
+                attackSI(65121008,on)
+            else:
+                attackSemiNDMagic(65121100,65111002,1.2,on)
+    elif job in KaiserJobs and job != KaiserJobs[3]: #Kaiser 1st 2nd 3rd 4th
+        attackSI(61001005,on)
+    elif job == KaiserJobs[3]:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiNDMagic(61001005,61001005,0.36,on)
+    elif job == 2500: #Shade 1st
+        attackAuto(25001000,on)
+    elif job == 2510: #Shade 2nd
+        attackSI(25101000,on)
+    elif job == 2511: #Shade 3rd
+        attackSIND(25110001,on,300)
+        #attackSemiNDMagic(25110001,2511001,0.99,on)
+        #attackSIND(25111000,on,800)
+    elif job == 2512: #Shade 4th
+        #attackSI(25120003,on,100)
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            if Character.GetSkillLevel(25121000) >= 1:
+                attackSemiNDMagic(25121000,25121000,0.63,on)
+            else:
+                attackSIND(25110001,on,300)
+    elif job == 5100: #Mihile 1st
+        attackAuto(51001004,on)
+        #attackSemiNDMagic(51001004,51001004,0.96,on)
+    elif job in MihileJobs and field_id in curbrockhideout:
+        attackAuto(51001004,on)
+    elif job == 5110: #Mihile 2nd
+        attackSIND(51101005,on,800)
+        #attackSemiNDMagic(51101005,51001004,0.96,on)
+    elif job == 5111: #Mihile 3rd
+        #attackSemiNDMagic(51111006,51111006,0.84,on)
+        attackSIND(51111006,on,600)
+    elif job == 5112: #Mihile 4th
+        delay = 0.84
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            attackSemiNDMagic(32120055,32120055,0.45,on)
+        elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
+            bind_skill(32121052)
+        else:
+            attackSemiNDMagic(51121009,51111006,0.84,on)
+            #attackSIND(51121009,on,400)
+    else:
+        Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetCheckBox("Skill Injection", False)
+        #print("Not any of the listed jobs, not going to attack for safety")
+    if job not in KannaJobs:
+        Terminal.SetCheckBox("charm_fma",False)
+        Terminal.SetCheckBox("Summon Kishin",False)
+        Terminal.SetCheckBox("MonkeySpiritsNDcheck", False)
+    if job not in IlliumJobs:
+        Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+        Terminal.SetCheckBox("bot/illium/summon_control",False)
+
     
 
 def GetEmblem():
@@ -10592,7 +11642,10 @@ def stronghold():
 if GameState.IsInGame():
     safety_setting()
     if not (SCLib.GetVar("DoingJobAdv") and (job == ShadeJobs[0] or job == ShadeJobs[1])):
-        toggleAttack(True)
+        if SCLib.GetVar("DoingJobAdv"):
+            toggleAttackQuest(True)
+        else:
+            toggleAttack(True)
         Terminal.SetCheckBox("Auto SP",True)
     set_potion()
     if not Terminal.IsRushing():
@@ -12973,7 +14026,7 @@ if GameState.IsInGame() and level < 140 and Inventory.FindItemByID(5040004).vali
     Terminal.SetCheckBox("Legit Vac",False)
 elif GameState.IsInGame() and level < 50 or not Inventory.FindItemByID(5040004).valid or not useExploit:
     Terminal.SetComboBox("eva_cmb",3)
-    Terminal.SetComboBox("HackingOpt",0)
+    Terminal.SetComboBox("HackingOpt",2)
     if field_id == 130030106:
         Terminal.SetCheckBox("Legit Vac",False)
     else:

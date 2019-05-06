@@ -273,7 +273,7 @@ ZakumsAltar = [280030100,280030101,280030102,280030103,280030104]
 TheCaveOfTrials3Zakum = 211042200
 blackgate_maps = [610050000,610051300, 610051400, 610051500, 610051600, 610051700, 610051800, 610051900, 610052000, 610050100, 610050200, 610050600, 610050700, 610050800, 610051200, 610050300, 610050400, 610050500, 610050900, 610051000, 610051100]
 henesys = 100000000
-LongestRideOnByeByeStation = [551030001,551030002,551030003,551030004,551030005,551030006,551030007,551030008,551030009,551030010,551030011,551030012,551030013,551030014,551030015,551030016,551030017,551030018,551030019,551030020]
+LongestRideOnByeByeStation = [551010000,551030001,551030002,551030003,551030004,551030005,551030006,551030007,551030008,551030009,551030010,551030011,551030012,551030013,551030014,551030015,551030016,551030017,551030018,551030019,551030020]
 #npc ids
 NpcRobeiraMagicianInstructor = 2020009
 
@@ -667,11 +667,11 @@ def settings_fourth_job():
 	elif level >= 149:
 		Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
 		if accountData['cubing_done']:
-			Terminal.SetSpinBox("FilterMeso",11500)
-			Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
+			Terminal.SetSpinBox("FilterMeso",1000)
+			Terminal.SetSpinBox("MonkeySpiritsNDdelay",110)
 		elif accountData['ready_for_cube']:
 			Terminal.SetSpinBox("FilterMeso",1000)
-			Terminal.SetSpinBox("MonkeySpiritsNDdelay",480)
+			Terminal.SetSpinBox("MonkeySpiritsNDdelay",110)
 		else:
 			Terminal.SetSpinBox("FilterMeso",1000)
 			Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
@@ -1944,7 +1944,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetCheckBox("Auto Loot",False)
 		Terminal.SetSpinBox("AutoDieExp",90)
 		Terminal.SetSpinBox("AutoDieLevel",level)
-		Terminal.SetComboBox("Familiar0",7)
+		Terminal.SetComboBox("Familiar0",0)
 		print("Sleeping for 30 seconds to farm")
 		time.sleep(30)
 		"""
@@ -1980,7 +1980,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetCheckBox("Auto Loot",False)
 		Terminal.SetSpinBox("AutoDieExp",90)
 		Terminal.SetSpinBox("AutoDieLevel",level)
-		Terminal.SetComboBox("Familiar0",7)
+		Terminal.SetComboBox("Familiar0",0) #do not farm with leprechaun
 		Terminal.SetCheckBox("settings/mesologout",True)
 		if not SCLib.GetVar("EquipMesoDone"):
 			Terminal.SetCheckBox('MonkeySpiritsNDcheck',False)
@@ -2177,6 +2177,7 @@ if Character.GetLevel() >= 83 and GameState.IsInGame():
 					Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
 				Terminal.Rush(310050600)
 
+'''
 if Character.IsOwnFamiliar(9960295) and GameState.IsInGame() and level >= 104 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("GettingEarring"):
 	item = Inventory.FindItemByID(2871073)
 	if not Character.IsOwnFamiliar(9961073):
@@ -2219,7 +2220,7 @@ if Character.IsOwnFamiliar(9960295) and GameState.IsInGame() and level >= 104 an
 			time.sleep(5)
 		elif mapID(610010001):
 			rush(600000000)
-
+'''
 
 ###### Inner ability #######
 '''
