@@ -326,6 +326,7 @@ if GameState.IsInGame() and job in [4211, 4212]:
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
         #Terminal.SetCheckBox("Mob Falldown",False)
         Terminal.SetCheckBox("Auto Attack",False)
+        Terminal.SetCheckBox("Auto Rune",False)
         for user in Terminal.GetLocalUsers():
             user = Terminal.GetLocalUser(user.clientid) # dynamic update
             if CheckIdFilter(user) and CheckMapFilter(user) and user.channel > 0:

@@ -325,11 +325,12 @@ def AlishanRushing():
         else:
             teleport_enter(-822,-537)
             toggle_rush_by_level(True)
+            print("Resume rush by level; alishan")
 
 def dungeonTeleport():
     prefield = field_id
     toggle_kami(False)
-    toggleAttack(False)
+    toggleAttackQuest(False)
     time.sleep(1)
     Key.Press(0x08)
     time.sleep(1)
@@ -339,7 +340,7 @@ def dungeonTeleport():
     if newfield != prefield:
         print("Successfully entered portal")
         toggle_kami(True)
-        toggleAttack(True)
+        toggleAttackQuest(True)
     else:
         print("Failed to enter portal")
 def toggle_rush_by_level(indicator):
@@ -731,7 +732,7 @@ def timeout_buffs(buffid,skillid = None,timer = 30,need_sleep = True,injectSkill
 def teleport_enter(x,y):
     prefield = field_id
     toggle_kami(False)
-    toggleAttack(False)
+    toggleAttackQuest(False)
     time.sleep(1)
     if Character.GetPos().x != x:
         Character.Teleport(x,y)
@@ -744,7 +745,7 @@ def teleport_enter(x,y):
     if newfield != prefield:
         print("Successfully entered portal")
         toggle_kami(True)
-        toggleAttack(True)
+        toggleAttackQuest(True)
     else:
         print("Failed to enter portal")
     
@@ -822,6 +823,7 @@ def CashItemResLoadLockerDone():
     else:
         Terminal.LeaveCashShop()
         toggle_rush_by_level(True)
+        print("Resume rush by level; htr")
         Terminal.StopRush()
  
 def CashItemInfoDecode(iPacket):
@@ -864,11 +866,11 @@ def acceptQuest(quest, startnpc, startmap, currentmap):
                 field_id = Field.GetID()
                 if field_id == 100030320: #-117 35
                     Terminal.StopRush()
-                    toggleAttack(False)
+                    toggleAttackQuest(False)
                     teleport_enter(-117,35)
                 elif field_id == 100030310:
                     Terminal.StopRush()
-                    toggleAttack(False)
+                    toggleAttackQuest(False)
                     teleport_enter(1062,-25)
                 else:
                     Terminal.Rush(startmap)
@@ -880,11 +882,11 @@ def acceptQuest(quest, startnpc, startmap, currentmap):
                 time.sleep(2)
                 field_id = Field.GetID()
                 if pos.x != -1006 and field_id == 100030102:
-                    toggleAttack(False)
+                    toggleAttackQuest(False)
                     teleport_enter(-1006,-32)
                     break
                 elif pos.x == -1006:
-                    toggleAttack(False)
+                    toggleAttackQuest(False)
                     teleport_enter(-1006,-32)
                     break
         else:
@@ -916,11 +918,11 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
                     time.sleep(2)
                     field_id = Field.GetID()
                     if pos.x != -1006 and field_id == 100030102:
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         teleport_enter(-1006,-32)
                         break
                     elif pos.x == -1006:
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         teleport_enter(-1006,-32)
                         break
             elif endmap == 100030300:
@@ -931,16 +933,16 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
                     time.sleep(2)
                     if field_id == 100030320: #-117 35
                         Terminal.StopRush()
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         teleport_enter(-117,35)
                     elif field_id == 100030310:
                         Terminal.StopRush()
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         teleport_enter(1062,-25)
                     elif field_id != 100030300:
                         Terminal.Rush(endmap)
             else:
-                toggleAttack(False)
+                toggleAttackQuest(False)
                 Terminal.Rush(endmap)
                 time.sleep(1)
         questnpc = Field.FindNpc(endnpc)
@@ -968,11 +970,11 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
                     field_id = Field.GetID()
                     if field_id == 100030320: #-117 35
                         Terminal.StopRush()
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         teleport_enter(-117,35)
                     elif field_id == 100030310:
                         Terminal.StopRush()
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         teleport_enter(1062,-25)
                     else:
                         Terminal.Rush(grindmap)
@@ -984,11 +986,11 @@ def completeQuest(quest, endnpc, endmap, grindmap, currentmap):
                     time.sleep(2)
                     field_id = Field.GetID()
                     if pos.x != -1006 and field_id == 100030102:
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         teleport_enter(-1006,-32)
                         break
                     elif pos.x == -1006:
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         teleport_enter(-1006,-32)
                         break
             else:
@@ -1048,7 +1050,7 @@ def rush(mapid):
 
 def exploit1():
     toggle_rush_by_level(False)
-    toggleAttack(False)
+    toggleAttackQuest(False)
     toggle_kami(False)
     toggle_HTR(True)
     expTable = dict()
@@ -1194,10 +1196,10 @@ def mano():
     mob = Field.FindMob(9300815)
     if mob.valid:
         toggle_kami(True)
-        toggleAttack(True)
+        toggleAttackQuest(True)
     elif not mob.valid:
         toggle_kami(False)
-        toggleAttack(False)
+        toggleAttackQuest(False)
         teleport_enter(68,150)
 
 def gotoGreatSpirit():
@@ -1546,6 +1548,7 @@ def catch_jaguar():
                 Character.EnterPortal()
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                print("Resume rush by level; jaguar")
                 Terminal.StopRush()
                 time.sleep(10)
                 break
@@ -1583,6 +1586,7 @@ def buy_expansion():
     if not SCLib.GetVar("BuyExpansion"):
         toggle_rush_by_level(True)
         toggle_kami(True)
+        print("Not buying")
 
 def has_pensalir(printInfo = True):
     #pensalir gear
@@ -1819,7 +1823,7 @@ def DemonFirst():
 
 def DASecond():
     Terminal.SetCheckBox("Kami Vac",False)
-    toggleAttack(False)
+    toggleAttackQuest(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     if Quest.GetQuestState(23210) !=2:
         if Quest.GetQuestState(23210) == 0:
@@ -1834,7 +1838,7 @@ def DASecond():
                     teleport_enter(515,-14)
             else:
                 Terminal.SetCheckBox("Kami Vac",True)
-                toggleAttack(True)
+                toggleAttackQuest(True)
         else:
             print("Done fighting")
             Quest.CompleteQuest(23210, 2153006)
@@ -1866,10 +1870,11 @@ def DASecond():
                 toggle_rush_by_level(True)
                 Terminal.SetCheckBox("Kami Vac",True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                print("Resume rush by level; da second jobadv")
 
 def DAThird():
     Terminal.SetCheckBox("Kami Vac",False)
-    toggleAttack(False)
+    toggleAttackQuest(False)
     SCLib.UpdateVar("DoingJobAdv",True)
     if Quest.GetQuestState(23213) !=2:
         print("1")
@@ -1898,7 +1903,7 @@ def DAThird():
             if Quest.CheckCompleteDemand(23214,2153006) != 0:
                 if len(Field.GetMobs()) > 0:
                     Terminal.StopRush()
-                    toggleAttack(True)
+                    toggleAttackQuest(True)
                     toggle_kami(False)
                     time.sleep(5)
                 elif field_id == 931050120:
@@ -1909,7 +1914,7 @@ def DAThird():
             else:
                 time.sleep(1)
                 Quest.CompleteQuest(23214, 2153006)
-                toggleAttack(True)
+                toggleAttackQuest(True)
                 toggle_kami(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
     #else:
@@ -1925,7 +1930,7 @@ def DAThird():
             if Quest.CheckCompleteDemand(23218,2153006) != 0:
                 if len(Field.GetMobs()) > 0:
                     Terminal.StopRush()
-                    toggleAttack(True)
+                    toggleAttackQuest(True)
                     toggle_kami(True)
                     time.sleep(5)
                 elif field_id == 931050120:
@@ -1941,7 +1946,7 @@ def DAThird():
                     time.sleep(1)
                     Quest.CompleteQuest(23218, 2153006)
                     time.sleep(1)
-                    toggleAttack(True)
+                    toggleAttackQuest(True)
                     toggle_kami(True)
                     SCLib.UpdateVar("DoingJobAdv",False)
 def DAFourth():
@@ -1969,11 +1974,12 @@ def DAFourth():
                     toggle_rush_by_level(True)
                     SCLib.UpdateVar("DoingJobAdv",False)
                     time.sleep(1)
+                    print("Resume rush by level; da fourth job adv")
             else:
                 toggle_kami(False)
                 time.sleep(5)
                 teleport_to_mobs()
-                toggleAttack(True)
+                toggleAttackQuest(True)
 
 def DSFourth():
     TrueAwakening = 23215
@@ -2000,6 +2006,7 @@ def DSFourth():
                     toggle_rush_by_level(True)
                     SCLib.UpdateVar("DoingJobAdv",False)
                     time.sleep(1)
+                    print("Resume rush by level; ds fourth job adv")
             else:
                 if field_id == 220050300:
                     Character.TalkToNpc(2159331)
@@ -2007,7 +2014,7 @@ def DSFourth():
                     toggle_kami(False)
                     time.sleep(5)
                     teleport_to_mobs()
-                    toggleAttack(True)
+                    toggleAttackQuest(True)
 def MercedesFirst():
     Quest.StartQuest(29952, 1033210)
 
@@ -2091,6 +2098,7 @@ def HayatoFirst():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Hayato first job done")
 
 def PressControl():
     if GameState.IsInGame():
@@ -2532,6 +2540,7 @@ def IlliumFirst():
         Quest.CompleteQuest(34718, 3001344)
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_rush_by_level(True)
+        print("Resume rush by level; illium first")
         time.sleep(10)
 
 def IlliumSecond():
@@ -2648,6 +2657,7 @@ def IlliumThird():
             acceptQuest(SanctuaryDiscovered1,shuang,RelicExcavationCamp,field_id)
             toggle_rush_by_level(True)
             SCLib.UpdateVar("DoingJobAdv",False)
+            print("Resume rush by level; illium third job adv")
 
 def IlliumFourth():
     DiscoveryoftheSanctuary2 = 34842
@@ -3082,12 +3092,14 @@ def CadenaFirst():
                 toggle_kami(True)
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                print("Resume rush by level; cadena")
                 
     if job == 6400 and level >= 30:
         Quest.StartQuest(34657, 3001250)
         toggle_kami(True)
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; cadena")
 
 def CadenaThird():
     Quest.StartQuest(34658, 3001250)
@@ -3420,6 +3432,7 @@ def ArkSecond():
     elif quest2 == 2:
         toggle_rush_by_level(True)
         toggle_kami(True)
+        print("Ark done")
     if level >= 60:
         jobQuest = Quest.GetQuestState(34903)
         print("Completing Ark Third Job Adv")
@@ -3767,7 +3780,7 @@ def EvanFirst():
                         toggle_loot(True)
                         if pos.x != haystack.x:
                             Character.Teleport(haystack.x,haystack.y)
-                            toggleAttack(False)
+                            toggleAttackQuest(False)
                             time.sleep(2)
                             Character.BasicAttack()
                             time.sleep(2)
@@ -3843,6 +3856,7 @@ def EvanFirst():
         if Quest.GetQuestState(LetterDelivery) == 2:
             toggle_rush_by_level(True)
             toggle_kami(True)
+            print("Evan first job done")
     magicwand = Inventory.FindItemByID(1372043)
     if magicwand.valid:
         Inventory.SendChangeSlotPositionRequest(1,magicwand.pos,weapon_slot,-1)
@@ -3856,6 +3870,7 @@ def EvanFirst():
         SCLib.UpdateVar("EvanLogout",False)
         Terminal.SetCheckBox("settings/loginwait",True)
         Terminal.SetCheckBox("settings/explogout",False)
+        print("Resume rush by level; evan")
 
 def XenonSecond():
     #print("Needs to be implemented")
@@ -3887,10 +3902,12 @@ def XenonSecond():
                 toggle_rush_by_level(True)
                 toggle_kami(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                print("Resume rush by level; xenon second")
     if Quest.GetQuestState(VeritasFinest) == 2:
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; xenon second")
     
 def XenonThird():
     toggle_rush_by_level(False)
@@ -3938,7 +3955,7 @@ def XenonThird():
                 elif quest4 == 1:
                     if Quest.CheckCompleteDemand(23615,2159421) == 0:
                         toggle_kami(False)
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         time.sleep(5)
                         Quest.CompleteQuest(23615, 2159421)
                         time.sleep(1)
@@ -4012,6 +4029,7 @@ def PhantomFirst():
                 toggle_rush_by_level(True)
                 toggle_kami(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                print("Resume rush by level; phantom first")
     
 def PhantomSecond():
     #print("Needs to be implemented")
@@ -4063,10 +4081,10 @@ def PhantomSecond():
     if field_id == TreasureVaultEntrance and len(Field.GetMobs()) > 0:
         print("Break lock")
         toggle_kami(True)
-        toggleAttack(True)
+        toggleAttackQuest(True)
     elif field_id == TreasureVaultEntrance and len(Field.GetMobs()) == 0:
         toggle_kami(False)
-        toggleAttack(False)
+        toggleAttackQuest(False)
         teleport_enter(163,182)
     if field_id == TreasureVault:
         Character.TalkToNpc(smallcabinet)
@@ -4076,7 +4094,7 @@ def PhantomSecond():
         Character.TalkToNpc(smallcabinet)
         time.sleep(1)
         toggle_kami(False)
-        toggleAttack(False)
+        toggleAttackQuest(False)
         dungeonTeleport()
 
 def PhantomThird():
@@ -4579,7 +4597,7 @@ def AranSecond():
                                 teleport_enter(-1301,363)
                             else:
                                 toggle_kami(True)
-                                toggleAttack(True)
+                                toggleAttackQuest(True)
                         elif Quest.CheckCompleteDemand(BlackSmith,sirBlackSmith) == 0:
                             if field_id != headblacksmithshop:
                                 dungeonTeleport()
@@ -4651,7 +4669,7 @@ def AranThird():
                                 teleport_enter(-211,454)
                             else:
                                 toggle_kami(True)
-                                toggleAttack(True)
+                                toggleAttackQuest(True)
                                 toggle_loot(True)
                         elif Quest.CheckCompleteDemand(FriendshipWithYeti,Tititi) == 0:
                             if field_id != razorsharpcliff:
@@ -4725,7 +4743,7 @@ def ExplorerFirst():
     else:
         if Field.GetID() == 4000011:
             toggle_kami(False)
-            toggleAttack(False)
+            toggleAttackQuest(False)
             teleport_enter(1106,545)
         if Field.GetID() == 4000012:
             Npc.ClearSelection()
@@ -4853,6 +4871,7 @@ def ExplorerFirst():
                 toggle_kami(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_loot(False)
+                print("Resume rush by level; explorer first")
 
 def ExplorerSecond():
     print("Explorer 2")
@@ -4983,6 +5002,7 @@ def ExplorerSecond():
                         completeQuest(cannoneerQuest2,Instructor,toGoMap,toGoMap,field_id)
                         SCLib.UpdateVar("DoingJobAdv",False)
                         toggle_rush_by_level(True)
+                        print("Resume rush by level; cannoneer first")
                 else:
                     if len(Field.GetMobs()) > 0:
                         toggle_kami(True)
@@ -5015,6 +5035,7 @@ def ExplorerSecond():
                         completeQuest(targetJob,Instructor,toGoMap,toGoMap,field_id)
                         SCLib.UpdateVar("DoingJobAdv",False)
                         toggle_rush_by_level(True)
+                        print("Resume rush by level; explorer second -> first")
                         toggle_loot(False)
                 else:
                     if len(Field.GetMobs()) > 0:
@@ -5185,6 +5206,7 @@ def ExplorerThird():
                     if Quest.GetQuestState(toDoQuest2) == 2:
                         SCLib.UpdateVar("DoingJobAdv",False)
                         toggle_rush_by_level(True)
+                        print("Resume rush by level; explorer third")
             elif field_id == el_nath_map:
                 print("talk to holy stone")
                 if pos.x != 27 and pos.y != 454:
@@ -5200,7 +5222,7 @@ def ExplorerThird():
             elif field_id in DimensionalWorld:
                 print("In demensional world")
                 mobs = Field.GetMobs()
-                toggleAttack(True)
+                toggleAttackQuest(True)
                 toggle_loot(True)
                 if len(mobs) == 0:
                     if pos.x != 692:
@@ -5212,13 +5234,13 @@ def ExplorerThird():
                         toggle_loot(False)
                 else:
                     toggle_kami(True)
-                    toggleAttack(True)
+                    toggleAttackQuest(True)
             elif field_id != 211040300:
                 print("Rushing there")
                 rush(211040300)
                 time.sleep(3)
             elif field_id == 211040300:
-                toggleAttack(False)
+                toggleAttackQuest(False)
                 teleport_enter(31,454)
                 time.sleep(1)
                 teleport_enter(31,454)
@@ -5227,6 +5249,7 @@ def ExplorerThird():
     if Quest.GetQuestState(toDoQuest2) == 2:
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_rush_by_level(True)
+        print("Explorer third job done")
 
 def ExplorerFourth():
     print("Explorer 4")
@@ -5327,6 +5350,7 @@ def ExplorerFourth():
                 if Character.GetJob() in explorerFourthJobs:
                     SCLib.UpdateVar("DoingJobAdv",False)
                     toggle_rush_by_level(True)
+                    print("Resume rush by level; explorer fourth")
             elif not (Inventory.FindItemByID(pentagon).count >= 1 or Inventory.FindItemByID(pentagon2).count >= 1 or Inventory.FindItemByID(pentagon3).count >= 1 or Inventory.FindItemByID(pentagon4).count >= 1 or Inventory.FindItemByID(pentagon5).count >= 1):
                 print("Hunt for pentagon")
                 if field_id == GriffeyForest:
@@ -5341,7 +5365,7 @@ def ExplorerFourth():
                     time.sleep(2)
                     if not loot.valid:
                         time.sleep(5)
-                        toggleAttack(True)
+                        toggleAttackQuest(True)
                         toggle_kami(True)
                         mobs = Field.GetMobs()
                         if len(mobs) == 0 and not Field.FindItem(pentagon_loot).valid:
@@ -5369,7 +5393,7 @@ def ExplorerFourth():
                     toggle_loot(True)
                     if not loot.valid:
                         time.sleep(5)
-                        toggleAttack(True)
+                        toggleAttackQuest(True)
                         toggle_kami(True)
                         mobs = Field.GetMobs()
                         if len(mobs) == 0 and not Field.FindItem(star_loot).valid:
@@ -5718,6 +5742,7 @@ def CygnusFirst():
                     toggle_rush_by_level(True)
                     SCLib.UpdateVar("DoingJobAdv",False)
                     toggle_kami(True)
+                    print("Resume rush by level; cygnus first")
 
 def CygnusSecond():
     toggle_rush_by_level(False)
@@ -5789,6 +5814,7 @@ def CygnusSecond():
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_kami(True)
+                print("Resume rush by level; cygnus second")
             else:
                 Terminal.Rush(130020000)
         else:
@@ -5945,6 +5971,7 @@ def CygnusFourth():
             toggle_rush_by_level(True)
             SCLib.UpdateVar("DoingJobAdv",False)
             toggle_kami(True)
+            print("Resume rush by level; cygnus fourth")
 
 def ResistanceFirst():
     print("Resistance 1")
@@ -6277,6 +6304,7 @@ def ResistanceFirst():
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_kami(True)
+        print("Resume rush by level; resistance first")
 
 def ResistanceSecond():
     toggle_rush_by_level(False)
@@ -6366,6 +6394,7 @@ def ResistanceSecond():
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_kami(True)
                 toggle_loot(False)
+                print("Resume rush by level; resistance second")
             else:
                 Terminal.Rush(310010000)
                 time.sleep(1)
@@ -6431,7 +6460,7 @@ def ResistanceThird():
                 hat = Inventory.FindItemByID(1003134)
                 if hat.valid:
                     # wear the hat
-                    toggleAttack(False)
+                    toggleAttackQuest(False)
                     time.sleep(5)
                     Inventory.SendChangeSlotPositionRequest(1, hat.pos, -1, -1)
                     time.sleep(1) # sleep 1 second
@@ -6482,6 +6511,7 @@ def ResistanceThird():
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_kami(True)
                 Terminal.SetCheckBox("Auto Equip",True)
+                print("Resume rush by level; resistance third")
             else:
                 Terminal.Rush(310010000)
 
@@ -6694,6 +6724,7 @@ def ResistanceFourth():
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_kami(True)
                 Terminal.SetCheckBox("Auto Equip",True)
+                print("Resume rush by level; resistance fourth")
 
 def ABSecond():
     toDoQuest = 25825
@@ -6781,6 +6812,7 @@ def JettSecond():
             acceptQuest(toDoQuest3,thunderhammer,toGoMap,field_id)
             toggle_rush_by_level(True)
             SCLib.UpdateVar("DoingJobAdv",False)
+            print("Resume rush by level; jett second")
 
 def JettThird():
     print("Jett Third")
@@ -6860,7 +6892,7 @@ def JettFourth():
                 else:
                     rush(261020400)
                 toggle_kami(True)
-                toggleAttack(True)
+                toggleAttackQuest(True)
     elif quest2 != 2:
         if quest2 == 0:
             acceptQuest(toDoQuest2,broker,magatia,field_id)
@@ -6902,6 +6934,7 @@ def JettFourth():
                 teleport_enter(441,332)
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                print("Resume rush by level; jett fourth")
 
 def CannoneerFirst():
     def Autism():
@@ -6999,11 +7032,11 @@ def CannoneerFirst():
                 time.sleep(1)
                 Key.Press(0x26)
             elif field_id == 3000300:
-                toggleAttack(True)
+                toggleAttackQuest(True)
                 toggle_kami(True)
                 toggle_loot(True)
         elif Quest.CheckCompleteDemand(2564, 1096005) == 0:
-            toggleAttack(False)
+            toggleAttackQuest(False)
             toggle_kami(False)
             if field_id == 3000200:
                 Quest.CompleteQuest(2564, 1096005)
@@ -7014,7 +7047,7 @@ def CannoneerFirst():
                 time.sleep(1)
     elif Quest7 != 2:
         print("q7")
-        toggleAttack(False)
+        toggleAttackQuest(False)
         if field_id == 3000200 and Quest7 == 0:
             Quest.StartQuest(2565, 1096005)
         elif Quest7 == 1 and Quest.CheckCompleteDemand(2565, 1096005) != 0:
@@ -7124,6 +7157,7 @@ def CannoneerFirst():
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
                 Terminal.SetCheckBox("Pet Item Teleport",True)
+                print("Resume rush by level; cannoneer first")
 
 def LevelSkill(id):
     qPacket = Packet.COutPacket(level_skill_header)
@@ -7585,6 +7619,7 @@ def ShadeFirst():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; shade first")
 
 def ShadeThird():
     toggle_rush_by_level(False)
@@ -7634,6 +7669,7 @@ def ShadeThird():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; shade third")
 
 def ShadeFourth():
     toggle_rush_by_level(False)
@@ -7658,6 +7694,7 @@ def ShadeFourth():
             toggle_rush_by_level(True)
             toggle_kami(True)
             SCLib.UpdateVar("DoingJobAdv",False)
+            print("Resume rush by level; shade fourth")
 
 def MihileSecond():
     toggle_rush_by_level(False)
@@ -7694,7 +7731,7 @@ def MihileSecond():
                     if pos.x != -3298:
                         print("teleporting to enemy")
                         Character.Teleport(-3298,88)
-                    toggleAttack(True)
+                    toggleAttackQuest(True)
                 else:
                     Terminal.Rush(103000000)
     elif quest3 != 2: #101030300
@@ -7717,7 +7754,7 @@ def MihileSecond():
                     print("Enabling attack settings")
                     toggle_kami(True)
                     toggle_loot(True)
-                    toggleAttack(True)
+                    toggleAttackQuest(True)
                 else:
                     Terminal.Rush(101030300)
     elif quest4 != 2:
@@ -7736,7 +7773,7 @@ def MihileSecond():
                         if Character.GetPos().x not in range(stumpy.x-200,stumpy.x):
                             toggle_kami(False)
                             Character.Teleport(stumpy.x-100,stumpy.y)
-                        toggleAttack(True)
+                        toggleAttackQuest(True)
                     else:
                         Character.ChangeChannel(0)
                 else:
@@ -7747,6 +7784,7 @@ def MihileSecond():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; mihile second")
 
 def MihileThird():
     toggle_rush_by_level(False)
@@ -7765,6 +7803,7 @@ def MihileThird():
                 toggle_rush_by_level(True)
                 toggle_kami(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                print("Resume rush by level; mihile third")
         else:
             if field_id != 913070200:
                 if field_id == 130000000:
@@ -7773,7 +7812,7 @@ def MihileThird():
                     Terminal.Rush(130000000)
             else:
                 toggle_kami(True)
-                toggleAttack(True)
+                toggleAttackQuest(True)
 
 def MihileFourth():
     toggle_rush_by_level(False)
@@ -7795,6 +7834,7 @@ def MihileFourth():
                     toggle_rush_by_level(True)
                     toggle_kami(True)
                     SCLib.UpdateVar("DoingJobAdv",False)
+                    print("Resume rush by level; mihile fourth")
                 else:
                     Terminal.Rush(130000000)
             else:
@@ -7805,7 +7845,7 @@ def MihileFourth():
                         Terminal.Rush(130000000)
                 else:
                     toggle_kami(True)
-                    toggleAttack(True)
+                    toggleAttackQuest(True)
 
 def DualbladeFirst():
     print("Check1")
@@ -8093,6 +8133,7 @@ def DualbladeFirst():
     #Complete quest10 (SpyTraningComplete)
     elif quest10 != 2:
         Terminal.SetCheckBox("Rush By Level", 0)
+        print("Toggle rush by level false db")
         if quest10 ==0:
             if fieldID != SecretPracticePlaceEntrance:
                 if fieldID != TheSecretGarden2ndFloor:
@@ -8201,6 +8242,7 @@ def DualbladeSecond():
                 toggle_kami(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_loot(False)
+                print("Resume rush by level; db second")
 
 def DualBladeThird():
     item = Inventory.GetItemCount(4031013)
@@ -8231,6 +8273,7 @@ def DualBladeThird():
                 toggle_rush_by_level(True)
                 toggle_kami(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                print("Resume rush by level; db third")
             elif item >= 30:
                 Character.Teleport(503, 152)
                 toggle_kami(False)
@@ -8298,6 +8341,7 @@ def DualBladeFourth():
                 time.sleep(5)
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_rush_by_level(True)
+                print("Resume rush by level; db fourth")
             else:
                 TP_Syl()
                 while Terminal.IsRushing():
@@ -8364,6 +8408,7 @@ def DualBladeFifth():
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_rush_by_level(True)
                 toggle_kami(True)
+                print("Resume rush by level; db fifth")
 
 def DualBladeSixth():
     toggle_rush_by_level(False)
@@ -8448,6 +8493,7 @@ def DualBladeSixth():
                 SCLib.UpdateVar("DoingJobAdv",False)
                 toggle_rush_by_level(True)
                 toggle_kami(True)
+                print("Resume rush by level; db sixth")
 
 def KinesisFirst():
 
@@ -9380,7 +9426,9 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
     if siSkill != 32120055:
         delay = 30*math.ceil(delay*1000 * (10+attackSpeed)/480)/1000
     print("The delay for skill {} is {}, starting si".format(siSkill,delay))
-    if siSkill not in [25101000,25121000]:
+    if siSkill in [5311000,5301000]:
+        sleepTime = 0.161
+    elif siSkill not in [25101000,25121000]:
         sleepTime = 0.231
     else:
         sleepTime = 0.101
@@ -10019,7 +10067,8 @@ def toggleAttack(on):
         #attackAuto(5301001,on)
         #attackSIND(5011002,on,200)
         if Character.GetSkillLevel(5301000) >= 1:
-            attackSemiNDMagic(5301000,5301000,0.84,on)
+            attackSIND("5301000;5011002",on,300)
+            #attackSemiNDMagic(5301000,5301000,0.90,on)
         else:
             attack_key = 0x44
             Key.Set(attack_key,1,5301001)
@@ -10042,7 +10091,8 @@ def toggleAttack(on):
             Terminal.SetCheckBox("Speedy Gonzales",True)
         '''
         if Character.GetSkillLevel(5311000) >= 1:
-            attackSemiNDMagic(5311000,5311000,0.96,on)
+            #attackSemiNDMagic(5311000,5311000,0.96,on)
+            attackSIND("5311000;5011002",on,250)
         else:
             attack_key = 0x44
             Key.Set(attack_key,1,5301001)
@@ -11060,16 +11110,7 @@ def toggleAttackQuest(on):
         #    attackAuto(5301001,on)
             #attackSemiNDMagic(5301000,5301000,0.84,on)
         #else:
-        attack_key = 0x44
-        Key.Set(attack_key,1,5301001)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",400)
-        Terminal.SetLineEdit("SISkillID",str(5011002))
-        Terminal.SetSpinBox("SkillInjection",200)
-        Terminal.SetCheckBox("Melee No Delay",on)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",on)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSIND("5301000;5011002",on,300)
     elif job in CannoneerJobs and field_id in curbrockhideout: #1001005
         attackAuto(5301001,on)
     elif job == 531: #Cannon Trooper
@@ -11083,16 +11124,7 @@ def toggleAttackQuest(on):
         #if Character.GetSkillLevel(5311000) >= 1:
         #    attackSemiNDMagic(5311000,5311000,0.96,on)
         #else:
-        attack_key = 0x44
-        Key.Set(attack_key,1,5301001)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",400)
-        Terminal.SetLineEdit("SISkillID",str(5011002))
-        Terminal.SetSpinBox("SkillInjection",200)
-        Terminal.SetCheckBox("Melee No Delay",on)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",on)
-        Terminal.SetCheckBox("Skill Injection", on)
+        attackSIND("5311000;5011002",on,250)
     elif job == 532: #Cannon Master
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
             attackSemiNDMagic(32120055,32120055,0.45,on)
@@ -11619,6 +11651,7 @@ def stronghold():
             Quest.CompleteQuest(31125, 2142001)
             Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
             toggle_rush_by_level(True)
+            print("Resume rush by level; stronghold")
             
         else:
             # not done yet
@@ -11684,6 +11717,7 @@ if GameState.IsInGame():
     elif (Quest.GetQuestState(31125) == 2 or has_htr) and SCLib.GetVar("DoingJobAdv") and level < 200 and level >= 180:
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_rush_by_level(True)
+        print("Resume rush by level; stronghold")
     
     if Terminal.GetCheckBox("Skill Injection"):
         if not Terminal.GetCheckBox("Auto Loot"):
@@ -11731,6 +11765,7 @@ if GameState.IsInGame():
         toggle_kami(True)
         toggle_loot(False)
         time.sleep(2)
+        print("Resume rush by level; da/ds start")
     elif (job == 3101 or job ==3100) and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
         print("Completing Demon Avenger Second job")
         toggle_rush_by_level(False)
@@ -11748,6 +11783,7 @@ if GameState.IsInGame():
         teleport_enter(111,-14)
         toggle_rush_by_level(True)
         toggle_kami(True)
+        print("Resume rush by level; da/ds third start training")
     elif job == 3121 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
         toggle_rush_by_level(False)
         DAFourth()
@@ -11760,6 +11796,7 @@ if GameState.IsInGame():
             MercedesFirst()
         toggle_rush_by_level(True)
         toggle_kami(True)
+        print("Resume rush by level; mercedes start")
     elif job == 2300 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
         toggle_kami(False)
         MercedesSecond()
@@ -11767,6 +11804,7 @@ if GameState.IsInGame():
         teleport_enter(9,-250)
         toggle_rush_by_level(True)
         toggle_kami(True)
+        print("Resume rush by level; mercedes second start training")
     elif job == 4100 and level <13:
         HayatoFirst()
     elif job == 4100 and level >=30 and not SCLib.GetVar("DoingCurbrock"):
@@ -11805,10 +11843,12 @@ if GameState.IsInGame():
         toggle_kami(True)
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; illium fourth start training")
     elif field_id == 102040200 and job == 15211: #Still in relicExcavation Camp
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; relic Excavation camp")
     elif (job == 6400 or job == 6002 or job == 6410) and Quest.GetQuestState(34625) != 2:
         print("Completing Cadena First Job and Second Job")
         SCLib.UpdateVar("DoingJobAdv",True)
@@ -11835,6 +11875,7 @@ if GameState.IsInGame():
     elif job == 15510 and level < 35 and Quest.GetQuestState(34940) == 2 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("GettingBoogie"):
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; ark second start training")
     elif job == 15510 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
         print("Completing Ark Third Job")
         ArkSecond()
@@ -11910,6 +11951,7 @@ if GameState.IsInGame():
             toggle_rush_by_level(True)
             toggle_kami(True)
             SCLib.UpdateVar("DoingJobAdv",False)
+            print("Resume rush by level; cloud park 2")
     elif job == 2410 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
         print("Doing Phantom Third Job")
         PhantomThird()
@@ -11923,6 +11965,7 @@ if GameState.IsInGame():
             dungeonTeleport()
             toggle_rush_by_level(True)
             toggle_kami(True)
+            print("Resume rush by level; over looked area")
         elif field_id == arianttreasure:
             dungeonTeleport()
         elif field_id == arianttreasurevault:
@@ -11942,6 +11985,7 @@ if GameState.IsInGame():
             toggle_rush_by_level(True)
             toggle_kami(True)
             SCLib.UpdateVar("DoingJobAdv",False)
+            print("Resume rush by level; lush forest")
         elif field_id == leafretreasurevaultentrance:
             dungeonTeleport()
         elif field_id == leafretreasurevault:
@@ -11952,10 +11996,11 @@ if GameState.IsInGame():
     elif (job == 2000 or job == 2100) and Quest.GetQuestState(21700) != 2 and level < 13:
         print("Doing Aran First Job")
         AranFirst()
-    elif job == 2100 and field_id == 140000000 and level < 30:
+    elif job == 2100 and field_id == 140000000 and level < 29:
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; aran first start training")
     elif job == 2100 and level == 10 and field_id == 140020300 and Character.GetMeso() < 800:
         while True:
             if Character.GetMeso() < 800:
@@ -11965,6 +12010,7 @@ if GameState.IsInGame():
             else:
                 toggle_rush_by_level(True)
                 SCLib.UpdateVar("DoingJobAdv",False)
+                print("rushing out aran")
                 break
     elif job == 2100 and level < 30:
         polearm = Inventory.FindItemByID(1442077)
@@ -11977,6 +12023,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; aran second start training")
     elif job == 2110 and level >=60 and not SCLib.GetVar("DoingCurbrock"):
         print("Doing Aran Third Job")
         AranThird()
@@ -11984,6 +12031,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; aran third start training")
     elif job == 2111 and level >= 100 and not SCLib.GetVar("DoingZakum"):
         print("Doing Aran Fourth Job")
         AranFourth()
@@ -11991,11 +12039,13 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; aran fourth start training")
     elif job == 0 and GameState.IsInGame():
         ExplorerFirst()
     elif job == 400 and level < 11:
         toggle_rush_by_level(True)
         toggle_kami(True)
+        print("Resume rush by level; db first start training")
         SCLib.UpdateVar("DoingJobAdv",False)
         knife = Inventory.FindItemByID(1332063)
         stars = Inventory.FindItemByID(2070015)
@@ -12057,10 +12107,11 @@ if GameState.IsInGame():
         cannon = Inventory.FindItemByID(1532000)
         if cannon.valid:
             Inventory.SendChangeSlotPositionRequest(1,cannon.pos,weapon_slot,-1)
-    elif job == 530 and level < 60 and field_id == 120000101:
+    elif job == 530 and level < 59 and field_id == 120000101:
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; cannoneer second start training")
     elif job == CorsairJobs[1] and level < 31:
         pistol = Inventory.FindItemByID(1492014)
         if pistol.valid:
@@ -12068,6 +12119,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; corsair buy pistol")
     elif job in CorsairJobs and Inventory.FindItemByID(2330000).valid == 0 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum"):
         print("Need bullets")
         buy_bullets()
@@ -12123,6 +12175,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; explorer second start training")
     elif job in explorerSecondJobs and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
         print("Doing Explorer Third Job")
         ExplorerThird()
@@ -12138,6 +12191,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; jett first start training")
     elif job == 508 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
         JettSecond()
     elif job == 570 and level < 40 and field_id == 552000071:
@@ -12145,6 +12199,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; jett second start training")
     elif job == 570 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
         JettThird()
     elif job == 571 and level < 70 and field_id == 552000071:
@@ -12152,6 +12207,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resume rush by level; jett third start training")
     elif job == 571 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
         JettFourth()
     elif job == 572 and level <= 104 and SCLib.GetVar("DoingJobAdv"):
@@ -12159,6 +12215,7 @@ if GameState.IsInGame():
             toggle_rush_by_level(True)
             toggle_kami(True)
             SCLib.UpdateVar("DoingJobAdv",False)
+            print("Resume rush by level; jett fourth start training")
     elif job == 1000:
         CygnusFirst()
     elif job in cygnusFirstJobs and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
@@ -12167,6 +12224,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_kami(True)
+        print("Resume rush by level; cygnus second start training")
     elif job in cygnusSecondJobs and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
         print("Doing Cygnus Knights Third job")
         CygnusThird()
@@ -12174,12 +12232,14 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_kami(True)
+        print("Resume rush by level; cygnus third start training")
     elif job in cygnusThirdJobs and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
         CygnusFourth()
     elif job in cygnusFourthJobs and field_id == 130000000:
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_kami(True)
+        print("Resume rush by level; cygnus fourth start training")
     elif job == 3000:
         print("Resistance first")
         ResistanceFirst()
@@ -12241,6 +12301,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Starting AB training")
     elif job == AngelicBusterJobs[0] and level >= 30:
         ABSecond()
     elif job == AngelicBusterJobs[1] and level >= 60:
@@ -12251,6 +12312,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Starting Kaiser Training")
     elif job == KaiserJobs[0] and level >= 30:
         KaiserSecond()
     elif job == KaiserJobs[1] and level >= 60:
@@ -12270,6 +12332,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_kami(True)
+        print("Resuming Shade Third Job training")
     elif job == ShadeJobs[3] and level >= 100:
         print("Doing Shade Fourth job")
         ShadeFourth()
@@ -12277,9 +12340,11 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resuming Shade Fourth job training")
     elif job == MihileJobs[0] and field_id == 130000000 and level == 10:
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Starting Mihile training")
     elif job == MihileJobs[0] and level >= 30:
         print("Doing Mihile Second Job")
         MihileSecond()
@@ -12290,6 +12355,7 @@ if GameState.IsInGame():
         toggle_rush_by_level(True)
         toggle_kami(True)
         SCLib.UpdateVar("DoingJobAdv",False)
+        print("Resuming Mihile third job training")
     elif job == MihileJobs[2] and level >= 100:
         print("Doing Mihile Fourth Job")
         MihileFourth()
@@ -12347,7 +12413,7 @@ def getBoogie():
         pos = Character.GetPos()
         if drop.valid:
             Terminal.SetCheckBox("Kami Vac",False)
-            toggleAttack(False)
+            toggleAttackQuest(False)
             Terminal.SetCheckBox("Auto Loot",True)
             if pos.x == drop.x and pos.y == drop.y:
                 print("Teleported to item location, waiting item to be picked up")
@@ -12362,9 +12428,10 @@ def getBoogie():
             Inventory.UseFamiliarCard(2870098)
             Inventory.UseFamiliarCard(2870098)
             toggle_rush_by_level(True)
+            print("Restoring rush by level; Boogie")
             time.sleep(1)
             Terminal.SetCheckBox("Kami Vac",True)
-            toggleAttack(True)
+            toggleAttackQuest(True)
             SCLib.UpdateVar("GettingBoogie",False)
             Terminal.SetCheckBox("Kami Loot",False)
             toggle_loot(False)
@@ -12376,7 +12443,7 @@ def getBoogie():
             if Field.GetID() == 102010000:
                 # Perion Southern Ridge
                 # let bot kill mobs and pickup?
-                toggleAttack(True)
+                toggleAttackQuest(True)
                 toggle_kami(True)
                 time.sleep(2)
             elif Terminal.IsRushing():
@@ -12426,7 +12493,7 @@ if Character.GetLevel() >= 83 and GameState.IsInGame() and getSpider:
         pos = Character.GetPos()
         if drop.valid:
             Terminal.SetCheckBox("Kami Vac",False)
-            toggleAttack(False)
+            toggleAttackQuest(False)
             Terminal.SetCheckBox("Auto Loot",True)
             if pos.x == drop.x and pos.y == drop.y:
                 print("Teleported to item location, waiting item to be picked up")
@@ -12442,7 +12509,7 @@ if Character.GetLevel() >= 83 and GameState.IsInGame() and getSpider:
             toggle_rush_by_level(True)
             time.sleep(1)
             toggle_kami(True)
-            toggleAttack(True)
+            toggleAttackQuest(True)
             if not Terminal.GetCheckBox("Familiar 0"):
                 Terminal.SetComboBox("Familiar0",2)
                 Terminal.SetCheckBox("Familiar 0",True)
@@ -12539,7 +12606,7 @@ if ((level >= 140 and job not in ThunderBreakerJobs) or (level >= 150 and job in
             Inventory.UseItem(2434265)
             time.sleep(2)
         Terminal.SetSpinBox("FilterMeso",50000)
-        Terminal.SetCheckBox("settings/expcrash",False)
+        #Terminal.SetCheckBox("settings/expcrash",False)
         Terminal.SetCheckBox("Instant Final Smash",False)
         equip_pensalir()
 elif level >= 140 and not has_pensalir(False) and GameState.IsInGame() and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv"):
@@ -12549,10 +12616,11 @@ elif level >= 140 and not has_pensalir(False) and GameState.IsInGame() and not S
     toggle_loot(True)
     equip_pensalir()
     Terminal.SetProperty("CheckEquip",True)
-elif level >= 140 and has_pensalir(False) and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv") and Terminal.GetProperty("CheckEquip",True) or Terminal.GetCheckBox("Kami Loot"):
+elif level >= 140 and (has_pensalir(False) and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv") and Terminal.GetProperty("CheckEquip",True) or Terminal.GetCheckBox("Kami Loot")):
     toggle_rush_by_level(True)
     Terminal.SetCheckBox("Kami Loot",False)
     Terminal.SetProperty("CheckEquip",False)
+    print("Resume rush by level; training to 200")
 if level >= 200 and accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
     if field_id != 240000000:
         rush(240000000)
@@ -12581,7 +12649,7 @@ if DoBlackGate and Character.GetHP() > 0 and level >= 145 and not SCLib.GetVar("
     if not Terminal.GetCheckBox('Auto Loot'):
         Terminal.SetCheckBox('Auto Loot',True)
     Terminal.SetCheckBox("Kami Vac",True)
-    toggleAttack(True)
+    toggleAttackQuest(True)
     Terminal.SetSpinBox("FilterMeso",0)
     if Inventory.GetEmptySlotCount(1) == 0:
         if not Terminal.IsRushing():
@@ -12711,17 +12779,19 @@ if GameState.IsInGame() and not Terminal.IsRushing() and level >= 34 and level <
                 time.sleep(8)
                 dungeonTeleport()
                 toggle_rush_by_level(True)
+                print("Resume rush by level; curbrock")
             else:
                 Quest.CompleteQuest(5500,sabitrama)
                 SCLib.UpdateVar("DoingCurbrock",False)
                 time.sleep(4)
                 toggle_rush_by_level(True)
+                print("Resume rush by level; curbrock")
         else:
             print("Enable kami to kill curbrock")
             SCLib.UpdateVar("DoingCurbrock",True)
             Terminal.StopRush()
             toggle_kami(True)
-            toggleAttack(True)
+            toggleAttackQuest(True)
 if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and level >= 61 and level < 100 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum"):
     pos = Character.GetPos()
     if curbrock3 ==0:
@@ -12742,15 +12812,17 @@ if GameState.IsInGame() and not Terminal.IsRushing() and curbrock2 == 2 and leve
                 time.sleep(8)
                 dungeonTeleport()
                 toggle_rush_by_level(True)
+                print("Resume rush by level; curbrock")
             else:
                 Quest.CompleteQuest(5501,sabitrama)
                 SCLib.UpdateVar("DoingCurbrock",False)
                 toggle_rush_by_level(True)
+                print("Resume rush by level; curbrock")
         else:
             print("Enable kami to kill curbrock")
             SCLib.UpdateVar("DoingCurbrock",True)
             toggle_kami(True)
-            toggleAttack(True)
+            toggleAttackQuest(True)
             Terminal.StopRush()
 if GameState.IsInGame() and field_id in curbrockhideout:
     time.sleep(2)
@@ -12764,7 +12836,7 @@ if GameState.IsInGame() and field_id in curbrockhideout:
     else:
         print("Mob not dead")
         SCLib.UpdateVar("DoingCurbrock",True)
-        toggleAttack(True)
+        toggleAttackQuest(True)
         toggle_kami(True)
         Terminal.StopRush()
 elif GameState.IsInGame() and field_id in escaperoutes:
@@ -12774,16 +12846,18 @@ elif GameState.IsInGame() and field_id in escaperoutes:
         Quest.CompleteQuest(5501,sabitrama)
     time.sleep(8)
     dungeonTeleport()
-    toggleAttack(True)
+    toggleAttackQuest(True)
     toggle_rush_by_level(True)
+    print("Resume rush by level; curbrock")
     SCLib.UpdateVar("DoingCurbrock",False)
 elif GameState.IsInGame() and field_id not in curbrockhideout and field_id not in escaperoutes and SCLib.GetVar("DoingCurbrock") and len(Field.GetMobs()) == 0:
     print("Ended up somewhere weird")
     SCLib.UpdateVar("DoingCurbrock",False)
-    toggleAttack(True)
+    toggleAttackQuest(True)
     toggle_kami(True)
     time.sleep(4)
     toggle_rush_by_level(True)
+    print("Resume rush by level; curbrock")
     Terminal.StopRush()
 
 
@@ -13460,6 +13534,7 @@ if GameState.IsInGame() and doBeach and not Terminal.IsRushing() and level >= 36
                 time.sleep(2)
                 toggle_rush_by_level(True)
                 toggle_kami(True)
+                print("Resume rush by level; beach")
     #All quest for Gold Beach Complete!
 elif GameState.IsInGame() and quest26 == 2 and Inventory.FindItemByID(1032254).valid and level < 100:
     print("Equiping earring and enabling rush by level")
@@ -13675,7 +13750,7 @@ if GameState.IsInGame() and doSleepyWood and not Terminal.IsRushing() and level 
             if pos.x != -523:
                 Character.Teleport(-523, 1028)
                 time.sleep(1)
-            toggleAttack(False)
+            toggleAttackQuest(False)
             Character.EnterPortal()
             time.sleep(1)
         if quest15 ==0:
@@ -13703,7 +13778,7 @@ if GameState.IsInGame() and doSleepyWood and not Terminal.IsRushing() and level 
                         if pos.x != -75:
                             Character.Teleport(-75, -2685)
                         else:
-                            toggleAttack(False)
+                            toggleAttackQuest(False)
                             Character.EnterPortal()
                 if field_id == 910530001:
                     if pos.x != 762:
@@ -13731,7 +13806,7 @@ if GameState.IsInGame() and doSleepyWood and not Terminal.IsRushing() and level 
                             Character.Teleport(1259, -2565)
                             time.sleep(1)
                         else:
-                            toggleAttack(False)
+                            toggleAttackQuest(False)
                             Character.EnterPortal()
                 if field_id == 910530101:
                     if pos.x != -434:
@@ -13750,11 +13825,13 @@ if GameState.IsInGame() and doSleepyWood and not Terminal.IsRushing() and level 
                 toggle_rush_by_level(True)
                 toggle_kami(True)
                 SCLib.UpdateVar("DoingSleepy",False)
+                print("Resume rush by level; sleepywood")
                 quest17 = Quest.GetQuestState(ForestOfTenacity3)
                 if quest17 == 2:
                     toggle_HTR(True)
                     toggle_rush_by_level(True)
                     toggle_kami(True)
+                    print("Resume rush by level; sleepy wood")
             else:
                 if field_id != 910530202:
                     if field_id != 910530201:
@@ -13772,7 +13849,7 @@ if GameState.IsInGame() and doSleepyWood and not Terminal.IsRushing() and level 
                                 Character.Teleport(1523, -1905)
                                 time.sleep(1)
                             else:
-                                toggleAttack(False)
+                                toggleAttackQuest(False)
                                 Character.EnterPortal()
                                 time.sleep(1)
                     if field_id == 910530201:
@@ -13780,7 +13857,7 @@ if GameState.IsInGame() and doSleepyWood and not Terminal.IsRushing() and level 
                             Character.Teleport(255, -1545)
                             time.sleep(1)
                         else:
-                            toggleAttack(False)
+                            toggleAttackQuest(False)
                             Character.EnterPortal()
                             time.sleep(1)
                 if field_id == 910530202:
@@ -13827,6 +13904,7 @@ if (KillZakumDaily == False or not SCLib.GetVar("DoingZakum")) and (field_id == 
         Terminal.SetCheckBox("Kami Vac",True)
         Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
         SCLib.UpdateVar("DoingZakum",False)
+        print("Resume rush by level; Zakum")
     elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
         toggle_kami(False)
         teleport_enter(-1599,-331)
@@ -13836,6 +13914,7 @@ if (KillZakumDaily == False or not SCLib.GetVar("DoingZakum")) and (field_id == 
             toggle_rush_by_level(True)
             toggle_loot(False)
             SCLib.UpdateVar("DoingZakum",False)
+            print("Resume rush by level; Zakum")
 
 runebuff_id = 80002280
 if KillZakumDaily and level >= 105 and (Character.GetEquippedItemIDBySlot(face_slot) != condensed_power_crystal or Character.GetEquippedItemIDBySlot(eye_slot) != aquatic_letter_eye) and Terminal.GetLineEdit("LoginChar") not in accountData['done_zakum'] and (Character.HasBuff(2,runebuff_id) or SCLib.GetVar("DoingZakum")) and not SCLib.GetVar("DoingMP"):
@@ -13906,7 +13985,7 @@ if KillZakumDaily and level >= 105 and (Character.GetEquippedItemIDBySlot(face_s
             DidSpawn()
             if pos.x != -260:
                 Character.Teleport(-260, 84)
-                toggleAttack(True)
+                toggleAttackQuest(True)
             else:
                 print("Fighting Zakum StandBy")
         else:
@@ -13958,7 +14037,7 @@ if KillZakumDaily and level >= 105 and (Character.GetEquippedItemIDBySlot(face_s
                     else:
                         print("Dropping stone to spawn Zakum")
                         Inventory.SendChangeSlotPositionRequest(4, stone.pos, 0, 1)
-                        toggleAttack(False)
+                        toggleAttackQuest(False)
                         time.sleep(6)
                 elif not stone.valid:
                     toggle_loot(True)
@@ -14004,6 +14083,7 @@ if GameState.IsInGame() and SCLib.GetVar("BuyExpansion") and not SCLib.GetVar("D
 if not SCLib.GetVar("BuyExpansion") and field_id == 240000002 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock"):
     toggle_rush_by_level(True)
     toggle_kami(True)
+    print("Resume rush by level; general store")
 
 if GameState.IsInGame() and level < 140 and Inventory.FindItemByID(5040004).valid and not SCLib.GetVar("GettingBoogie") and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingCurbrock") and useExploit and not SCLib.GetVar("DoingJobAdv"):
     print("Doing exploit")
@@ -14015,6 +14095,7 @@ if GameState.IsInGame() and level < 140 and Inventory.FindItemByID(5040004).vali
             Terminal.SetCheckBox("Kami Vac",True)
             Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
             SCLib.UpdateVar("DoingZakum",False)
+            print("Resume rush by level; zakum -> exploit")
     elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
         if pos.x != -1599:
             toggle_kami(False)
