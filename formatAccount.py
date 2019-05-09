@@ -11,4 +11,3 @@ if __name__ == "__main__":
             for text in split_str:
                 frag = text.split(":")
                 w.write("{};{}\n".format(frag[0].replace(" ","").replace("\n",""),frag[3].replace(" ","")))
-
