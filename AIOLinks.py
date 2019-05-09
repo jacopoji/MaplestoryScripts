@@ -1,25 +1,3 @@
-'''
-Links skills
-TODO:
-Kanna           DONE
-Luminous        DONE
-Demon Avenger   DONE
-Demon Slayer    DONE
-Mercedes        DONE
-Hayato          DONE
-Xenon           DONE
-Phantom         DONE
-Illium          DONE(untested)
-Cadena          DONE(untested)
-Ark             DONE(untested)
-Evan            DONE
-Kinesis         DONE
-Aran            DONE
-Beast Tamer     DONE
-'''
-
-#demonS 00F3 [1A0101000000] 02A0 [458EB8030000]
-#demonA 00F3 [1A0100000000] 02A0 [CD5FB9030000]
 curbrockhideout = [600050000,600050010,600050020]
 useExploit = False
 useHyperExploit = True
@@ -1323,13 +1301,33 @@ def buy_potion(): #00F4 [00] 000D 001E8C67 05DC 00000000 00000ED8
                 time.sleep(0.5)
                 BuyKey = Packet.COutPacket(BuyItemHeader)
                 if Character.GetMeso() > 5700000:
-                    BuyKey.EncodeBuffer("00 000D 001E8C67 05DC 00000000 00000ED8")
+                    BuyKey.EncodeBuffer("00 000D 001E8C67 05DC 00000000 00000ED8") #00F4 00 000D 001E8C67 0001 00000000 00000ED8
                     print("Have enough money to buy 1500 potions")
                 else:
                     BuyKey.EncodeBuffer("00 000D 001E8C67 {} 00000000 00000ED8".format(hex(int(Character.GetMeso()/3800))[2:].zfill(4)))
                     print("Only have enough money to buy {} potions".format(int(Character.GetMeso()/3800)))
                 Packet.SendPacket(BuyKey)
                 time.sleep(0.5)
+                if Inventory.FindItemByID(2002023).count == 0:
+                    print("Failed to buy, using discount packet")
+                    BuyKey = Packet.COutPacket(BuyItemHeader)
+                    if Character.GetMeso() > 5700000:
+                        BuyKey.EncodeBuffer("00 000D 001E8C67 05DC 00000000 00000E40")
+                    else:
+                        BuyKey.EncodeBuffer("00 000D 001E8C67 {} 00000000 00000E40".format(hex(int(Character.GetMeso()/3800))[2:].zfill(4)))
+                    Packet.SendPacket(BuyKey)
+                    time.sleep(0.5)
+                if Inventory.FindItemByID(2002023).count == 0:
+                    print("Out of potions, cc")
+                    Packet.UnBlockRecvHeader(BlockBuyHeader)
+                    CloseShop = Packet.COutPacket(BuyItemHeader)
+                    CloseShop.EncodeBuffer("[03]")
+                    Packet.SendPacket(CloseShop)
+                    Terminal.SetPushButton("Leave shop",True)
+                    time.sleep(1)
+                    Terminal.SetPushButton("Leave shop",False)
+                    Terminal.ChangeChannel(0)
+                    continue
                 Packet.UnBlockRecvHeader(BlockBuyHeader)
                 CloseShop = Packet.COutPacket(BuyItemHeader)
                 CloseShop.EncodeBuffer("[03]")
@@ -1738,6 +1736,7 @@ def equip_pensalir():
 
 #########Job specific advancements##########
 def kannaFirst():
+    SCLib.UpdateVar("DoingJobAdv",True)
     if field_id == 807040000:
         if Terminal.IsRushing():
             print("Stopping terminal rush")
@@ -1777,6 +1776,7 @@ def kannaFirst():
             print("Returning control to rush by level")
             toggle_rush_by_level(True)
             toggle_kami(True)
+            SCLib.UpdateVar("DoingJobAdv",False)
     else:
         time.sleep(1)
         fan = Inventory.FindItemByID(1552000)
@@ -1788,6 +1788,9 @@ def kannaFirst():
         print("Setting up first job settings")
         Key.Set(0x44, 1, 42001000)
         time.sleep(1)
+        toggle_rush_by_level(True)
+        toggle_kami(True)
+        SCLib.UpdateVar("DoingJobAdv",False)
 
 def LumiFirst():
     Quest.StartQuest(25560, 0)
@@ -2226,6 +2229,7 @@ def IlliumFirst():
  
     if grossular != 2:
         if grossular == 0:
+            dungeonTeleport()
             rush(402000526)
             Quest.StartQuest(34802, 3001332)
          
@@ -3108,6 +3112,7 @@ def CadenaFourth():
     Quest.StartQuest(34659,0)
 
 def ArkFirst():
+    SCLib.UpdateVar("DoingJobAdv",True)
     quest1 = Quest.GetQuestState(34915)
     quest2 = Quest.GetQuestState(34916)
     quest3 = Quest.GetQuestState(34917)
@@ -3152,10 +3157,12 @@ def ArkFirst():
     elif quest3 != 2:
         print("3")
         if quest3 == 0:
+            print("3.0")
             toggle_kami(False)
             StartQuest(34917, 3001400, 402000600)
         elif quest3 == 1:
-            if Quest.CheckCompleteDemand(34917, 3001400):
+            print("3.1")
+            if Quest.CheckCompleteDemand(34917, 3001400) != 0:
                 KillMobAndLoot(402000610)
                 time.sleep(5)
             else:
@@ -3175,7 +3182,7 @@ def ArkFirst():
             toggle_kami(False)
             StartQuest(34919, 3001401, 402000600)
         elif quest5 == 1:
-            if Quest.CheckCompleteDemand(34919, 3001401):
+            if Quest.CheckCompleteDemand(34919, 3001401)!= 0:
                 KillMobAndLoot(402000611)
                 time.sleep(5)
             else:
@@ -3391,6 +3398,7 @@ def ArkFirst():
         if quest25 == 0:
             toggle_kami(False)
             StartQuest(34902, 0, 402000640)
+            #SCLib.UpdateVar("DoingJobAdv",False)
 
 def ArkSecond():
     quest1 = Quest.GetQuestState(34939)
@@ -3433,6 +3441,7 @@ def ArkSecond():
         toggle_rush_by_level(True)
         toggle_kami(True)
         print("Ark done")
+        SCLib.UpdateVar("DoingJobAdv",False)
     if level >= 60:
         jobQuest = Quest.GetQuestState(34903)
         print("Completing Ark Third Job Adv")
@@ -7775,7 +7784,7 @@ def MihileSecond():
                             Character.Teleport(stumpy.x-100,stumpy.y)
                         toggleAttackQuest(True)
                     else:
-                        Character.ChangeChannel(0)
+                        Terminal.ChangeChannel(0)
                 else:
                     Terminal.Rush(102020500)
     elif quest5 != 2:
@@ -9429,7 +9438,7 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
     if siSkill in [5311000,5301000]:
         sleepTime = 0.161
     elif siSkill not in [25101000,25121000]:
-        sleepTime = 0.231
+        sleepTime = 0.201
     else:
         sleepTime = 0.101
     while Field.GetCharacterCount()<=1 and Field.GetEliteState() !=2 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and not Terminal.GetRadioButton("SIRadioDragon") and on:
@@ -9563,12 +9572,13 @@ def toggleAttack(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
-            Terminal.SetCheckBox("Grenade Kami",True)
-            Terminal.SetCheckBox("charm_fma",False)
+            Terminal.SetSpinBox("charm_delay",100)
+            Terminal.SetCheckBox("charm_fma",on)
             Terminal.SetCheckBox("Summon Kishin",False)
-            Terminal.SetCheckBox("MonkeySpiritsNDcheck",on)
-            Terminal.SetCheckBox("Kami Vac",False)
+            Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
+            Terminal.SetCheckBox("Auto Attack",on)
+            Terminal.SetSpinBox("autoattack_spin",7500)
+            Terminal.SetComboBox("AttackKey",36)
             Terminal.SetCheckBox("Skill Injection",False)
         Terminal.SetCheckBox("Auto Attack",on)
         Terminal.SetSpinBox("autoattack_spin",7500)
@@ -10110,7 +10120,8 @@ def toggleAttack(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            attackSemiNDMagic(5321000,5321000,0.95,on)
+            attackSIND("5321000;5011002",on,250)
+            #attackSemiNDMagic(5321000,5321000,0.95,on)
     elif job == 508: #Jett 1sts
         attackAuto(5081020,on)
     elif job in JettJobs and field_id in curbrockhideout:
@@ -10118,7 +10129,8 @@ def toggleAttack(on):
     elif job == 570: #Jett 2nd
         #attackAuto(5081020,on)
         if Character.GetSkillLevel(5701011) >= 1:
-            attackSemiNDMagic(5701011,5701011,0.2,on,attackSpeed=4)
+            #attackSemiNDMagic(5701011,5701011,0.2,on,attackSpeed=4)
+            attackSIND(5701011,on,150)
         else:
             attackAuto(5701010,on)
     elif job == 571: #Jett 3rd
@@ -10404,7 +10416,7 @@ def toggleAttack(on):
     elif job in KinesisJobs and field_id in curbrockhideout:
         attackAuto(142001001,on)
     elif job == 14210: #Kinesis 2nd 142101002
-        attackSemiNDMagic(142101002,142101002,0.69,on,attackSpeed = 5)
+        attackSemiNDMagic(142101002,142101002,0.79,on,attackSpeed = 5)
         #attackAuto(142101002,on)
     elif job == 14211 or job == 14212: #Kinesis 3rd + 4th 142111002
         #
@@ -10806,7 +10818,7 @@ def toggleAttackQuest(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            attackSemiND(155001100,155001100,0.85,on)
+            attackAuto(155001100,on)
     elif job == 2001: #Evan pre 1st job
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -11131,7 +11143,8 @@ def toggleAttackQuest(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            attackSemiNDMagic(5321000,5321000,0.95,on)
+            attackSIND("5321000;5011002",on,250)
+            #attackSemiNDMagic(5321000,5321000,0.95,on)
     elif job == 508: #Jett 1sts
         attackAuto(5081020,on)
     elif job in JettJobs and field_id in curbrockhideout:
@@ -11675,7 +11688,7 @@ def stronghold():
 if GameState.IsInGame():
     safety_setting()
     if not (SCLib.GetVar("DoingJobAdv") and (job == ShadeJobs[0] or job == ShadeJobs[1])):
-        if SCLib.GetVar("DoingJobAdv"):
+        if SCLib.GetVar("DoingJobAdv") or SCLib.GetVar("GettingBoogie"):
             toggleAttackQuest(True)
         else:
             toggleAttack(True)
@@ -11869,10 +11882,10 @@ if GameState.IsInGame():
     elif job == 15500:
         print("Completing Ark First Job")
         ArkFirst()
-    elif job == 15510 and level < 35 and Quest.GetQuestState(34940) != 2 and not SCLib.GetVar("DoingCurbrock"):
+    elif job == 15510 and level < 40 and Quest.GetQuestState(34940) != 2 and not SCLib.GetVar("DoingCurbrock"):
         print("Completing Ark Second Job")
         ArkSecond()
-    elif job == 15510 and level < 35 and Quest.GetQuestState(34940) == 2 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("GettingBoogie"):
+    elif job == 15510 and level < 40 and Quest.GetQuestState(34940) == 2 and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("GettingBoogie"):
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
         print("Resume rush by level; ark second start training")
@@ -12396,7 +12409,7 @@ if GameState.IsInGame():
         Npc.RegisterSelection("gift")
         Quest.StartQuest(61590, 9201253)
         time.sleep(3)
-    elif Quest.GetQuestState(61590) ==2:
+    elif Quest.GetQuestState(61590) ==2 and level < 70:
         if Inventory.FindItemByID(2430451).valid:
             print("Using equip box lvl60")
             Inventory.UseItem(2430451)
@@ -12463,7 +12476,7 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
         if Quest.GetQuestState(34625) == 2:
             getBoogie()
     elif job in ArkJobs:
-        if job != 15500 and Quest.GetQuestState(34940) == 2:
+        if job != 15500 and Quest.GetQuestState(34940) == 2 or level >= 36:
             getBoogie()
     elif job in EvanJobs:
         if Quest.GetQuestState(22510) == 2:
@@ -12477,7 +12490,7 @@ if Character.GetLevel() >= 13 and GameState.IsInGame() and not SCLib.GetVar("Doi
     elif job == 14200:
         if Quest.GetQuestState(22733) == 2:
             getBoogie()
-    elif job != -1 and job != 0 and job not in DemonAvengerJobs and job not in DemonSlayerJobs and job not in KannaJobs:
+    elif job != -1 and job != 0 and job not in DemonAvengerJobs and job not in DemonSlayerJobs and job not in KannaJobs and job not in KinesisJobs:
         getBoogie()
     
 
@@ -12595,20 +12608,33 @@ if ((level >= 140 and job not in ThunderBreakerJobs) or (level >= 150 and job in
                     Terminal.Logout()
                     time.sleep(2)
     else:
-        if field_id != 224000142:
-            rush(224000142)
-        toggle_rush_by_level(False)
-        toggle_loot(True)
-        pet = Inventory.FindItemByID(2434265)
-        if pet.valid:
-            Key.Set(0x41, 2, 2001582)
-            time.sleep(2)
-            Inventory.UseItem(2434265)
-            time.sleep(2)
-        Terminal.SetSpinBox("FilterMeso",50000)
-        #Terminal.SetCheckBox("settings/expcrash",False)
-        Terminal.SetCheckBox("Instant Final Smash",False)
-        equip_pensalir()
+        if job in IlliumJobs:
+            if field_id != 240000000:
+                rush(240000000)
+                toggle_rush_by_level(False)
+            else:
+                print("Current character done, moving to next one")
+                accountData['changing_mule'] = True
+                writeJson(accountData,accountId)
+                if GameState.IsInGame():
+                    Terminal.Logout()
+                    time.sleep(2)
+                    toggle_rush_by_level(True)
+        else:
+            if field_id != 224000142:
+                rush(224000142)
+            toggle_rush_by_level(False)
+            toggle_loot(True)
+            pet = Inventory.FindItemByID(2434265)
+            if pet.valid:
+                Key.Set(0x41, 2, 2001582)
+                time.sleep(2)
+                Inventory.UseItem(2434265)
+                time.sleep(2)
+            Terminal.SetSpinBox("FilterMeso",50000)
+            #Terminal.SetCheckBox("settings/expcrash",False)
+            Terminal.SetCheckBox("Instant Final Smash",False)
+            equip_pensalir()
 elif level >= 140 and not has_pensalir(False) and GameState.IsInGame() and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv"):
     if field_id != 224000142:
         rush(224000142)
@@ -14122,12 +14148,12 @@ if level >= 106 and Terminal.GetCheckBox("Rush By Level") and not SCLib.GetVar("
 else:
     Terminal.SetCheckBox("timedCCCheck",False)
 
-if job in KannaJobs:
+if job in KannaJobs and level >= 145:
     toggle_rush_by_level(False)
     if field_id != 240000000:
         rush(240000000)
     else:
-        sleep(5)
+        time.sleep(5)
 
 def get_next_char(current_list):
     doAllJobs = False

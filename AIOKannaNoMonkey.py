@@ -427,6 +427,7 @@ def equip_item(item_pos,equip_slot,throw_old = False):
 	skillInject = Terminal.GetCheckBox("Skill Injection")
 	javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
 	monkey = Terminal.GetCheckBox("MonkeySpiritsNDcheck")
+	charm = Terminal.GetCheckBox("charm_fma")
 	Terminal.SetCheckBox("Auto Attack",False)
 	Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
 	Terminal.SetCheckBox("Skill Injection",False)
@@ -437,6 +438,7 @@ def equip_item(item_pos,equip_slot,throw_old = False):
 	Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
 	Terminal.SetCheckBox("Skill Injection",skillInject)
 	Terminal.SetCheckBox("MonkeySpiritsNDcheck",monkey)
+	Terminal.SetCheckBox("charm_fma",charm)
 	time.sleep(1)
 	if Inventory.GetItem(1,item_pos).id != target_equip:#Equip change request success
 		print("Successfully equipped item")
@@ -525,133 +527,68 @@ def use_pet():
 		time.sleep(2)
 
 def settings_first_job():
-	if Terminal.GetCheckBox("Auto Attack"):
-		Terminal.SetCheckBox("Auto Attack",False)
-		Terminal.SetSpinBox("autoattack_spin",100)
-		Terminal.SetComboBox("AttackKey",33)
+	on_settings = ["SkillInjection","Legit Vac","Kami Vac","Auto Equip","Rush By Level"]
+	off_settings = ["Auto Attack","bot/kanna_kami","charm_fma","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+
 	Terminal.SetSpinBox("SkillInjection", 100)
 	Terminal.SetLineEdit("SISkillID","42001006")
-	if not Terminal.GetCheckBox("Skill Injection"):
-		Terminal.SetCheckBox("Skill Injection",True)
-	if Terminal.GetComboBox("AttackKey") != 33:
-		Terminal.SetSpinBox("autoattack_spin",100)
-		Terminal.SetComboBox("AttackKey",33)
-	if Terminal.GetCheckBox("bot/kanna_kami"):
-		Terminal.SetCheckBox("bot/kanna_kami",False)
-		Terminal.SetSpinBox("bot/kanna_kami_delay",1000)
-	Terminal.SetCheckBox("Legit Vac",True)
-	if not Terminal.GetCheckBox("Kami Vac"):
-		Terminal.SetCheckBox("Kami Vac",True)
-	if Terminal.GetCheckBox("charm_fma"):
-		Terminal.SetCheckBox("charm_fma",False)
-	if Terminal.GetCheckBox("MonkeySpiritsNDcheck"):
-		Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
-	if Terminal.GetCheckBox("Kami Loot"):
-		Terminal.SetCheckBox("Kami Loot",False)
-		Terminal.SetCheckBox("Auto Loot",False)
-	if Terminal.GetCheckBox('filter_equip'):
-		Terminal.SetCheckBox('filter_equip',False)
-	if not Terminal.GetCheckBox("Auto Equip"):
-		Terminal.SetCheckBox("Auto Equip",True)
-	if not Terminal.GetCheckBox("Rush By Level"):
-		Terminal.SetCheckBox("Rush By Level",True)
-	Key.Set(0x44, 1, 42001000)
-	Terminal.SetCheckBox("settings/mesologout",False)
-	Terminal.SetCheckBox("Speedy Gonzales",False)
+	for options in on_settings:
+		if not Terminal.GetCheckBox(options):
+			Terminal.SetCheckBox(options,True)
+	for options in off_settings:
+		if Terminal.GetCheckBox(options):
+			Terminal.SetCheckBox(options,False)
+
 def settings_second_job():
-	if Terminal.GetCheckBox("Auto Attack"):
-		Terminal.SetCheckBox("Auto Attack",False)
-	Terminal.SetCheckBox("Legit Vac",True)
-	if Terminal.GetCheckBox("Skill Injection"):
-		Terminal.SetCheckBox("Skill Injection",False)
-	if not Terminal.GetCheckBox("charm_fma"):
-		Terminal.SetSpinBox("charm_delay",100)
-		Terminal.SetCheckBox("charm_fma",True)
-	if not Terminal.GetCheckBox("bot/kanna_kami"):
-		Terminal.SetCheckBox("bot/kanna_kami",True)
-		Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
-	if Terminal.GetCheckBox("Kami Vac"):
-		Terminal.SetCheckBox("Kami Vac",False)
-	if Terminal.GetCheckBox("MonkeySpiritsNDcheck"):
-		Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
-	if Terminal.GetCheckBox("Kami Loot"):
-		Terminal.SetCheckBox("Kami Loot",False)
-		Terminal.SetCheckBox("Auto Loot",False)
-	if Terminal.GetCheckBox('filter_equip'):
-		Terminal.SetCheckBox('filter_equip',False)
-	if not Terminal.GetCheckBox("Auto Equip"):
-		Terminal.SetCheckBox("Auto Equip",True)
-	if not Terminal.GetCheckBox("Rush By Level"):
-		Terminal.SetCheckBox("Rush By Level",True)
-	Terminal.SetCheckBox("settings/mesologout",False)
+	on_settings = ["Legit Vac","Auto Equip","Rush By Level","bot/kanna_kami","charm_fma"]
+	off_settings = ["SkillInjection","Kami Vac","Auto Attack","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+
+	Terminal.SetSpinBox("charm_delay",100)
+	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
+	for options in on_settings:
+		if not Terminal.GetCheckBox(options):
+			Terminal.SetCheckBox(options,True)
+	for options in off_settings:
+		if Terminal.GetCheckBox(options):
+			Terminal.SetCheckBox(options,False)
+
 def settings_third_job():
-	Terminal.SetCheckBox("Legit Vac",True)
-	if Terminal.GetCheckBox("Skill Injection"):
-		Terminal.SetCheckBox("Skill Injection",False)
-	if not Terminal.GetCheckBox("charm_fma"):
-		Terminal.SetSpinBox("charm_delay",100)
-		Terminal.SetCheckBox("charm_fma",True)
-	if not Terminal.GetCheckBox("Summon Kishin"):
-		Terminal.SetCheckBox("Summon Kishin",True)
-	if not Terminal.GetCheckBox("bot/kanna_kami"):
-		Terminal.SetCheckBox("bot/kanna_kami",True)
-		Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
-	if Terminal.GetCheckBox("Kami Vac"):
-		Terminal.SetCheckBox("Kami Vac",False)
-	if Terminal.GetCheckBox("MonkeySpiritsNDcheck"):
-		Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
-	if not Terminal.GetCheckBox("Auto Attack"):
-		Terminal.SetCheckBox("Auto Attack",True)
-		Terminal.SetSpinBox("autoattack_spin",7500)
-		Terminal.SetComboBox("AttackKey",36)
-	if Terminal.GetComboBox("AttackKey") != 36:
-		Terminal.SetSpinBox("autoattack_spin",7500)
-		Terminal.SetComboBox("AttackKey",36)
-	if Terminal.GetCheckBox("Kami Loot"):
-		Terminal.SetCheckBox("Kami Loot",False)
-		Terminal.SetCheckBox("Auto Loot",False)
-	if Terminal.GetCheckBox('filter_equip'):
-		Terminal.SetCheckBox('filter_equip',False)
-	if not Terminal.GetCheckBox("Auto Equip"):
-		Terminal.SetCheckBox("Auto Equip",True)
-	if not Terminal.GetCheckBox("Rush By Level"):
-		Terminal.SetCheckBox("Rush By Level",True)
+	on_settings = ["Legit Vac","Auto Equip","Auto Attack","Rush By Level","bot/kanna_kami","charm_fma"]
+	off_settings = ["SkillInjection","Kami Vac","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+
+	Terminal.SetSpinBox("charm_delay",100)
+	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
+	
 	Key.Set(0x47,1,42111003)
-	Terminal.SetCheckBox("settings/mesologout",False)
+	Terminal.SetSpinBox("autoattack_spin",7500)
+	Terminal.SetComboBox("AttackKey",36)
+	for options in on_settings:
+		if not Terminal.GetCheckBox(options):
+			Terminal.SetCheckBox(options,True)
+	for options in off_settings:
+		if Terminal.GetCheckBox(options):
+			Terminal.SetCheckBox(options,False)
+
 def settings_fourth_job():
 	level = Character.GetLevel()
-	if not Terminal.GetCheckBox("Auto Attack"):
-		Terminal.SetCheckBox("Auto Attack",True)
-		Terminal.SetSpinBox("autoattack_spin",7500)
-		Terminal.SetComboBox("AttackKey",36)
-	if Terminal.GetComboBox("AttackKey") != 36:
-		Terminal.SetSpinBox("autoattack_spin",7500)
-		Terminal.SetComboBox("AttackKey",36)
-	Terminal.SetCheckBox("Legit Vac",True)
-	if Terminal.GetCheckBox("charm_fma"):
-		Terminal.SetCheckBox("charm_fma",False)
-	#if not Terminal.GetCheckBox("Summon Kishin"):
-	#	Terminal.SetCheckBox("Summon Kishin",True)
-	if not Terminal.GetCheckBox("Grenade Kami"):
-		Terminal.SetCheckBox("Grenade Kami",True)
-	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
-	if Terminal.GetCheckBox("Skill Injection"):
-		Terminal.SetCheckBox("Skill Injection",False)
-	if Terminal.GetCheckBox("bot/kanna_kami"):
-		Terminal.SetCheckBox("bot/kanna_kami",False)
-		Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
-	if Terminal.GetCheckBox("Kami Vac"):
-		Terminal.SetCheckBox("Kami Vac",False)
-	elif level < 100 and GameState.IsInGame():
-		if Terminal.GetCheckBox("Kami Loot") or Terminal.GetCheckBox("Auto Loot"):
-			Terminal.SetCheckBox("Kami Loot",False)
-			Terminal.SetCheckBox("Auto Loot",False)
-	if level <= 99 and GameState.IsInGame():
-		Terminal.SetSpinBox("FilterMeso",50000)
-		if not Terminal.GetCheckBox("Auto Equip"):
-			Terminal.SetCheckBox("Auto Equip",True)
-	elif level > 100 and level < 145:
-		Terminal.SetSpinBox("FilterMeso",0)
+	on_settings = ["Legit Vac","Auto Attack","Rush By Level","charm_fma"]
+	off_settings = ["SkillInjection","Kami Vac","MonkeySpiritsNDcheck","bot/kanna_kami","settings/mesologout","Speedy Gonzales"]#,"Auto Loot","Kami Loot"
+
+	Terminal.SetSpinBox("charm_delay",100)
+	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
+	Terminal.SetSpinBox("FilterMeso",1000)
+	
+	Key.Set(0x47,1,42111003)
+	Terminal.SetSpinBox("autoattack_spin",7500)
+	Terminal.SetComboBox("AttackKey",36)
+	for options in on_settings:
+		if not Terminal.GetCheckBox(options):
+			Terminal.SetCheckBox(options,True)
+	for options in off_settings:
+		if Terminal.GetCheckBox(options):
+			Terminal.SetCheckBox(options,False)
+
+	if level > 100 and level < 145:
 		if not Terminal.GetCheckBox("Auto Equip"):
 			Terminal.SetCheckBox("Auto Equip",True)
 		if not Terminal.GetCheckBox("map/maprusher/hypertelerock"):
@@ -666,15 +603,7 @@ def settings_fourth_job():
 		toggle_loot(True)
 	elif level >= 149:
 		Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
-		if accountData['cubing_done']:
-			Terminal.SetSpinBox("FilterMeso",1000)
-			Terminal.SetSpinBox("MonkeySpiritsNDdelay",110)
-		elif accountData['ready_for_cube']:
-			Terminal.SetSpinBox("FilterMeso",1000)
-			Terminal.SetSpinBox("MonkeySpiritsNDdelay",110)
-		else:
-			Terminal.SetSpinBox("FilterMeso",1000)
-			Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
+		
 	Key.Set(0x47,1,42111003)
 	if level >= 140:
 		equip_pensalir()
@@ -1689,7 +1618,7 @@ def withdraw_mesos():
 ######Black gate
 def BossCheck():
 	print("Waiting for boss to spawn...")
-	Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
+	Terminal.SetCheckBox("charm_fma",True)
 	time.sleep(10)
 	for mob in blackgate_boss:
 		print("Checking for boss: " + str(mob) + "...")
@@ -1726,7 +1655,7 @@ def BossCheck():
 			time.sleep(9)
 	print("no boss found or boss killed")
 	time.sleep(2)
-	Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
+	Terminal.SetCheckBox("charm_fma",False)
 
 
 def EnterPortal(name):
@@ -1918,7 +1847,7 @@ if jobid == 4211 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetSpinBox("FilterMeso",1000)
 ###### fourth job ########
 if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBG") and not SCLib.GetVar("BuyingExpansion") and not accountData['pet_expire']:
-	if not Terminal.GetCheckBox("MonkeySpiritsNDcheck") or not Terminal.GetCheckBox("Grenade Kami"):
+	if not Terminal.GetCheckBox("charm_fma") or not Terminal.GetCheckBox("Grenade Kami"):
 		print("Now fourth job")
 		settings_fourth_job()
 		if not Terminal.GetCheckBox("Rush By Level"):
@@ -1988,7 +1917,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			time.sleep(10)
 			check_meso_equip()
 			SCLib.UpdateVar("EquipMesoDone",True)
-			Terminal.SetCheckBox('MonkeySpiritsNDcheck',True)
+			Terminal.SetCheckBox('charm_fma',True)
 		if int(SCLib.GetVar("farm_counter")) >= 20:
 			new_meso = int(accountData['storage_number']) * 30 + Character.GetMeso() / 1000000000
 			print("Updating total mesos from {} to {}b".format(accountData['total_meso'],new_meso))
@@ -2374,7 +2303,7 @@ if KillZakumDaily and level >= 120 and not SCLib.GetVar("DoingMP") and not accou
 			if pos.x != -353:
 				Character.Teleport(-353, 84)
 			else:
-				Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
+				Terminal.SetCheckBox("charm_fma",True)
 				print("Fighting Zakum StandBy")
 		else:
 			if HasSpawned:
