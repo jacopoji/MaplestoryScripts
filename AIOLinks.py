@@ -1658,16 +1658,15 @@ def equip_item(item_pos,equip_slot,throw_old = False):
     Terminal.SetCheckBox("Skill Injection",False)
     Terminal.SetRadioButton("SIRadioDragon",True)
     time.sleep(5)
-    Inventory.SendChangeSlotPositionRequest(1,item_pos,equip_slot,-1)
-    Terminal.SetCheckBox("Auto Attack",autoAttack)
-    Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
-    Terminal.SetCheckBox("Skill Injection",skillInject)
-    time.sleep(1)
     Terminal.SetCheckBox("Auto Equip",False)
-    if Inventory.GetItem(1,item_pos).id != target_equip:#Equip change request success
-        print("Successfully equipped item")
-        equip_success = True
-        Terminal.SetCheckBox("Auto Equip",True)
+    while not equip_success:
+        Inventory.SendChangeSlotPositionRequest(1,item_pos,equip_slot,-1)
+        time.sleep(1)
+        if Inventory.GetItem(1,item_pos).id != target_equip:#Equip change request success
+            print("Successfully equipped item")
+            equip_success = True
+            Terminal.SetCheckBox("Auto Equip",True)
+    
     if throw_old and equip_success:
         time.sleep(2)
         Terminal.SetCheckBox("Auto Loot",False)
@@ -1675,6 +1674,10 @@ def equip_item(item_pos,equip_slot,throw_old = False):
         time.sleep(1)
         Terminal.SetCheckBox("Auto Loot",True)
         Terminal.SetCheckBox("Auto Equip",True)
+    
+    Terminal.SetCheckBox("Auto Attack",autoAttack)
+    Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+    Terminal.SetCheckBox("Skill Injection",skillInject)
     Terminal.SetCheckBox("Auto Equip",True)
 
 
@@ -9284,11 +9287,43 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     writeJson(accountData,accountId)
     KillPersistVarThred()
 
+def print_info(chars):
+    directory = "C:/Users/Jacopo/Pictures/MapleStoryMerch/ready_to_sell/{}".format(Terminal.GetLineEdit("LoginID"))
+    level_count = 0
+    link_count = 0
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        print("Creating folder")
+    else:
+        filelist = [ f for f in os.listdir(directory) if f.endswith(".txt") ]
+        if len(filelist) > 1:
+            for f in filelist:
+                os.remove(os.path.join(directory, f))
+        print("Writing to file")
+        with open('C:/Users/Jacopo/Pictures/MapleStoryMerch/ready_to_sell/{0}/{0}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as f:
+            f.write("Comes with the following:\n")
+            for char in chars:
+                if char.level > 100:
+                    level_count += char.level
+                    link_count += 1
+                    f.write("{} {}\n".format(id2str(char.jobid),char.level))
+            f.write("Total Legion: {}\n".format(level_count))
+            f.write("Total Links Skill Characters: {}\n".format(link_count-1))
+            f.write("Reboot Box Stage 1 (untouched)")
+            f.write(
+	'''\nOriginal Email that was used to create this account
+Please do not hesitate to message me if you have any questions, I will be as responsive as possible. 
+Will provide all information that was used to create the accounts including the original email.
+I'm in the EST time zone.
+	''')
+        f.close()
+
 if accountData['training_done'] and GameState.GetLoginStep() == 2:
     Terminal.SetCheckBox("Auto Login",False)
     chars = Login.GetChars()
     count = 0
     if not Terminal.GetProperty("OutputInfo",False):
+        print_info(chars)
         with open('C:/Users/Jacopo/Desktop/TerminalManager/info/output/links_{}.txt'.format(Terminal.GetLineEdit("LoginID")),'w') as charInfo:
             for char in chars:
                 if char.level > 100:
@@ -9299,6 +9334,7 @@ if accountData['training_done'] and GameState.GetLoginStep() == 2:
         Terminal.ChangeStatus("#################Training Done##############")
         print("Detected that training is done")
         Terminal.SetProperty("OutputInfo",True)
+        Terminal.SetCheckBox("settings/expcrash",False)
 
 if not accountData['changing_mule'] and GameState.GetLoginStep() == 2:
     accountData['total_slots'] = Login.GetCharSlot()
@@ -9324,10 +9360,11 @@ if len(accountData["done_links"]) >= 43 and not accountData['phase_one']:
     if GameState.IsInGame():
         Terminal.Logout()
         time.sleep(2)
-elif len(accountData["done_links"]) == 19 and not accountData['training_done']:
+elif len(accountData["done_links"]) == 20 and not accountData['training_done']:
     accountData['training_done'] = True
     print("Completed {} links".format(len(accountData["done_links"])))
     writeJson(accountData,accountId)
+    Terminal.ChangeStatus("#################Training Done##############")
 
 
 def safety_setting():
@@ -9438,7 +9475,7 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
     if siSkill in [5311000,5301000]:
         sleepTime = 0.161
     elif siSkill not in [25101000,25121000]:
-        sleepTime = 0.201
+        sleepTime = 0.231
     else:
         sleepTime = 0.101
     while Field.GetCharacterCount()<=1 and Field.GetEliteState() !=2 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and not Terminal.GetRadioButton("SIRadioDragon") and on:
@@ -9543,9 +9580,9 @@ def toggleAttack(on):
         Terminal.SetCheckBox("Kami Loot",False)
         Terminal.SetCheckBox("Auto Loot",True)
     if job == 4200: #kanna first job
-        attackAuto(42001000,on)
+        attackSI(42001006,on)
     elif job in KannaJobs and field_id in curbrockhideout:
-        attackAuto(42001000,on)
+        attackSI(42001006,on)
     elif job == 4210: #kanna 2nd
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetSpinBox("charm_delay",100)
@@ -9576,10 +9613,10 @@ def toggleAttack(on):
             Terminal.SetCheckBox("charm_fma",on)
             Terminal.SetCheckBox("Summon Kishin",False)
             Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
-            Terminal.SetCheckBox("Auto Attack",on)
             Terminal.SetSpinBox("autoattack_spin",7500)
             Terminal.SetComboBox("AttackKey",36)
-            Terminal.SetCheckBox("Skill Injection",False)
+            Terminal.SetCheckBox("Skill Injection",False) #42111011
+            #attackSemiNDMagic(42111000,42001006,0.70,on)
         Terminal.SetCheckBox("Auto Attack",on)
         Terminal.SetSpinBox("autoattack_spin",7500)
         Terminal.SetComboBox("AttackKey",36)
@@ -9776,7 +9813,7 @@ def toggleAttack(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            attackSemiND(155001100,155001100,0.85,on)
+            attackSemiNDMagic(155001100,155001100,0.85,on)
     elif job == 2001: #Evan pre 1st job
         Terminal.SetCheckBox("Skill Injection", False)
         Terminal.SetCheckBox("Melee No Delay",False)
@@ -10586,9 +10623,9 @@ def toggleAttackQuest(on):
         Terminal.SetCheckBox("Kami Loot",False)
         Terminal.SetCheckBox("Auto Loot",True)
     if job == 4200: #kanna first job
-        attackAuto(42001000,on)
+        attackSI(42001006,on)
     elif job in KannaJobs and field_id in curbrockhideout:
-        attackAuto(42001000,on)
+        attackSI(42001006,on)
     elif job == 4210: #kanna 2nd
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetSpinBox("charm_delay",100)
@@ -10615,12 +10652,13 @@ def toggleAttackQuest(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             bind_skill(32121052)
         else:
-            Terminal.SetSpinBox("MonkeySpiritsNDdelay",100)
-            Terminal.SetCheckBox("Grenade Kami",True)
-            Terminal.SetCheckBox("charm_fma",False)
+            Terminal.SetSpinBox("charm_delay",100)
+            Terminal.SetCheckBox("charm_fma",on)
             Terminal.SetCheckBox("Summon Kishin",False)
-            Terminal.SetCheckBox("MonkeySpiritsNDcheck",on)
-            Terminal.SetCheckBox("Kami Vac",False)
+            Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
+            Terminal.SetCheckBox("Auto Attack",on)
+            Terminal.SetSpinBox("autoattack_spin",7500)
+            Terminal.SetComboBox("AttackKey",36)
             Terminal.SetCheckBox("Skill Injection",False)
         Terminal.SetCheckBox("Auto Attack",on)
         Terminal.SetSpinBox("autoattack_spin",7500)
@@ -11737,9 +11775,14 @@ if GameState.IsInGame():
             Terminal.SetCheckBox("Auto Loot",True)
     #print("Toggling attack")
 ############################Job Advancements###############################
-    if job == 4200 and level < 13:
+    if job == 4200 and level < 13 and field_id != 100020400:
         print("Completing Kanna First job")
         kannaFirst()
+        
+    elif job == 4200 and level < 13 and field_id == 100020400:
+        SCLib.UpdateVar("DoingJobAdv",False)
+        toggle_rush_by_level(True)
+        toggle_kami(True)
 
     elif job == 4200 and level >= 30:
         print("Completing Kanna Second job")
@@ -12248,7 +12291,7 @@ if GameState.IsInGame():
         print("Resume rush by level; cygnus third start training")
     elif job in cygnusThirdJobs and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
         CygnusFourth()
-    elif job in cygnusFourthJobs and field_id == 130000000:
+    elif job in cygnusFourthJobs and field_id == 130000000 and level < 120:
         toggle_rush_by_level(True)
         SCLib.UpdateVar("DoingJobAdv",False)
         toggle_kami(True)
@@ -12541,7 +12584,7 @@ if Character.GetLevel() >= 83 and GameState.IsInGame() and getSpider:
 
 
 
-if level >= 150 and job not in NightWalkerJobs and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
+if level >= 150 and job not in ThunderBreakerJobs and not accountData['phase_one'] and not SCLib.GetVar("DoingZakum"):
     if field_id != 240000000:
         rush(240000000)
     else:
@@ -12578,7 +12621,8 @@ if ((level >= 140 and job not in ThunderBreakerJobs) or (level >= 150 and job in
                     time.sleep(2)
                     toggle_rush_by_level(True)
         elif job in ThunderBreakerJobs:
-            if Quest.GetQuestState(20766) != 2:
+            if Quest.GetQuestState(20766) != 2 or Character.GetSkillLevel(10000202) < 6:
+                print("Completing Cygnus quests")
                 q1 = Quest.GetQuestState(20761)
                 q2 = Quest.GetQuestState(20762)
                 q3 = Quest.GetQuestState(20763)
@@ -12621,8 +12665,8 @@ if ((level >= 140 and job not in ThunderBreakerJobs) or (level >= 150 and job in
                     time.sleep(2)
                     toggle_rush_by_level(True)
         else:
-            if field_id != 224000142:
-                rush(224000142)
+            if field_id != 251010500:
+                rush(251010500)
             toggle_rush_by_level(False)
             toggle_loot(True)
             pet = Inventory.FindItemByID(2434265)
@@ -12635,14 +12679,14 @@ if ((level >= 140 and job not in ThunderBreakerJobs) or (level >= 150 and job in
             #Terminal.SetCheckBox("settings/expcrash",False)
             Terminal.SetCheckBox("Instant Final Smash",False)
             equip_pensalir()
-elif level >= 140 and not has_pensalir(False) and GameState.IsInGame() and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv"):
-    if field_id != 224000142:
-        rush(224000142)
+elif level >= 140 and not has_pensalir(False) and GameState.IsInGame() and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv") and accountData['phase_one']:
+    if field_id != 251010500:
+        rush(251010500)
     toggle_rush_by_level(False)
     toggle_loot(True)
     equip_pensalir()
     Terminal.SetProperty("CheckEquip",True)
-elif level >= 140 and (has_pensalir(False) and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv") and Terminal.GetProperty("CheckEquip",True) or Terminal.GetCheckBox("Kami Loot")):
+elif level >= 140 and accountData['phase_one'] and (has_pensalir(False) and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv") and Terminal.GetProperty("CheckEquip",True) or Terminal.GetCheckBox("Kami Loot")):
     toggle_rush_by_level(True)
     Terminal.SetCheckBox("Kami Loot",False)
     Terminal.SetProperty("CheckEquip",False)

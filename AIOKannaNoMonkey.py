@@ -514,6 +514,7 @@ def CashItemInfoDecode(iPacket):
 def toggle_rush_by_level(indicator):
 	Terminal.SetCheckBox("Rush By Level",indicator)
 	Terminal.SetRushByLevel(indicator)
+
 def toggle_loot(indicator):
     Terminal.SetCheckBox("Kami Loot",indicator)
     Terminal.SetCheckBox("Auto Loot",indicator)
@@ -571,7 +572,7 @@ def settings_third_job():
 
 def settings_fourth_job():
 	level = Character.GetLevel()
-	on_settings = ["Legit Vac","Auto Attack","Rush By Level","charm_fma"]
+	on_settings = ["Legit Vac","Auto Attack","charm_fma"]
 	off_settings = ["SkillInjection","Kami Vac","MonkeySpiritsNDcheck","bot/kanna_kami","settings/mesologout","Speedy Gonzales"]#,"Auto Loot","Kami Loot"
 
 	Terminal.SetSpinBox("charm_delay",100)
@@ -603,7 +604,7 @@ def settings_fourth_job():
 		toggle_loot(True)
 	elif level >= 149:
 		Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
-		
+
 	Key.Set(0x47,1,42111003)
 	if level >= 140:
 		equip_pensalir()

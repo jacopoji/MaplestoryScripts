@@ -1,4 +1,4 @@
-import os, sys, Terminal, time, GameState, Field, Character, Context, Key,Inventory
+import os, sys, Terminal, time, GameState, Field, Character, Context, Key,Inventory,Packet
 sys.path.append('C:/Users/Jacopo/Desktop/Scripts')
 import headers
 #KannaForEveryBot.py
@@ -10,7 +10,7 @@ import headers
 # 1 bots only in whitelist
 # 2 bots except in blacklist
 idFilter        = 1
-idWhiteList     = [10,13,53,102,103,115,116,114,207,228,227,226,225,224]
+idWhiteList     = [10,11,13,53,102,103,115,116,114,207,228,227,226,225,224]
 idBlackList     = []
 
 
@@ -35,6 +35,9 @@ CP_UserHyperSkillUpRequest = 513 # 0x0201
 LP_ChangeSkillRecordResult = 97 # 0x0061
 CashItemRequestOpcode = headers.cash_item_header
 CashItemResultOpcode = headers.cash_recv_header
+BuyByMesoRequest = 85
+LoadLockerDoneResult = 2
+MoveLToSRequest = 15
 #########################
 # Dont Touch below
 #########################
@@ -327,16 +330,17 @@ if GameState.IsInGame() and job in [4211, 4212]:
         #Terminal.SetCheckBox("Mob Falldown",False)
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Auto Rune",False)
-        for user in Terminal.GetLocalUsers():
-            user = Terminal.GetLocalUser(user.clientid) # dynamic update
-            if CheckIdFilter(user) and CheckMapFilter(user) and user.channel > 0:
-                location = (user.mapid, user.channel)
-                startTime = time.time()
-                if location not in visited:
-                    visited.append(location)
-                    print("Kishin for {0} at {1} Ch{2}".format(user.charname, user.mapid, user.channel), flush=True)
-                    Terminal.SetFollowID(user.clientid)
-                    WaitForFollow(user, startTime)
-                    Kishin(kishinPump)
-                    while time.time() - startTime < timeout and wait:
-                        time.sleep(1)
+        if Inventory.GetItemCount(5040004) != 0:
+            for user in Terminal.GetLocalUsers():
+                user = Terminal.GetLocalUser(user.clientid) # dynamic update
+                if CheckIdFilter(user) and CheckMapFilter(user) and user.channel > 0:
+                    location = (user.mapid, user.channel)
+                    startTime = time.time()
+                    if location not in visited:
+                        visited.append(location)
+                        print("Kishin for {0} at {1} Ch{2}".format(user.charname, user.mapid, user.channel), flush=True)
+                        Terminal.SetFollowID(user.clientid)
+                        WaitForFollow(user, startTime)
+                        Kishin(kishinPump)
+                        while time.time() - startTime < timeout and wait:
+                            time.sleep(1)
