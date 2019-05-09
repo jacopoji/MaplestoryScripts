@@ -69,7 +69,7 @@ if GameState.IsInGame():
         famePerson = Field.FindCharacter(fameCharacter)
         if famePerson.valid:
             print("Faming Character {}".format(fameCharacter))
-            #Character.Teleport(famePerson.x, famePerson.y)
+            Character.Teleport(famePerson.x, famePerson.y)
             time.sleep(1)
             charPacket = Packet.COutPacket(0x0159)
             charPacket.Encode4(int(time.monotonic()*1000))
