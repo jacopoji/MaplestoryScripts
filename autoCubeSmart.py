@@ -29,8 +29,8 @@ startSlot   = 1
 endSlot     = 9
 
 #Stat threshold
-statThreshold           = 27
-stopAtStatThreshold     = False
+statThreshold           = 6
+stopAtStatThreshold     = True
 autoStat                = True      # Automatically set whichever highest stat you have
 isLvl160                = 1
 
@@ -61,7 +61,7 @@ stopAtAtkThreshold      = True
 atkThreshold            = 21
 wepPotentialLines       = 3         # Set 0 if you are not going to use it
 if FindHighestStat() == "INT":
-    wepPotentialOptions     = [["MATT","MATT","BOSS"],["MATT","BOSS","BOSS"],["MATT","IED","BOSS"],["MATT","MATT","MATT"],["MATT","MATT","IED"],["MATT","IED","IED"]]
+    wepPotentialOptions     = [["MATT","MATT","BOSS"],["MATT","BOSS","BOSS"],["MATT","IED","BOSS"],["MATT","MATT","MATT"],["MATT","MATT","IED"],["MATT","IED","IED"],["IED","IED","IED"]]
 else:
     wepPotentialOptions     = [["ATT","ATT","BOSS"],["ATT","BOSS","BOSS"],["ATT","IED","BOSS"],["ATT","ATT","ATT"],["ATT","ATT","IED"],["ATT","IED","IED"],["IED","IED","IED"],["IED","IED","BOSS"]]      # Always keep end squre bracket
 #Change delay if you want (seconds)

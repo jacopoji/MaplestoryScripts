@@ -2165,7 +2165,7 @@ if level > 70 and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum"):
 		Quest.StartQuest(12396, 9010000)
 '''
 ###### Monster park starting at level 143
-if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum") and do_MP and Character.GetHP() > 0 and not (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not accountData['kanna_daily_done'] and not accountData['cubing_done']:
+if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.GetVar("DoingZakum") and do_MP and Character.GetHP() > 0 and not (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter) and not accountData['kanna_daily_done'] and (not accountData['cubing_done'] or accountData['pet_expire']):
 	SCLib.UpdateVar("DoingMP",True)
 	Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
 	toggle_rush_by_level(False)

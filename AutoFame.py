@@ -8,7 +8,7 @@ import Terminal
 import Quest
 import Inventory
 
-fameCharacter = "ElfBenKi"#"NikuBenKi"#'FibreOptics'
+fameCharacter = "AppleCharger"#"ElfBenKi"#"NikuBenKi"#'FibreOptics'
 fameMap = 807000000
 farmMap = 807020100
 accountPIC = '000111'
@@ -28,19 +28,25 @@ if GameState.IsInGame():
             if quest1 != 2:
                 if quest1 == 0:
                     Quest.StartQuest(57400, 0)
+                    time.sleep(0.2)
             elif quest2 != 2:
                 if quest2 == 0:
                     Quest.StartQuest(57401, 9130082)
+                    time.sleep(0.2)
                 else:
                     Quest.CompleteQuest(57401, 9130082)
+                    time.sleep(0.2)
             elif quest3 != 2:
                 if quest3 == 0:
                     Quest.StartQuest(57402, 0)
+                    time.sleep(0.6)
                 elif quest3 == 1:
                     if Field.GetID() != 807040100:
                         Terminal.Rush(807040100)
+                        time.sleep(0.3)
                     else:
                         Quest.CompleteQuest(57402, 9130083)
+                        time.sleep(0.2)
                         '''
                         fan = Inventory.FindItemByID(1552000)
                         time.sleep(1)
@@ -60,34 +66,36 @@ if GameState.IsInGame():
         Terminal.Rush(fameMap)
         Terminal.SetComboBox("HackingOpt",1)
     
-    if Field.GetID() == fameMap:
-        Terminal.SetComboBox("HackingOpt",1)
-        if channel != GameState.GetChannel():
-            Terminal.ChangeChannel(channel)
-            while Terminal.IsRushing():
+        if Field.GetID() == fameMap:
+            Terminal.SetComboBox("HackingOpt",1)
+            if channel != GameState.GetChannel():
+                Terminal.ChangeChannel(channel)
+                while Terminal.IsRushing():
+                    time.sleep(1)
+            famePerson = Field.FindCharacter(fameCharacter)
+            if famePerson.valid:
+                print("Faming Character {}".format(fameCharacter))
+                #Character.Teleport(famePerson.x, famePerson.y)
                 time.sleep(1)
-        famePerson = Field.FindCharacter(fameCharacter)
-        if famePerson.valid:
-            print("Faming Character {}".format(fameCharacter))
-            Character.Teleport(famePerson.x, famePerson.y)
-            time.sleep(1)
-            charPacket = Packet.COutPacket(0x0159)
-            charPacket.Encode4(int(time.monotonic()*1000))
-            charPacket.Encode4(famePerson.id)
-            charPacket.EncodeBuffer('FF 00 01 00 00')
-            Packet.SendPacket(charPacket)
-            time.sleep(1)
-            famePacket = Packet.COutPacket(0x0157)
-            famePacket.Encode4(famePerson.id)
-            famePacket.EncodeBuffer('01')
-            Packet.SendPacket(famePacket)
-            time.sleep(1)
-            Packet.SendPacket(famePacket)
-            Terminal.SetProperty('lastFameChar', Character.GetName())
-            time.sleep(0.2)
-            Terminal.Logout()
+                charPacket = Packet.COutPacket(0x0159)
+                charPacket.Encode4(int(time.monotonic()*1000))
+                charPacket.Encode4(famePerson.id)
+                charPacket.EncodeBuffer('FF 00 01 00 00')
+                Packet.SendPacket(charPacket)
+                time.sleep(1)
+                famePacket = Packet.COutPacket(0x0157)
+                famePacket.Encode4(famePerson.id)
+                famePacket.EncodeBuffer('01')
+                Packet.SendPacket(famePacket)
+                Packet.WaitForRecv(0x006B,2000)
+                #time.sleep(1)
+                #Packet.SendPacket(famePacket)
+                Terminal.SetProperty('lastFameChar', Character.GetName())
+                time.sleep(0.2)
+                Terminal.Logout()
    
 if GameState.GetLoginStep() == 2 and Login.GetCharCount() > 0:
+    time.sleep(0.1)
     if Login.GetChar(0).name == Terminal.GetProperty('lastFameChar', 'lol'):
         print("Deleting {}".format(Terminal.GetProperty('lastFameChar','lol')))
         deleteChar = Packet.COutPacket(0x0082)

@@ -1828,13 +1828,13 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2412: #Phantom 4th 24121000
         print("Setting up Settings for Phantom")
-        Terminal.SetLineEdit("SISkillID","24121000")
+        Terminal.SetLineEdit("SISkillID","24121010;24121000")
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         
         Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetSpinBox("SkillInjection",110)
+        Terminal.SetSpinBox("SkillInjection",140)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15212: #Illium 4th
         print("Setting up Settings for Illium")
@@ -2094,13 +2094,13 @@ def initAttackDone():
     elif job == 2412: #Phantom 4th 24121000
         print("Setting up Settings for Phantom")
         
-        Terminal.SetLineEdit("SISkillID","24121000")
+        Terminal.SetLineEdit("SISkillID","24121010;24121000")
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         
         Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetSpinBox("SkillInjection",110)
+        Terminal.SetSpinBox("SkillInjection",140)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15212: #Illium 4th
         print("Setting up Settings for Illium")
