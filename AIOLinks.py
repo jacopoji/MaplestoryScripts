@@ -115,6 +115,7 @@ except:
 #    print("Need to update SCLib")
 SCLib.StartVars()
 ###persist variables
+persistVariables = ["DoingSleepy","DoingBeach","MPDone","DoingMP","retry_count","zakum_retry_count","KillZakumDaily","HasSpawned","NowLockedVar","DoingZakum","DoingBG","DoingCurbrock","BuyExpansion","EvanLogout","ExploitCount","DoingJobAdv","GettingBoogie","Cannoneer","DualBlade"]
 if SCLib.GetVar("MPDone") is None:
     SCLib.PersistVar("MPDone", False)
 if SCLib.GetVar("DoingMP") is None:
@@ -333,7 +334,7 @@ def ToggleKami(indicator):
 
 def ToggleLoot(indicator):
     Terminal.SetCheckBox("Kami Loot",indicator)
-    Terminal.SetCheckBox("Auto Loot",indicator)
+    #Terminal.SetCheckBox("Auto Loot",indicator)
 #print(Character.GetMP())
 
 def BindSkill(skill):
@@ -682,7 +683,7 @@ def TimeoutBuffs(buffid,skillid = None,timer = 30,need_sleep = True,injectSkill 
                 Terminal.SetCheckBox("Skill Injection",skillInject)
             elif time.time() > Terminal.GetProperty("skill_timeout{}".format(str(buffid)),False):
                 Terminal.SetProperty("skill_timeout{}".format(str(buffid)),timeout)
-                print("Skill {}: Continued".format(buffid))
+                #print("Skill {}: Continued".format(buffid))
                 autoAttack = Terminal.GetCheckBox("Auto Attack")
                 skillInject = Terminal.GetCheckBox("Skill Injection")
                 javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
@@ -1224,14 +1225,15 @@ def CompleteQuest(quest, npc, map):
        ToggleKami(True)
 
 def KillMobAndLoot(map):
-   if Terminal.IsRushing():
-       time.sleep(1)
-   elif mapID != map:
-       Terminal.Rush(map)
-       time.sleep(3)
-   else:
-       Terminal.SetCheckBox("Kami Loot", True)
-       Terminal.SetCheckBox("Auto Loot", True)
+    ToggleLoot(True)
+    if Terminal.IsRushing():
+        time.sleep(1)
+    elif mapID != map:
+        Terminal.Rush(map)
+        time.sleep(3)
+    else:
+        Terminal.SetCheckBox("Kami Loot", True)
+        Terminal.SetCheckBox("Auto Loot", True)
 
 def BuyExpansionPacket():
     if Character.GetMeso() > 19900000:
@@ -3173,12 +3175,11 @@ def ArkFirstJobAdv():
             StartQuest(34917, 3001400, 402000600)
         elif quest3 == 1:
             print("3.1")
-            if Quest.CheckCompleteDemand(34917, 3001400) != 0:
-                KillMobAndLoot(402000610)
-                time.sleep(5)
-            else:
+            if Quest.CheckCompleteDemand(34917, 3001400) == 0:
                 ToggleKami(False)
                 CompleteQuest(34917, 3001400, 402000600)
+            else:
+                KillMobAndLoot(402000610)
     elif quest4 != 2:
         print("4")
         if quest4 == 0:
@@ -4806,6 +4807,7 @@ def ExplorerFirstJobAdv():
                     if Field.GetID() == 4000030:
                         Terminal.SetCheckBox("Auto Loot", False)
                         TeleportEnter(2506,287)  
+                        Terminal.SetCheckBox("Auto Loot", True)
             
         if Character.GetLevel() == 6:
             if Field.GetID() == 4000030:
@@ -9389,32 +9391,36 @@ def SetPotion():
         Key.Set(pgup_key, 1, 31011001)
 
 def ShowStatus():
-    timerSecond = 20
-    statusString = ""
-    if Terminal.GetProperty("timeOut",0) == 0:
-        Terminal.SetProperty("timeOut",time.time())
-    elif time.time()-Terminal.GetProperty("timeOut",0) >= timerSecond: #timerSecond seconds passed
-        
-        #Show exp status
-        if Terminal.GetProperty("currentExp",0) == 0:
-            Terminal.SetProperty("currentExp",Character.GetExp())
-        else:
-            expPerSecond = int((Character.GetExp()-Terminal.GetProperty("currentExp",0))/timerSecond)
-            if expPerSecond < 0:
-                statusString = "Leveled Up!!"
+    if GameState.IsInGame():
+        timerSecond = 20
+        statusString = ""
+        if Terminal.GetProperty("timeOut",0) == 0:
+            Terminal.SetProperty("timeOut",time.time())
+        elif time.time()-Terminal.GetProperty("timeOut",0) >= timerSecond: #timerSecond seconds passed
+            
+            #Show exp status
+            if Terminal.GetProperty("currentExp",0) == 0:
+                Terminal.SetProperty("currentExp",Character.GetExp())
             else:
-                statusString = "{} exp/s".format(expPerSecond)
-            Terminal.SetProperty("currentExp",Character.GetExp())
+                expPerSecond = int((Character.GetExp()-Terminal.GetProperty("currentExp",0))/timerSecond)
+                if expPerSecond < 0:
+                    statusString = "Leveled Up!!"
+                else:
+                    statusString = "{} exp/s".format(expPerSecond)
+                Terminal.SetProperty("currentExp",Character.GetExp())
 
-        #Show meso status
-        if Terminal.GetProperty("currentMeso",0) == 0:
-            Terminal.SetProperty("currentMeso",Character.GetMeso())
-        else:
-            mesoPerSecond = int((Character.GetMeso()-Terminal.GetProperty("currentMeso",0))/timerSecond)
-            statusString += ", {} meso/min".format(mesoPerSecond * 60)
+            #Show meso status
+            if Terminal.GetProperty("currentMeso",0) == 0:
+                Terminal.SetProperty("currentMeso",Character.GetMeso())
+            else:
+                mesoPerSecond = int((Character.GetMeso()-Terminal.GetProperty("currentMeso",0))/timerSecond)
+                statusString += ", {} meso/min".format(mesoPerSecond * 60)
+                Terminal.SetProperty("currentMeso",Character.GetMeso())
 
-        Terminal.ChangeStatus(statusString)
-        Terminal.SetProperty("timeOut",time.time())
+            Terminal.ChangeStatus(statusString)
+            Terminal.SetProperty("timeOut",time.time())
+    else:
+        Terminal.ChangeStatus("Not logged in")
 
 
 def AttackAuto(skillid,on):
@@ -9494,7 +9500,7 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
     count = 0
     if siSkill != 32120055:
         delay = 30*math.ceil(delay*1000 * (10+attackSpeed)/480)/1000
-    print("The delay for skill {} is {}, starting si".format(siSkill,delay))
+    #print("The delay for skill {} is {}, starting si".format(siSkill,delay))
     if siSkill in [5311000,5301000]:
         sleepTime = 0.161
     elif siSkill not in [25101000,25121000]:
@@ -9519,7 +9525,7 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
         if siSkill == 27111303 and not(Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219)):
             break
         count += 1
-    print("Si ended due to break options")
+    #print("Si ended due to break options")
 def AttackSemiNDMagic(siSkill,dummySkill,delay,on,attackSpeed = 4):
     try:
         SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed))
@@ -9578,7 +9584,7 @@ def ToggleAttack(on):
                 Terminal.SetCheckBox("filter_etc",False)
             if Terminal.GetCheckBox("filter_use"):
                 Terminal.SetCheckBox("filter_use",False)
-        Terminal.SetSpinBox("FilterMeso",50000)
+        #Terminal.SetSpinBox("FilterMeso",0)
         if level < 140:
             ToggleLoot(False)
     elif Terminal.GetLineEdit("SISkillID") in SpeedyGonzalesList:
@@ -10624,7 +10630,7 @@ def ToggleAttackQuest(on):
                 Terminal.SetCheckBox("filter_etc",False)
             if Terminal.GetCheckBox("filter_use"):
                 Terminal.SetCheckBox("filter_use",False)
-        Terminal.SetSpinBox("FilterMeso",50000)
+        #Terminal.SetSpinBox("FilterMeso",50000)
     elif Terminal.GetLineEdit("SISkillID") in SpeedyGonzalesList:
         Terminal.SetCheckBox("Speedy Gonzales",True)
     elif job == BuccaneerJobs[1]:
@@ -11749,6 +11755,8 @@ def StrongholdPrequest():
                     Character.Teleport(emblem.x, emblem.y)
                     time.sleep(2)
                     Terminal.SetCheckBox("Auto Loot",True)
+
+ShowStatus()
 if GameState.IsInGame():
     SafetySetting()
     if not (SCLib.GetVar("DoingJobAdv") and (job == ShadeJobs[0] or job == ShadeJobs[1])) and not Terminal.IsRushing():
@@ -11758,7 +11766,6 @@ if GameState.IsInGame():
             ToggleAttack(True)
         Terminal.SetCheckBox("Auto SP",True)
     SetPotion()
-    ShowStatus()
     if not Terminal.IsRushing():
         ToggleSkill()
     GetEmblem()
@@ -11792,7 +11799,7 @@ if GameState.IsInGame():
     if level >= 180 and level < 185 and Quest.GetQuestState(31125) != 2 and not HasHtr() and not SCLib.GetVar("DoingZakum"):
         StrongholdPrequest()
         print("Doing stronghold")
-    elif (Quest.GetQuestState(31125) == 2 or has_htr) and SCLib.GetVar("DoingJobAdv") and level < 200 and level >= 180:
+    elif (Quest.GetQuestState(31125) == 2 or HasHtr()) and SCLib.GetVar("DoingJobAdv") and level < 200 and level >= 180:
         SCLib.UpdateVar("DoingJobAdv",False)
         ToggleRushByLevel(True)
         print("Resume rush by level; stronghold")
@@ -11921,6 +11928,7 @@ if GameState.IsInGame():
         IlliumThirdJobAdv()
     elif job == 15211 and level < 100:
         SCLib.UpdateVar("DoingJobAdv",False)
+        ToggleRushByLevel(True)
     elif job == 15211 and level >= 100 and not SCLib.GetVar("DoingZakum"):
         print("Completing Illium Fourth job")
         IlliumFourthJobAdv()
@@ -12620,7 +12628,7 @@ if Character.GetLevel() >= 83 and GameState.IsInGame() and getSpider:
             if not Terminal.GetCheckBox("Familiar 0"):
                 Terminal.SetComboBox("Familiar0",2)
                 Terminal.SetCheckBox("Familiar 0",True)
-                Terminal.SetCheckBox("Auto Loot",False)
+                #Terminal.SetCheckBox("Auto Loot",False)
         else:
             if Field.GetID() == 310050600:
                 # let bot kill mobs and pickup?
