@@ -24,20 +24,20 @@ class Hayato():
    God_Of_Blades = [41121054, 0x70] # F1
 
 class Demon_Slayer():
-   Blue_Blood = [31121054, 0x71] # F2
+   Blue_Blood = [31121054, 0x5A] # Z
 
 class Demon_Avenger():
-   Forbidden_Contract = [31221054, 0x72] # F3
+   Forbidden_Contract = [31221054, 0xC0] #`~
 
 class Battle_Mage():
    Master_of_Death = [32121056, 0x73] # F4
    Sweeping_Staff = [32121052, 0x58, 160] # X
 
 class Kaiser():
-   Kaisers_Majesty = [61121054, 0x74] # F5
+   Kaisers_Majesty = [61121054, 0x36] # 6
 
 class Cadena():
-   Shadowdealers_Elixir = [64121054, 0x77] # F8
+   Shadowdealers_Elixir = [64121054, 0x4F] # O
 
 class Shade():
    Spirit_Bond_Max = [25121131, 0x78] # F9
@@ -61,7 +61,7 @@ class Hero():
    Epic_Adventure = [1121053, 0x35] # 5
 
 class Dark_Knight():
-   Dark_Thirst = [1321054, 0x36] # 6
+   Dark_Thirst = [1321054, 0x74] # F5
    Epic_Adventure = [1321053, 0x37] # 7
 
 class Shadower():
@@ -87,7 +87,7 @@ class Corsair():
 
 class Buccaneer():
    Epic_Adventure = [5121053, 0x41] # A
-   Power_Unity = [5121052, 0x5A] # Z
+   Power_Unity = [5121052, 0x72] # F3
    Stimulating_Conversation = [5121054, 0x4D] # M
 
 class Ice_Lightning():
@@ -107,16 +107,16 @@ class Blaze_Wizard():
    Dragons_blaze = [12121054, 0xDD] # ]
 
 class Marksman():
-   Bullseye_Shot = [3221054, 0xC0] # ~`
+   Bullseye_Shot = [3221054,0x71] # F2
    Epic_Adventure = [3221053, 0x52] # R
 
 class Bowmaster():
-   Concentration = [3121054, 0x54] # T
+   Concentration = [3121054, 0x75] # F6
    Epic_Adventure = [3121053, 0x59] # Y
 
 class Mihile():
    Charging_Light = [51121052, 0xDB] # [
-   Sacred_Cube = [51121054, 0x4F] # O
+   Sacred_Cube = [51121054, 0x77] # F8
 
 class Dawn_Warrior():
    Soul_Forge = [11121054, 0x50] # P
@@ -125,7 +125,7 @@ class Wild_Hunter():
    Silent_Rampage = [33121054, 0x76] # F7
 
 class Night_Walker():
-   Dominion = [14121052, 0x75] # F6
+   Dominion = [14121052, 0x54] # T
 
 class KeyType:
    Skill = 1
@@ -148,7 +148,6 @@ def bind_skill(skill):
 if GameState.IsInGame():
     bind_skill(Ark.Divine_Wrath)
     bind_skill(Bishop.Heavens_Door)
-    bind_skill(Bishop.Righteously_Indignant)
     bind_skill(Blaze_Wizard.Dragons_blaze)
     bind_skill(Bowmaster.Concentration)
     bind_skill(Buccaneer.Power_Unity)
@@ -174,6 +173,7 @@ if GameState.IsInGame():
     bind_skill(Wild_Hunter.Silent_Rampage)
     bind_skill(Ice_Lightning.Absolute_Zero_Aura)
     bind_skill(Battle_Mage.Sweeping_Staff)
+    bind_skill(Bishop.Righteously_Indignant)
 
     
     # bind_skill(Bishop.Epic_Adventure)

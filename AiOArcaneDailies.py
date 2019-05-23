@@ -1112,10 +1112,12 @@ def Lacheleinprequest():
                     if Field.GetID() == 450003100:
                         Quest.CompleteQuest(34302, 3003209)
                     elif fieldid == 450003720:
+                        toggle_kami(False)
                         Character.Teleport(-877, 51)
                         time.sleep(2)
                         Key.Press(0x26)
                         time.sleep(1)
+                        toggle_kami(True)
                     elif fieldid != 450003100 and fieldid != 450003720:
                         Terminal.Rush(450003100)
             else:
@@ -1732,13 +1734,13 @@ def initAttack():
         Terminal.SetComboBox("MPKey",6)
     if job == 3712:
         
-        Terminal.SetLineEdit("SISkillID","37121003")
+        Terminal.SetLineEdit("SISkillID","37110006")
         Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",1)
+        Terminal.SetSpinBox("SkillInjection",80)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetCheckBox("Kami Vac",True)
+        #Terminal.SetCheckBox("Kami Vac",True)
     elif job ==4212: #4th
         print("Setting up Settings for Kanna")
         Terminal.SetSpinBox("MonkeySpiritsNDdelay",0)
@@ -2009,13 +2011,13 @@ def initAttackDone():
     Terminal.SetCheckBox("eliteCC",False)
     if job == 3712:
         print("Setting up settings for Blaster")
-        Terminal.SetLineEdit("SISkillID","37121003")
+        Terminal.SetLineEdit("SISkillID","37110006")
         Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",1)
+        Terminal.SetSpinBox("SkillInjection",80)
         Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetCheckBox("Kami Vac",True)
+        #Terminal.SetCheckBox("Kami Vac",True)
     elif job ==4212: #4th
         print("Setting up Settings for Kanna")
         Terminal.SetSpinBox("charm_delay",100)

@@ -8,7 +8,7 @@ import Terminal
 import Quest
 import Inventory
 
-fameCharacter = "AppleCharger"#"ElfBenKi"#"NikuBenKi"#'FibreOptics'
+fameCharacter = "Mikkushu"#"ElfBenKi"#"NikuBenKi"#'FibreOptics'
 fameMap = 807000000
 farmMap = 807020100
 accountPIC = '000111'

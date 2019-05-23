@@ -528,7 +528,7 @@ def use_pet():
 		time.sleep(2)
 
 def settings_first_job():
-	on_settings = ["SkillInjection","Legit Vac","Kami Vac","Auto Equip","Rush By Level"]
+	on_settings = ["Skill Injection","Legit Vac","Kami Vac","Auto Equip","Rush By Level"]
 	off_settings = ["Auto Attack","bot/kanna_kami","charm_fma","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
 
 	Terminal.SetSpinBox("SkillInjection", 100)
@@ -542,7 +542,7 @@ def settings_first_job():
 
 def settings_second_job():
 	on_settings = ["Legit Vac","Auto Equip","Rush By Level","bot/kanna_kami","charm_fma"]
-	off_settings = ["SkillInjection","Kami Vac","Auto Attack","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+	off_settings = ["Skill Injection","Kami Vac","Auto Attack","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
@@ -555,7 +555,7 @@ def settings_second_job():
 
 def settings_third_job():
 	on_settings = ["Legit Vac","Auto Equip","Auto Attack","Rush By Level","bot/kanna_kami","charm_fma"]
-	off_settings = ["SkillInjection","Kami Vac","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+	off_settings = ["Skill Injection","Kami Vac","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
@@ -573,14 +573,14 @@ def settings_third_job():
 def settings_fourth_job():
 	level = Character.GetLevel()
 	on_settings = ["Legit Vac","Auto Attack","charm_fma"]
-	off_settings = ["SkillInjection","Kami Vac","MonkeySpiritsNDcheck","bot/kanna_kami","settings/mesologout","Speedy Gonzales"]#,"Auto Loot","Kami Loot"
+	off_settings = ["Skill Injection","Kami Vac","MonkeySpiritsNDcheck","bot/kanna_kami","settings/mesologout","Speedy Gonzales"]#,"Auto Loot","Kami Loot"
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
 	Terminal.SetSpinBox("FilterMeso",1000)
 	
 	Key.Set(0x47,1,42111003)
-	Terminal.SetSpinBox("autoattack_spin",7500)
+	Terminal.SetSpinBox("autoattack_spin",2500)
 	Terminal.SetComboBox("AttackKey",36)
 	for options in on_settings:
 		if not Terminal.GetCheckBox(options):
@@ -1874,7 +1874,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetCheckBox("Auto Loot",False)
 		Terminal.SetSpinBox("AutoDieExp",90)
 		Terminal.SetSpinBox("AutoDieLevel",level)
-		Terminal.SetComboBox("Familiar0",0)
+		Terminal.SetComboBox("Familiar0",2)
 		print("Sleeping for 30 seconds to farm")
 		time.sleep(30)
 		"""
@@ -1910,7 +1910,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetCheckBox("Auto Loot",False)
 		Terminal.SetSpinBox("AutoDieExp",90)
 		Terminal.SetSpinBox("AutoDieLevel",level)
-		Terminal.SetComboBox("Familiar0",0) #do not farm with leprechaun
+		Terminal.SetComboBox("Familiar0",2) #do not farm with leprechaun
 		Terminal.SetCheckBox("settings/mesologout",True)
 		if not SCLib.GetVar("EquipMesoDone"):
 			Terminal.SetCheckBox('MonkeySpiritsNDcheck',False)

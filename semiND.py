@@ -1,4 +1,4 @@
-import Terminal,time,math,Field,GameState,sys,os,Character,Key
+import Terminal,time,math,Field,GameState,sys,os,Character,Key,Packet
 if not any("SunCat" in s for s in sys.path):
     sys.path.append(os.getcwd() + "/SunCat")
 
@@ -77,6 +77,14 @@ resistanceSecondJobs = [3210,3310,3510,3710]
 resistanceThirdJobs = [3211,3311,3511,3711]
 resistanceFourthJobs= [3212,3312,3512,3712]
 
+def vulcan():
+    if GameState.IsInGame() and ((int(time.time())%8==0) or (Character.HasBuff(2, 37110009)==False and Character.HasBuff(2, 37120012)==False)):
+        Vulcan = Packet.COutPacket(0x0151)
+        Vulcan.Encode4(0x17D7AF14)
+        Vulcan.EncodeBuffer("00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00")
+        Packet.SendPacket(Vulcan)
+    return
+    
 def attackAuto(skillid,on):
     attack_key = 0x44
     Key.Set(attack_key,1,skillid)
@@ -137,7 +145,33 @@ def attackSemiNDMagic(siSkill,dummySkill,delay,on,attackSpeed = 5):
         SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed))
     except:
         x = 1
-
+def ToggleBuffs(buffid,skillid = None,toggleKami = False):
+    short_sleep = 0.75
+    if skillid is None:
+        skillid = buffid
+    if Character.GetSkillLevel(buffid) > 0:
+        if Character.HasBuff(2, buffid) == False:
+            autoAttack = Terminal.GetCheckBox("Auto Attack")
+            skillInject = Terminal.GetCheckBox("Skill Injection")
+            javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
+            Terminal.SetCheckBox("Auto Attack",False)
+            Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+            Terminal.SetCheckBox("Skill Injection",False)
+            if toggleKami:
+                ToggleKami(False)
+            time.sleep(short_sleep)
+            Character.UseSkill(skillid)
+            #time.sleep(short_sleep)
+            if job in BattleMageJobs:
+                time.sleep(short_sleep)
+                Character.UseSkill(32001014)
+                #time.sleep(short_sleep)
+            if Character.HasBuff(2, buffid) == True:
+                if toggleKami:
+                    ToggleKami(True)
+            Terminal.SetCheckBox("Auto Attack",autoAttack)
+            Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+            Terminal.SetCheckBox("Skill Injection",skillInject)
 def setSIND(siSkill,delay,on):
     Terminal.SetRadioButton("SIRadioMelee",True)
     Terminal.SetLineEdit("SISkillID",siSkill)
@@ -152,15 +186,11 @@ if GameState.IsInGame():
         Terminal.SetComboBox("Familiar0",1)
     else:
         Terminal.SetComboBox("Familiar0",5)
-    if job == 3712:
+    if job == 3712: #Blaster
         print("Setting up settings for Blaster")
-        Terminal.SetLineEdit("SISkillID","37121003")
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetSpinBox("SkillInjection",1)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Skill Injection", True)
-        
+        attackSI(37110006,True,80)
+        #attackSemiNDMagic(32120055,32120055,0.45,True)
+        vulcan()
     elif job ==4212: #4th
         print("Setting up Settings for Kanna")
         #Terminal.SetSpinBox("charm_delay",100)
@@ -194,7 +224,8 @@ if GameState.IsInGame():
         #attackSemiNDMagic(31211010,31211010,0.78,True)
         #Execution 31221012
         attackSemiNDMagic(31221012,31221012,0.84,True)
-        
+    elif job == 1112: #Dawn warrior
+        attackSemiNDMagic(32120055,32120055,0.45,True)
     elif job == 3112: #DS fourth job
         print("Setting up Settings for DS")
         attackSemiNDMagic(400011018,400011018,0.40,True,attackSpeed = 6)
@@ -208,7 +239,9 @@ if GameState.IsInGame():
         
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Skill Injection", True)
-        
+    elif job == 11212: #BeastTamer
+        print("Setting up Settings for BeastTamer")
+        attackSemiNDMagic(32120055,32120055,0.45,True) 
     elif job == 4112: #Hayato 4th 41121011
         print("Setting up Settings for Hayato")
         
@@ -217,14 +250,14 @@ if GameState.IsInGame():
     elif job == 3612:#Xenon 4th 36121000
         print("Setting up Settings for Xenon")
         
-        Terminal.SetLineEdit("SISkillID","36121000")
-        Terminal.SetSpinBox("SkillInjection",80)
-        Terminal.SetCheckBox("Melee No Delay",False)
+        # Terminal.SetLineEdit("SISkillID","36121000")
+        # Terminal.SetSpinBox("SkillInjection",80)
+        # Terminal.SetCheckBox("Melee No Delay",False)
         
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", True)
-        
+        # Terminal.SetRadioButton("SIRadioMelee",True)
+        # Terminal.SetCheckBox("Auto Attack",False)
+        # Terminal.SetCheckBox("Skill Injection", True)
+        attackSemiNDMagic(32120055,32120055,0.45,True)
     elif job == 2412: #Phantom 4th 24121000
         print("Setting up Settings for Phantom")
         #setSIND("24121010;24121000",140,on)
@@ -239,18 +272,13 @@ if GameState.IsInGame():
         
     elif job == 15212: #Illium 4th
         print("Setting up Settings for Illium")
-        
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto Attack",False)
-        
-        Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",True)
-        Terminal.SetCheckBox("bot/illium/summon_control",True)
-        Terminal.SetCheckBox("General FMA",True)
-        Terminal.SetCheckBox("Kami Vac",False)
+        #setSIND("32120055;152121041",65,True)
+        attackSemiNDMagic(32120055,32120055,0.45,True)
     elif job == 6412: # Cadena 4th job
         print("Setting up Settings for Cadena")
-        attackSIND(64001001,True,160,"si_cadena")
+        #setSIND("64120000;64001001",100,True)
+        #attackSIND(64001001,True,160,"si_cadena")
+        attackSemiNDMagic(32120055,32120055,0.45,True)
         
     elif job == 15512: #Ark 4th 155121007 @50
         print("Setting up Settings for Ark")
@@ -342,7 +370,7 @@ if GameState.IsInGame():
         print("Setting up Settings for Blaze Wizard")
         Terminal.SetCheckBox("Full Map Attack",False)
         #attackAuto(12001020,True)
-        setSIND("32120055;12121055",31,True)
+        setSIND("32120055;12121055",65,True)
     elif job == 572: #Jett 4th
         print("Setting up Settings for Jett")
         
@@ -369,7 +397,10 @@ if GameState.IsInGame():
     if job not in IlliumJobs:
         Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
         Terminal.SetCheckBox("bot/illium/summon_control",False)
-        if job not in AngelicBusterJobs:
+        if job not in AngelicBusterJobs and job not in BlasterJobs:
             Terminal.SetCheckBox("General FMA",False)
         #if job not in LuminousJobs:
         #    Terminal.SetCheckBox("Full Map Attack",False)
+
+#Key.Set(0x4C, 1, 2321054)
+#ToggleBuffs(2321054)

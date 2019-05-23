@@ -264,7 +264,7 @@ if GameState.IsInGame():
     # IF AT BDF MAIN MAP
     elif map == 610050000:
         time.sleep(5)
-        if channel == 30:
+        if channel == 20:
             channel = 1
         else:
             channel += 1

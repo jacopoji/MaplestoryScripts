@@ -9420,7 +9420,10 @@ def ShowStatus():
             Terminal.ChangeStatus(statusString)
             Terminal.SetProperty("timeOut",time.time())
     else:
-        Terminal.ChangeStatus("Not logged in")
+        if accountData['training_done']:
+            Terminal.ChangeStatus("#################Training Done##############")
+        else:
+            Terminal.ChangeStatus("Not logged in")
 
 
 def AttackAuto(skillid,on):
@@ -9893,7 +9896,8 @@ def ToggleAttack(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
-            AttackSIND(1120017,on,400)
+            #AttackSIND(1120017,on,400)
+            AttackSemiNDMagic(1120017,1120017,0.6,on)
     elif job == 120: #Page 1201011
         AttackSI(1201011,on)
     elif job in PaladinJobs and field_id in curbrockhideout: #1001005
@@ -10060,7 +10064,7 @@ def ToggleAttack(on):
         else:
             Terminal.SetSpinBox("KamiOffsetX", -85)
             if Character.GetSkillLevel(4121017) >= 1:
-                AttackSI(4121017,on)
+                AttackSemiNDMagic(4121017,4121017,1.0,on)
             else:
                 AttackSI(4111015,on)
         
@@ -10079,6 +10083,7 @@ def ToggleAttack(on):
             BindSkill(32121052)
         else:
             AttackSI(4221007,on)
+            #AttackSemiNDMagic(4221007,4221007,1.1,on)
         
     elif job == 430: #dualblade
         if Character.GetSkillLevel(4001013) == 0:
@@ -10203,7 +10208,8 @@ def ToggleAttack(on):
             AttackAuto(5701010,on)
     elif job == 571: #Jett 3rd
         if Character.GetSkillLevel(5710020) >= 1:
-            AttackSemiNDMagic(5710020,5710020,0.9,on,attackSpeed=4)
+            #AttackSemiNDMagic(5710020,5710020,0.9,on,attackSpeed=4)
+            AttackSIND(5710020,on,150)
         else:
             AttackSIND(5701011,on,150)
     elif job == 572: #Jett 4th
@@ -10939,6 +10945,7 @@ def ToggleAttackQuest(on):
             BindSkill(32121052)
         else:
             AttackSIND(1120017,on,400)
+            #AttackSemiNDMagic(1120017,1120017,0.4,on)
     elif job == 120: #Page 1201011
         AttackSI(1201011,on)
     elif job in PaladinJobs and field_id in curbrockhideout: #1001005
@@ -14018,8 +14025,8 @@ if level >= 61 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetV
         if item.valid and item.currentStar != star_force_level and item.currentStar != item.maxStar and (level < 130 or item.maxStar != 20):
             count += 1
             StarItem(x, item.currentStar, item.maxStar, star_force_level, item.id)
-            if count >= 1:
-                print("Starred 1  times, break for now")
+            if count >= 2:
+                print("Starred 2  times, break for now")
                 break
 #print(SCLib.GetVar("DoingZakum"))
 #ZAKUM DAILY
@@ -14392,8 +14399,9 @@ if int(Terminal.GetLineEdit("LoginChar")) >= Login.GetCharCount() and GameState.
     done_jobs = []
     for x in range(Login.GetCharCount()):
         #print(set(Id2Str(Login.GetChar(x).jobid)))
-        current -= set((Id2Str(Login.GetChar(x).jobid),))
-        done_jobs.append(Id2Str(Login.GetChar(x).jobid))
+        if Login.GetChar(x).level >= 140:
+            current -= set((Id2Str(Login.GetChar(x).jobid),))
+            done_jobs.append(Id2Str(Login.GetChar(x).jobid))
     print("Missing {} jobs {}".format(len(list(current)),str(current)))
     Terminal.SetComboBox("settings/autochar_job",GetNextChar(done_jobs))
     print(GetNextChar(done_jobs))
