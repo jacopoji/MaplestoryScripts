@@ -1919,7 +1919,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			check_meso_equip()
 			SCLib.UpdateVar("EquipMesoDone",True)
 			Terminal.SetCheckBox('charm_fma',True)
-		if int(SCLib.GetVar("farm_counter")) >= 20:
+		if int(SCLib.GetVar("farm_counter")) >= 25:
 			new_meso = int(accountData['storage_number']) * 30 + Character.GetMeso() / 1000000000
 			print("Updating total mesos from {} to {}b".format(accountData['total_meso'],new_meso))
 			if accountData['total_meso'] == new_meso:
