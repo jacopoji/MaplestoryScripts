@@ -1,5 +1,5 @@
 import Field, Character, Terminal, time, Quest, GameState, Inventory, Party, Packet,sys,os,Key,json, Login,Npc
-
+import math
 if not any("SunCat" in s for s in sys.path):
 	sys.path.append(os.getcwd() + "\SunCat")
 
@@ -8,10 +8,11 @@ try:
 except:
 	print("Couldn't find SunCat module")
 
-start_char_number = 24
-return_char = 24
+
+return_char = 23
 usingkami		=		True
 usingHyperTeleportRock= True
+useHyperExploit =       True
 HotKey = 0x78
 
 CrimsonQueenNormal	=	True
@@ -21,8 +22,8 @@ VellumNormal	=		True
 ###CrimsonQueen###
 CrimsonQueenNormalBuffer = ["[150E0000]", "[180E0000]", "[130E0000]", "[170E0000]", "[1B0E0000]", "[240E0000]", "[280E0000]"]
 #150E0000 180E0000 130E0000 170E0000 1B0E0000 240E0000 280E0000
-CrimsonQueenNormalRebootBuffer = ["[FA0D0000]", "[0C0E0000]", "[0F0E0000]", "[070E0000]", "[FC0D0000]","[F60D0000]","[000E0000]","[040E0000]","[1C0E0000]","[200E0000]","[140E0000]"]
-#FA0D0000 0C0E0000 0F0E0000 070E0000 FC0D0000
+CrimsonQueenNormalRebootBuffer = ["00000E87","00000E83","00000E7F","00000E89","00000E85","00000E81","00000DCF","00000DCB","00000DC7"]
+#FA0D0000 0C0E0000 0F0E0000 070E0000 FC0D0000 "[FA0D0000]", "[0C0E0000]", "[0F0E0000]", "[070E0000]", "[FC0D0000]","[F60D0000]","[000E0000]","[040E0000]","[1C0E0000]","[200E0000]","[140E0000]"
 
 CrimsonQueenChaosBuffer = ["[2B110000]", "[45110000]"]
 #2B110000 1F110000 45110000
@@ -32,8 +33,8 @@ CrimsonQueenChaosRebootBuffer = ["[FA0D0000]", "[1F110000]", "[30110000]"]
 ###Von Bon###
 VonBonNormalBuffer = ["[8E0C0000]", "[8C0C0000]", "[990C0000]", "[9D0C0000]"]
 #8E0C0000 8C0C0000 990C0000 9D0C0000
-VonBonNormalRebootBuffer =  ["[00000C45]","[830C0000]", "[850C0000]", "[880C0000]", "[800C0000]", "[750C0000]","[6F0C0000]","[820C0000]","[8F0C0000]","[950C0000]","[A20C0000]","[AF0C0000]","[8D0C0000]","[9A0C0000]"]
-#830C0000 850C0000 880C0000 800C0000 750C0000
+VonBonNormalRebootBuffer =  ["00000D12","00000D05","00000CF8","00000D14","00000D07","00000CFA","00000C51","00000C44","[00000C45]"]
+#830C0000 850C0000 880C0000 800C0000 750C0000 "[830C0000]", "[850C0000]", "[880C0000]", "[800C0000]", "[750C0000]","[6F0C0000]","[820C0000]","[8F0C0000]","[950C0000]","[A20C0000]","[AF0C0000]","[8D0C0000]","[9A0C0000]"
 
 VonBonChaosBuffer = ["[250F0000]", "[2F0F0000]"]
 #250F0000 2F0F0000
@@ -43,8 +44,10 @@ VonbonChaosRebootBuffer = ["[730C0000]", "[090F0000]", "[120F0000]"]
 ###Vellum###
 VellumNormalBuffer = ["[650E0000]", "[630E0000]", "[670E0000]", "[740E0000]"]
 #650E0000 630E0000 670E0000 740E0000
-VellumNormalRebootBuffer = ["[5A0E0000]", "[5C0E0000]", "[5F0E0000]", "[570E0000]", "[4C0E0000]","[460E0000]","[500E0000]","[540E0000]","[670E0000]","[700E0000]","[6C0E0000]","[780E0000]","[640E0000]",'[680E0000]']
-#5A0E0000 5C0E0000 5F0E0000 570E0000 4C0E0000
+VellumNormalRebootBuffer = ["00000ED7","00000ECF","00000ED3","00000ED9","00000ED1","00000ED5","00000E23","00000E1F","00000E1B"]
+#5A0E0000 5C0E0000 5F0E0000 570E0000 4C0E0000 ,"[5A0E0000]", "[5C0E0000]", "[5F0E0000]", "[570E0000]", "[4C0E0000]","[460E0000]","[500E0000]","[540E0000]","[670E0000]","[700E0000]","[6C0E0000]","[780E0000]","[640E0000]",'[680E0000]'
+
+#051F 00000ECF 001024E4 00 FF40 01C4 00 "" RECEIV PACKET
 
 VellumChaosBuffer = ["[DD110000]", "[FE110000]"]
 #DD110000 FE110000
@@ -54,7 +57,7 @@ sys.path.append('C:/Users/Jacopo/Desktop/Scripts')
 import headers
 from JobConstants import *
 ###Packet Headers###
-InteractHeader = 0x0419 
+InteractHeader = 0x042C #headers.interact_header
 BlockBuyHeader = headers.buy_block_header
 BuyItemHeader = headers.buy_header
 
@@ -69,9 +72,14 @@ queen_reactor = 1058018
 vonbon_reactor = 1058016
 vellum_reactor = 1058020
 def doZakum():
-    return Inventory.GetItem(1, -3).id == aquatic_letter_eye and Inventory.GetItem(1,-2).id == condensed_power_crystal
+    # if Inventory.GetItem(1, -3).id == aquatic_letter_eye:
+    #     print("Has Aquatic Letter Eye")
+    # if Inventory.GetItem(1,-2).id == condensed_power_crystal:
+    #     print("Has Condensed Power Crystal")
+    return (Inventory.GetItem(1, -3).id == aquatic_letter_eye and Inventory.GetItem(1,-2).id == condensed_power_crystal)
 
-DoZakumDaily= not doZakum()
+if GameState.IsInGame():
+    DoZakumDaily= not doZakum()
 
 SCLib.PersistVar("HasSpawned", False)
 SCLib.PersistVar("NowLockedVar", False)
@@ -99,7 +107,7 @@ if SCLib.GetVar("enter_cs") is None:
     	SCLib.PersistVar("enter_cs",True)
     else:
         SCLib.PersistVar("enter_cs",False)
-SCLib.StartVars(100)
+SCLib.StartVars()
 HasSpawned = SCLib.GetVar("HasSpawned")
 NowLockedVar = SCLib.GetVar("NowLockedVar")
 
@@ -109,6 +117,8 @@ KillPierre = SCLib.GetVar("KillPierre")
 KillVonBon = SCLib.GetVar("KillVonBon")
 KillVellum = SCLib.GetVar("KillVellum")
 KillZakumDaily = SCLib.GetVar("KillZakumDaily")
+
+field_id = Field.GetID()
 def KillPersistVarThred():
     print("Stopping vars")
     SCLib.StopVars()
@@ -123,7 +133,7 @@ NormalCrimsonQueen3 = 8920100
 NormalCrimsonQueen2 = 8920101
 NormalCrimsonQueen1 = 8920103
 NormalCrimsonQueen = 8920102
-CurrentChannel = GameState.GetChannel()
+
 pos = Character.GetPos()
 fieldID = Field.GetID()
 job = Character.GetJob()
@@ -158,6 +168,18 @@ NormalZakum = 8800002
 NormalZakumv1 = 8800000
 NormalZakumv2 = 8800001	
 
+CP_UserHyperSkillUpRequest = 515 # 0x0203
+LP_ChangeSkillRecordResult = 99 # 0x0063
+
+def BindSkill(skill):
+   oPacket = Packet.COutPacket(CP_UserHyperSkillUpRequest)
+   oPacket.Encode4(int(time.monotonic() * 1000))
+   oPacket.Encode4(skill)
+   Packet.SendPacket(oPacket)
+
+   Packet.WaitForRecv(LP_ChangeSkillRecordResult, 10000)
+   print("Received {}.".format(skill))
+
 def ToggleMobDisarm(flag):
     Terminal.SetCheckBox("Mob Disarm",flag)
 
@@ -169,15 +191,15 @@ def GetToTheDoorToZakum():
 			Terminal.Rush(CheifsResidence)
 		else:
 			#Ark, Angelic Buster, Cannoneer, Jett, Mechanic, Shade, Thunder Breaker
-			Pirates = [15500, 15510, 15511, 15512, 6500, 6510, 6511, 6512, 530, 531, 532, 508, 570, 571, 572, 3500, 3510, 3511, 3512, 2500, 2510, 2511, 2512, 1500, 1510, 1511, 1512]
+			Pirates = [511,512,521,522,15500, 15510, 15511, 15512, 6500, 6510, 6511, 6512, 530, 531, 532, 508, 570, 571, 572, 3500, 3510, 3511, 3512, 2500, 2510, 2511, 2512, 1500, 1510, 1511, 1512]
 			#Wild Hunter, Wind Archer, Mercedes
-			Bowman = [3300, 3310, 3311, 3312, 1300, 1310, 1311, 1312, 2300, 2310, 2311, 2312]
+			Bowman = [311,312,321,322,3300, 3310, 3311, 3312, 1300, 1310, 1311, 1312, 2300, 2310, 2311, 2312]
 			#Phantom, Xenon, Dual Blade
-			Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6410,6411,6412,1412]
+			Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6411,6412,6410,422,421,411,412,1412,1411]
 			#Kanna, Battle Mage, Beast Tamer, Blaze Wizard, Evan, Luminous
-			Magician = [15212,4200, 4210, 4211, 4212, 3200, 3210, 3211, 3212, 11000, 11200, 11210, 11211, 11212, 1200, 1210, 1211, 1212, 2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2700, 2710, 2711, 2712, ]
+			Magician = [211,212,221,222,231,232,14211,14212,15211,15212,4200, 4210, 4211, 4212, 3200, 3210, 3211, 3212, 11000, 11200, 11210, 11211, 11212, 1200, 1210, 1211, 1212, 2200, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2700, 2710, 2711, 2712, ]
 			#Aran, Blaster, Demon Avenger, Demon Slayer, Hayato, Kaiser, Mihile, Zero, Dawn Warrior
-			Warrior = [3700, 3710, 3711, 3712, 2100, 2110, 2111, 2112, 3101, 3120, 1321, 3122, 3100, 3110, 3111, 3112, 4100, 4110, 4111, 4112, 6100, 6110, 6111, 6112, 5100, 5110, 5111, 5112, 10100, 10110, 10111, 10112, 1100, 1110, 1111, 1112,132]
+			Warrior = [111,112,121,122,131,132,3700, 3710, 3711, 3712, 2100, 2110, 2111, 2112, 3101, 3120, 1321, 3122,3121, 3100, 3110, 3111, 3112, 4100, 4110, 4111, 4112, 6100, 6110, 6111, 6112, 5100, 5110, 5111, 5112, 10100, 10110, 10111, 10112, 1100, 1110, 1111, 1112]
 			if job in Bowman:
 				TalkNPC = NpcReneBowmanInstructor
 			elif job in Thief:
@@ -234,33 +256,35 @@ def handleReady(data):
         data['orig_char'] = Terminal.GetLineEdit("LoginChar")
     elif str(data['orig_char']) != str(return_char):
         data['orig_char'] = str(return_char)
+    if "RootAbyssChar" not in data:
+        data['RootAbyssChar'] = str(return_char)
 
-def InteractCrimsonQueenNormal():
+def InteractCrimsonQueenNormal(packet):
     print("Sending Intreact Packet")
-    for x in CrimsonQueenNormalBuffer:
-        Interact = Packet.COutPacket(InteractHeader)
-        Interact.EncodeBuffer(x)
-        Packet.SendPacket(Interact)
-    for x in CrimsonQueenNormalRebootBuffer:
-        InteractReboot = Packet.COutPacket(InteractHeader)
-        InteractReboot.EncodeBuffer(x)
-        Packet.SendPacket(InteractReboot)
-def InteractVonBonNormal():
+    # for x in CrimsonQueenNormalBuffer:
+    #     Interact = Packet.COutPacket(InteractHeader)
+    #     Interact.EncodeBuffer(x)
+    #     Packet.SendPacket(Interact)
+    InteractReboot = Packet.COutPacket(InteractHeader)
+    InteractReboot.EncodeBuffer(packet)
+    Packet.SendPacket(InteractReboot)
+    print("Sent Packet: {}".format(packet))
+def InteractVonBonNormal(packet):
     print("Sending Interact Packet")
-    for x in VonBonNormalRebootBuffer:
-        InteractReboot = Packet.COutPacket(InteractHeader)
-        InteractReboot.EncodeBuffer(x)
-        Packet.SendPacket(InteractReboot)
-def InteractVellumNormal():
+    InteractReboot = Packet.COutPacket(InteractHeader)
+    InteractReboot.EncodeBuffer(packet)
+    Packet.SendPacket(InteractReboot)
+    print("Sent Packet: {}".format(packet))
+def InteractVellumNormal(packet):
     print("Sending Interact Packet")
-    for x in VellumNormalBuffer:
-        Interact = Packet.COutPacket(InteractHeader)
-        Interact.EncodeBuffer(x)
-        Packet.SendPacket(Interact)
-    for x in VellumNormalRebootBuffer:
-        InteractReboot = Packet.COutPacket(InteractHeader)
-        InteractReboot.EncodeBuffer(x)
-        Packet.SendPacket(InteractReboot)
+    # for x in VellumNormalBuffer:
+    #     Interact = Packet.COutPacket(InteractHeader)
+    #     Interact.EncodeBuffer(x)
+    #     Packet.SendPacket(Interact)
+    InteractReboot = Packet.COutPacket(InteractHeader)
+    InteractReboot.EncodeBuffer(packet)
+    Packet.SendPacket(InteractReboot)
+    print("Sent Packet: {}".format(packet))
 
 def enter_boss(boss_portal_id):
     time.sleep(1)
@@ -308,7 +332,10 @@ def BuyGnarledWoodenKey():
             Packet.BlockRecvHeader(BlockBuyHeader)
             time.sleep(0.5)
             BuyKey = Packet.COutPacket(BuyItemHeader)
-            BuyKey.EncodeBuffer("00 0000 003D8C4B 0001 00000000 000186A0")
+            if job in CadenaJobs:
+                BuyKey.EncodeBuffer("00 0000 003D8C4B 0001 00000000 00017700")
+            else:
+                BuyKey.EncodeBuffer("00 0000 003D8C4B 0001 00000000 000186A0")
             Packet.SendPacket(BuyKey)
             time.sleep(0.5)
             CloseShop = Packet.COutPacket(BuyItemHeader)
@@ -345,6 +372,9 @@ def rush(mapid):
         print("We are currently rushing. Standby...")
         time.sleep(1)
 
+def getMiddleX():
+    rect = Field.GetRect()
+    return int((rect.right- rect.left)/2)-700
 
 def tele(x, y):
     print("Teleporting to {0}, {1}".format(x, y))
@@ -470,6 +500,370 @@ def SetSIND(siSkill,delay,on):
     Terminal.SetCheckBox("Melee No Delay",on)
     Terminal.SetSpinBox("SkillInjection",delay)
 
+def ToggleSkill():
+    if job in WildHunterJobs and level > 11:
+        #Rige Jaguar
+        buff = 33001001
+        ToggleBuffs(buff,buff,True)
+        if level >= 140:
+            buff = 33121054
+            TimeoutBuffs(buff)
+        hunter = 33111013
+        TimeoutBuffs(hunter)
+    elif job in MechanicJobs:
+        #Mount Mechanic machine
+        if level < 160:
+            buff = 35001002
+            ToggleBuffs(buff,buff,True)
+            bots = 35121009
+            TimeoutBuffs(bots)
+        if job == MechanicJobs[1]:
+            roboLauncher = 35101012
+            ToggleBuffs(roboLauncher)
+        elif job == MechanicJobs[2]:
+            buff = 35111013
+            TimeoutBuffs(buff)
+            roboLauncher = 35101012
+            ToggleBuffs(roboLauncher)
+            support = 35111008
+            ToggleBuffs(support)
+        elif job == MechanicJobs[3]:
+            buff = 35120014
+            skill = 35111013
+            TimeoutBuffs(buff,skill)
+            if level < 160:
+                roboLauncher = 35101012
+                ToggleBuffs(roboLauncher)
+                support = 35111008
+                ToggleBuffs(support)
+    elif job in FPMageJobs or job in ILMageJobs or job in BishopJobs:
+        #magic guard
+        buff = 2001002
+        ToggleBuffs(buff)
+        if job == BishopJobs[3]:
+            summon_dragon = 2321003
+            ToggleBuffs(summon_dragon)
+    elif job in EvanJobs:
+        #magic guard
+        buff = 22001012
+        ToggleBuffs(buff)
+    elif job in DawnWarriorJobs:
+        if job == DawnWarriorJobs[1]:
+            buff = 11101022 #moon 
+            ToggleBuffs(buff)
+        elif job == DawnWarriorJobs[2]:
+            #buff = 11111022 #sun
+            buff = 11101022 #moon 
+            ToggleBuffs(buff)
+        elif job == DawnWarriorJobs[3]:
+            #if level < 180:
+            #    buff = 11111022 
+            #else:
+            #    buff = 11121005#equinox
+            buff = 11111022
+            ToggleBuffs(buff)
+    elif job == ThunderBreakerJobs[3]:
+        buff = 15121004
+        ToggleBuffs(buff)
+    elif job == NightWalkerJobs[3]:
+        buff = 14121003
+        TimeoutBuffs(buff,timer=10)
+    elif job in WindArcherJobs and job != WindArcherJobs[0]:
+        if job == WindArcherJobs[1]:
+            buff = 13101022
+            ToggleBuffs(buff)
+        elif job == WindArcherJobs[2]:
+            buff = 13110022
+            skill = 13101022
+            ToggleBuffs(buff,skill)
+        elif job == WindArcherJobs[3]:
+            buff = 13120003
+            skill = 13101022
+            ToggleBuffs(buff,skill)
+    elif job in BattleMageJobs:
+        if job == BattleMageJobs[0]:
+            buff = 32001016 #hasty aura
+            ToggleBuffs(buff)
+        elif job == BattleMageJobs[1]:
+            buff = 32101009 #yellow aura
+            ToggleBuffs(buff)
+        elif job == BattleMageJobs[2]:
+            buff = 32111012 #blue aura
+            ToggleBuffs(buff)
+        elif job == BattleMageJobs[3]:
+            buff = 32121017 #dark aura
+            ToggleBuffs(buff)
+    elif job == AngelicBusterJobs[3]:
+        buff = 65121011
+        ToggleBuffs(buff)
+    elif job in DarkknightJobs and job != DarkknightJobs[0]:
+        buff = 1301013
+        ToggleBuffs(buff)
+        if level >= 140:
+            buff = 1321054
+            TimeoutBuffs(buff)
+    elif job in HeroJobs and job != HeroJobs[0]:
+        buff = 1101013
+        ToggleBuffs(buff)
+    elif job in ShadeJobs and job >=2510:
+        buff = 25101009
+        ToggleBuffs(buff)
+        if job == ShadeJobs[4] and level >= 140:
+            buff2 = 25121131
+            TimeoutBuffs(buff2)
+    elif job == 531: #Cannon Trooper 5311005
+        buff = 5311005
+        TimeoutBuffs(buff)
+        buff3 = 5311004
+        TimeoutBuffs(buff3)
+    elif job == 532: #Cannoneer
+        buff = 5321004
+        TimeoutBuffs(buff)
+        buff2 = 5320007
+        skill2= 5311005
+        TimeoutBuffs(buff2,skill2)
+        buff3 = 5311004
+        TimeoutBuffs(buff3)
+        buff4 = 5321052
+        TimeoutBuffs(buff4,timer = 30)
+    elif job == CorsairJobs[2]: #or job == CorsairJobs[3]:
+        buff = 5211014
+        TimeoutBuffs(buff)
+    elif job == CorsairJobs[3]: #5220014
+        buff = 5220014
+        skill = 5211007
+        TimeoutBuffs(buff,skill)
+    elif job == BuccaneerJobs[2]: #or job == CorsairJobs[3]:
+        buff = 5111007
+        TimeoutBuffs(buff)
+    elif job == BuccaneerJobs[3]: #5220014
+        buff = 5120012
+        skill = 5111007
+        TimeoutBuffs(buff,skill)
+
+        buff2 = 5121013
+        TimeoutBuffs(buff2,buff2,30,True,True)
+    elif job in IlliumJobs and job != IlliumJobs[0]:
+        buff = 152101000
+        skill = 152101003
+        ToggleBuffs(buff,skill)
+    elif job in HayatoJobs:
+        buff = 40011289
+        TimeoutBuffs(buff)
+        if level >= 140:
+            buff = 41121054
+            TimeoutBuffs(buff)
+        '''
+        if Character.HasBuff(2,buff) == False:
+            timeout = time.time() + 30
+            if not Terminal.GetProperty("skill_timeout",False):
+                Terminal.SetProperty("skill_timeout",timeout)
+                print("Summer rain: Initialize")
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                Character.UseSkill(buff)
+                time.sleep(short_sleep)
+                Terminal.SetCheckBox("Skill Injection",True)
+            elif time.time() > Terminal.GetProperty("skill_timeout",False):
+                Terminal.SetProperty("skill_timeout",timeout)
+                print("Summer rain: Continued")
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                Character.UseSkill(buff)
+                time.sleep(short_sleep)
+        '''
+    elif job in KinesisJobs:
+        if job == KinesisJobs[3]:
+            buff = 142121004
+            TimeoutBuffs(buff)
+            
+    elif job == ShadowerJobs[3] and level >= 140:
+        buff = 1
+        skill = 4221054 #coin
+        TimeoutBuffs(buff,skill,timer = 40)
+        if level < 180:
+            buff2 = 4221052 #shadow veil
+            TimeoutBuffs(buff2,timer=15)
+        #buffs = Character.GetBuffs()
+        #for buffa in buffs:
+        #    print("Current Buff Id: {}; Remaining Time: {}".format(buff.id,buff.timeLeft))
+    elif job in NightlordJobs and job != NightlordJobs[0]:
+        buff = 4101011
+        ToggleBuffs(buff)
+        buff2 = 4111007
+        TimeoutBuffs(buff2,timer = 60)
+        if job == NightlordJobs[3] and level >= 140:
+            buff = 4121054
+            TimeoutBuffs(buff,buff,30)
+    elif job in KaiserJobs:
+        buff = 60001217
+        ToggleBuffs(buff)
+        if job == KaiserJobs[2] or job == KaiserJobs[3]:
+            buff = 61111002
+            ToggleBuffs(buff)
+        if level >= 140:
+            buff = 61121054
+            TimeoutBuffs(buff)
+    elif job in PhantomJobs:
+        buff = 20031210
+        ToggleBuffs(buff)
+    elif job in BowmasterJobs:
+        if job == BowmasterJobs[2]:
+            buff = 3111011
+            ToggleBuffs(buff)
+        elif job == BowmasterJobs[3]:
+            buff = 3111011
+            ToggleBuffs(buff)
+            buff2=3121054
+            TimeoutBuffs(buff2,buff2,30,False)
+    elif job in MarksmanJobs:
+        if job == MarksmanJobs[2]:
+            buff = 3211012
+            ToggleBuffs(buff)
+        elif job == MarksmanJobs[3]:
+            buff = 3211012
+            ToggleBuffs(buff)
+            buff2 = 3221054
+            TimeoutBuffs(buff2,need_sleep = True)
+    elif job in DemonSlayerJobs:
+        if job == DemonSlayerJobs[3]:
+            buff = 31121054
+            TimeoutBuffs(buff)
+    elif job in DemonAvengerJobs:
+        if job == DemonAvengerJobs[3]:
+            if level >= 140:
+                buff = 31221054
+                TimeoutBuffs(buff,buff,30,False)
+            if level >= 200:
+                buff = 31221053
+                TimeoutBuffs(buff,buff,30,False)
+    elif job in MercedesJobs:
+        if level >= 140:
+            buff = 23121054
+            TimeoutBuffs(buff)
+    elif job in DualbladeJobs:
+        #if job == DualbladeJobs[-1]:
+            #buff = 4341002
+            #TimeoutBuffs(buff)
+            #buff2= 4341011
+            #TimeoutBuffs(buff2,timer=50)
+        if level >= 140:
+            buff = 4341054
+            TimeoutBuffs(buff)
+    elif job in XenonJobs:
+        buff = 36001005
+        ToggleBuffs(buff)
+        if job == XenonJobs[3]:
+            buff = 36121002
+            TimeoutBuffs(buff)
+            buff2= 36121003
+            TimeoutBuffs(buff2)
+    elif job in ArkJobs[1:]:
+        buff = 155101008
+        ToggleBuffs(buff)
+            
+def ToggleBuffs(buffid,skillid = None,ToggleKami = False):
+    short_sleep = 0.75
+    if skillid is None:
+        skillid = buffid
+    if Character.GetSkillLevel(buffid) > 0:
+        if Character.HasBuff(2, buffid) == False:
+            autoAttack = Terminal.GetCheckBox("Auto Attack")
+            skillInject = Terminal.GetCheckBox("Skill Injection")
+            javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
+            Terminal.SetCheckBox("Auto Attack",False)
+            Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+            Terminal.SetCheckBox("Skill Injection",False)
+            if ToggleKami:
+                toggleKami(False)
+            time.sleep(short_sleep)
+            Character.UseSkill(skillid)
+            #time.sleep(short_sleep)
+            if job in BattleMageJobs:
+                time.sleep(short_sleep)
+                Character.UseSkill(32001014)
+                #time.sleep(short_sleep)
+            if Character.HasBuff(2, buffid) == True:
+                if ToggleKami:
+                    toggleKami(True)
+            Terminal.SetCheckBox("Auto Attack",autoAttack)
+            Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+            Terminal.SetCheckBox("Skill Injection",skillInject)
+    
+def TimeoutBuffs(buffid,skillid = None,timer = 30,need_sleep = True,injectSkill = False):
+    if need_sleep:
+        short_sleep = 0.85
+    else:
+        short_sleep = 0.05
+    if skillid is None:
+        skillid = buffid
+    if Character.GetSkillLevel(skillid) > 0:
+        if Character.HasBuff(2,buffid) == False and len(Field.GetMobs()) > 0:
+            timeout = time.time() + timer
+            if not Terminal.GetProperty("skill_timeout{}".format(str(buffid)),False):
+                Terminal.SetProperty("skill_timeout{}".format(str(buffid)),timeout)
+                print("Skill {}: Initialize".format(buffid))
+                autoAttack = Terminal.GetCheckBox("Auto Attack")
+                skillInject = Terminal.GetCheckBox("Skill Injection")
+                javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
+                Terminal.SetCheckBox("Auto Attack",False)
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                if not injectSkill:
+                    if skillid == 4341002:
+                        Key.Set(0x44, 1, skillid)
+                        Character.UseSkill(skillid)
+                        time.sleep(0.01)
+                        Key.Down(0x44)
+                        time.sleep(0.7)
+                        Key.Up(0x44)
+                    else:
+                        Character.UseSkill(skillid)
+                        time.sleep(0.01)
+                        Character.UseSkill(skillid)
+                        time.sleep(0.01)
+                        Character.UseSkill(skillid)
+                else:
+                    Terminal.SetLineEdit("SISkillID",str(skillid))
+                    Terminal.SetSpinBox("SkillInjection",300)
+                    Terminal.SetCheckBox("Skill Injection",True)
+                    time.sleep(short_sleep*2)
+                    Terminal.SetCheckBox("Skill Injection",False)
+                #time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",autoAttack)
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+                Terminal.SetCheckBox("Skill Injection",skillInject)
+            elif time.time() > Terminal.GetProperty("skill_timeout{}".format(str(buffid)),False):
+                Terminal.SetProperty("skill_timeout{}".format(str(buffid)),timeout)
+                #print("Skill {}: Continued".format(buffid))
+                autoAttack = Terminal.GetCheckBox("Auto Attack")
+                skillInject = Terminal.GetCheckBox("Skill Injection")
+                javelin = Terminal.GetCheckBox("bot/illium/radiant_javelin_delay")
+                Terminal.SetCheckBox("Auto Attack",False)
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",False)
+                Terminal.SetCheckBox("Skill Injection",False)
+                time.sleep(short_sleep)
+                if not injectSkill:
+                    Character.UseSkill(skillid)
+                    time.sleep(0.01)
+                    Character.UseSkill(skillid)
+                    time.sleep(0.01)
+                    Character.UseSkill(skillid)
+                else:
+                    Terminal.SetLineEdit("SISkillID",str(skillid))
+                    Terminal.SetSpinBox("SkillInjection",300)
+                    Terminal.SetCheckBox("Skill Injection",True)
+                    time.sleep(short_sleep*2)
+                    Terminal.SetCheckBox("Skill Injection",False)
+                if job == KinesisJobs[3]:
+                    time.sleep(short_sleep*2)
+                    Character.UseSkill(142121005)
+                #time.sleep(short_sleep)
+                Terminal.SetCheckBox("Auto Attack",autoAttack)
+                Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",javelin)
+                Terminal.SetCheckBox("Skill Injection",skillInject)
+
 def AttackSemiNDOnce(siSkill,dummySkill,delay,on):
     Terminal.SetCheckBox("Auto Attack",False)
     Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
@@ -490,7 +884,7 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
     Terminal.SetRadioButton("SIRadioMelee",True)
     Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
     Terminal.SetCheckBox("Speedy Gonzales",True)
-    #count = 0
+    count = 0
     if siSkill != 32120055:
         delay = 30*math.ceil(delay*1000 * (10+attackSpeed)/480)/1000
     #print("The delay for skill {} is {}, starting si".format(siSkill,delay))
@@ -500,7 +894,7 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
         sleepTime = 0.231
     else:
         sleepTime = 0.101
-    while Field.GetCharacterCount()<=1 and Field.GetEliteState() !=2 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and not Terminal.GetRadioButton("SIRadioDragon") and on:
+    while Field.GetCharacterCount()<=1 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and not Terminal.GetRadioButton("SIRadioDragon") and on:
         Terminal.SetCheckBox("Skill Injection",True)
         Terminal.SetLineEdit("SISkillID",str(siSkill))
         Terminal.SetCheckBox("Melee No Delay",True)
@@ -513,20 +907,18 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
         time.sleep(delay+0.05)
         #if Terminal.IsRushing():
         #    break
-        #if count >= 30:
-        #    break
+        if count >= 20:
+            break
         if siSkill == 27111303 and not(Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219)):
             break
-        #count += 1
+        count += 1
     #print("Si ended due to break options")
-    Terminal.SetProperty("IssueThread",True)
+    #Terminal.SetProperty("IssueThread",True)
 def AttackSemiNDMagic(siSkill,dummySkill,delay,on,attackSpeed = 4):
     try:
-        if Terminal.GetProperty("IssueThread",True):
-            SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed))
-            Terminal.SetProperty("IssueThread",False)
-    except:
-        pass
+        SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed))
+    except Exception as e:
+        print(e)
         
 
 def ToggleAttack(on):
@@ -543,45 +935,7 @@ def ToggleAttack(on):
         Terminal.SetComboBox("Familiar0",1)
 
     #print(SCLib.GetVar("DoingJobAdv"))
-    if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum"):
-        if Terminal.GetCheckBox("Legit Vac") and Terminal.GetCheckBox("Kami Vac") and field_id not in mobFalldownBlacklist:# and not Terminal.GetCheckBox("Melee No Delay"):
-            Terminal.SetCheckBox("Mob Falldown",on)
-        else:
-            if Terminal.GetCheckBox("Mob Falldown"):
-                Terminal.SetCheckBox("Mob Falldown",False)
-    else:
-        Terminal.SetCheckBox("Mob Falldown",False)
-    if Terminal.GetLineEdit("SISkillID") in SpeedyGonzalesList and Terminal.GetCheckBox("Skill Injection") and Terminal.GetCheckBox("Melee No Delay"):
-        #print("In list")
-        if not Terminal.GetCheckBox("Speedy Gonzales"):
-            Terminal.SetCheckBox("Speedy Gonzales",True)
-        if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("GettingBoogie") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBeach") and not SCLib.GetVar("DoingSleepy"):
-            if not Terminal.GetCheckBox("filter_etc"):
-                Terminal.SetCheckBox("filter_etc",True)
-            if not Terminal.GetCheckBox("filter_use"):
-                Terminal.SetCheckBox("filter_use",True)
-        else:
-            if Terminal.GetCheckBox("filter_etc"):
-                Terminal.SetCheckBox("filter_etc",False)
-            if Terminal.GetCheckBox("filter_use"):
-                Terminal.SetCheckBox("filter_use",False)
-        #Terminal.SetSpinBox("FilterMeso",0)
-        if level < 140:
-            ToggleLoot(False)
-    elif Terminal.GetLineEdit("SISkillID") in SpeedyGonzalesList:
-        Terminal.SetCheckBox("Speedy Gonzales",True)
-    elif job == BuccaneerJobs[1]:
-        if not Terminal.GetCheckBox("Speedy Gonzales"):
-            Terminal.SetCheckBox("Speedy Gonzales",True) 
-    else:
-        #if Terminal.GetCheckBox("Speedy Gonzales"):
-        #    Terminal.SetCheckBox("Speedy Gonzales",False)
-        if Terminal.GetCheckBox("filter_etc"):
-            Terminal.SetCheckBox("filter_etc",False)
-        if Terminal.GetCheckBox("filter_use"):
-            Terminal.SetCheckBox("filter_use",False)
-        if level < 140:
-            Terminal.SetSpinBox("FilterMeso",0)
+    
             
     #elif job == NightWalkerJobs[2] or job == NightWalkerJobs[3]:
     #    if not Terminal.GetCheckBox("Speedy Gonzales"):
@@ -590,8 +944,6 @@ def ToggleAttack(on):
         Terminal.SetCheckBox("Kami Loot",False)
         Terminal.SetCheckBox("Auto Loot",True)
     if job == 4200: #kanna first job
-        AttackSI(42001006,on)
-    elif job in KannaJobs and field_id in curbrockhideout:
         AttackSI(42001006,on)
     elif job == 4210: #kanna 2nd
         Terminal.SetCheckBox("Auto Attack",False)
@@ -616,7 +968,8 @@ def ToggleAttack(on):
         Key.Set(0x47,1,42111003) #kishin
     elif job == 4212: #kanna 4th 
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -638,8 +991,6 @@ def ToggleAttack(on):
         # 20040216 Light Mode
         # 20040220 20040219 Equi Mode
         AttackSemiNDMagic(27001201,27001201,0.98,on)
-    elif job in LuminousJobs and field_id in curbrockhideout:
-        AttackAuto(27001201,on)
     elif job == 2710: #lumi second job
         if Character.HasBuff(2,20040217): #use dark magic
             #AttackAuto(27001201,on)
@@ -657,7 +1008,8 @@ def ToggleAttack(on):
             AttackSI(27101202,on,200)
     elif job == 2712: #lumi fourth job
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -671,15 +1023,14 @@ def ToggleAttack(on):
                 AttackSI(27101202,on,200)
     elif job == 3101: #DA first job
         AttackAuto(31011000,on)
-    elif job in DemonAvengerJobs and field_id in curbrockhideout:
-        AttackAuto(31011000,on)
     elif job == 3120: #DA 2nd
         #AttackSemiNDMagic(31201010,31201010,0.66,on)
         AttackSIND(31201010,on,100)
         #AttackAuto(31011000,on)
     elif job == 3121 or job == 3122: #DA third job and fourth job
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -692,15 +1043,14 @@ def ToggleAttack(on):
             AttackSemiNDMagic(31001008,31001008,0.55,on)
     elif job == 3112: #DS fourth job
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             #AttackSI(31121010,on,16)
             AttackSemiNDMagic(31121010,31121010,0.66,on)
     elif job == 2300: #Mercedes 1st 
-        AttackAuto(23001000,on)
-    elif job in MercedesJobs and field_id in curbrockhideout:
         AttackAuto(23001000,on)
     elif job ==2310: #Mercedes 2nd
         AttackAuto(23101000,on)
@@ -725,7 +1075,8 @@ def ToggleAttack(on):
     elif job == 2312: #Mercedes 4th
         #AttackAuto(23111000)
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -746,23 +1097,20 @@ def ToggleAttack(on):
             AttackSemiNDMagic(23120013,23111002,0.54,on)
     elif job == 4100: #Hayato 1st 41001004
         AttackSI(41001004,on,100)
-    elif job in HayatoJobs and field_id in curbrockhideout:
-        AttackSI(41001004,on,100)
     elif job == 4110: #Hayato 2nd 41101000
         AttackSemiNDMagic(41101000,41101000,0.45,on)
     elif job == 4111: #Hayato 3rd 41111011
         AttackSemiNDMagic(41111011,41111011,0.45,on)
     elif job == 4112: #Hayato 4th 41121011
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             AttackSemiNDMagic(41121011,41121011,0.45,on)
     elif job == 3600:#Xenon 1st 36001000
         AttackSemiNDMagic(36001000,36001000,1.08,on)
-    elif job in XenonJobs and field_id in curbrockhideout:
-        AttackSI(36001000,on,150)
     elif job == 3610:#Xenon 2nd 36101000
         AttackSemiNDMagic(36101000,36101000,0.99,on)
     elif job == 3611:#Xenon 3rd 36111000
@@ -771,7 +1119,8 @@ def ToggleAttack(on):
         #AttackSemiNDMagic(36111010,36111010,0.72,on)
     elif job == 3612:#Xenon 4th 36121000
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -781,15 +1130,14 @@ def ToggleAttack(on):
                 AttackSI(36121000,on,110)
     elif job == 2400: #Phantom 1st 24001000
         AttackSemiNDMagic(24001000,24001000,0.81,on)
-    elif job in PhantomJobs and field_id in curbrockhideout:
-        AttackAuto(24001000,on)
     elif job == 2410: #Phantom 2nd 24101000
         AttackSemiNDMagic(24101000,24101000,0.99,on)
     elif job == 2411: #Phantom 3rd 24111000
         AttackSemiNDMagic(24111000,24111000,0.99,on)
     elif job == 2412: #Phantom 4th 24121000
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -807,13 +1155,19 @@ def ToggleAttack(on):
         Terminal.SetComboBox("AttackKey",1)
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job in IlliumJobs: #Illium 1st+2nd+3rd+4th
-        Terminal.SetCheckBox("Skill Injection", False)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Auto Attack",False)
-        
-        Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",on)
-        Terminal.SetCheckBox("bot/illium/summon_control",on)
-        Terminal.SetCheckBox("General FMA",on)
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            #AttackSIND(32120055,32120055,0.45,on)
+        #AttackSIND("32120055;64001001",on,100)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
+        else:
+            Terminal.SetCheckBox("Skill Injection", False)
+            Terminal.SetCheckBox("Melee No Delay",False)
+            Terminal.SetCheckBox("Auto Attack",False)
+            
+            Terminal.SetCheckBox("bot/illium/radiant_javelin_delay",on)
+            Terminal.SetCheckBox("bot/illium/summon_control",on)
+            Terminal.SetCheckBox("General FMA",on)
     elif job in CadenaJobs: #Cadena 1st + 2nd + 3rd 64001006 or 64001001
         if job != CadenaJobs[-1]:
             AttackSIND("64001001;64001006",on,100)
@@ -821,14 +1175,16 @@ def ToggleAttack(on):
             if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
                 #AttackSIND(32120055,32120055,0.45,on)
                 #AttackSIND("32120055;64001001",on,100)
-                AttackSemiNDMagic(32120055,32120055,0.45,on)
+                #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+                AttackSI(32120055,on)
             elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
                 BindSkill(32121052)
             else:
                 AttackSIND("64120000;64001001",on,100)
     elif job in ArkJobs: #Ark 1st + 2nd + 3rd 155001100
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -841,12 +1197,6 @@ def ToggleAttack(on):
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 2200: #Evan 1st 22001010 AA
         AttackAuto(22001010,on)
-    elif job in EvanJobs and field_id in curbrockhideout:
-        if field_id == 600050020:
-            AttackSIND(22110010,on,100)
-        else:
-            AttackAuto(22001010,on)
-            Key.Set(attack_key,1,22001010)
     elif job == 2211: #Evan 2nd 22110010 SI/ND
         AttackSIND(22110010,on,100)
         
@@ -855,7 +1205,8 @@ def ToggleAttack(on):
         
     elif job == 2217: #Evan 4th 22170061 SI/ND
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -871,28 +1222,26 @@ def ToggleAttack(on):
         AttackAuto(1001005,on)
     elif job == 110: #fighter 1101011
         AttackAuto(1101011,on)
-    elif job in HeroJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(1001005,on)
     elif job == 111: #crusader 1111010
         AttackSIND(1111010,on,450)
     elif job == 112: #Hero 1120017
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
-            #AttackSIND(1120017,on,400)
-            AttackSemiNDMagic(1120017,1120017,0.6,on)
+            AttackSI(1120017,on,100)
+            #AttackSemiNDMagic(1120017,1120017,0.6,on)
     elif job == 120: #Page 1201011
         AttackSI(1201011,on)
-    elif job in PaladinJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(1001005,on)
     elif job == 121: #White knight 1211008
         #AttackAuto(1211008,on)
         AttackSI(1201011,on)
     elif job == 122: #Paladin 1211008
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -909,8 +1258,6 @@ def ToggleAttack(on):
     elif job == 130: #Spearman 1301011
         AttackSemiND(1301011,1301011,0.81,on)
         
-    elif job in DarkknightJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(1001005,on)
     elif job == 131: #Berserker
         AttackSemiND(1301011,1301011,0.81,on)
         
@@ -918,7 +1265,8 @@ def ToggleAttack(on):
         #AttackAuto(1321012,on)
         #AttackSIND(1321012,on,450)
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -926,8 +1274,6 @@ def ToggleAttack(on):
     elif job == 200: #Mage
         AttackAuto(2001008,on)
         
-    elif job in ILMageJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(2001008,on)
     elif job == 220: #IL wizard
         AttackAuto(2201005,on)
         
@@ -936,7 +1282,8 @@ def ToggleAttack(on):
         
     elif job == 222: #IL archmage
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         #elif level >= 140:
@@ -948,8 +1295,6 @@ def ToggleAttack(on):
             AttackAuto(2221006,on)
 
         
-    elif job in FPMageJobs and field_id in curbrockhideout: #1001005
-        AttackSI(2101004,on,100,"SIRadioMagic") 
     elif job == 210: #FP wizard
         AttackSI(2101004,on,100,"SIRadioMagic") 
         
@@ -958,7 +1303,8 @@ def ToggleAttack(on):
         
     elif job == 212: #FP archmage
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         #elif level >= 140:
@@ -969,15 +1315,14 @@ def ToggleAttack(on):
         else:
             AttackAuto(2121006,on)
         
-    elif job in BishopJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(2001008,on)
     elif job == 230: #cleric
         AttackAuto(2301005,on)
     elif job == 231: #priest
         AttackAuto(2311004,on)
     elif job == 232: #Bishop
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         #elif level >= 140:
@@ -990,8 +1335,6 @@ def ToggleAttack(on):
     elif job == 300: #Archer
         AttackAuto(3001004,on)
         
-    elif (job in BowmasterJobs or job in MarksmanJobs) and field_id in curbrockhideout: #1001005
-        AttackAuto(3001004,on)
     elif job == 310: #Hunter
         AttackAuto(3101005,on)
         
@@ -1001,11 +1344,12 @@ def ToggleAttack(on):
         
     elif job == 312: #Bowmaster
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
-            AttackSIND(3121015,on,600)
+            AttackSI(3121015,on,100)
         
     elif job == 320: #Crossbowman
         AttackAuto(3201005,on)
@@ -1014,11 +1358,12 @@ def ToggleAttack(on):
         #AttackSIND(3211009,on,400)
     elif job == 322: #Marksman
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
-            AttackAuto(3221017,on)
+            AttackAuto(3221007,on)
     elif job == 400: #Thief
         
         if SCLib.GetVar("DualBlade"):
@@ -1035,35 +1380,30 @@ def ToggleAttack(on):
     elif job == 410: #Assassin
         AttackSI(4101008,on)
         
-    elif job in NightlordJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(4101008,on)
     elif job == 411: #Hermit
         AttackSI(4111015,on)
         
     elif job == 412: #nightlord
         #print(Character.GetSkillLevel(32121052))
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             Terminal.SetSpinBox("KamiOffsetX", -85)
-            if Character.GetSkillLevel(4121017) >= 1:
-                AttackSemiNDMagic(4121017,4121017,1.0,on)
-            else:
-                AttackSI(4111015,on)
+            AttackAuto(4121013,on)
         
     elif job == 420: #Bandit
         AttackSI(4201012,on)
         
-    elif job in ShadowerJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(4001334,on)
     elif job == 421: #Chief Bandit
         AttackSI(4211002,on)
         
     elif job == 422: #Shadower
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1091,7 +1431,8 @@ def ToggleAttack(on):
         AttackSIND(4321004,on,450)
     elif job == 434: #dual blade 4th
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1101,10 +1442,6 @@ def ToggleAttack(on):
     elif job == 501: #Cannoneer Pirate
         #AttackAuto(5011000,on)
         AttackSIND(5011002,on,200)
-    elif job in BuccaneerJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(5101012,on)
-    elif job in CorsairJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(5201001,on)
     elif job == 510: #Brawler
         AttackAuto(5101012,on)
     elif job == 511: #Marauder
@@ -1112,11 +1449,13 @@ def ToggleAttack(on):
     elif job == 512: #Buccaneer
         #AttackAuto(5121007,on)
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             AttackSemiNDMagic(5121017,5121007,1.25,on)
+            #AttackSI(5121017,on,100)
     elif job == 520: #Gunslinger
         AttackAuto(5201001,on)
     elif job == 521: #Outlaw
@@ -1126,7 +1465,8 @@ def ToggleAttack(on):
         #    AttackSIND(5221017,on,350)
         #else:
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1148,8 +1488,6 @@ def ToggleAttack(on):
             Terminal.SetRadioButton("SIRadioMelee",True)
             Terminal.SetCheckBox("Auto Attack",on)
             Terminal.SetCheckBox("Skill Injection", on)
-    elif job in CannoneerJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(5301001,on)
     elif job == 531: #Cannon Trooper
         '''
         if Terminal.GetCheckBox("Mob Falldown"):
@@ -1174,15 +1512,14 @@ def ToggleAttack(on):
             Terminal.SetCheckBox("Skill Injection", on)
     elif job == 532: #Cannon Master
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             AttackSIND("5321000;5011002",on,250)
             #AttackSemiNDMagic(5321000,5321000,0.95,on)
     elif job == 508: #Jett 1sts
-        AttackAuto(5081020,on)
-    elif job in JettJobs and field_id in curbrockhideout:
         AttackAuto(5081020,on)
     elif job == 570: #Jett 2nd
         #AttackAuto(5081020,on)
@@ -1199,7 +1536,8 @@ def ToggleAttack(on):
             AttackSIND(5701011,on,150)
     elif job == 572: #Jett 4th
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1207,8 +1545,6 @@ def ToggleAttack(on):
             AttackSIND(5710020,on,150)
     elif job == 1100: #Dawn warrior 1st
         AttackSI(11001020,on)
-    elif job in DawnWarriorJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(11001020,on)
     elif job == 1110: #Dawn Warrior 2nd
         #AttackAuto(11101120,on)
         AttackSIND(11101120,on,600)
@@ -1219,7 +1555,8 @@ def ToggleAttack(on):
         dummySkill = 11001020
         dummyDelay = 0.81
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1230,8 +1567,6 @@ def ToggleAttack(on):
         AttackAuto(12001020,on)
         
         ToggleLoot(False)
-    elif job in BlazeWizardJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(12001021,on)
         Terminal.SetCheckBox("Full Map Attack",False)
     elif job == 1210: #BW 2nd
         Terminal.SetCheckBox("Full Map Attack",True)
@@ -1243,7 +1578,8 @@ def ToggleAttack(on):
         
     elif job == 1212: #BW 4th
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:           
@@ -1257,8 +1593,6 @@ def ToggleAttack(on):
             
     elif job == 1300: #Wind Archer 1st
         AttackAuto(13001020,on)
-    elif job in WindArcherJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(13001020,on)
     elif job == 1310: #Wind Archer 2nd
         if Character.GetSkillLevel(13101020) >= 1:
             AttackSI(13101020,on)
@@ -1270,14 +1604,13 @@ def ToggleAttack(on):
     elif job == 1312: #Wind Archer 4th
         #AttackAuto(13121002,on)
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             AttackSI(13121002,on,siOption = "SIRadioShoot")
     elif job == 1400: #Night Walker 1st
-        AttackAuto(14001020,on)
-    elif job in NightWalkerJobs and field_id in curbrockhideout: #1001005
         AttackAuto(14001020,on)
     elif job == 1410: #Night Walker 2nd
         AttackSI(14101020,on)
@@ -1285,7 +1618,8 @@ def ToggleAttack(on):
         AttackAuto(14111022,on)
     elif job == 1412: #Night Walker 4th
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1297,8 +1631,6 @@ def ToggleAttack(on):
             AttackSemiNDMagic(15001021,15001021,0.8,on)
         else:
             AttackAuto(15001020,on)
-    elif job in ThunderBreakerJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(15001020,on)
     elif job == 1510: #Thunder breaker 2nd
         #AttackAuto(15101020,on)
         AttackSemiNDMagic(15101020,15101020,0.72,on)
@@ -1307,7 +1639,8 @@ def ToggleAttack(on):
         AttackSemiNDMagic(15111020,15111020,0.9,on)
     elif job == 1512: #Thunder breaker 4th
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1318,8 +1651,6 @@ def ToggleAttack(on):
         #AttackAuto(15121001,on)
     elif job == 3300: #Wild Hunter 1st
         AttackAuto(33001105,on)
-    elif job in WildHunterJobs and field_id in curbrockhideout: #1001005
-        AttackAuto(33001105,on)
     elif job == 3310: #Wild Hunter 2nd
         #AttackAuto(33101113,on)
         AttackSI(33101215,on)
@@ -1328,14 +1659,13 @@ def ToggleAttack(on):
         #AttackSI(33111010,on,100,"SIRadioMagic")
     elif job == 3312: #Wild Hunter 4th
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             AttackAuto(33111112,on)
     elif job == 3200: #Battle Mage 1st
-        AttackSI(32001014,on)
-    elif job in BattleMageJobs and field_id in curbrockhideout: #1001005
         AttackSI(32001014,on)
     elif job == 3210: #Battle Mage 2nd
         #AttackSI(32100010,on)
@@ -1346,7 +1676,8 @@ def ToggleAttack(on):
     elif job == 3212: #Battle Mage 4th
         if level >= 160:
             if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-                AttackSemiNDMagic(32120055,32120055,0.45,on)
+                #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+                AttackSI(32120055,on)
             elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
                 BindSkill(32121052)
         #elif level >= 140:
@@ -1364,10 +1695,6 @@ def ToggleAttack(on):
     elif job == 3700: #Blaster 1st
         Terminal.SetCheckBox("General FMA",False)
         AttackAuto(37001000,on)
-    elif job in BlasterJobs and field_id in curbrockhideout: #1001005
-        #Terminal.SetCheckBox("General FMA",on)
-        Terminal.SetCheckBox("General FMA",False)
-        AttackAuto(37001000,on)
     elif job == 3710: #Blaster 2nd
         #Terminal.SetCheckBox("General FMA",on)
         Terminal.SetCheckBox("General FMA",False)
@@ -1380,16 +1707,15 @@ def ToggleAttack(on):
     elif job == 3712: #Blaster 4th
         #AttackAuto(37001000,on)
         Terminal.SetCheckBox("General FMA",False)
-        vulcan()
+        #vulcan()
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             AttackSIND(37121000,on,80)
     elif job == 3500: #Mechanic 1st
-        AttackAuto(35001004,on)
-    elif job in MechanicJobs and field_id in curbrockhideout: #1001005
         AttackAuto(35001004,on)
     elif job == 3510: #Mechanic 2nd
         AttackAuto(35101001,on)
@@ -1397,7 +1723,8 @@ def ToggleAttack(on):
         AttackAuto(35111006,on)
     elif job == 3512: #Mechanic 4th
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1406,7 +1733,8 @@ def ToggleAttack(on):
         #AttackAuto(35111006,on)
     elif job == 11212: #Beast Tamer
         #if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-        #    AttackSemiNDMagic(32120055,32120055,0.45,on)
+        #    #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+        #AttackSI(32120055,on)
         #elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
         #    BindSkill(32121052)
         #else:
@@ -1446,11 +1774,13 @@ def ToggleAttack(on):
 
     elif job == 2111 or job == 2112: #Aran 3rd
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
-            AttackSemiNDMagic(21111021,21111021,0.81,on)
+            #AttackSemiNDMagic(21111021,21111021,0.81,on)
+            SetSIND("21110028;21100018",100,True)
             #if Character.HasBuff(2,21110016):
             #    AttackSIND(21111021,on,450)
             #else:
@@ -1473,15 +1803,14 @@ def ToggleAttack(on):
             '''
     elif job == 14200:# Kinesis 1st
         AttackSemiNDMagic(142001001,142001001,0.63,on,attackSpeed = 5)
-    elif job in KinesisJobs and field_id in curbrockhideout:
-        AttackAuto(142001001,on)
     elif job == 14210: #Kinesis 2nd 142101002
         AttackSemiNDMagic(142101002,142101002,0.79,on,attackSpeed = 5)
         #AttackAuto(142101002,on)
     elif job == 14211 or job == 14212: #Kinesis 3rd + 4th 142111002
         #
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1501,7 +1830,8 @@ def ToggleAttack(on):
         AttackSemiNDMagic(65111002,65111002,1.2,on)
     elif job == 6512: #AB 4th
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1513,7 +1843,8 @@ def ToggleAttack(on):
         AttackSemiNDMagic(61001005,61001005,0.36,on)
     elif job == KaiserJobs[3]:
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1529,7 +1860,8 @@ def ToggleAttack(on):
     elif job == 2512: #Shade 4th
         #AttackSI(25120003,on,100)
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1540,8 +1872,6 @@ def ToggleAttack(on):
     elif job == 5100: #Mihile 1st
         AttackAuto(51001004,on)
         #AttackSemiNDMagic(51001004,51001004,0.96,on)
-    elif job in MihileJobs and field_id in curbrockhideout:
-        AttackAuto(51001004,on)
     elif job == 5110: #Mihile 2nd
         #AttackSIND(51101005,on,800)
         AttackSemiNDMagic(51101005,51001004,0.96,on)
@@ -1551,7 +1881,8 @@ def ToggleAttack(on):
     elif job == 5112: #Mihile 4th
         delay = 0.84
         if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
-            AttackSemiNDMagic(32120055,32120055,0.45,on)
+            #AttackSemiNDMagic(32120055,32120055,0.45,on) 
+            AttackSI(32120055,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
@@ -1622,70 +1953,94 @@ def GotoRootAbyss():
     toggleKami(False)
     if not Terminal.IsRushing():
         if fieldID != ColossalRoot:
+            toggleHyperTeleportRock(False)
             Terminal.Rush(ColossalRoot)
             time.sleep(3)
-        else:
-            toggleHyperTeleportRock(False)
-            
-def vonbon():
-    print("Doing Von Bon")
+def ToHex(val, nbits):
+    return ((val + (1 << nbits)) % (1 << nbits))
+def vonbon(retryCount = False):
+    #print("Doing Von Bon")
     toggleKami(False)
-    if CurrentChannel != 20:
-        print("Change to Channel 20")
-        Terminal.ChangeChannel(20)
-    else:
-        if fieldID not in TerporalCrevasseNormal:
-            if fieldID not in EastGardenNormal:
-                if fieldID != ColossalRoot:
-                    GotoRootAbyss()
-                else:
-                    if Inventory.GetItemCount(4033611) < 1:
-                        print("Missing Gnarled Wooden Key, Buying one before continue")
-                        BuyGnarledWoodenKey()
-                    else:
-                        Party.CreateParty()
-                        enter_boss(vonbon_portal)
+    if fieldID not in TerporalCrevasseNormal:
+        if fieldID not in EastGardenNormal:
+            if fieldID != ColossalRoot:
+                GotoRootAbyss()
             else:
-                if not NowLockedVar:
-                    mob = Field.FindMob(7120110)
-                    if mob.valid:
-                        toggleKami(True)
-                        ToggleAttack(True)
-                        
-                        
-                        print("Killing Blazing Imps")
-                    else:
-                        ToggleAttack(False)
-                        toggleKami(False)
-                        
-                        if pos.x != 3352:
-                            Character.Teleport(3352, 155)
-                        else:
-                            Character.EnterPortal()
+                if Inventory.GetItemCount(4033611) < 1:
+                    print("Missing Gnarled Wooden Key, Buying one before continue")
+                    BuyGnarledWoodenKey()
                 else:
-                    print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                    SCLib.UpdateVar("KillVonBon", False)
-                    ResetNowLockedFunction()
+                    Party.CreateParty()
+                    enter_boss(vonbon_portal)
+                    if retryCount:
+                        RetryCountAdd()
         else:
-            NowLockedFunction()
-            boss = Field.FindMob(NormalVonBon)
-            if boss.valid:
-                ToggleAttack(True)
-                toggleKami(True)
-                
-                toggleNoBossMapEffect(True)
-                
-                DidSpawn()
-                print("Killing boss Standby")
-            else:
-                if HasSpawned:
+            if not NowLockedVar:
+                mob = Field.FindMob(7120110)
+                if mob.valid:
                     toggleKami(False)
-                    print("VonBon is dead, Waiting 5 sec before continue")
-                    Terminal.SetCheckBox("Kami Loot",True)
-                    Terminal.SetCheckBox("Auto Loot",True)
-                    time.sleep(5)
-                    Terminal.SetCheckBox("Kami Loot",False)
-                    Terminal.SetCheckBox("Auto Loot",False)
+                    while Character.GetPos().x not in range(1740,1840) and GameState.IsInGame():
+                        Character.AMoveX(1757)
+                    ToggleAttack(True)
+                    Terminal.SetCheckBox("Mob Falldown",True)
+                    ToggleMobDisarm(True)
+                    
+                    
+                    print("Killing Blazing Imps")
+                else:
+                    ToggleAttack(False)
+                    toggleKami(False)
+                    Terminal.SetCheckBox("Mob Falldown",False)
+                    
+                    if pos.x != 3352:
+                        Character.Teleport(3352, 155)
+                    else:
+                        Character.EnterPortal()
+                        mapRecv = Packet.WaitForRecv(0x051F,3000)
+                        vonbonInteractPacket = hex(mapRecv.ReadLong(4))[2:].zfill(8)
+                        Terminal.SetProperty("VonbonPacket",str(vonbonInteractPacket))
+                        print("Packets:{} remaining {}".format(vonbonInteractPacket,mapRecv.GetRemaining()))
+            else:
+                print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
+                SCLib.UpdateVar("KillVonBon", False)
+                ResetNowLockedFunction()
+    else:
+        NowLockedFunction()
+        boss = Field.FindMob(NormalVonBon)
+        if boss.valid:
+            ToggleAttack(True)
+            #toggleKami(True)
+            
+            toggleNoBossMapEffect(True)
+            ToggleMobDisarm(True)
+            DidSpawn()
+            #print("Killing boss Standby")
+        else:
+            if HasSpawned:
+                toggleKami(False)
+                print("VonBon is dead, Waiting 5 sec before continue")
+                Terminal.SetCheckBox("Kami Loot",True)
+                Terminal.SetCheckBox("Auto Loot",True)
+                time.sleep(5)
+                Terminal.SetCheckBox("Kami Loot",False)
+                Terminal.SetCheckBox("Auto Loot",False)
+                if pos.x != -1090:
+                    Character.Teleport(-1090, 453)
+                else:
+                    time.sleep(1)
+                    Character.EnterPortal()
+                    time.sleep(0.5)
+                    Character.EnterPortal()
+                    time.sleep(1)
+                    SCLib.UpdateVar("KillVonBon", False)
+                    ResetSpawn()
+                    ResetNowLockedFunction()
+                    TimeOutReset()
+                    if retryCount:
+                        RetryCountReset()
+            else:
+                find = Field.FindReactor(vonbon_reactor)
+                if TimedOut() and not find.valid:
                     if pos.x != -1090:
                         Character.Teleport(-1090, 453)
                     else:
@@ -1693,306 +2048,334 @@ def vonbon():
                         Character.EnterPortal()
                         time.sleep(0.5)
                         Character.EnterPortal()
+                    ResetSpawn()
+                    ResetNowLockedFunction()
+                    TimeOutReset()
+                else:
+                    InteractVonBonNormal(Terminal.GetProperty("VonbonPacket","00000ECF"))
+                    ToggleAttack(False)
+                        
+def pierre(retryCount = False):
+    #toggleKami(False)
+    if fieldID not in AfternoonTeaTableNormal:
+        if fieldID not in WestGardenNormal:
+            if fieldID != ColossalRoot:
+                GotoRootAbyss()
+            else:
+                if Inventory.GetItemCount(4033611) < 1:
+                    print("Missing Gnarled Wooden Key, Buying one before continue")
+                    BuyGnarledWoodenKey()
+                else:
+                    Party.CreateParty()
+                    enter_boss(pierre_portal)
+                    if retryCount:
+                        RetryCountAdd()
+        else:
+            if not NowLockedVar:
+                mob = Field.FindMob(7120110)
+                if mob.valid:
+                    toggleKami(False)
+                    while Character.GetPos().x not in range(getMiddleX()-50,getMiddleX()+40) and GameState.IsInGame():
+                        Character.AMoveX(getMiddleX()-10)
+                    ToggleAttack(True)
+                    ToggleMobDisarm(True)
+                    Terminal.SetCheckBox("Mob Falldown",True)
+                    
+                    
+                    print("Killing Blazing Imps")
+                else:
+                    ToggleAttack(False)
+                    toggleKami(False)
+                    Terminal.SetCheckBox("Mob Falldown",False)
+                    if pos.x != 2407:
+                        print("Moving into position to enter portal")
+                        Character.Teleport(2407, 100)
+                    else:
+                        print("Entering portal")
+                        Character.EnterPortal()
+            else:
+                print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
+                SCLib.UpdateVar("KillPierre", False)
+                ResetNowLockedFunction()
+    else:
+        NowLockedFunction()
+        boss1 = Field.FindMob(NormalPierre)
+        boss2 = Field.FindMob(NormalPierrev2)
+        boss3 = Field.FindMob(NormalPierrev3)
+        if boss1.valid or boss2.valid or boss3.valid:
+            ToggleAttack(True)
+            toggleKami(False)
+            
+            toggleNoBossMapEffect(True)
+            
+            #print("Killing Pierre, standby")
+        else:
+            print("chest?")
+            toggleKami(False)
+            chest = Field.FindMob(8900103)
+            newX = chest.x -50
+            TimeOutCount()
+            if chest.valid:
+                print("Attacking Chest to get loot")
+                DidSpawn()
+                if pos.x != newX:
+                    Character.Teleport(newX, 550)
+                else:
+                    ToggleAttack(False)
+                    Character.BasicAttack()
+                    Terminal.SetCheckBox("Kami Loot",True)
+                    Terminal.SetCheckBox("Auto Loot",True)
+                    time.sleep(7)
+                    Terminal.SetCheckBox("Kami Loot",False)
+                    Terminal.SetCheckBox("Auto Loot",False)
+            else:
+                if HasSpawned or TimedOut():
+                    print("PierreNormal and chest has been killed waiting 5 sec before continue")
+                    Terminal.SetCheckBox("Kami Loot",True)
+                    Terminal.SetCheckBox("Auto Loot",True)
+                    time.sleep(5)
+                    Terminal.SetCheckBox("Kami Loot",False)
+                    Terminal.SetCheckBox("Auto Loot",False)
+                    if pos.x != -382:
+                        print("Moving into position to enter portal")
+                        Character.Teleport(-382, 550)
+                    else:
+                        print("Entering portal")
                         time.sleep(1)
-                        SCLib.UpdateVar("KillVonBon", False)
+                        Character.EnterPortal()
+                        time.sleep(0.5)
+                        Character.EnterPortal()
+                        time.sleep(0.5)
+                        Character.EnterPortal()
+                        time.sleep(0.5)
+                        Character.EnterPortal()
+                        time.sleep(2)
+                        SCLib.UpdateVar("KillPierre", False)
                         ResetSpawn()
                         ResetNowLockedFunction()
                         TimeOutReset()
+                        if retryCount:
+                            RetryCountReset()
                 else:
-                    find = Field.FindReactor(vonbon_reactor)
-                    if TimedOut() and not find.valid:
-                        if pos.x != -1090:
-                            Character.Teleport(-1090, 453)
-                        else:
-                            time.sleep(1)
-                            Character.EnterPortal()
-                            time.sleep(0.5)
-                            Character.EnterPortal()
-                        ResetSpawn()
-                        ResetNowLockedFunction()
-                        TimeOutReset()
-                    else:
-                        InteractVonBonNormal()
-                        ToggleAttack(False)
-                        
-def pierre():
-    toggleKami(False)
-    if CurrentChannel != 20:
-        print("Change to Channel 20")
-        Terminal.ChangeChannel(20)
-    else:
-        if fieldID not in AfternoonTeaTableNormal:
-            if fieldID not in WestGardenNormal:
-                if fieldID != ColossalRoot:
-                    GotoRootAbyss()
-                else:
-                    if Inventory.GetItemCount(4033611) < 1:
-                        print("Missing Gnarled Wooden Key, Buying one before continue")
-                        BuyGnarledWoodenKey()
-                    else:
-                        Party.CreateParty()
-                        enter_boss(pierre_portal)
-            else:
-                if not NowLockedVar:
-                    mob = Field.FindMob(7120110)
-                    if mob.valid:
-                        toggleKami(True)
-                        ToggleAttack(True)
-                        
-                        
-                        print("Still some more Blazing imp to kill")
-                    else:
-                        print("Imps are dead")
-                        ToggleAttack(False)
-                        
-                        toggleKami(False)
-                        if pos.x != 2407:
-                            print("Moving into position to enter portal")
-                            Character.Teleport(2407, 100)
-                        else:
-                            print("Entering portal")
-                            Character.EnterPortal()
-                else:
-                    print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                    SCLib.UpdateVar("KillPierre", False)
-                    ResetNowLockedFunction()
-        else:
-            NowLockedFunction()
-            boss1 = Field.FindMob(NormalPierre)
-            boss2 = Field.FindMob(NormalPierrev2)
-            boss3 = Field.FindMob(NormalPierrev3)
-            if boss1.valid or boss2.valid or boss3.valid:
-                ToggleAttack(True)
-                toggleKami(True)
-                
-                toggleNoBossMapEffect(True)
-                
-                print("Killing Pierre, standby")
-            else:
-                print("chest?")
-                toggleKami(False)
-                chest = Field.FindMob(8900103)
-                newX = chest.x -50
-                TimeOutCount()
-                if chest.valid:
-                    print("Attacking Chest to get loot")
-                    DidSpawn()
-                    if pos.x != newX:
-                        Character.Teleport(newX, 550)
-                    else:
-                        ToggleAttack(False)
-                        Character.BasicAttack()
-                        Terminal.SetCheckBox("Kami Loot",True)
-                        Terminal.SetCheckBox("Auto Loot",True)
-                        time.sleep(7)
-                        Terminal.SetCheckBox("Kami Loot",False)
-                        Terminal.SetCheckBox("Auto Loot",False)
-                else:
-                    if HasSpawned or TimedOut():
-                        print("PierreNormal and chest has been killed waiting 5 sec before continue")
-                        Terminal.SetCheckBox("Kami Loot",True)
-                        Terminal.SetCheckBox("Auto Loot",True)
-                        time.sleep(5)
-                        Terminal.SetCheckBox("Kami Loot",False)
-                        Terminal.SetCheckBox("Auto Loot",False)
-                        if pos.x != -382:
-                            print("Moving into position to enter portal")
-                            Character.Teleport(-382, 550)
-                        else:
-                            print("Entering portal")
-                            time.sleep(1)
-                            Character.EnterPortal()
-                            time.sleep(0.5)
-                            Character.EnterPortal()
-                            time.sleep(0.5)
-                            Character.EnterPortal()
-                            time.sleep(0.5)
-                            Character.EnterPortal()
-                            time.sleep(2)
-                            SCLib.UpdateVar("KillPierre", False)
-                            ResetSpawn()
-                            ResetNowLockedFunction()
-                            TimeOutReset()
-                    else:
-                        
-                        ToggleAttack(False)
+                    
+                    ToggleAttack(False)
 
-def crimsonqueen():
-    toggleKami(False)
-    if CurrentChannel != 20:
-        print("Change to Channel 20")
-        Terminal.ChangeChannel(20)
-    else:
-        if fieldID not in QueensCastleNormal:
-            if fieldID not in SouthGardenNormal:
-                if fieldID != ColossalRoot:
-                    GotoRootAbyss()
-                else:
-                    if Inventory.GetItemCount(4033611) < 1:
-                        print("Missing Gnarled Wooden Key, Buying one before continue")
-                        BuyGnarledWoodenKey()
-                    else:
-                        Party.CreateParty()
-                        enter_boss(queen_portal)
+
+def crimsonqueen(retryCount = False):
+    #toggleKami(False)
+    if fieldID not in QueensCastleNormal:
+        if fieldID not in SouthGardenNormal:
+            if fieldID != ColossalRoot:
+                GotoRootAbyss()
             else:
-                if not NowLockedVar:
-                    mob = Field.FindMob(7120110)
-                    if mob.valid:
-                        toggleKami(True)
-                        
-                        ToggleAttack(True)
-                        
-                        print("Need to kill some more Blazing Imps to enter next room")
-                    else:
-                        ToggleAttack(False)
-                        toggleKami(False)
-                        
-                        print("Imps are dead")
-                        if pos.x != 1835:
-                            print("Moving into position to enter portal")
-                            Character.Teleport(1835, 259)
-                        else:
-                            print("Entering Portal")
-                            Character.EnterPortal()
+                if Inventory.GetItemCount(4033611) < 1:
+                    print("Missing Gnarled Wooden Key, Buying one before continue")
+                    BuyGnarledWoodenKey()
                 else:
-                    print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                    SCLib.UpdateVar("KillCrimsonQueen", False)
-                    ResetNowLockedFunction()
+                    Party.CreateParty()
+                    enter_boss(queen_portal)
+                    if retryCount:
+                        RetryCountAdd()
         else:
-            NowLockedFunction()
-            boss = Field.FindMob(NormalCrimsonQueen)
-            boss1 = Field.FindMob(NormalCrimsonQueen1)
-            boss2 = Field.FindMob(NormalCrimsonQueen2)
-            boss3 = Field.FindMob(NormalCrimsonQueen3)
-            if boss.valid or boss1.valid or boss2.valid or boss3.valid:
-                ToggleAttack(True)
-                
-                toggleNoBossMapEffect(True)
-                
-                toggleKami(True)
-                print("Fighting boss standby")
-            else:	
-                chest = Field.FindMob(8920106)
-                newX = chest.x -30
-                TimeOutCount()
-                if chest.valid:
-                    DidSpawn()
-                    print("Attacking chest to get the loot")
-                    if pos.x != newX:
-                        Character.Teleport(newX, 130)
-                    else:
-                        ToggleAttack(False)
-                        Character.BasicAttack()
-                        Terminal.SetCheckBox("Kami Loot",True)
-                        Terminal.SetCheckBox("Auto Loot",True)
-                        time.sleep(5)
-                        Terminal.SetCheckBox("Kami Loot",False)
-                        Terminal.SetCheckBox("Auto Loot",False)
+            if not NowLockedVar:
+                mob = Field.FindMob(7120110)
+                if mob.valid:
+                    toggleKami(False)
+                    while Character.GetPos().x not in range(662-80,662+80) and GameState.IsInGame():
+                        Character.AMoveX(662)
+                    ToggleMobDisarm(True)
+                    ToggleAttack(True)
+                    Terminal.SetCheckBox("Mob Falldown",True)
+                    
+                    
+                    print("Killing Blazing Imps")
                 else:
-                    if HasSpawned or TimedOut():
-                        print("CrimsonQueen and Chest Has been killed waiting 5 sec before continue")
-                        toggleKami(False)
-                        Terminal.SetCheckBox("Kami Loot",True)
-                        Terminal.SetCheckBox("Auto Loot",True)
-                        time.sleep(5)
-                        Terminal.SetCheckBox("Kami Loot",False)
-                        Terminal.SetCheckBox("Auto Loot",False)
+                    ToggleAttack(False)
+                    toggleKami(False)
+                    Terminal.SetCheckBox("Mob Falldown",False)
+                    print("Imps are dead")
+                    if pos.x != 1835:
+                        print("Moving into position to enter portal")
+                        Character.Teleport(1835, 259)
+                    else:
+                        print("Entering Portal")
+                        Character.EnterPortal()
+                        mapRecv = Packet.WaitForRecv(0x051F,3000)
+                        queenInteractPacket = hex(mapRecv.ReadLong(4))[2:].zfill(8)
+                        Terminal.SetProperty("QueenPacket",str(queenInteractPacket))
+                        print("Packets:{} remaining {}".format(queenInteractPacket,mapRecv.GetRemaining()))
+            else:
+                print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
+                SCLib.UpdateVar("KillCrimsonQueen", False)
+                ResetNowLockedFunction()
+    else:
+        NowLockedFunction()
+        boss = Field.FindMob(NormalCrimsonQueen)
+        boss1 = Field.FindMob(NormalCrimsonQueen1)
+        boss2 = Field.FindMob(NormalCrimsonQueen2)
+        boss3 = Field.FindMob(NormalCrimsonQueen3)
+        if boss.valid or boss1.valid or boss2.valid or boss3.valid:
+            ToggleAttack(True)
+            
+            toggleNoBossMapEffect(True)
+            
+            toggleKami(False)
+            #print("Fighting boss standby")
+        else:	
+            chest = Field.FindMob(8920106)
+            newX = chest.x -30
+            TimeOutCount()
+            if chest.valid:
+                DidSpawn()
+                print("Attacking chest to get the loot")
+                if pos.x != newX:
+                    toggleKami(False)
+                    Character.Teleport(newX, 130)
+                else:
+                    ToggleAttack(False)
+                    Character.BasicAttack()
+                    Terminal.SetCheckBox("Kami Loot",True)
+                    Terminal.SetCheckBox("Auto Loot",True)
+                    time.sleep(5)
+                    Terminal.SetCheckBox("Kami Loot",False)
+                    Terminal.SetCheckBox("Auto Loot",False)
+            else:
+                if HasSpawned or TimedOut():
+                    print("CrimsonQueen and Chest Has been killed waiting 5 sec before continue")
+                    toggleKami(False)
+                    Terminal.SetCheckBox("Kami Loot",True)
+                    Terminal.SetCheckBox("Auto Loot",True)
+                    time.sleep(5)
+                    Terminal.SetCheckBox("Kami Loot",False)
+                    Terminal.SetCheckBox("Auto Loot",False)
+                    if pos.x != -849:
+                        Character.Teleport(-849, 132)
+                    else:
+                        time.sleep(1)
+                        Character.EnterPortal()
+                        time.sleep(0.5)
+                        Character.EnterPortal()
+                        time.sleep(0.5)
+                        Character.EnterPortal()
+                        time.sleep(1)
+                        
+                        SCLib.UpdateVar("KillCrimsonQueen", False)
+                        ResetSpawn()
+                        ResetNowLockedFunction()
+                        TimeOutReset()
+                        if retryCount:
+                            RetryCountReset()
+                else:
+                    find = Field.FindReactor(queen_reactor)
+                    if TimedOut() and not find.valid:
                         if pos.x != -849:
+                            toggleKami(False)
                             Character.Teleport(-849, 132)
                         else:
                             time.sleep(1)
                             Character.EnterPortal()
                             time.sleep(0.5)
                             Character.EnterPortal()
-                            time.sleep(0.5)
-                            Character.EnterPortal()
-                            time.sleep(1)
-                            
-                            SCLib.UpdateVar("KillCrimsonQueen", False)
-                            ResetSpawn()
-                            ResetNowLockedFunction()
-                            TimeOutReset()
+                        ResetSpawn()
+                        ResetNowLockedFunction()
+                        TimeOutReset()
                     else:
-                        find = Field.FindReactor(queen_reactor)
-                        if TimedOut() and not find.valid:
-                            if pos.x != -849:
-                                Character.Teleport(-849, 132)
-                            else:
-                                time.sleep(1)
-                                Character.EnterPortal()
-                                time.sleep(0.5)
-                                Character.EnterPortal()
-                            ResetSpawn()
-                            ResetNowLockedFunction()
-                            TimeOutReset()
-                        else:
-                            InteractCrimsonQueenNormal()
-                            ToggleAttack(False)
+                        InteractCrimsonQueenNormal(Terminal.GetProperty("QueenPacket","00000ECF"))
+                        ToggleAttack(False)
+                        time.sleep(0.8)
                             
 
-def vellum():
+def vellum(retryCount = False):
     boss = Field.FindMob(NormalVellum)
     if not boss.valid:
         toggleKami(False)
-    if CurrentChannel != 20:
-        print("Change to Channel 20")
-        Terminal.ChangeChannel(20)
-    else:
-        if fieldID not in AbyssalCaveNormal:
-            if fieldID not in NorthGardenNormal:
-                if fieldID != ColossalRoot:
-                    GotoRootAbyss()
-                else:
-                    if Inventory.GetItemCount(4033611) < 1:
-                        print("Missing Gnarled Wooden Key, Buying one before continue")
-                        BuyGnarledWoodenKey()
-                    else:
-                        Party.CreateParty()
-                        enter_boss(vellum_portal)
+    if fieldID not in AbyssalCaveNormal:
+        if fieldID not in NorthGardenNormal:
+            if fieldID != ColossalRoot:
+                GotoRootAbyss()
             else:
-                if not NowLockedVar:
-                    mob = Field.FindMob(7120111)
-                    if mob.valid:
-                        toggleKami(True)
-                        ToggleAttack(True)
-                        
-                        
-                        print("Need to kill som more Pointy imps to enter next map")
-                    else:
-                        toggleKami(False)
-                        ToggleAttack(False)
-                        
-                        print("Moving on")
-                        if pos.x != 2290:
-                            Character.Teleport(2290, 179)
-                        else:
-                            print("Entering Vellum Normal map")
-                            Key.Press(0x26)
+                if Inventory.GetItemCount(4033611) < 1:
+                    print("Missing Gnarled Wooden Key, Buying one before continue")
+                    BuyGnarledWoodenKey()
                 else:
-                    print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                    SCLib.UpdateVar("KillVellum", False)
-                    ResetNowLockedFunction()
+                    Party.CreateParty()
+                    enter_boss(vellum_portal)
+                    if retryCount:
+                        RetryCountAdd()
         else:
-            NowLockedFunction()
-            boss = Field.FindMob(NormalVellum)
-            if boss.valid:
-                ToggleAttack(True)
-                
-                DidSpawn()
-                if pos.x != -410:
-                    Character.Teleport(-410,434)
-                toggleNoBossMapEffect(True)
-                
-                print("Killin Vallum Standby")
-            else:
-                if HasSpawned:
+            if not NowLockedVar:
+                mob = Field.FindMob(7120111)
+                if mob.valid:
                     toggleKami(False)
-                    print("Vallum is dead, waiting 5 sec before continue")
-                    Terminal.SetCheckBox("Kami Loot",True)
-                    Terminal.SetCheckBox("Auto Loot",True)
-                    time.sleep(5)
-                    Terminal.SetCheckBox("Kami Loot",False)
-                    Terminal.SetCheckBox("Auto Loot",False)
+                    while Character.GetPos().x not in range(getMiddleX()-50,getMiddleX()+40) and GameState.IsInGame():
+                        Character.AMoveX(getMiddleX()-10)
+                    ToggleAttack(True)
+                    Terminal.SetCheckBox("Mob Falldown",True)
+                    
+                    
+                    print("Killing Blazing Imps")
+                else:
+                    ToggleAttack(False)
+                    toggleKami(False)
+                    Terminal.SetCheckBox("Mob Falldown",False)
+                    if pos.x != 2290:
+                        Character.Teleport(2290, 179)
+                    else:
+                        print("Entering Vellum Normal map")
+                        time.sleep(0.5)
+                        Key.Press(0x26)
+                        mapRecv = Packet.WaitForRecv(0x051F,3000)
+                        vellumInteractPacket = hex(mapRecv.ReadLong(4))[2:].zfill(8)
+                        Terminal.SetProperty("VellumPacket",str(vellumInteractPacket))
+                        print("Packets:{} remaining {}".format(vellumInteractPacket,mapRecv.GetRemaining()))
+                        #time.sleep(1)
+            else:
+                print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
+                SCLib.UpdateVar("KillVellum", False)
+                ResetNowLockedFunction()
+    else:
+        NowLockedFunction()
+        boss = Field.FindMob(NormalVellum)
+        if boss.valid:
+            ToggleAttack(True)
+            
+            DidSpawn()
+            while Character.GetPos().x not in range(-480,-320) and Field.FindMob(NormalVellum).valid:
+                Character.AMoveX(-400)
+            toggleNoBossMapEffect(True)
+            ToggleMobDisarm(False)
+            
+            #print("Killin Vallum Standby")
+        else:
+            if HasSpawned:
+                toggleKami(False)
+                print("Vellum is dead, waiting 5 sec before continue")
+                Terminal.SetCheckBox("Kami Loot",True)
+                Terminal.SetCheckBox("Auto Loot",True)
+                time.sleep(15)
+                Terminal.SetCheckBox("Kami Loot",False)
+                Terminal.SetCheckBox("Auto Loot",False)
+                if pos.x != -1758:
+                    Character.Teleport(-1758, 440)
+                else:
+                    time.sleep(1)
+                    Character.EnterPortal()
+                    time.sleep(0.5)
+                    Character.EnterPortal()
+                    time.sleep(1)
+                    if Field.GetID() not in range(105200400,105200410+20):
+                        SCLib.UpdateVar("KillVellum", False)
+                        ResetSpawn()
+                        ResetNowLockedFunction()
+                        time.sleep(1)
+                        if retryCount:
+                            RetryCountReset()
+                    #accountData['mule_number'] = accountData['mule_number']+1
+                    #writeJson(accountData,accountId)
+                    ToggleMobDisarm(True)
+            else:
+                find = Field.FindReactor(vellum_reactor)
+                if TimedOut() and not find.valid:
                     if pos.x != -1758:
                         Character.Teleport(-1758, 440)
                     else:
@@ -2000,31 +2383,14 @@ def vellum():
                         Character.EnterPortal()
                         time.sleep(0.5)
                         Character.EnterPortal()
-                        time.sleep(1)
-                        SCLib.UpdateVar("KillVellum", False)
-                        ResetSpawn()
-                        ResetNowLockedFunction()
-                        time.sleep(1)
-                        accountData['mule_number'] = accountData['mule_number']+1
-                        writeJson(accountData,accountId)
-                        ToggleMobDisarm(True)
+                    ResetSpawn()
+                    ResetNowLockedFunction()
+                    TimeOutReset()
+                    ToggleMobDisarm(True)
                 else:
-                    find = Field.FindReactor(vellum_reactor)
-                    if TimedOut() and not find.valid:
-                        if pos.x != -1758:
-                            Character.Teleport(-1758, 440)
-                        else:
-                            time.sleep(1)
-                            Character.EnterPortal()
-                            time.sleep(0.5)
-                            Character.EnterPortal()
-                        ResetSpawn()
-                        ResetNowLockedFunction()
-                        TimeOutReset()
-                    else:
-                        InteractVellumNormal()
-                        ToggleAttack(False)
-                        ToggleMobDisarm(False)
+                    InteractVellumNormal(Terminal.GetProperty("VellumPacket","00000ECF"))
+                    ToggleAttack(False)
+                    ToggleMobDisarm(False)
                         
 #root00
 # quest id's
@@ -2056,6 +2422,8 @@ accountId = Terminal.GetLineEdit("LoginID")
 accountData = startupCheck(accountId)
 handleReady(accountData)
 writeJson(accountData,accountId)
+
+start_char_number = accountData["RootAbyssChar"]
 if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAll"):
     ColossalRoot = 105200000
     SouthGardenNormal = [105200300,105200301,105200302,105200303,105200304,105200305,105200306,105200307,105200308,105200309]
@@ -2107,10 +2475,11 @@ if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAl
                 if mapID(mRoot):
                     startQuest(q1, nGirl)
                 else:
-                    rush(105010000)
-                    port = Field.FindPortal("root00")
-                    if port.valid:
-                        goThru(port.x, port.y)
+                    toggleHyperTeleportRock(False)
+                    rush(105200000)
+                    # port = Field.FindPortal("root00")
+                    # if port.valid:
+                    #     goThru(port.x, port.y)
             elif hasQuest(q1):
                 goThru(-1013, 215)
                 completeQuest(q1, nGirl)
@@ -2154,7 +2523,8 @@ if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAl
                     completeQuest(q6, nNeinheart)
                 else:
                     rush(130000000)
-                    tele(227, -9)
+                    if mapID(130000000):
+                        tele(227, -9)
     elif needQuest(q7) and not GameState.IsInCashShop():
         startQuest(q7,nNeinheart)
     elif doQuest(q8) and not GameState.IsInCashShop():
@@ -2209,15 +2579,26 @@ if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAl
         if needQuest(q11):
             startQuest(q11, nGirl2)
         elif hasQuest(q11):
-            if Quest.CheckCompleteDemand(q11, nGirl2) ==0 and fieldID == mRoot:
+            if Quest.CheckCompleteDemand(q11, nGirl2) ==0:
                 if fieldID != mRoot:
-                    rush(mRoot)
-                    time.sleep(1)
+                    if Field.GetID() in range(105200400,105200410+20):
+                        if pos.x != -1758:
+                            Character.Teleport(-1758, 440)
+                        else:
+                            time.sleep(1)
+                            Character.EnterPortal()
+                            time.sleep(0.5)
+                            Character.EnterPortal()
+                            time.sleep(1)
+                    else:
+                        rush(mRoot)
+                        time.sleep(1)
                 else:
                     time.sleep(0.5)
                     Quest.CompleteQuest(q11, nGirl2)
                     time.sleep(1)
             else:
+                #print(Quest.CheckCompleteDemand(q11, nGirl2))
                 vellum()
     elif doQuest(q12) and not GameState.IsInCashShop():
         print("q12")
@@ -2238,13 +2619,13 @@ if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAl
             time.sleep(1)
             SCLib.UpdateVar("enter_cs",False)
     #StartQuest(63780, 9400428)
-    elif doQuest(63780):
-        if needQuest(63780):
-            startQuest(63780, 9400428)
+    # elif doQuest(63780):
+    #     if needQuest(63780):
+    #         startQuest(63780, 9400428)
 
 ###CrimsonQueen Normal###
     elif KillCrimsonQueen:
-        print("Doing Crimson Queen")
+        #print("Doing Crimson Queen")
         #toggleKami(False)
         if CrimsonQueenNormal:
             #print("Normal")
@@ -2252,117 +2633,12 @@ if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAl
                 SCLib.UpdateVar("KillCrimsonQueen", False)
                 ResetNowLockedFunction()
                 RetryCountReset()
-            if CurrentChannel != 20:
-                print("Change to Channel 20")
-                Terminal.ChangeChannel(20)
-            else:
-                if fieldID not in QueensCastleNormal:
-                    if fieldID not in SouthGardenNormal:
-                        if fieldID != ColossalRoot:
-                            GotoRootAbyss()
-                        else:
-                            if Inventory.GetItemCount(4033611) < 1:
-                                print("Missing Gnarled Wooden Key, Buying one before continue")
-                                BuyGnarledWoodenKey()
-                            else:
-                                Party.CreateParty()
-                                enter_boss(queen_portal)
-                                RetryCountAdd()
-                    else:
-                        if not NowLockedVar:
-                            mob = Field.FindMob(7120110)
-                            if mob.valid:
-                                toggleKami(True)
-                                
-                                ToggleAttack(True)
-                                
-                                print("Need to kill some more Blazing Imps to enter next room")
-                            else:
-                                ToggleAttack(False)
-                                toggleKami(False)
-                                
-                                print("Imps are dead")
-                                if pos.x != 1835:
-                                    print("Moving into position to enter portal")
-                                    Character.Teleport(1835, 259)
-                                else:
-                                    print("Entering Portal")
-                                    Character.EnterPortal()
-                        else:
-                            print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                            SCLib.UpdateVar("KillCrimsonQueen", False)
-                            ResetNowLockedFunction()
-                else:
-                    NowLockedFunction()
-                    boss = Field.FindMob(NormalCrimsonQueen)
-                    boss1 = Field.FindMob(NormalCrimsonQueen1)
-                    boss2 = Field.FindMob(NormalCrimsonQueen2)
-                    boss3 = Field.FindMob(NormalCrimsonQueen3)
-                    if boss.valid or boss1.valid or boss2.valid or boss3.valid:
-                        ToggleAttack(True)
-                        
-                        toggleNoBossMapEffect(True)
-                        
-                        toggleKami(True)
-                        print("Fighting boss standby")
-                    else:
-                        ToggleAttack(False)
-                        toggleKami(False)
-                        chest = Field.FindMob(8920106)
-                        newX = chest.x -30
-                        TimeOutCount()
-                        if chest.valid:
-                            DidSpawn()
-                            print("Attacking chest to get the loot")
-                            ToggleAttack(False)
-                            Character.BasicAttack()
-                            Terminal.SetCheckBox("Kami Loot",True)
-                            Terminal.SetCheckBox("Auto Loot",True)
-                            time.sleep(5)
-                            Terminal.SetCheckBox("Kami Loot",False)
-                            Terminal.SetCheckBox("Auto Loot",False)
-                        else:
-                            if HasSpawned or TimedOut():
-                                print("CrimsonQueen and Chest Has been killed waiting 5 sec before continue")
-                                toggleKami(False)
-                                Terminal.SetCheckBox("Kami Loot",True)
-                                Terminal.SetCheckBox("Auto Loot",True)
-                                time.sleep(5)
-                                Terminal.SetCheckBox("Kami Loot",False)
-                                Terminal.SetCheckBox("Auto Loot",False)
-                                if pos.x != -849:
-                                    Character.Teleport(-849, 132)
-                                    time.sleep(1)
-                                else:
-                                    Character.EnterPortal()
-                                    time.sleep(0.5)
-                                    Character.EnterPortal()
-                                    time.sleep(1)
-                                    SCLib.UpdateVar("KillCrimsonQueen", False)
-                                    ResetSpawn()
-                                    ResetNowLockedFunction()
-                                    TimeOutReset()
-                                    RetryCountReset()
-                            else:
-                                find_q = Field.FindReactor(queen_reactor)
-                                if TimedOut() and not find_q.valid:
-                                    if pos.x != -849:
-                                        Character.Teleport(-849, 132)
-                                    else:
-                                        time.sleep(1)
-                                        Character.EnterPortal()
-                                        time.sleep(0.5)
-                                        Character.EnterPortal()
-                                    ResetSpawn()
-                                    ResetNowLockedFunction()
-                                    TimeOutReset()
-                                else:
-                                    InteractCrimsonQueenNormal()
-                                    ToggleAttack(False)
+            crimsonqueen(True)
+            
                                     
     ###Pierre Normal###
     elif KillPierre:
-        print("Doing Pierre")
+        #print("Doing Pierre")
         #toggleKami(False)
         if PierreNormal:
             #print("Normal")
@@ -2370,104 +2646,11 @@ if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAl
                 SCLib.UpdateVar("KillPierre", False)
                 ResetNowLockedFunction()
                 RetryCountReset()
-            if CurrentChannel != 20:
-                print("Change to Channel 20")
-                Terminal.ChangeChannel(20)
-            else:
-                if fieldID not in AfternoonTeaTableNormal:
-                    if fieldID not in WestGardenNormal:
-                        if fieldID != ColossalRoot:
-                            GotoRootAbyss()
-                        else:
-                            if Inventory.GetItemCount(4033611) < 1:
-                                print("Missing Gnarled Wooden Key, Buying one before continue")
-                                BuyGnarledWoodenKey()
-                            else:
-                                Party.CreateParty()
-                                enter_boss(pierre_portal)
-                                RetryCountAdd()
-                    else:
-                        if not NowLockedVar:
-                            mob = Field.FindMob(7120110)
-                            if mob.valid:
-                                toggleKami(True)
-                                ToggleAttack(True)
-                                
-                                
-                                print("Still some more Blazing imp to kill")
-                            else:
-                                print("Imps are dead")
-                                ToggleAttack(False)
-                                
-                                toggleKami(False)
-                                if pos.x != 2407:
-                                    print("Moving into position to enter portal")
-                                    Character.Teleport(2407, 100)
-                                else:
-                                    print("Entering portal")
-                                    Character.EnterPortal()
-                        else:
-                            print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                            SCLib.UpdateVar("KillPierre", False)
-                            ResetNowLockedFunction()
-                else:
-                    NowLockedFunction()
-                    boss1 = Field.FindMob(NormalPierre)
-                    boss2 = Field.FindMob(NormalPierrev2)
-                    boss3 = Field.FindMob(NormalPierrev3)
-                    if boss1.valid or boss2.valid or boss3.valid:
-                        ToggleAttack(True)
-                        toggleKami(True)
-                        
-                        toggleNoBossMapEffect(True)
-                        
-                        print("Killing Pierre, standby")
-                    else:
-                        toggleKami(False)
-                        ToggleAttack(False)
-                        chest = Field.FindMob(8900103)
-                        newX = chest.x -50
-                        TimeOutCount()
-                        if chest.valid:
-                            print("Attacking Chest to get loot")
-                            DidSpawn()
-                            ToggleAttack(False)
-                            time.sleep(1)
-                            Character.BasicAttack()
-                            Terminal.SetCheckBox("Kami Loot",True)
-                            Terminal.SetCheckBox("Auto Loot",True)
-                            time.sleep(5)
-                            Terminal.SetCheckBox("Kami Loot",False)
-                            Terminal.SetCheckBox("Auto Loot",False)
-                        else:
-                            if HasSpawned or TimedOut():
-                                print("PierreNormal and chest has been killed waiting 5 sec before continue")
-                                Terminal.SetCheckBox("Kami Loot",True)
-                                Terminal.SetCheckBox("Auto Loot",True)
-                                time.sleep(5)
-                                Terminal.SetCheckBox("Kami Loot",False)
-                                Terminal.SetCheckBox("Auto Loot",False)
-                                if pos.x != -382:
-                                    print("Moving into position to enter portal")
-                                    Character.Teleport(-382, 550)
-                                    time.sleep(1)
-                                else:
-                                    print("Entering portal")
-                                    Character.EnterPortal()
-                                    time.sleep(0.5)
-                                    Character.EnterPortal()
-                                    time.sleep(2)
-                                    SCLib.UpdateVar("KillPierre", False)
-                                    ResetSpawn()
-                                    ResetNowLockedFunction()
-                                    TimeOutReset()
-                                    RetryCountReset()
-                            else:
-                                
-                                ToggleAttack(False)
+            pierre(True)
+            
     ###VonBon Normal###
     elif KillVonBon:
-        print("Doing Von Bon")
+        #print("Doing Von Bon")
         #toggleKami(False)
         
         if VonBonNormal:
@@ -2476,95 +2659,12 @@ if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAl
                 SCLib.UpdateVar("KillVonBon", False)
                 ResetNowLockedFunction()
                 RetryCountReset()
-            if CurrentChannel != 20:
-                print("Change to Channel 20")
-                Terminal.ChangeChannel(20)
-            else:
-                if fieldID not in TerporalCrevasseNormal:
-                    if fieldID not in EastGardenNormal:
-                        if fieldID != ColossalRoot:
-                            GotoRootAbyss()
-                        else:
-                            if Inventory.GetItemCount(4033611) < 1:
-                                print("Missing Gnarled Wooden Key, Buying one before continue")
-                                BuyGnarledWoodenKey()
-                            else:
-                                Party.CreateParty()
-                                enter_boss(vonbon_portal)
-                                RetryCountAdd()
-                    else:
-                        if not NowLockedVar:
-                            mob = Field.FindMob(7120110)
-                            if mob.valid:
-                                toggleKami(True)
-                                ToggleAttack(True)
-                                
-                                
-                                print("Killing Blazing Imps")
-                            else:
-                                ToggleAttack(False)
-                                toggleKami(False)
-                                
-                                if pos.x != 3352:
-                                    Character.Teleport(3352, 155)
-                                else:
-                                    Character.EnterPortal()
-                        else:
-                            print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                            SCLib.UpdateVar("KillVonBon", False)
-                            ResetNowLockedFunction()
-                else:
-                    NowLockedFunction()
-                    boss = Field.FindMob(NormalVonBon)
-                    if boss.valid:
-                        ToggleAttack(True)
-                        
-                        toggleKami(True)
-                        toggleNoBossMapEffect(True)
-                        
-                        DidSpawn()
-                        print("Killing boss Standby")
-                    else:
-                        if HasSpawned:
-                            toggleKami(False)
-                            print("VonBon is dead, Waiting 5 sec before continue")
-                            Terminal.SetCheckBox("Kami Loot",True)
-                            Terminal.SetCheckBox("Auto Loot",True)
-                            time.sleep(5)
-                            Terminal.SetCheckBox("Kami Loot",False)
-                            Terminal.SetCheckBox("Auto Loot",False)
-                            if pos.x != -1090:
-                                Character.Teleport(-1090, 453)
-                                time.sleep(1)
-                            else:
-                                Character.EnterPortal()
-                                time.sleep(0.5)
-                                Character.EnterPortal()
-                                time.sleep(1)
-                                SCLib.UpdateVar("KillVonBon", False)
-                                ResetSpawn()
-                                ResetNowLockedFunction()
-                                RetryCountReset()
-                        else:
-                            find = Field.FindReactor(vonbon_reactor)
-                            if TimedOut() and not find.valid:
-                                if pos.x != -1090:
-                                    Character.Teleport(-1090, 453)
-                                else:
-                                    time.sleep(1)
-                                    Character.EnterPortal()
-                                    time.sleep(0.5)
-                                    Character.EnterPortal()
-                                ResetSpawn()
-                                ResetNowLockedFunction()
-                                TimeOutReset()
-                            else:
-                                InteractVonBonNormal()
-                                ToggleAttack(False)
+            vonbon(True)
+            
                                 
     ###Vellum Normal###
     elif KillVellum:
-        print("Doing Vellum")
+        #print("Doing Vellum")
         boss = Field.FindMob(NormalVellum)
         if not boss.valid:
             toggleKami(False)
@@ -2574,100 +2674,7 @@ if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAl
                 SCLib.UpdateVar("KillVellum", False)
                 ResetNowLockedFunction()
                 RetryCountReset()
-            if CurrentChannel != 20:
-                print("Change to Channel 20")
-                Terminal.ChangeChannel(20)
-            else:
-                if fieldID not in AbyssalCaveNormal:
-                    if fieldID not in NorthGardenNormal:
-                        if fieldID != ColossalRoot:
-                            GotoRootAbyss()
-                        else:
-                            if Inventory.GetItemCount(4033611) < 1:
-                                print("Missing Gnarled Wooden Key, Buying one before continue")
-                                BuyGnarledWoodenKey()
-                            else:
-                                Party.CreateParty()
-                                enter_boss(vellum_portal)
-                                RetryCountAdd()
-                    else:
-                        if not NowLockedVar:
-                            mob = Field.FindMob(7120111)
-                            if mob.valid:
-                                toggleKami(True)
-                                ToggleAttack(True)
-                                
-                                
-                                print("Need to kill som more Pointy imps to enter next map")
-                            else:
-                                toggleKami(False)
-                                ToggleAttack(False)
-                                
-                                print("Moving on")
-                                if pos.x != 2290:
-                                    Character.Teleport(2290, 179)
-                                else:
-                                    print("Entering Vellum Normal map")
-                                    Key.Press(0x26)
-                        else:
-                            print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                            SCLib.UpdateVar("KillVellum", False)
-                            ResetNowLockedFunction()
-                else:
-                    NowLockedFunction()
-                    boss = Field.FindMob(NormalVellum)
-                    if boss.valid:
-                        ToggleAttack(True)
-                        
-                        DidSpawn() #-410 434
-                        if pos.x != boss.x-120:
-                            Character.Teleport(boss.x-120,434)
-                        toggleNoBossMapEffect(True)
-                        
-                        print("Killin Vallum Standby")
-                    else:
-                        if HasSpawned:
-                            toggleKami(False)
-                            print("Vallum is dead, waiting 5 sec before continue")
-                            Terminal.SetCheckBox("Kami Loot",True)
-                            Terminal.SetCheckBox("Auto Loot",True)
-                            time.sleep(5)
-                            Terminal.SetCheckBox("Kami Loot",False)
-                            Terminal.SetCheckBox("Auto Loot",False)
-                            if pos.x != -1758:
-                                Character.Teleport(-1758, 440)
-                                time.sleep(1)
-                            else:
-                                Character.EnterPortal()
-                                time.sleep(0.5)
-                                Character.EnterPortal()
-                                time.sleep(1)
-                                ResetSpawn()
-                                ResetNowLockedFunction()
-                                RetryCountReset()
-                                if job in KannaJobs:
-                                    Terminal.SetCheckBox("Grenade Kami",True)
-                                    Terminal.SetSpinBox("MonkeySpiritsNDdelay",40)
-                                time.sleep(1)
-                                if fieldID not in AbyssalCaveNormal:
-                                    SCLib.UpdateVar("KillVellum", False)
-                                print("Done all RA bosses, moving to zakum")
-                        else:
-                            find = Field.FindReactor(vellum_reactor)
-                            if TimedOut() and not find.valid:
-                                if pos.x != -1758:
-                                    Character.Teleport(-1758, 440)
-                                else:
-                                    time.sleep(1)
-                                    Character.EnterPortal()
-                                    time.sleep(0.5)
-                                    Character.EnterPortal()
-                                ResetSpawn()
-                                ResetNowLockedFunction()
-                                TimeOutReset()
-                            else:
-                                InteractVellumNormal()
-                                ToggleAttack(False)
+            vellum(True)
                                 
     elif KillZakumDaily == False and (fieldID == TheDoorToZakum or fieldID == EntranceToZakumAlter):
         toggleKami(False)
@@ -2678,24 +2685,33 @@ if GameState.IsInGame() or GameState.IsInCashShop() and not SCLib.GetVar("DoneAl
                 Character.Teleport(-3003, -220)
                 time.sleep(0.5)
                 Character.EnterPortal()
+                time.sleep(0.5)
+                Character.EnterPortal()
+                Character.EnterPortal()
                 time.sleep(1)
                 if fieldID != TheDoorToZakum:
                     SCLib.UpdateVar("KillZakumDaily",False)
         elif (fieldID == TheDoorToZakum or fieldID == EntranceToZakumAlter or fieldID == TheCaveOfTrials3Zakum):
             print("Moving to a location where MapRusher works")
             if pos.x != -1599:
-                Terminal.SetCheckBox("Auto Equip",False)
+                #Terminal.SetCheckBox("Auto Equip",False) 
                 Character.Teleport(-1599, -331)
                 time.sleep(0.5)
                 Character.EnterPortal()
+                time.sleep(0.2)
+                Character.EnterPortal()
+                time.sleep(0.2)
+                Character.EnterPortal()
+                
                 
                 
 
     elif KillZakumDaily:
         toggleKami(False)
         ToggleAttack(False)
+        ToggleMobDisarm(True)
         
-        print("Doing Zakum")
+        #print("Doing Zakum")
         Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
         Terminal.SetCheckBox('filter_equip',False)
         pos = Character.GetPos()
@@ -2822,15 +2838,18 @@ elif GameState.GetLoginStep() == 2:
         target_char = None
     if target_char is None:
         print("Reached end of character list")
-        SCLib.UpdateVar("DoneAll",True)
-        Terminal.SetLineEdit("LoginChar", str(accountData['orig_char']))
-        Terminal.SetCheckBox("Auto Login",True)
-        time.sleep(5)
-        accountData['mule_number'] = start_char_number
+        #SCLib.UpdateVar("DoneAll",True)
+        #Terminal.SetLineEdit("LoginChar", str(accountData['orig_char']))
+        accountData['mule_number'] = int(start_char_number)
         writeJson(accountData,accountId)
-        time.sleep(3)
+        Terminal.SetLineEdit("LoginChar", str(accountData['mule_number']))
+        Terminal.SetCheckBox("Auto Login",True)
+        SCLib.StopVars()
+        time.sleep(5)
     else:
         Terminal.SetLineEdit("LoginChar", str(accountData['mule_number']))
         Terminal.SetCheckBox("Auto Login",True)
         SCLib.StopVars()
         time.sleep(5)
+
+ToggleSkill()

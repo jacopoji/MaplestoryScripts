@@ -19,13 +19,17 @@ idBlackList     = []
 # 1 Follow bots only in whitelisted maps
 # 2 Follow bots except in blacklisted maps
 # 3 Follow bots only in current map
+victoriaMaps = [120000400,101020300,101020200,101020000,102020200,102020000]
 blackHeavenMaps = [310070460,310070480,105300210,105300201,310070490]
 goldenBeachMaps = [120040100,120040100,120040300,120041000,120041100,120041200,120041300,120041400,120041500,120041600,120041700,120041800]
+templeOfTimeMaps = [270010100,270010200,270010300,270010400,270010500,270020100,270020200,270020300,270020400,270020500,270030100,270030200,270030300,270030400,270030500,270030600,270030610,270030620,270030630]
 mapFilter       = 1
-mapWhiteList    = [105300209,310070470,224000142,102030100,102030200,273040300,273020300,271030540,801030000,240090700,240040521,251010500,240030101,220070100,220070300,240010600,120041100,105020400,200010301,260010300,260020400,240010900,102040500,866000130,100020400,101030500,103030000,102030000,105010301,211040200,260020500,261020300,240010700,224000100,251010100,103041115,221030400,221030620,271030540,273020000,240010600,260020700]
+mapWhiteList    = [102030400,105300209,310070470,224000142,102030100,102030200,273040300,273020300,271030540,801030000,240090700,240040521,251010500,240030101,220070100,220070300,240010600,120041100,105020400,200010301,260010300,260020400,240010900,102040500,866000130,100020400,101030500,103030000,102030000,105010301,211040200,260020500,261020300,240010700,224000100,251010100,103041115,221030400,221030620,271030540,273020000,240010600,260020700]
 mapBlackList    = []
 mapWhiteList.extend(blackHeavenMaps)
 mapWhiteList.extend(goldenBeachMaps)
+mapWhiteList.extend(templeOfTimeMaps)
+mapWhiteList.extend(victoriaMaps)
 # Maximum time spent on each bot. 
 # Set True  if you like to have your kanna stay for given time period in the map
 # Set False if you like to move to next bot right after finishing kishin.
@@ -230,9 +234,14 @@ def CashItemResLoadLockerDone():
             Terminal.LeaveCashShop()
     else:
         Terminal.LeaveCashShop()
-        toggle_rush_by_level(True)
+        ToggleRushByLevel(True)
         Terminal.StopRush()
  
+def ToggleRushByLevel(indicator):
+    Terminal.SetCheckBox("Rush By Level",indicator)
+    Terminal.SetRushByLevel(indicator)
+
+
 def CashItemInfoDecode(iPacket):
     pCashItemInfo.liSN = iPacket.ReadLong(8)
     dwAccountID = iPacket.ReadLong(4)
@@ -262,7 +271,7 @@ level = Character.GetLevel()
 if GameState.IsInGame() and job in [4211, 4212]:
     if Inventory.GetItemCount(5040004) == 0 and Inventory.GetEmptySlotCount(5) > 0 and Character.GetMeso() >= 5200000:
             print("Need to buy hyper teleport rock")
-            #toggle_rush_by_level(False)
+            #ToggleRushByLevel(False)
             Terminal.SetCheckBox("Auto Attack",False)
             Terminal.SetCheckBox("Skill Injection",False)
             Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)

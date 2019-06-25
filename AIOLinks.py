@@ -21,7 +21,7 @@ getSpider = False
 DoBlackGate = False
 doSleepyWood = False
 doBeach = False
-get_pensalir = True
+get_pensalir = False
 #Key to restart pers. variables
 HotKey = 0x7A
 
@@ -53,8 +53,8 @@ BuyByMesoRequest = 85
 LoadLockerDoneResult = 2
 MoveLToSRequest = 15
 
-CP_UserHyperSkillUpRequest = 513 # 0x0201
-LP_ChangeSkillRecordResult = 97 # 0x0061
+CP_UserHyperSkillUpRequest = 515 # 0x0203
+LP_ChangeSkillRecordResult = 99 # 0x0063
 
 #equip slot numbers
 helmet_slot = -1
@@ -1044,6 +1044,15 @@ def Exploit1():
         if field_id == 224000101:
             Terminal.StopRush()
 
+def AssignHyperStats():
+    hyperStats = [(80000400,15),(80000401,15),(80000402,15),(80000403,15),(80000404,15),(80000405,15),(80000406,10),(80000409,15),(80000410,15),(80000412,15),(80000413,15),(80000414,15),(80000419,15),(80000420,15)]
+    for hyperStat in hyperStats:
+        if Character.GetSkillLevel(hyperStat[0]) < hyperStat[1]:
+            hyperStatPacket = Packet.COutPacket(headers.level_skill_header)
+            hyperStatPacket.EncodeBuffer("** ** ** ** {} FFFFFFFA".format(hex(hyperStat[0])[2:].zfill(8)))
+            Packet.SendPacket(hyperStatPacket)
+            print("Assigning a skill point to {}".format(hyperStat[0]))
+
 def EventQuests():
     #StartQuest(52516, 9330195)
     #StartQuest(52517, 9330195)
@@ -1589,6 +1598,7 @@ def HasPensalir(printInfo = True):
     utgard_fan = 1552102
 
 def EquipItem(item_pos,equip_slot,throw_old = False):
+    print("Equipping item from "+item_pos + "to" + equip_slot)
     target_equip = Inventory.GetItem(1,item_pos).id
     equip_success = False
     Terminal.SetCheckBox("Auto Equip",False)
@@ -4066,11 +4076,14 @@ def PhantomThirdJobAdv():
     if quest1 != 2:
         if quest1 == 0:
             Quest.StartQuest(ThePoorTheRich,0)
+            print("1.0")
         elif quest1 == 1:
+            print("1.1")
             if Quest.CheckCompleteDemand(ThePoorTheRich,0) == 0:
                 Quest.CompleteQuest(ThePoorTheRich,0)
     elif quest2 != 2:
         if quest2 == 0:
+            print("2.0")
             Quest.StartQuest(TheLowdown,0)
         elif quest2 == 1:
             if Quest.CheckCompleteDemand(TheLowdown,0) == 0:
@@ -4443,6 +4456,10 @@ def AranFirstJobAdv():
                 Quest.CompleteQuest(gift_for_the_hero, putzki_id)
                 time.sleep(1)
                 Terminal.Rush(snow_island - 90000)
+    elif field_id == 140090500:
+        DungeonTeleport()
+    elif field_id == 140010000:
+        TeleportEnter(-101,86)
 
     elif field_id == snow_island - 90000:
         #if pos.x != -208:
@@ -5963,12 +5980,13 @@ def ResistanceFirstJobAdv():
             mascot = Quest.GetQuestState(23005)
             mysteriousInvitation = Quest.GetQuestState(23010)
             done_list = accountData['done_links']
-            if "Wild Hunter" not in done_list:
-                targetJobQuest = 23012
-                Instructor = 2151002
-            elif "Blaster" not in done_list:
+            
+            if "Blaster" not in done_list:
                 targetJobQuest = 23160
                 Instructor = 2151000
+            elif "Wild Hunter" not in done_list:
+                targetJobQuest = 23012
+                Instructor = 2151002
             elif "Battle Mage" not in done_list:
                 targetJobQuest = 23011
                 Instructor = 2151001
@@ -9324,7 +9342,7 @@ def SetPotion():
 
 def ShowStatus():
     if GameState.IsInGame():
-        timerSecond = 20
+        timerSecond = 40
         statusString = ""
         if Terminal.GetProperty("timeOut",0) == 0:
             Terminal.SetProperty("timeOut",time.time())
@@ -9342,6 +9360,8 @@ def ShowStatus():
                 Terminal.SetProperty("currentExp",Character.GetExp())
                 if expPerSecond == 0:
                     Terminal.StopRush()
+                    if not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("GettingBoogie"):
+                        ToggleRushByLevel(True)
                 
 
             #Show meso status
@@ -9361,8 +9381,8 @@ def ShowStatus():
 
 def vulcan():
     if GameState.IsInGame() and ((int(time.time())%8==0) or (Character.HasBuff(2, 37110009)==False and Character.HasBuff(2, 37120012)==False)):
-        Vulcan = Packet.COutPacket(0x0151)
-        Vulcan.Encode4(0x17D7AF14)
+        Vulcan = Packet.COutPacket(0x033E)
+        Vulcan.Encode4(0x023640F1)
         Vulcan.EncodeBuffer("00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00")
         Packet.SendPacket(Vulcan)
     return
@@ -9441,7 +9461,7 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
     Terminal.SetRadioButton("SIRadioMelee",True)
     Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
     Terminal.SetCheckBox("Speedy Gonzales",True)
-    #count = 0
+    count = 0
     if siSkill != 32120055:
         delay = 30*math.ceil(delay*1000 * (10+attackSpeed)/480)/1000
     #print("The delay for skill {} is {}, starting si".format(siSkill,delay))
@@ -9464,18 +9484,18 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
         time.sleep(delay+0.05)
         #if Terminal.IsRushing():
         #    break
-        #if count >= 30:
-        #    break
+        if count >= 30:
+            break
         if siSkill == 27111303 and not(Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219)):
             break
-        #count += 1
+        count += 1
     #print("Si ended due to break options")
-    Terminal.SetProperty("IssueThread",True)
+    #Terminal.SetProperty("IssueThread",True)
 def AttackSemiNDMagic(siSkill,dummySkill,delay,on,attackSpeed = 4):
     try:
-        if Terminal.GetProperty("IssueThread",True):
-            SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed))
-            Terminal.SetProperty("IssueThread",False)
+        #if Terminal.GetProperty("IssueThread",True):
+        SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed))
+        #    Terminal.SetProperty("IssueThread",False)
     except:
         pass
         
@@ -9508,10 +9528,14 @@ def ToggleAttack(on):
             Terminal.SetCheckBox("Auto AP",True)
 
     if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBeach") and not SCLib.GetVar("DoingSleepy"): # kami control interupt by job adv script and zakum script
-        ToggleKami(on)
+        noKami = [271030540,273020300,273040300]
+        if field_id not in noKami:
+            ToggleKami(on)
+        elif field_id in noKami:
+            ToggleKami(False)
     #print(SCLib.GetVar("DoingJobAdv"))
     if not SCLib.GetVar("DoingJobAdv") and not SCLib.GetVar("DoingZakum"):
-        if Terminal.GetCheckBox("Legit Vac") and Terminal.GetCheckBox("Kami Vac") and field_id not in mobFalldownBlacklist:# and not Terminal.GetCheckBox("Melee No Delay"):
+        if Terminal.GetCheckBox("Legit Vac") and field_id not in mobFalldownBlacklist:# and not Terminal.GetCheckBox("Melee No Delay"):
             Terminal.SetCheckBox("Mob Falldown",on)
         else:
             if Terminal.GetCheckBox("Mob Falldown"):
@@ -9563,7 +9587,7 @@ def ToggleAttack(on):
     elif job == 4210: #kanna 2nd
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetSpinBox("charm_delay",100)
-        Terminal.SetCheckBox("charm_fma",on)
+        Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
         Terminal.SetSpinBox("SkillInjection", 100)
         Terminal.SetLineEdit("SISkillID","42001006")
@@ -9572,7 +9596,7 @@ def ToggleAttack(on):
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 4211:#kanna 3rd
         Terminal.SetSpinBox("charm_delay",100)
-        Terminal.SetCheckBox("charm_fma",on)
+        Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
         Terminal.SetCheckBox("Auto Attack",on)
@@ -9582,19 +9606,19 @@ def ToggleAttack(on):
         Terminal.SetCheckBox("bot/summon_kami",False)
         Key.Set(0x47,1,42111003) #kishin
     elif job == 4212: #kanna 4th 
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             Terminal.SetSpinBox("charm_delay",100)
-            Terminal.SetCheckBox("charm_fma",on)
+            Terminal.SetCheckBox("charm_fma",False)
             Terminal.SetCheckBox("Summon Kishin",False)
             Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
             Terminal.SetSpinBox("autoattack_spin",7500)
             Terminal.SetComboBox("AttackKey",36)
-            Terminal.SetCheckBox("Skill Injection",False) #42111011
-            #AttackSemiNDMagic(42111000,42001006,0.70,on)
+            #Terminal.SetCheckBox("Skill Injection",False) #42111011
+            AttackSemiNDMagic(42111000,42001006,0.70,on)
         Terminal.SetCheckBox("Auto Attack",on)
         Terminal.SetSpinBox("autoattack_spin",7500)
         Terminal.SetComboBox("AttackKey",36)
@@ -9623,7 +9647,7 @@ def ToggleAttack(on):
             #AttackAuto(27111202,on)
             AttackSI(27101202,on,200)
     elif job == 2712: #lumi fourth job
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9645,7 +9669,7 @@ def ToggleAttack(on):
         AttackSIND(31201010,on,100)
         #AttackAuto(31011000,on)
     elif job == 3121 or job == 3122: #DA third job and fourth job
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9658,7 +9682,7 @@ def ToggleAttack(on):
         else:
             AttackSemiNDMagic(31001008,31001008,0.55,on)
     elif job == 3112: #DS fourth job
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9691,7 +9715,7 @@ def ToggleAttack(on):
         #AttackSIND(23111000,on,250)
     elif job == 2312: #Mercedes 4th
         #AttackAuto(23111000)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9720,7 +9744,7 @@ def ToggleAttack(on):
     elif job == 4111: #Hayato 3rd 41111011
         AttackSemiNDMagic(41111011,41111011,0.45,on)
     elif job == 4112: #Hayato 4th 41121011
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9737,13 +9761,14 @@ def ToggleAttack(on):
         AttackSemiNDMagic(36111009,36111009,0.81,on)
         #AttackSemiNDMagic(36111010,36111010,0.72,on)
     elif job == 3612:#Xenon 4th 36121000
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             if Character.GetSkillLevel(36121001) >= 1:
-                AttackSemiNDMagic(36121011,36121011,1.38,on)
+                #AttackSemiNDMagic(36121011,36121011,1.38,on)
+                SetSIND("36121011;36121000",150,on)
             else:
                 AttackSI(36121000,on,110)
     elif job == 2400: #Phantom 1st 24001000
@@ -9755,7 +9780,7 @@ def ToggleAttack(on):
     elif job == 2411: #Phantom 3rd 24111000
         AttackSemiNDMagic(24111000,24111000,0.99,on)
     elif job == 2412: #Phantom 4th 24121000
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9785,7 +9810,7 @@ def ToggleAttack(on):
         if job != CadenaJobs[-1]:
             AttackSIND("64001001;64001006",on,100)
         else:
-            if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            if level >= 160 and Character.GetSkillLevel(32121052) == 1:
                 #AttackSIND(32120055,32120055,0.45,on)
                 #AttackSIND("32120055;64001001",on,100)
                 AttackSemiNDMagic(32120055,32120055,0.45,on)
@@ -9794,7 +9819,7 @@ def ToggleAttack(on):
             else:
                 AttackSIND("64120000;64001001",on,100)
     elif job in ArkJobs: #Ark 1st + 2nd + 3rd 155001100
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9821,7 +9846,7 @@ def ToggleAttack(on):
         AttackSIND(22140010,on,100)
         
     elif job == 2217: #Evan 4th 22170061 SI/ND
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9841,9 +9866,10 @@ def ToggleAttack(on):
     elif job in HeroJobs and field_id in curbrockhideout: #1001005
         AttackAuto(1001005,on)
     elif job == 111: #crusader 1111010
-        AttackSIND(1111010,on,450)
+        #AttackSIND(1111010,on,450)
+        AttackSemiNDMagic(1111010,1111010,0.85,on)
     elif job == 112: #Hero 1120017
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9858,7 +9884,7 @@ def ToggleAttack(on):
         #AttackAuto(1211008,on)
         AttackSI(1201011,on)
     elif job == 122: #Paladin 1211008
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9884,7 +9910,7 @@ def ToggleAttack(on):
     elif job == 132: #Dark Knight
         #AttackAuto(1321012,on)
         #AttackSIND(1321012,on,450)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9902,7 +9928,7 @@ def ToggleAttack(on):
         AttackAuto(2211002,on)
         
     elif job == 222: #IL archmage
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9924,7 +9950,7 @@ def ToggleAttack(on):
         AttackSI(2101004,on,100,"SIRadioMagic") 
         
     elif job == 212: #FP archmage
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9943,7 +9969,7 @@ def ToggleAttack(on):
     elif job == 231: #priest
         AttackAuto(2311004,on)
     elif job == 232: #Bishop
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9967,7 +9993,7 @@ def ToggleAttack(on):
         #AttackSIND(3111003,on,300)
         
     elif job == 312: #Bowmaster
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -9980,7 +10006,7 @@ def ToggleAttack(on):
         AttackAuto(3211009,on)
         #AttackSIND(3211009,on,400)
     elif job == 322: #Marksman
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10009,7 +10035,7 @@ def ToggleAttack(on):
         
     elif job == 412: #nightlord
         #print(Character.GetSkillLevel(32121052))
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10029,7 +10055,7 @@ def ToggleAttack(on):
         AttackSI(4211002,on)
         
     elif job == 422: #Shadower
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10057,7 +10083,7 @@ def ToggleAttack(on):
         #AttackAuto(4321004,on)
         AttackSIND(4321004,on,450)
     elif job == 434: #dual blade 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10078,7 +10104,7 @@ def ToggleAttack(on):
         AttackAuto(5111002,on)
     elif job == 512: #Buccaneer
         #AttackAuto(5121007,on)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10092,7 +10118,7 @@ def ToggleAttack(on):
         #if level < 160:
         #    AttackSIND(5221017,on,350)
         #else:
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10140,7 +10166,7 @@ def ToggleAttack(on):
             Terminal.SetCheckBox("Auto Attack",on)
             Terminal.SetCheckBox("Skill Injection", on)
     elif job == 532: #Cannon Master
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10165,7 +10191,7 @@ def ToggleAttack(on):
         else:
             AttackSIND(5701011,on,150)
     elif job == 572: #Jett 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10185,7 +10211,7 @@ def ToggleAttack(on):
     elif job == 1112: #Dawn Warrior 4th
         dummySkill = 11001020
         dummyDelay = 0.81
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10209,7 +10235,7 @@ def ToggleAttack(on):
         AttackAuto(12001020,on)
         
     elif job == 1212: #BW 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10236,7 +10262,7 @@ def ToggleAttack(on):
         AttackSI(13101020,on)
     elif job == 1312: #Wind Archer 4th
         #AttackAuto(13121002,on)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10251,7 +10277,7 @@ def ToggleAttack(on):
     elif job == 1411: #Night Walker 3rd
         AttackAuto(14111022,on)
     elif job == 1412: #Night Walker 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10273,7 +10299,7 @@ def ToggleAttack(on):
         #AttackAuto(15111020,on)
         AttackSemiNDMagic(15111020,15111020,0.9,on)
     elif job == 1512: #Thunder breaker 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10294,7 +10320,7 @@ def ToggleAttack(on):
         AttackAuto(33111112,on)
         #AttackSI(33111010,on,100,"SIRadioMagic")
     elif job == 3312: #Wild Hunter 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10313,7 +10339,7 @@ def ToggleAttack(on):
         AttackSIND(32101001,on,250)
     elif job == 3212: #Battle Mage 4th
         if level >= 160:
-            if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            if level >= 160 and Character.GetSkillLevel(32121052) == 1:
                 AttackSemiNDMagic(32120055,32120055,0.45,on)
             elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
                 BindSkill(32121052)
@@ -10331,15 +10357,24 @@ def ToggleAttack(on):
                 AttackSIND(32101001,on,250)
     elif job == 3700: #Blaster 1st
         Terminal.SetCheckBox("General FMA",False)
-        AttackAuto(37001000,on)
+        if Character.GetSkillLevel(37001004) >= 1:
+            AttackSIND(37001004,on,80)
+        else:
+            AttackAuto(37001000,on)
     elif job in BlasterJobs and field_id in curbrockhideout: #1001005
         #Terminal.SetCheckBox("General FMA",on)
         Terminal.SetCheckBox("General FMA",False)
-        AttackAuto(37001000,on)
+        if Character.GetSkillLevel(37001004) >= 1:
+            AttackSIND(37001004,on,80)
+        else:
+            AttackAuto(37001000,on)
     elif job == 3710: #Blaster 2nd
         #Terminal.SetCheckBox("General FMA",on)
         Terminal.SetCheckBox("General FMA",False)
-        AttackAuto(37001000,on)
+        if Character.GetSkillLevel(37001004) >= 1:
+            AttackSIND(37001004,on,80)
+        else:
+            AttackAuto(37001000,on)
     elif job == 3711: #Blaster 3rd
         #AttackAuto(37001000,on)
         AttackSI(37110006,on,80)
@@ -10349,7 +10384,7 @@ def ToggleAttack(on):
         #AttackAuto(37001000,on)
         Terminal.SetCheckBox("General FMA",False)
         vulcan()
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10364,16 +10399,17 @@ def ToggleAttack(on):
     elif job == 3511: #Mechanic 3rd
         AttackAuto(35111006,on)
     elif job == 3512: #Mechanic 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
-            AttackSemiNDMagic(35111015,35111015,0.84,on)
+            if Character.HasBuff(2, 35001002):
+                AttackSemiNDMagic(35111015,35111015,0.84,on)
             #AttackSI(35121015,on,250)
         #AttackAuto(35111006,on)
     elif job == 11212: #Beast Tamer
-        #if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        #if level >= 160 and Character.GetSkillLevel(32121052) == 1:
         #    AttackSemiNDMagic(32120055,32120055,0.45,on)
         #elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
         #    BindSkill(32121052)
@@ -10407,18 +10443,22 @@ def ToggleAttack(on):
         Terminal.SetComboBox("AttackKey",1)
         Terminal.SetSpinBox("autoattack_spin",100)
         
-    elif job == 2100 or job == 2110: #Aran 1st 21000007
+    elif job == 2100:# or job == 2110: #Aran 1st 21000007
         AttackSI(21000006,on,80)
         #AttackSemiNDMagic(21000006,21000006,0.4,on)
-            
+
+    elif job == 2110:
+        SetSIND("21000007;21100018",100,on)
 
     elif job == 2111 or job == 2112: #Aran 3rd
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
-            AttackSemiNDMagic(21111021,21111021,0.81,on)
+            #AttackSemiNDMagic(21111021,21111021,0.81,on)
+            SetSIND("21110028;21100018",100,on)
+
             #if Character.HasBuff(2,21110016):
             #    AttackSIND(21111021,on,450)
             #else:
@@ -10448,7 +10488,7 @@ def ToggleAttack(on):
         #AttackAuto(142101002,on)
     elif job == 14211 or job == 14212: #Kinesis 3rd + 4th 142111002
         #
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10468,7 +10508,7 @@ def ToggleAttack(on):
         #AttackSI(65111002,on,100,"SIRadioMagic")
         AttackSemiNDMagic(65111002,65111002,1.2,on)
     elif job == 6512: #AB 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10480,7 +10520,7 @@ def ToggleAttack(on):
     elif job in KaiserJobs and job != KaiserJobs[3]: #Kaiser 1st 2nd 3rd 4th
         AttackSemiNDMagic(61001005,61001005,0.36,on)
     elif job == KaiserJobs[3]:
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10489,14 +10529,14 @@ def ToggleAttack(on):
     elif job == 2500: #Shade 1st
         AttackAuto(25001000,on)
     elif job == 2510: #Shade 2nd
-        AttackSemiNDMagic(25101000,25101000,1.19,on)
+        AttackSemiNDMagic(25101000,25101000,0.75,on)
     elif job == 2511: #Shade 3rd
         AttackSIND(25110001,on,300)
         #AttackSemiNDMagic(25110001,2511001,0.99,on)
         #AttackSIND(25111000,on,800)
     elif job == 2512: #Shade 4th
         #AttackSI(25120003,on,100)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10518,7 +10558,7 @@ def ToggleAttack(on):
         #AttackSIND(51111006,on,600)
     elif job == 5112: #Mihile 4th
         delay = 0.84
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10619,7 +10659,7 @@ def ToggleAttackQuest(on):
     elif job == 4210: #kanna 2nd
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetSpinBox("charm_delay",100)
-        Terminal.SetCheckBox("charm_fma",on)
+        Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
         Terminal.SetSpinBox("SkillInjection", 100)
         Terminal.SetLineEdit("SISkillID","42001006")
@@ -10628,7 +10668,7 @@ def ToggleAttackQuest(on):
         Terminal.SetSpinBox("autoattack_spin",100)
     elif job == 4211:#kanna 3rd
         Terminal.SetSpinBox("charm_delay",100)
-        Terminal.SetCheckBox("charm_fma",on)
+        Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
         Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
         Terminal.SetCheckBox("Auto Attack",on)
@@ -10638,13 +10678,13 @@ def ToggleAttackQuest(on):
         Terminal.SetCheckBox("bot/summon_kami",False)
         Key.Set(0x47,1,42111003) #kishin
     elif job == 4212: #kanna 4th 
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             Terminal.SetSpinBox("charm_delay",100)
-            Terminal.SetCheckBox("charm_fma",on)
+            Terminal.SetCheckBox("charm_fma",False)
             Terminal.SetCheckBox("Summon Kishin",False)
             Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
             Terminal.SetSpinBox("autoattack_spin",7500)
@@ -10679,7 +10719,7 @@ def ToggleAttackQuest(on):
             #AttackAuto(27111202,on)
             AttackSI(27101202,on,200)
     elif job == 2712: #lumi fourth job
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10701,7 +10741,7 @@ def ToggleAttackQuest(on):
         AttackSIND(31201010,on,100)
         #AttackAuto(31011000,on)
     elif job == 3121 or job == 3122: #DA third job and fourth job
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10714,7 +10754,7 @@ def ToggleAttackQuest(on):
         else:
             AttackSI(31001008,on)
     elif job == 3112: #DS fourth job
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10748,7 +10788,7 @@ def ToggleAttackQuest(on):
         #AttackSIND(23111000,on,250)
     elif job == 2312: #Mercedes 4th
         #AttackAuto(23111000)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10777,7 +10817,7 @@ def ToggleAttackQuest(on):
     elif job == 4111: #Hayato 3rd 41111011
         AttackSI(41111011,on,100)
     elif job == 4112: #Hayato 4th 41121011
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10794,13 +10834,14 @@ def ToggleAttackQuest(on):
         AttackSI(36111009,on)
         #AttackSemiNDMagic(36111010,36111010,0.72,on)
     elif job == 3612:#Xenon 4th 36121000
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
             if Character.GetSkillLevel(36121001) >= 1:
-                AttackSemiNDMagic(36121011,36121011,1.38,on)
+                #AttackSemiNDMagic(36121011,36121011,1.38,on)
+                SetSIND("36121011;36121000",150,on)
             else:
                 AttackSI(36121000,on,110)
     elif job == 2400: #Phantom 1st 24001000
@@ -10812,7 +10853,7 @@ def ToggleAttackQuest(on):
     elif job == 2411: #Phantom 3rd 24111000
         AttackSI(24111000,on)
     elif job == 2412: #Phantom 4th 24121000
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10844,7 +10885,7 @@ def ToggleAttackQuest(on):
         else:
             AttackSIND("64120000;64001001",on,100)
     elif job in ArkJobs: #Ark 1st + 2nd + 3rd 155001100
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10871,7 +10912,7 @@ def ToggleAttackQuest(on):
         AttackSIND(22140010,on,100)
         
     elif job == 2217: #Evan 4th 22170061 SI/ND
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10893,7 +10934,7 @@ def ToggleAttackQuest(on):
     elif job == 111: #crusader 1111010
         AttackSIND(1111010,on,450)
     elif job == 112: #Hero 1120017
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10908,7 +10949,7 @@ def ToggleAttackQuest(on):
         #AttackAuto(1211008,on)
         AttackSI(1201011,on)
     elif job == 122: #Paladin 1211008
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10934,7 +10975,7 @@ def ToggleAttackQuest(on):
     elif job == 132: #Dark Knight
         #AttackAuto(1321012,on)
         #AttackSIND(1321012,on,450)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10952,7 +10993,7 @@ def ToggleAttackQuest(on):
         AttackAuto(2211002,on)
         
     elif job == 222: #IL archmage
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10974,7 +11015,7 @@ def ToggleAttackQuest(on):
         AttackSI(2101004,on,100,"SIRadioMagic") 
         
     elif job == 212: #FP archmage
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -10993,7 +11034,7 @@ def ToggleAttackQuest(on):
     elif job == 231: #priest
         AttackAuto(2311004,on)
     elif job == 232: #Bishop
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11017,7 +11058,7 @@ def ToggleAttackQuest(on):
         #AttackSIND(3111003,on,300)
         
     elif job == 312: #Bowmaster
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11030,7 +11071,7 @@ def ToggleAttackQuest(on):
         AttackAuto(3211009,on)
         #AttackSIND(3211009,on,400)
     elif job == 322: #Marksman
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11059,7 +11100,7 @@ def ToggleAttackQuest(on):
         
     elif job == 412: #nightlord
         #print(Character.GetSkillLevel(32121052))
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11079,7 +11120,7 @@ def ToggleAttackQuest(on):
         AttackSI(4211002,on)
         
     elif job == 422: #Shadower
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11106,7 +11147,7 @@ def ToggleAttackQuest(on):
         #AttackAuto(4321004,on)
         AttackSIND(4321004,on,450)
     elif job == 434: #dual blade 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11127,7 +11168,7 @@ def ToggleAttackQuest(on):
         AttackAuto(5111002,on)
     elif job == 512: #Buccaneer
         #AttackAuto(5121007,on)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11141,7 +11182,7 @@ def ToggleAttackQuest(on):
         #if level < 160:
         #    AttackSIND(5221017,on,350)
         #else:
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11170,7 +11211,7 @@ def ToggleAttackQuest(on):
         #else:
         AttackSIND("5311000;5011002",on,250)
     elif job == 532: #Cannon Master
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11194,7 +11235,7 @@ def ToggleAttackQuest(on):
         else:
             AttackSIND(5701011,on,150)
     elif job == 572: #Jett 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11214,7 +11255,7 @@ def ToggleAttackQuest(on):
     elif job == 1112: #Dawn Warrior 4th
         dummySkill = 11001020
         dummyDelay = 0.81
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11238,7 +11279,7 @@ def ToggleAttackQuest(on):
         AttackAuto(12001020,on)
         
     elif job == 1212: #BW 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11265,7 +11306,7 @@ def ToggleAttackQuest(on):
         AttackSI(13101020,on)
     elif job == 1312: #Wind Archer 4th
         #AttackAuto(13121002,on)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11280,7 +11321,7 @@ def ToggleAttackQuest(on):
     elif job == 1411: #Night Walker 3rd
         AttackAuto(14111022,on)
     elif job == 1412: #Night Walker 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11302,7 +11343,7 @@ def ToggleAttackQuest(on):
         AttackAuto(15111020,on)
         #AttackSemiNDMagic(15111020,15111020,0.9,on)
     elif job == 1512: #Thunder breaker 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11323,7 +11364,7 @@ def ToggleAttackQuest(on):
         AttackAuto(33111112,on)
         #AttackSI(33111010,on,100,"SIRadioMagic")
     elif job == 3312: #Wild Hunter 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11341,7 +11382,7 @@ def ToggleAttackQuest(on):
         AttackSIND(32101001,on,250)
     elif job == 3212: #Battle Mage 4th
         if level >= 160:
-            if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+            if level >= 160 and Character.GetSkillLevel(32121052) == 1:
                 AttackSemiNDMagic(32120055,32120055,0.45,on)
             elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
                 BindSkill(32121052)
@@ -11359,15 +11400,24 @@ def ToggleAttackQuest(on):
                 AttackSIND(32101001,on,250)
     elif job == 3700: #Blaster 1st
         Terminal.SetCheckBox("General FMA",False)
-        AttackAuto(37001000,on)
+        if Character.GetSkillLevel(37001004) >= 1:
+            AttackSIND(37001004,on,80)
+        else:
+            AttackAuto(37001000,on)
     elif job in BlasterJobs and field_id in curbrockhideout: #1001005
         #Terminal.SetCheckBox("General FMA",on)
         Terminal.SetCheckBox("General FMA",False)
-        AttackAuto(37001000,on)
+        if Character.GetSkillLevel(37001004) >= 1:
+            AttackSIND(37001004,on,80)
+        else:
+            AttackAuto(37001000,on)
     elif job == 3710: #Blaster 2nd
         #Terminal.SetCheckBox("General FMA",on)
         Terminal.SetCheckBox("General FMA",False)
-        AttackAuto(37001000,on)
+        if Character.GetSkillLevel(37001004) >= 1:
+            AttackSIND(37001004,on,80)
+        else:
+            AttackAuto(37001000,on)
     elif job == 3711: #Blaster 3rd
         #AttackAuto(37001000,on)
         AttackSI(37110006,on,80)
@@ -11376,7 +11426,7 @@ def ToggleAttackQuest(on):
     elif job == 3712: #Blaster 4th
         #AttackAuto(37001000,on)
         Terminal.SetCheckBox("General FMA",False)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11391,7 +11441,7 @@ def ToggleAttackQuest(on):
     elif job == 3511: #Mechanic 3rd
         AttackAuto(35111006,on)
     elif job == 3512: #Mechanic 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11400,7 +11450,7 @@ def ToggleAttackQuest(on):
             #AttackSI(35121015,on,250)
         #AttackAuto(35111006,on)
     elif job == 11212: #Beast Tamer
-        #if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        #if level >= 160 and Character.GetSkillLevel(32121052) == 1:
         #    AttackSemiNDMagic(32120055,32120055,0.45,on)
         #elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
         #    BindSkill(32121052)
@@ -11434,18 +11484,21 @@ def ToggleAttackQuest(on):
         Terminal.SetComboBox("AttackKey",1)
         Terminal.SetSpinBox("autoattack_spin",100)
         
-    elif job == 2100 or job == 2110: #Aran 1st 21000007
+    elif job == 2100:# or job == 2110: #Aran 1st 21000007
         AttackSI(21000006,on,80)
         #AttackSemiNDMagic(21000006,21000006,0.4,on)
-            
+
+    elif job == 2110:
+        SetSIND("21000007;21100018",100,on)   
 
     elif job == 2111 or job == 2112: #Aran 3rd
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
-            AttackSI(21000006,on,80)
+            #AttackSI(21000006,on,80)
+            SetSIND("21110028;21100018",100,on)
             #AttackSemiNDMagic(21111021,21111021,0.81,on)
             #if Character.HasBuff(2,21110016):
             #    AttackSIND(21111021,on,450)
@@ -11477,7 +11530,7 @@ def ToggleAttackQuest(on):
         AttackAuto(142101002,on)
     elif job == 14211 or job == 14212: #Kinesis 3rd + 4th 142111002
         #
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11496,7 +11549,7 @@ def ToggleAttackQuest(on):
         AttackSI(65111002,on,100,"SIRadioMagic")
         #AttackSemiNDMagic(65111002,65111002,1.2,on)
     elif job == 6512: #AB 4th
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11508,7 +11561,7 @@ def ToggleAttackQuest(on):
     elif job in KaiserJobs and job != KaiserJobs[3]: #Kaiser 1st 2nd 3rd 4th
         AttackSI(61001005,on)
     elif job == KaiserJobs[3]:
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11524,7 +11577,7 @@ def ToggleAttackQuest(on):
         #AttackSIND(25111000,on,800)
     elif job == 2512: #Shade 4th
         #AttackSI(25120003,on,100)
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11546,7 +11599,7 @@ def ToggleAttackQuest(on):
         AttackSIND(51111006,on,600)
     elif job == 5112: #Mihile 4th
         delay = 0.84
-        if level >= 160 and Character.GetSkillLevel(32121052) == 1 and useHyperExploit:
+        if level >= 160 and Character.GetSkillLevel(32121052) == 1:
             AttackSemiNDMagic(32120055,32120055,0.45,on)
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
@@ -11720,6 +11773,8 @@ def StrongholdPrequest():
 ShowStatus()
 if GameState.IsInGame():
     SafetySetting()
+    time.sleep(1)
+    AssignHyperStats()
     if not (SCLib.GetVar("DoingJobAdv") and (job == ShadeJobs[0] or job == ShadeJobs[1])) and not Terminal.IsRushing():
         if SCLib.GetVar("DoingJobAdv") or SCLib.GetVar("GettingBoogie"):
             ToggleAttackQuest(True)
@@ -11910,7 +11965,7 @@ if GameState.IsInGame():
         print("Completing Cadena First Job and Second Job")
         SCLib.UpdateVar("DoingJobAdv",True)
         CadenaFirstJobAdv()
-    elif job == 6410 and Quest.GetQuestState(34625) == 2 and level <50:
+    elif job == 6410 and Quest.GetQuestState(34625) == 2 and level <50 and SCLib.GetVar("DoinJobAdv"):
         print("Cadena Job Pre done")
         SCLib.UpdateVar("DoingJobAdv",False)
     elif job == 6410 and level >= 60 and not SCLib.GetVar("DoingCurbrock"):
@@ -14220,7 +14275,7 @@ if job in KannaJobs and level >= 145 and level < 152:
         time.sleep(5)
 
 def GetNextChar(current_list):
-    doAllJobs = False
+    doAllJobs = True
     autoChar_resistance = 1
     autoChar_explorer = 2
     autoChar_cygnus = 3
@@ -14286,14 +14341,14 @@ def GetNextChar(current_list):
     elif "Kanna" not in current_list:
         return autoChar_kanna
     elif doAllJobs:
-        explorer_jobs = ["Shadower","Night Lord","Hero","Paladin","Dark Knight","Ice/Lightning Archmage","Fire/Poison Archmage","Bishop","Bowmaster","Marksman","Corsair","Buccaneer"]
-        for explorer_job in explorer_jobs:
-            if explorer_job not in current_list:
-                return autoChar_explorer
         resistance_jobs = ["Blaster","Wild Hunter","Battle Mage","Mechanic"]
         for resistance_job in resistance_jobs:
             if resistance_job not in current_list:
                 return autoChar_resistance
+        explorer_jobs = ["Shadower","Night Lord","Hero","Paladin","Dark Knight","Ice/Lightning Archmage","Fire/Poison Archmage","Bishop","Bowmaster","Marksman","Corsair","Buccaneer"]
+        for explorer_job in explorer_jobs:
+            if explorer_job not in current_list:
+                return autoChar_explorer
         cygnus_jobs = ["Dawn Warrior","Wind Archer","Night Walker","Thunder Breaker","Blaze Wizard"]
         for cygnus_job in cygnus_jobs:
             if cygnus_job not in current_list:
@@ -14367,3 +14422,41 @@ if int(Terminal.GetLineEdit("LoginChar")) >= Login.GetCharCount() and GameState.
         Terminal.SetCheckBox("settings/autochar",True)
     time.sleep(1)
     
+
+##########Map specific settings
+if field_id == 105020400:
+    Terminal.SetLineEdit("nextmapccportal","west00")
+elif field_id == 105020401:
+    DungeonTeleport()
+elif field_id == 273040300:
+    if pos.x != -1271:
+        Character.Teleport(-1271,1215)
+        time.sleep(30)
+elif field_id == 271030540:
+    if pos.x != -151:
+        Character.Teleport(-151,208)
+        time.sleep(30)
+elif field_id == 273020300:
+    if pos.x != -695:
+        Character.Teleport(-695,375)
+        time.sleep(30)
+else:
+    Terminal.SetLineEdit("nextmapccportal","west00")
+
+
+buffmap_id = 701100015
+xpbonus = 2023532
+mesobonus = 2023533
+attbonus = 2023534
+hs = 2311003
+htr = 5040004
+
+if level > 63 and Inventory.FindItemByID(htr).valid and not SCLib.GetVar("DoingCurbrock") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingJobAdv"):
+    # Checks for Fortune Buff
+    if not Character.HasBuff(1, xpbonus):
+        #ToggleRushByLevel(False)
+        if map is not buffmap_id:
+            useHTR = Terminal.GetCheckBox("map/maprusher/hypertelerock")
+            Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
+            Terminal.Rush(buffmap_id)
+            Terminal.SetCheckBox("map/maprusher/hypertelerock",useHTR)

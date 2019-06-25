@@ -90,11 +90,11 @@ if GameState.IsInGame():
                 Terminal.SetProperty("danceDone",True)
     else:
         if Field.GetID() == 993050000:
-            if Character.GetPos().x != 2464:
-                Character.Teleport(2464,35)
-            else:
-                Character.EnterPortal()
-                time.sleep(0.3)
+            # if Character.GetPos().x != 2464:
+            #     Character.Teleport(2464,35)
+            # else:
+            #     Character.EnterPortal()
+            #     time.sleep(0.3)
             print("Need to leave map")
         else:
             time.sleep(1)

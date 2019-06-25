@@ -309,6 +309,15 @@ def GetCashItemInfo():
 
 pCashItemInfo = GetCashItemInfo()
 
+def AssignHyperStats():
+    hyperStats = [(80000400,15),(80000401,15),(80000402,15),(80000403,15),(80000404,15),(80000405,15),(80000406,10),(80000409,15),(80000410,15),(80000412,15),(80000413,15),(80000414,15),(80000419,15)]
+    for hyperStat in hyperStats:
+        if Character.GetSkillLevel(hyperStat[0]) < hyperStat[1]:
+            hyperStatPacket = Packet.COutPacket(headers.level_skill_header)
+            hyperStatPacket.EncodeBuffer("** ** ** ** {} FFFFFFFA".format(hex(hyperStat[0])[2:].zfill(8)))
+            Packet.SendPacket(hyperStatPacket)
+            print("Assigning a skill point to {}".format(hyperStat[0]))
+
 def BuyByMeso():
     Packet.BlockSendHeader(CashItemResultOpcode)
     oPacket = Packet.COutPacket(CashItemRequestOpcode)
@@ -529,7 +538,7 @@ def use_pet():
 
 def settings_first_job():
 	on_settings = ["Skill Injection","Legit Vac","Kami Vac","Auto Equip","Rush By Level"]
-	off_settings = ["Auto Attack","bot/kanna_kami","charm_fma","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+	off_settings = ["Auto Attack","bot/kanna_kami","charm_fma","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
 
 	Terminal.SetSpinBox("SkillInjection", 100)
 	Terminal.SetLineEdit("SISkillID","42001006")
@@ -541,11 +550,13 @@ def settings_first_job():
 			Terminal.SetCheckBox(options,False)
 
 def settings_second_job():
-	on_settings = ["Legit Vac","Auto Equip","Rush By Level","bot/kanna_kami","charm_fma"]
-	off_settings = ["Skill Injection","Kami Vac","Auto Attack","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+	on_settings = ["Legit Vac","Auto Equip","Rush By Level","charm_fma","Skill Injection","Kami Vac"]
+	off_settings = ["bot/kanna_kami","Auto Attack","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
+	Terminal.SetSpinBox("SkillInjection", 100)
+	Terminal.SetLineEdit("SISkillID","42101102")
 	for options in on_settings:
 		if not Terminal.GetCheckBox(options):
 			Terminal.SetCheckBox(options,True)
@@ -554,8 +565,10 @@ def settings_second_job():
 			Terminal.SetCheckBox(options,False)
 
 def settings_third_job():
-	on_settings = ["Legit Vac","Auto Equip","Auto Attack","Rush By Level","bot/kanna_kami","charm_fma"]
-	off_settings = ["Skill Injection","Kami Vac","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+	# on_settings = ["Legit Vac","Auto Equip","Auto Attack","Rush By Level","bot/kanna_kami","charm_fma"]
+	# off_settings = ["Skill Injection","Kami Vac","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+	on_settings = ["Legit Vac","Auto Equip","Skill Injection","Kami Vac","Auto Attack"]
+	off_settings = ["bot/kanna_kami","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
@@ -563,6 +576,8 @@ def settings_third_job():
 	Key.Set(0x47,1,42111003)
 	Terminal.SetSpinBox("autoattack_spin",7500)
 	Terminal.SetComboBox("AttackKey",36)
+	Terminal.SetSpinBox("SkillInjection", 100)
+	Terminal.SetLineEdit("SISkillID","42111112")
 	for options in on_settings:
 		if not Terminal.GetCheckBox(options):
 			Terminal.SetCheckBox(options,True)
@@ -572,8 +587,8 @@ def settings_third_job():
 
 def settings_fourth_job():
 	level = Character.GetLevel()
-	on_settings = ["Legit Vac","Auto Attack","charm_fma"]
-	off_settings = ["Skill Injection","Kami Vac","MonkeySpiritsNDcheck","bot/kanna_kami","settings/mesologout","Speedy Gonzales"]#,"Auto Loot","Kami Loot"
+	on_settings = ["Legit Vac","Auto Attack","MonkeySpiritsNDcheck"]
+	off_settings = ["Skill Injection","Kami Vac","bot/kanna_kami","settings/mesologout","Speedy Gonzales"]#,"Auto Loot","Kami Loot"
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
@@ -1848,7 +1863,7 @@ if jobid == 4211 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetSpinBox("FilterMeso",1000)
 ###### fourth job ########
 if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBG") and not SCLib.GetVar("BuyingExpansion") and not accountData['pet_expire']:
-	if not Terminal.GetCheckBox("charm_fma") or not Terminal.GetCheckBox("Grenade Kami"):
+	if not Terminal.GetCheckBox("MonkeySpiritsNDcheck") or not Terminal.GetCheckBox("Grenade Kami"):
 		print("Now fourth job")
 		settings_fourth_job()
 		if not Terminal.GetCheckBox("Rush By Level"):
@@ -2201,6 +2216,7 @@ if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.
 		toggle_rush_by_level(True)
 		Terminal.SetCheckBox("bot/kanna_kami",False)
 		Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
+		print("Finished rushing out of MP, return control to rush by level")
 	else:
 		print("Rushing to Monster Park")
 		rushToMP()
@@ -2211,7 +2227,7 @@ if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.
 		print("Count + 1")
 
 #auto star force pensalir gear and accessories
-if level >= 140 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and Character.GetMeso()>= 5000000 and not SCLib.GetVar("cube_lock"):
+if level >= 100 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and Character.GetMeso()>= 5000000 and not SCLib.GetVar("cube_lock"):
 	if accountData["cubing_done"]:
 		for x in range(-100, 0):
 			item = Inventory.GetItem(1, x)
@@ -2220,7 +2236,7 @@ if level >= 140 and star_force and not SCLib.GetVar("DoingMP") and not SCLib.Get
 	else:
 		for equips in equip_slot_list:
 			item = Inventory.GetItem(1,equips)
-			if item.valid and item.id in equip_valid_list and item.currentStar != star_force_level and (level < 130 or item.maxStar != 20):
+			if item.valid and item.currentStar != star_force_level and (level < 130 or item.maxStar != 20 or item.id in equip_valid_list):
 				#print("Starforcing item {}".format(item.id))
 				starItem(equips, item.currentStar, item.maxStar, star_force_level, item.id)
 		for accessories in accessory_slot_list:
@@ -2241,6 +2257,7 @@ if KillZakumDaily == False and (field_id == TheDoorToZakum or field_id == Entran
 			SCLib.UpdateVar("DoingZakum",False)
 			toggle_rush_by_level(True)
 			Terminal.SetCheckBox("map/maprusher/hypertelerock",False)
+			print("Returning Rush by level: Zakum")
 	elif (field_id == TheDoorToZakum or field_id == EntranceToZakumAlter or field_id == TheCaveOfTrials3Zakum):
 		if pos.x != -1599:
 			Character.Teleport(-1599, -331)
@@ -3104,3 +3121,6 @@ if accountData['training_done'] and GameState.GetLoginStep() == 2:
         Terminal.ChangeStatus("#################Training Done##############")
         print("Detected that training is done")
         Terminal.SetProperty("OutputInfo",True)
+
+if GameState.IsInGame():
+	AssignHyperStats()

@@ -4,7 +4,7 @@ import Field, GameState, Terminal, time, Character, Npc, Quest, Packet, os, sys,
 # gollux prequest + SunCat's auto maze crawler v197.4
 
 # tp packet
-header = 0x0340
+header = 0x0343
 
 # using kami?
 # no = 0  (gfma/fma)
@@ -43,6 +43,8 @@ def doMaze(targetMap):
       returnRoute = []
 
       while Field.GetID() != targetMap:
+         if Terminal.IsRushing():
+            continue
          if GameState.IsInGame():
             fgm(True)
             checkMap = Field.GetID()
@@ -79,7 +81,9 @@ def doMaze(targetMap):
                   print("Going to portal:", portal)
                   Character.Teleport(nextPortal.x, nextPortal.y - 10)
                   time.sleep(enterWait)
-                  Character.EnterPortal()
+                  for i in range(5):
+                     Character.EnterPortal()
+                     time.sleep(0.05)
                   time.sleep(checkWait)
                   if Field.GetID() != checkMap:
                      mapRoute.append(portal)
@@ -96,6 +100,9 @@ def doMaze(targetMap):
                               break
 
                      break
+         elif Field.GetID() == 863000017:
+            print("Disconnected from game! Exiting script...")
+            break
          else:
             print("Disconnected from game! Exiting script...")
             break
@@ -140,12 +147,15 @@ def tele(x, y):
    time.sleep(1)
 
 def goThru(x, y):
-   tele(x, y - 10)
-   print("Going thru portal.")
-   Character.EnterPortal()
-   time.sleep(.5)
-   Character.EnterPortal()
-   time.sleep(1)
+      useKami = Terminal.GetCheckBox("Kami Vac")
+      Terminal.SetCheckBox("Kami Vac",False)
+      tele(x, y - 10)
+      print("Going thru portal.")
+      Character.EnterPortal()
+      time.sleep(.5)
+      Character.EnterPortal()
+      time.sleep(1)
+      Terminal.SetCheckBox("Kami Vac",useKami)
 
 def setAttack(bool):
    if Character.GetJob() == 4212:  # kanna settings
@@ -154,30 +164,6 @@ def setAttack(bool):
       Terminal.SetCheckBox("Summon Kishin", bool)
       Terminal.SetCheckBox("bot/kishin_fma", bool)
       Terminal.SetCheckBox("Grenade Kami", bool)
-   elif Character.GetJob() == 3712:  # blaster settings
-      if Terminal.GetLineEdit("SISkillID") != "400010028":
-         Terminal.SetLineEdit("SISkillID", "400010028")
-      if Terminal.GetRadioButton("SkillInjection2") is False:
-         Terminal.SetRadioButton("SkillInjection2", True)
-      if Terminal.GetCheckBox("Melee No Delay") is False:
-         Terminal.SetCheckBox("Melee No Delay", True)
-      if Terminal.GetCheckBox("General FMA") is True:
-         Terminal.SetCheckBox("General FMA", False)
-      Terminal.SetCheckBox("Skill Injection", bool)
-      if kami == 1 and Terminal.GetCheckBox("Kami Vac") != bool:
-         Terminal.SetCheckBox("Kami Vac", bool)
-   elif Character.GetJob() == 15512:  # ark settings
-      if Terminal.GetLineEdit("SISkillID") != "155121006":
-         Terminal.SetLineEdit("SISkillID", "155121006")
-      if Terminal.GetRadioButton("SkillInjection2") is False:
-         Terminal.SetRadioButton("SkillInjection2", True)
-      if Terminal.GetSpinBox("SkillInjection") != 400:
-         Terminal.SetSpinBox("SkillInjection", 400)
-      if Terminal.GetCheckBox("Melee No Delay") is False:
-         Terminal.SetCheckBox("Melee No Delay", True)
-      if Terminal.GetCheckBox("General FMA") is True:
-         Terminal.SetCheckBox("General FMA", False)
-      Terminal.SetCheckBox("Skill Injection", bool)
    else:
       if kami == 1 and Terminal.GetCheckBox("Kami Vac") != bool:
          Terminal.SetCheckBox("Kami Vac", bool)
@@ -211,6 +197,7 @@ def hasQuest(id):  # quest is active
    return Quest.GetQuestState(id) == 1
 
 def doQuest(id):  # quest isn't complete/turned in
+   print("Checking "+str(id))
    return Quest.GetQuestState(id) != 2
 
 def questDone(quest, npc):
@@ -223,6 +210,16 @@ def wait(delay, quest, npc):
       else:
          break
 
+def ToggleLoot(indicator):
+    Terminal.SetCheckBox("Kami Loot",indicator)
+    Terminal.SetCheckBox("Auto Loot",indicator)
+
+def DungeonTeleport():
+    time.sleep(1)
+    Key.Press(0x08)
+    time.sleep(1)
+    Character.EnterPortal()
+    time.sleep(1)
 
 if GameState.IsInGame():
    # settings
@@ -268,22 +265,29 @@ if GameState.IsInGame():
       mCitadel = 301000000
 
       if doQuest(q0):
+         print("0")
          chatQuest(q0, nGrendel)
 
       elif doQuest(q1):
+         print("1")
          if needQuest(q1):
             startQuest(q1, nGrendel)
 
       elif doQuest(q2):
+         print("2")
          if needQuest(q2):
             startQuest(q2, nGrendel)
          elif hasQuest(q2):
             if mapID(mCitadel):
                completeQuest(q2, nPepper)
             else:
-               warp = Packet.COutPacket(header)
-               warp.EncodeBuffer("0692AD4E 00000005")
-               Packet.SendPacket(warp)
+               if mapID(100000000):
+                  warp = Packet.COutPacket(header)
+                  warp.EncodeBuffer("09CFBC23 00000005")
+                  Packet.SendPacket(warp)
+                  print("Warp")
+               else:
+                  rush(100000000)
 
       elif doQuest(q3):
          chatQuest(q3, nPepper, nRidley)
@@ -568,6 +572,7 @@ if GameState.IsInGame():
                else:
                   setAttack(False)
                   time.sleep(2)
+                  doMaze(mazeMaps[1])
 
       elif doQuest(q10):
          if needQuest(q10):
@@ -588,6 +593,7 @@ if GameState.IsInGame():
                else:
                   setAttack(False)
                   time.sleep(2)
+                  doMaze(mazeMaps[2])
 
       elif doQuest(q11):
          if needQuest(q11):
@@ -608,6 +614,7 @@ if GameState.IsInGame():
                else:
                   setAttack(False)
                   time.sleep(2)
+                  doMaze(mazeMaps[4])
 
       elif doQuest(q12):
          if needQuest(q12):
@@ -669,14 +676,18 @@ if GameState.IsInGame():
          elif hasQuest(q18):
             if questDone(q18, nHilla):
                setAttack(False)
+               ToggleLoot(False)
                if mapID(863100104):
                   completeQuest(q18, nHilla)
                else:
                   rush(863100104)
+                  if mapID([863100105,863100106,863100107,863100108]):
+                      DungeonTeleport()
             else:
-               if mapID(863100105):
+               if mapID([863100105,863100106,863100107,863100108]):
                   setAttack(True)
                   time.sleep(2)
+                  ToggleLoot(True)
                else:
                   setAttack(False)
                   time.sleep(2)
@@ -730,6 +741,7 @@ if GameState.IsInGame():
                   goThru(-1277, 118)
                elif mapID(863000015):
                   setAttack(True)
+                  ToggleLoot(True)
                   time.sleep(2)
                else:
                   setAttack(False)
@@ -758,6 +770,7 @@ if GameState.IsInGame():
                elif mapID(863000015):
                   setAttack(True)
                   time.sleep(2)
+                  ToggleLoot(True)
                else:
                   setAttack(False)
                   doMaze(mazeEnd)

@@ -79,8 +79,8 @@ resistanceFourthJobs= [3212,3312,3512,3712]
 
 def vulcan():
     if GameState.IsInGame() and ((int(time.time())%8==0) or (Character.HasBuff(2, 37110009)==False and Character.HasBuff(2, 37120012)==False)):
-        Vulcan = Packet.COutPacket(0x0151)
-        Vulcan.Encode4(0x17D7AF14)
+        Vulcan = Packet.COutPacket(0x033E)
+        Vulcan.Encode4(0x023640F1)
         Vulcan.EncodeBuffer("00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00")
         Packet.SendPacket(Vulcan)
     return
@@ -203,7 +203,7 @@ if GameState.IsInGame():
         Terminal.SetComboBox("AttackKey",36)
         Terminal.SetCheckBox("Skill Injection",False)
         Key.Set(0x47,1,42111003)
-        attackSemiNDMagic(42111011,42121000,0.6,True,4)
+        attackSemiNDMagic(42111011,42121000,0.4,True,4)
     elif job == 1312:
         attackSemiNDMagic(32120055,32120055,0.45,True)
     elif job == 2712: #lumi fourth job
@@ -307,18 +307,8 @@ if GameState.IsInGame():
     elif job == 2112: #Aran 4th 21000007
         print("Setting up Settings for Aran")
             #Assign an Item, reboot potion, to Page up(0x21)
-        Key.Set(attack_key,1,21001010)
-        Terminal.SetLineEdit("SISkillID","21000006")
-        
-        Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetSpinBox("SkillInjection",75)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
-        
+        setSIND("21110028;21100018",100,True)
+        Terminal.SetCheckBox("Kami Vac",True)
     elif job == 14212: # Kinesis 4th 142111002
         print("Setting up Settings for Kinesis")
             #Assign an Item, reboot potion, to Page up(0x21)

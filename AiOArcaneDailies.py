@@ -2,7 +2,8 @@ import Character,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sy
 
 if not any("SunCat" in s for s in sys.path):
     sys.path.append(os.getcwd() + "\SunCat")
-
+sys.path.append('C:/Users/Jacopo/Desktop/Scripts')
+import headers
 try:
     import SunCat, SCHotkey, SCLib
 except:
@@ -16,7 +17,7 @@ except:
 #--------------------------------------------------
 dailyVJ = True
 dailyChuChu = True
-dailyDD = True
+dailyDD = False
 dailySS = True
 
 SCLib.StartVars()
@@ -58,8 +59,8 @@ roundsPerRun = 15 #How many times you want to collect 5 spirits per run
 totalRuns = 1 #How many times you want to enter spirit savior
 
 #updated for v203
-CashItemRequestOpcode = 0x0546
-CashItemResultOpcode = 0x06E2
+CashItemRequestOpcode = headers.cash_item_header
+CashItemResultOpcode = headers.cash_recv_header
 BuyByMesoRequest = 85
 LoadLockerDoneResult = 2
 MoveLToSRequest = 15
@@ -2410,10 +2411,10 @@ def doVJ():
                 Quest.CompleteQuest(34129, vjNPC)
 
             vjSymbol = Inventory.FindItemByID(1712001)
-            if not useSymbol(vjSymbol):
-                print("Finished VJ")
-                SCLib.UpdateVar("CurDaily", "ChuChu")
-                SCLib.UpdateVar("CurStep", "InitChuChu")
+            #if not useSymbol(vjSymbol):
+            print("Finished VJ")
+            SCLib.UpdateVar("CurDaily", "ChuChu")
+            SCLib.UpdateVar("CurStep", "InitChuChu")
         
     else:
         print("Skipping VJ")
@@ -2450,11 +2451,14 @@ class Ingredient:
     
     def HandIn(self):
         hiPacket = Packet.COutPacket(SCLib.PacketHeader["ChuChu"])
+        hiPacket = Packet.COutPacket(0x015F)
         hiPacket.Encode1(0x02)
         hiPacket.EncodeString("pt_mutoHotPot")
-        hiPacket.EncodeBuffer("0592 0093")
+        hiPacket.EncodeBuffer("0575 0093")
         Packet.SendPacket(hiPacket)
         time.sleep(2)
+        # SunCat.KamiTP(1397, 147)
+        # time.sleep(5) 015F 02 "pt_mutoHotPot" 0575 0093
     
     def GetIngredient(self, amount):
         curAmount = 0
@@ -2639,11 +2643,11 @@ def doingChuChu():
 #print(SCLib.GetVar("CurStep"))
 def finishChuChu():
     chuchuSymbol = Inventory.FindItemByID(1712002)
-    if not useSymbol(chuchuSymbol):
-        if SCLib.GetVar("UsingWhitelist"):
-            Terminal.SetPushButton("Whitelist", True)
-        SCLib.UpdateVar("CurDaily", "DD")
-        SCLib.UpdateVar("CurStep", "InitDD")
+    #if not useSymbol(chuchuSymbol):
+    if SCLib.GetVar("UsingWhitelist"):
+        Terminal.SetPushButton("Whitelist", True)
+    SCLib.UpdateVar("CurDaily", "DD")
+    SCLib.UpdateVar("CurStep", "InitDD")
         
 def doChuChu():
     if dailyChuChu:
@@ -3293,6 +3297,7 @@ if GameState.IsInGame() and not accountData['arcane_daily_done'] and not account
                 accountData['changing_mule'] = True
                 writeJson(accountData,accountId)
                 if GameState.IsInGame():
+                    print("Loging out")
                     Terminal.Logout()
             else:
                 SCLib.StartVars()

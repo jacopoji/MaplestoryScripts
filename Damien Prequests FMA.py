@@ -16,6 +16,7 @@ while True:
     field_id = Field.GetID()
     jobid = Character.GetJob()
     level = Character.GetLevel()
+    pos = Character.GetPos()
     if jobid == -1 or level == -1:
       #not in game
       continue

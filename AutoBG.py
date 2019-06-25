@@ -24,7 +24,7 @@ def BossCheck():
 	for item in eqp:
 		print("Checking for item: " + str(item) + "...")
 		while Field.FindItem(item).valid and GameState.IsInGame():
-			Terminal.SetCheckBox("Kami Vac",False)
+			#Terminal.SetCheckBox("Kami Vac",False)
 			print("item found with id:" + str(item) + ", waiting until item looted")
 			time.sleep(9)
 	for mob in boss:
@@ -35,7 +35,7 @@ def BossCheck():
 	for item in eqp:
 		print("Checking for item: " + str(item) + "...")
 		while Field.FindItem(item).valid and GameState.IsInGame():
-			Terminal.SetCheckBox("Kami Vac",False)
+			#Terminal.SetCheckBox("Kami Vac",False)
 			print("item found with id:" + str(item) + ", waiting until item looted")
 			time.sleep(9)
 	print("no boss found or boss killed")
