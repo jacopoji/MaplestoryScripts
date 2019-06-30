@@ -360,7 +360,7 @@ if GameState.IsInGame():
 						elif currentMap >= 401060300 and currentMap <= 401060398:
 							# tyrant's room
 							print("in tyrant's room")
-							Terminal.SetCheckBox("Kami Vac",True)
+							#Terminal.SetCheckBox("Kami Vac",True)
 						else:
 							if currentMap != 401000002:
 								Terminal.Rush(401000002)

@@ -538,7 +538,7 @@ def use_pet():
 
 def settings_first_job():
 	on_settings = ["Skill Injection","Legit Vac","Kami Vac","Auto Equip","Rush By Level"]
-	off_settings = ["Auto Attack","bot/kanna_kami","charm_fma","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+	off_settings = ["Auto Attack","bot/kanna_kami","charm_fma","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales","30 Sec God Mode"]
 
 	Terminal.SetSpinBox("SkillInjection", 100)
 	Terminal.SetLineEdit("SISkillID","42001006")
@@ -551,7 +551,7 @@ def settings_first_job():
 
 def settings_second_job():
 	on_settings = ["Legit Vac","Auto Equip","Rush By Level","charm_fma","Skill Injection","Kami Vac"]
-	off_settings = ["bot/kanna_kami","Auto Attack","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+	off_settings = ["bot/kanna_kami","Auto Attack","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales","30 Sec God Mode"]
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
@@ -568,7 +568,7 @@ def settings_third_job():
 	# on_settings = ["Legit Vac","Auto Equip","Auto Attack","Rush By Level","bot/kanna_kami","charm_fma"]
 	# off_settings = ["Skill Injection","Kami Vac","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
 	on_settings = ["Legit Vac","Auto Equip","Skill Injection","Kami Vac","Auto Attack"]
-	off_settings = ["bot/kanna_kami","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
+	off_settings = ["bot/kanna_kami","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales",'30 Sec God Mode']
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
@@ -587,8 +587,8 @@ def settings_third_job():
 
 def settings_fourth_job():
 	level = Character.GetLevel()
-	on_settings = ["Legit Vac","Auto Attack","MonkeySpiritsNDcheck"]
-	off_settings = ["Skill Injection","Kami Vac","bot/kanna_kami","settings/mesologout","Speedy Gonzales"]#,"Auto Loot","Kami Loot"
+	on_settings = ["Legit Vac","Auto Attack"]
+	off_settings = ["Skill Injection","Kami Vac","bot/kanna_kami","settings/mesologout","Speedy Gonzales","MonkeySpiritsNDcheck"]#,"Auto Loot","Kami Loot"
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
@@ -1986,6 +1986,8 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetCheckBox('filter_equip',False)
 	if level >= 145 and not accountData["ready_for_cube"]:
 		print("Not done cubing yet")
+		if Terminal.IsRushing():
+			Terminal.StopRush()
 		if not Terminal.GetCheckBox("Kami Loot") or not Terminal.GetCheckBox("Auto Loot"):
 			Terminal.SetCheckBox("Kami Loot",True)
 			Terminal.SetCheckBox("Auto Loot",True)

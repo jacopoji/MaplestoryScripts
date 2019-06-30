@@ -308,7 +308,7 @@ if GameState.IsInGame():
         print("Setting up Settings for Aran")
             #Assign an Item, reboot potion, to Page up(0x21)
         setSIND("21110028;21100018",100,True)
-        Terminal.SetCheckBox("Kami Vac",True)
+        #Terminal.SetCheckBox("Kami Vac",True)
     elif job == 14212: # Kinesis 4th 142111002
         print("Setting up Settings for Kinesis")
             #Assign an Item, reboot potion, to Page up(0x21)

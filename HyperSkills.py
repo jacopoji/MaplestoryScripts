@@ -72,21 +72,21 @@ class Night_Lord():
    Epic_Adventure = [4121053, 0x30] # 0
 
 class Blade_Master():
-   Epic_Adventure = [4341053, 0x51] # Q
+   Epic_Adventure = [4341053, 0x31] # Q
 
 class Jett():
-   Epic_Adventure = [5721053, 0x58] # X
+   Epic_Adventure = [5721053, 0x32] # X
 
 class Cannon_Master():
    Buckshot = [5321054, 0x43] # C
-   Epic_Adventure = [5321053, 0x56] # V
+   Epic_Adventure = [5321053, 0x34] # V
 
 class Corsair():
-   Epic_Adventure = [5221053, 0x4E] # N
+   Epic_Adventure = [5221053, 0x36] # N
    Whalers_Potion = [5221054, 0x42] # B
 
 class Buccaneer():
-   Epic_Adventure = [5121053, 0x41] # A
+   Epic_Adventure = [5121053, 0x39] # A
    Power_Unity = [5121052, 0x72] # F3
    Stimulating_Conversation = [5121054, 0x4D] # M
 
@@ -146,7 +146,7 @@ def bind_skill(skill):
     Key.Set(skill[1], KeyType.Skill, skill[0])
 
 if GameState.IsInGame():
-    bind_skill(Ark.Divine_Wrath)
+    #bind_skill(Ark.Divine_Wrath)
     bind_skill(Bishop.Heavens_Door)
     bind_skill(Blaze_Wizard.Dragons_blaze)
     bind_skill(Bowmaster.Concentration)
@@ -161,7 +161,7 @@ if GameState.IsInGame():
 
     bind_skill(Fire_Poison.Inferno_Aura)
     bind_skill(Hayato.God_Of_Blades)
-    bind_skill(Hero.Cry_Valhalla)
+    #bind_skill(Hero.Cry_Valhalla)
     bind_skill(Illium.Divine_Wrath)
     bind_skill(Marksman.Bullseye_Shot)
     bind_skill(Mercedes.Elvish_Blessing)
@@ -169,28 +169,28 @@ if GameState.IsInGame():
     bind_skill(Mihile.Sacred_Cube)
     bind_skill(Night_Lord.Bleed_Dart)
     bind_skill(Night_Walker.Dominion)
-    bind_skill(Paladin.Sacrosanctity)
+    #bind_skill(Paladin.Sacrosanctity)
     bind_skill(Wild_Hunter.Silent_Rampage)
     bind_skill(Ice_Lightning.Absolute_Zero_Aura)
     bind_skill(Battle_Mage.Sweeping_Staff)
     bind_skill(Bishop.Righteously_Indignant)
 
     
-    # bind_skill(Bishop.Epic_Adventure)
-    # bind_skill(Blade_Master.Epic_Adventure)
-    # bind_skill(Cannon_Master.Epic_Adventure)
-    # bind_skill(Corsair.Epic_Adventure)
-    # bind_skill(Dark_Knight.Epic_Adventure)
-    # bind_skill(Fire_Poison.Epic_Adventure)
-    # bind_skill(Bowmaster.Epic_Adventure)
-    # bind_skill(Buccaneer.Epic_Adventure)
-    # bind_skill(Hero.Epic_Adventure)
-    # bind_skill(Ice_Lightning.Epic_Adventure)
-    # bind_skill(Jett.Epic_Adventure)
-    # bind_skill(Marksman.Epic_Adventure)
-    # bind_skill(Night_Lord.Epic_Adventure)
-    # bind_skill(Paladin.Epic_Adventure)
-    # bind_skill(Shadower.Epic_Adventure)
+    bind_skill(Bishop.Epic_Adventure)
+    bind_skill(Blade_Master.Epic_Adventure)
+    bind_skill(Cannon_Master.Epic_Adventure)
+    bind_skill(Corsair.Epic_Adventure)
+    bind_skill(Dark_Knight.Epic_Adventure)
+    bind_skill(Fire_Poison.Epic_Adventure)
+    bind_skill(Bowmaster.Epic_Adventure)
+    bind_skill(Buccaneer.Epic_Adventure)
+    bind_skill(Hero.Epic_Adventure)
+    bind_skill(Ice_Lightning.Epic_Adventure)
+    bind_skill(Jett.Epic_Adventure)
+    bind_skill(Marksman.Epic_Adventure)
+    bind_skill(Night_Lord.Epic_Adventure)
+    bind_skill(Paladin.Epic_Adventure)
+    bind_skill(Shadower.Epic_Adventure)
     
     #These do nothing or just don't work with every weapon.
     #bind_skill(Battle_Mage.Master_of_Death)
