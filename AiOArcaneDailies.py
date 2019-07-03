@@ -2609,8 +2609,8 @@ def startChuChu():
             
             if Field.GetID() == ccStartingMap:
                 print("Failed to enter ChuChu, creating a new party...")
-                leaveParty()
-                createParty()
+                Party.LeaveParty()
+                Party.CreateParty()
                 SCLib.UpdateVar("RetryCount", retryCount + 1)
                 time.sleep(1)
             elif Field.GetID() in hungryMutoMaps:
@@ -3268,12 +3268,15 @@ if GameState.IsInGame() and not accountData['arcane_daily_done'] and not account
         if GameState.IsInGame():
             if curDaily == "VJ":
                 Terminal.SetCheckBox("Rush By Level",False)
+                Terminal.SetSpinBox("FilterMeso",50000)
                 doVJ()
             elif curDaily == "ChuChu":
                 Terminal.SetCheckBox("Rush By Level",False)
+                Terminal.SetSpinBox("FilterMeso",50000)
                 doChuChu()
             elif curDaily == "DD":
                 Terminal.SetCheckBox("Rush By Level",False)
+                Terminal.SetSpinBox("FilterMeso",50000)
                 doDD()
             elif curDaily == "SS":
                 Terminal.SetCheckBox("Rush By Level",False)
@@ -3311,7 +3314,7 @@ if GameState.IsInGame() and not accountData['arcane_daily_done'] and not account
 
 #always make sure doing cur_pos character
 if job == -1 and not accountData['changing_mule'] and GameState.GetLoginStep() == 1:
-    print("Not logged in yet")
+    #print("Not logged in yet")
     Terminal.SetLineEdit("LoginChar",accountData["cur_pos"])
     Terminal.SetCheckBox("Auto Login",True)
     time.sleep(5)
@@ -3327,6 +3330,7 @@ if accountData['changing_mule'] and GameState.GetLoginStep() == 2 and not accoun
     KillPersistVarThred() #restart persisten variables
 
 if accountData['arcane_daily_done'] and GameState.GetLoginStep() == 2: #returning to farming char
+    Terminal.SetSpinBox("FilterMeso",0)
     Terminal.SetCheckBox("Auto Login",False)
     Terminal.SetLineEdit("LoginChar",str(accountData['training_char']))
     Terminal.SetCheckBox("Auto Login",True)

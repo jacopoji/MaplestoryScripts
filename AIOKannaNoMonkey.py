@@ -568,7 +568,7 @@ def settings_third_job():
 	# on_settings = ["Legit Vac","Auto Equip","Auto Attack","Rush By Level","bot/kanna_kami","charm_fma"]
 	# off_settings = ["Skill Injection","Kami Vac","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
 	on_settings = ["Legit Vac","Auto Equip","Skill Injection","Kami Vac","Auto Attack"]
-	off_settings = ["bot/kanna_kami","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales",'30 Sec God Mode']
+	off_settings = ["bot/kanna_kami","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales",'30 Sec God Mode',"Grenade Kami"]
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
@@ -1863,7 +1863,7 @@ if jobid == 4211 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 		Terminal.SetSpinBox("FilterMeso",1000)
 ###### fourth job ########
 if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZakum") and not SCLib.GetVar("DoingBG") and not SCLib.GetVar("BuyingExpansion") and not accountData['pet_expire']:
-	if not Terminal.GetCheckBox("MonkeySpiritsNDcheck") or not Terminal.GetCheckBox("Grenade Kami"):
+	if not Terminal.GetCheckBox("Grenade Kami"):
 		print("Now fourth job")
 		settings_fourth_job()
 		if not Terminal.GetCheckBox("Rush By Level"):
