@@ -9,7 +9,7 @@ header = 0x0343
 # using kami?
 # no = 0  (gfma/fma)
 # yes = 1
-kami = 1
+kami = 0
 
 # using auto attack?
 # no = 0  (skill injection)

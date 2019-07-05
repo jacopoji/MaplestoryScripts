@@ -1436,6 +1436,8 @@ def ToggleAttack(on):
         else:
             AttackSemiNDMagic(51121009,51111006,0.84,on)
             #AttackSIND(51121009,on,400)
+    elif job == 330 or job == 331 or job == 332:
+        AttackSIND("3301003",on,1,siOption = "si_cadena")
     else:
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)

@@ -1511,9 +1511,9 @@ def toggle_skill():
         if job == KaiserJobs[2] or job == KaiserJobs[3]:
             buff = 61111002
             toggle_buffs(buff)
-    elif job in PhantomJobs:
-        buff = 20031210
-        toggle_buffs(buff)
+    # elif job in PhantomJobs:
+    #     buff = 20031210
+    #     toggle_buffs(buff)
     elif job in BowmasterJobs:
         if job == BowmasterJobs[2]:
             buff = 3111011
@@ -1690,21 +1690,28 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
     Terminal.SetCheckBox("Auto Attack",False)
     Terminal.SetRadioButton("SIRadioMelee",True)
     Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
+    Terminal.SetCheckBox("Speedy Gonzales",True)
     count = 0
     if siSkill != 32120055:
         delay = 30*math.ceil(delay*1000 * (10+attackSpeed)/480)/1000
-    print("The delay for skill {} is {}, starting si".format(siSkill,delay))
-    while Field.GetCharacterCount()<=1 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and not Terminal.GetRadioButton("SIRadioDragon") and on:
+    #print("The delay for skill {} is {}, starting si".format(siSkill,delay))
+    if siSkill in [5311000,5301000]:
+        sleepTime = 0.161
+    elif siSkill not in [25101000,25121000]:
+        sleepTime = 0.231
+    else:
+        sleepTime = 0.101
+    while Field.GetCharacterCount()<=1 and Field.GetEliteState() !=2 and len(Field.GetMobs())>0 and not Terminal.IsRushing() and GameState.IsInGame() and not Terminal.GetRadioButton("SIRadioDragon") and on:
         Terminal.SetCheckBox("Skill Injection",True)
         Terminal.SetLineEdit("SISkillID",str(siSkill))
         Terminal.SetCheckBox("Melee No Delay",True)
-        Terminal.SetSpinBox("SkillInjection",10)
-        time.sleep(0.081)
-        Terminal.SetCheckBox("Melee No Delay",False)
+        Terminal.SetSpinBox("SkillInjection",17)
+        time.sleep(sleepTime)
+        #Terminal.SetCheckBox("Melee No Delay",False)
         Terminal.SetLineEdit("SISkillID",str(dummySkill))
-        time.sleep(0.03)
+        time.sleep(0.043)
         Terminal.SetCheckBox("Skill Injection",False)
-        time.sleep(delay)
+        time.sleep(delay+0.05)
         #if Terminal.IsRushing():
         #    break
         if count >= 30:
@@ -1712,7 +1719,6 @@ def SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed):
         if siSkill == 27111303 and not(Character.HasBuff(2,20040220) or Character.HasBuff(2,20040219)):
             break
         count += 1
-    print("Si ended due to break options")
 def attackSemiNDMagic(siSkill,dummySkill,delay,on,attackSpeed = 4):
     try:
         SCLib.ThreadedFunction(SemiNDSi(siSkill,dummySkill,delay,on,attackSpeed))
@@ -1811,14 +1817,7 @@ def initAttack():
     elif job == 4112: #Hayato 4th 41121011
         print("Setting up Settings for Hayato")
         
-        Terminal.SetLineEdit("SISkillID","41121011")
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetCheckBox("Kami Vac",True)
+        attackSI(32120055,True)
     elif job == 3612:#Xenon 4th 36121000
         print("Setting up Settings for Xenon")
         Terminal.SetLineEdit("SISkillID","36121000")
@@ -1831,13 +1830,7 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2412: #Phantom 4th 24121000
         print("Setting up Settings for Phantom")
-        Terminal.SetLineEdit("SISkillID","24121010;24121000")
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        
-        Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetSpinBox("SkillInjection",140)
+        attackSI(32120055,True)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15212: #Illium 4th
         print("Setting up Settings for Illium")
@@ -1933,8 +1926,8 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 1212: #BW 4th
         print("Setting up Settings for Blaze Wizard")
-        Terminal.SetCheckBox("Full Map Attack",True)
-        attackAuto(12001020,True)
+        Terminal.SetCheckBox("Full Map Attack",False)
+        attackSI(32120055,True)
         '''
         Terminal.SetLineEdit("SISkillID","12121055")
         Terminal.SetCheckBox("Auto Attack", False)

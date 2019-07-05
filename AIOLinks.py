@@ -1748,7 +1748,17 @@ def KannaFirstJobAdv():
         SCLib.UpdateVar("DoingJobAdv",False)
 
 def LumiFirstJobAdv():
-    Quest.StartQuest(25560, 0)
+    laniasHome = 101000100
+    if field_id != laniasHome:
+        Terminal.Rush(laniasHome)
+        time.sleep(10)
+    else:
+        Quest.StartQuest(25530, 1032205)
+        time.sleep(4)
+        Quest.StartQuest(25531, 0)
+        time.sleep(2)
+        ToggleRushByLevel(True)
+        ToggleKami(True)
 
 def LumiSecondJobAdv():
     Quest.StartQuest(25510, 1032209)
@@ -4297,13 +4307,17 @@ def AranFirstJobAdv():
 
     def Autism():
         time.sleep(1)
-        Key.Press(0x11)
+        #Key.Press(0x11)
+        Character.BasicAttack()
         time.sleep(3)
-        Key.Press(0x11)
+        #Key.Press(0x11)
+        Character.BasicAttack()
         time.sleep(3)
-        Key.Press(0x11)
+        #Key.Press(0x11)
+        Character.BasicAttack()
         time.sleep(3)
-        Key.Press(0x11)
+        Character.BasicAttack()
+        #Key.Press(0x11)
     # Map
     black_road                = 914000000
     snow_island               = 140090000
@@ -6893,13 +6907,17 @@ def JettFourthJobAdv():
 def CannoneerFirstJobAdv():
     def Autism():
         time.sleep(1)
-        Key.Press(0x11)
+        #Key.Press(0x11)
+        Character.BasicAttack()
         time.sleep(3)
-        Key.Press(0x11)
+        #Key.Press(0x11)
+        Character.BasicAttack()
         time.sleep(3)
-        Key.Press(0x11)
+        #Key.Press(0x11)
+        Character.BasicAttack()
         time.sleep(3)
-        Key.Press(0x11)
+        Character.BasicAttack()
+        #Key.Press(0x11)
 
 
     Quest1 = Quest.GetQuestState(2573)
@@ -7289,6 +7307,7 @@ def ShadeFirstJobAdv():
     '''
     if q15 == 2: 
         Key.Set(0x11, 1, 25001002)
+        print("Settings skill to ctrl")
         Terminal.SetCheckBox("Auto SP",True)
     else:
         SkillLevel = Character.GetSkillLevel(25001000)
@@ -7296,6 +7315,7 @@ def ShadeFirstJobAdv():
             print("Skill level is {},continue".format(SkillLevel))
             LevelSkill(25001000)
         Key.Set(0x11, 1, 25001000)
+        print("Settings skill to ctrl")
         Terminal.SetCheckBox("Auto SP",False)
         
       
@@ -8208,7 +8228,7 @@ def DualBladeThirdJobAdv():
     Terminal.SetCheckBox("filter_etc", False)
     Terminal.SetCheckBox("Auto Loot", True)
     Key.Set(0x11, 1, 4001013)
-    
+    print("Settings skill to ctrl")
     if quest0 != 2:
         Quest.StartQuest(2637, 1056000)
         time.sleep(2)
@@ -9628,7 +9648,7 @@ def ToggleAttack(on):
         # 20040217 Dark Mode Buff
         # 20040216 Light Mode
         # 20040220 20040219 Equi Mode
-        AttackSemiNDMagic(27001201,27001201,0.98,on)
+        AttackSI(27001100,on,100,"SIRadioMagic")
     elif job in LuminousJobs and field_id in curbrockhideout:
         AttackAuto(27001201,on)
     elif job == 2710: #lumi second job
@@ -10700,7 +10720,7 @@ def ToggleAttackQuest(on):
         # 20040217 Dark Mode Buff
         # 20040216 Light Mode
         # 20040220 20040219 Equi Mode
-        AttackSemiNDMagic(27001201,27001201,0.98,on)
+        AttackSI(27001100,on,100,"SIRadioMagic")
     elif job in LuminousJobs and field_id in curbrockhideout:
         AttackAuto(27001201,on)
     elif job == 2710: #lumi second job
@@ -11774,13 +11794,17 @@ ShowStatus()
 if GameState.IsInGame():
     SafetySetting()
     time.sleep(1)
-    AssignHyperStats()
+    if Character.GetLevel()>=10:
+        AssignHyperStats()
     if not (SCLib.GetVar("DoingJobAdv") and (job == ShadeJobs[0] or job == ShadeJobs[1])) and not Terminal.IsRushing():
         if SCLib.GetVar("DoingJobAdv") or SCLib.GetVar("GettingBoogie"):
             ToggleAttackQuest(True)
         else:
             ToggleAttack(True)
-        Terminal.SetCheckBox("Auto SP",True)
+        if Character.GetLevel() >= 10:
+            Terminal.SetCheckBox("Auto SP",True)
+        else:
+            Terminal.SetCheckBox("Auto SP",False)
     SetPotion()
     if not Terminal.IsRushing():
         ToggleSkill()
@@ -11844,9 +11868,9 @@ if GameState.IsInGame():
 
     elif job == 2700 and level == 10:
         print("Completing Lumi first job")
+        ToggleRushByLevel(False)
         LumiFirstJobAdv()
-        ToggleRushByLevel(True)
-        ToggleKami(True)
+        
     elif job == 2700 and level >= 30 and not SCLib.GetVar("DoingCurbrock"):
         print("Completing Lumi second job")
         LumiSecondJobAdv()
@@ -14460,3 +14484,13 @@ if level > 63 and Inventory.FindItemByID(htr).valid and not SCLib.GetVar("DoingC
             Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
             Terminal.Rush(buffmap_id)
             Terminal.SetCheckBox("map/maprusher/hypertelerock",useHTR)
+
+def ChooseLightPath():
+    choosePacket = Packet.COutPacket(0x00F5)
+    choosePacket.EncodeBuffer("1A 01 00000000")
+    Packet.SendPacket(choosePacket)
+
+if field_id == 927020000:
+    ToggleRushByLevel(False)
+    ChooseLightPath()
+    time.sleep(1)
