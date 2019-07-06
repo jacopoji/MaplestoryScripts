@@ -1934,7 +1934,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			check_meso_equip()
 			SCLib.UpdateVar("EquipMesoDone",True)
 			Terminal.SetCheckBox('charm_fma',True)
-		if int(SCLib.GetVar("farm_counter")) >= 25:
+		if int(SCLib.GetVar("farm_counter")) >= 50:
 			new_meso = int(accountData['storage_number']) * 30 + Character.GetMeso() / 1000000000
 			print("Updating total mesos from {} to {}b".format(accountData['total_meso'],new_meso))
 			if accountData['total_meso'] == new_meso:
@@ -1945,7 +1945,7 @@ if jobid == 4212 and not SCLib.GetVar("DoingMP") and not SCLib.GetVar("DoingZaku
 			accountData['total_meso'] = new_meso
 			writeJson_cube(accountData,accountId) 
 			SCLib.UpdateVar("farm_counter",0)
-		if not Terminal.IsAutoDying() and field_id in LongestRideOnByeByeStation and not SCLib.GetVar("DoingMP"): # and Character.HasBuff(1, 2023533)
+		if not Terminal.IsAutoDying() and field_id in LongestRideOnByeByeStation: # and Character.HasBuff(1, 2023533)
 			SCLib.UpdateVar("farm_counter",int(SCLib.GetVar("farm_counter"))+1)
 			Terminal.ChangeStatus("Still farming in ByeBye: {}b".format(accountData['total_meso']))
 		elif Terminal.IsAutoDying():

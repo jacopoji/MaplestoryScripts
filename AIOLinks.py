@@ -9046,7 +9046,7 @@ def GetToTheDoorToZakum():
         #Ark, Angelic Buster, Cannoneer, Jett, Mechanic, Shade, Thunder Breaker
         Pirates = [511,512,521,522,15500, 15510, 15511, 15512, 6500, 6510, 6511, 6512, 530, 531, 532, 508, 570, 571, 572, 3500, 3510, 3511, 3512, 2500, 2510, 2511, 2512, 1500, 1510, 1511, 1512]
         #Wild Hunter, Wind Archer, Mercedes
-        Bowman = [311,312,321,322,3300, 3310, 3311, 3312, 1300, 1310, 1311, 1312, 2300, 2310, 2311, 2312]
+        Bowman = [331,332,311,312,321,322,3300, 3310, 3311, 3312, 1300, 1310, 1311, 1312, 2300, 2310, 2311, 2312]
         #Phantom, Xenon, Dual Blade
         Thief = [2400, 2410, 2411, 2412, 3600, 3610, 3611, 3612, 400, 430, 431, 432, 433, 434,6411,6412,6410,422,421,411,412,1412,1411]
         #Kanna, Battle Mage, Beast Tamer, Blaze Wizard, Evan, Luminous
@@ -9335,7 +9335,7 @@ def SafetySetting():
     dangerous_settings = ["Auto Aggro","MonkeySpiritsNDcheck","General FMA","Full Map Attack","Mob Vac","Vellum Freeze","main/boss_freeze","Full God Mode","Guard God Mode"]
     for settings in dangerous_settings:
         if settings == "General FMA":
-            if job not in IlliumJobs and job not in BlasterJobs:
+            if job not in IlliumJobs and job not in BlasterJobs and job not in [330,331,332]:
                 Terminal.SetCheckBox(settings, False)
         elif settings == "Full Map Attack":
             if job not in BlazeWizardJobs:
@@ -10585,6 +10585,11 @@ def ToggleAttack(on):
         else:
             AttackSemiNDMagic(51121009,51111006,0.84,on)
             #AttackSIND(51121009,on,400)
+    elif job == 301:
+        AttackSIND(3011004,on,1,siOption = "bot/si_cadena")
+    elif job == 330 or job == 331 or job == 332:
+        AttackSIND(3301003,on,1,siOption = "bot/si_cadena")
+        Terminal.SetCheckBox("General FMA",on)
     else:
         Terminal.SetCheckBox("Auto Attack",False)
         Terminal.SetCheckBox("Melee No Delay",False)

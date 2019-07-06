@@ -1907,13 +1907,7 @@ def initAttack():
     elif job == 3512: #mechanic 4th 400051012
         #mech_att(on)
         print("Setting up Settings for Mechanic")
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetLineEdit("SISkillID","400051012")
-        Terminal.SetCheckBox("Auto Attack", False)
-        
-        Terminal.SetSpinBox("SkillInjection",100)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetCheckBox("Skill Injection", True)
+        attackSI(32120055,True)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2512: #Shade 4th
         print("Setting up Settings for Shade")
@@ -2387,6 +2381,8 @@ def doVJ():
         
         if SCLib.GetVar("CurStep") == "StartingVJ":
             print("Starting Vanishing Journey")
+            Terminal.SetCheckBox("Kami Loot",True)
+            Terminal.SetCheckBox("Auto Loot",True)
             acceptVJ()
         elif SCLib.GetVar("CurStep") == "DoingVJ":
             counter = 0
@@ -2609,6 +2605,8 @@ def startChuChu():
             elif Field.GetID() in hungryMutoMaps:
                 print("Starting ChuChuPQ!")
                 SCLib.UpdateVar("CurStep", "DoingChuChu")
+                Terminal.SetCheckBox("Kami Loot",False)
+                Terminal.SetCheckBox("Auto Loot",False)
                 time.sleep(8)
                 
 
