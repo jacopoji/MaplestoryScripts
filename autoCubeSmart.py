@@ -4,8 +4,8 @@ import DataType, Character, Field, Inventory, Packet, Terminal, time, GameState,
 #Author: Comicals   #Credit: Qybah
 #########################################################
 #Headers
-revealHeader    = 0x013E
-stampHeader     = 0x0132
+revealHeader    = 0x0140
+stampHeader     = 0x0134
 
 #Cube ID's
 RED     = 5062009
@@ -29,13 +29,13 @@ startSlot   = 1
 endSlot     = 9
 
 #Stat threshold
-statThreshold           = 24
+statThreshold           = 21
 stopAtStatThreshold     = True
 autoStat                = True      # Automatically set whichever highest stat you have
-isLvl160                = 1
+isLvl160                = 0
 
 #For drop&meso rate
-dropStatThreshold       = 12        # Work only with Single Meso or Drop rate
+dropStatThreshold       = 6        # Work only with Single Meso or Drop rate
 stopAtMesoRate          = True
 stopAtDropRate          = True
 stopAtDoubleMesoRate    = True

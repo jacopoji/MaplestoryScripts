@@ -273,14 +273,14 @@ def writeJson(data,accountId):
         outfile.write(parsed)
         outfile.close()
 def handleReady(data):
+    if "RootAbyssChar" not in data:
+        data['RootAbyssChar'] = str(return_char)
     if 'mule_number' not in data:
         data['mule_number'] = start_char_number
     if 'orig_char' not in data:
         data['orig_char'] = Terminal.GetLineEdit("LoginChar")
     elif str(data['orig_char']) != str(return_char):
         data['orig_char'] = str(return_char)
-    if "RootAbyssChar" not in data:
-        data['RootAbyssChar'] = str(return_char)
 
 def InteractCrimsonQueenNormal(packet):
     print("Sending Intreact Packet")
@@ -2361,7 +2361,7 @@ def vellum(retryCount = False):
         boss = Field.FindMob(NormalVellum)
         if boss.valid:
             ToggleAttack(True)
-            
+            Terminal.SetCheckBox("Full God Mode",True)
             DidSpawn()
             while Character.GetPos().x not in range(-480,-320) and Field.FindMob(NormalVellum).valid:
                 Character.AMoveX(-400)
@@ -2370,6 +2370,7 @@ def vellum(retryCount = False):
             
             #print("Killin Vallum Standby")
         else:
+            Terminal.SetCheckBox("Full God Mode",False)
             if HasSpawned:
                 toggleKami(False)
                 print("Vellum is dead, waiting 5 sec before continue")

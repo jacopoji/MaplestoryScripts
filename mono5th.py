@@ -361,6 +361,9 @@ if GameState.IsInGame():
 							# tyrant's room
 							print("in tyrant's room")
 							#Terminal.SetCheckBox("Kami Vac",True)
+							while Character.GetPos().x not in range(1400,1600):
+								Character.AMoveX(1525)
+
 						else:
 							if currentMap != 401000002:
 								Terminal.Rush(401000002)

@@ -179,14 +179,6 @@ WildHunterJobs = [3300, 3310, 3311, 3312]
 BlasterJobs = [3700, 3710, 3711, 3712]
 MechanicJobs = [3500,3510,3511,3512]
 
-####TODO LIST:
-####Auto buy ticket					done
-####AUTO ZAKUM                      done
-####auto switch profile to farming  done
-####AUTO buy cubes					done
-####auto cube potentials			done
-####Auto IA                         done
-
 import Character,Context,DataType,Field,Inventory,Key,Npc,Packet,Quest,Terminal,time,GameState,sys,os,Party, json,math,Login,datetime
 
 if not any("SunCat" in s for s in sys.path):
@@ -273,7 +265,7 @@ ZakumsAltar = [280030100,280030101,280030102,280030103,280030104]
 TheCaveOfTrials3Zakum = 211042200
 blackgate_maps = [610050000,610051300, 610051400, 610051500, 610051600, 610051700, 610051800, 610051900, 610052000, 610050100, 610050200, 610050600, 610050700, 610050800, 610051200, 610050300, 610050400, 610050500, 610050900, 610051000, 610051100]
 henesys = 100000000
-LongestRideOnByeByeStation = [551010000,551030001,551030002,551030003,551030004,551030005,551030006,551030007,551030008,551030009,551030010,551030011,551030012,551030013,551030014,551030015,551030016,551030017,551030018,551030019,551030020]
+LongestRideOnByeByeStation = [x for x in range(551030000,551030021)]
 #npc ids
 NpcRobeiraMagicianInstructor = 2020009
 
@@ -537,11 +529,11 @@ def use_pet():
 		time.sleep(2)
 
 def settings_first_job():
-	on_settings = ["Skill Injection","Legit Vac","Kami Vac","Auto Equip","Rush By Level"]
-	off_settings = ["Auto Attack","bot/kanna_kami","charm_fma","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales","30 Sec God Mode"]
+	on_settings = ["Skill Injection","Legit Vac","Kami Vac","Auto Equip","Rush By Level","Melee No Delay"]
+	off_settings = ["Auto Attack","bot/kanna_kami","charm_fma","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales"]#,"30 Sec God Mode"]
 
 	Terminal.SetSpinBox("SkillInjection", 100)
-	Terminal.SetLineEdit("SISkillID","42001006")
+	Terminal.SetLineEdit("SISkillID","42001000")
 	for options in on_settings:
 		if not Terminal.GetCheckBox(options):
 			Terminal.SetCheckBox(options,True)
@@ -550,13 +542,13 @@ def settings_first_job():
 			Terminal.SetCheckBox(options,False)
 
 def settings_second_job():
-	on_settings = ["Legit Vac","Auto Equip","Rush By Level","charm_fma","Skill Injection","Kami Vac"]
-	off_settings = ["bot/kanna_kami","Auto Attack","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales","30 Sec God Mode"]
+	on_settings = ["Legit Vac","Auto Equip","Rush By Level","charm_fma","Skill Injection","Kami Vac","Melee No Delay"]
+	off_settings = ["bot/kanna_kami","Auto Attack","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales"]#,"30 Sec God Mode"]
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
-	Terminal.SetSpinBox("SkillInjection", 100)
-	Terminal.SetLineEdit("SISkillID","42101102")
+	Terminal.SetSpinBox("SkillInjection", 110)
+	Terminal.SetLineEdit("SISkillID","42101100")
 	for options in on_settings:
 		if not Terminal.GetCheckBox(options):
 			Terminal.SetCheckBox(options,True)
@@ -567,8 +559,8 @@ def settings_second_job():
 def settings_third_job():
 	# on_settings = ["Legit Vac","Auto Equip","Auto Attack","Rush By Level","bot/kanna_kami","charm_fma"]
 	# off_settings = ["Skill Injection","Kami Vac","MonkeySpiritsNDcheck","Kami Loot","Auto Loot","filter_equip","settings/mesologout","Speedy Gonzales"]
-	on_settings = ["Legit Vac","Auto Equip","Skill Injection","Kami Vac","Auto Attack"]
-	off_settings = ["bot/kanna_kami","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales",'30 Sec God Mode',"Grenade Kami"]
+	on_settings = ["Legit Vac","Auto Equip","Skill Injection","Kami Vac","Auto Attack","Melee No Delay"]
+	off_settings = ["bot/kanna_kami","MonkeySpiritsNDcheck","Kami Loot","filter_equip","settings/mesologout","Speedy Gonzales","Grenade Kami"]
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
@@ -576,8 +568,8 @@ def settings_third_job():
 	Key.Set(0x47,1,42111003)
 	Terminal.SetSpinBox("autoattack_spin",7500)
 	Terminal.SetComboBox("AttackKey",36)
-	Terminal.SetSpinBox("SkillInjection", 100)
-	Terminal.SetLineEdit("SISkillID","42111112")
+	Terminal.SetSpinBox("SkillInjection", 110)
+	Terminal.SetLineEdit("SISkillID","42110013;42001000")
 	for options in on_settings:
 		if not Terminal.GetCheckBox(options):
 			Terminal.SetCheckBox(options,True)
@@ -587,13 +579,14 @@ def settings_third_job():
 
 def settings_fourth_job():
 	level = Character.GetLevel()
-	on_settings = ["Legit Vac","Auto Attack"]
-	off_settings = ["Skill Injection","Kami Vac","bot/kanna_kami","settings/mesologout","Speedy Gonzales","MonkeySpiritsNDcheck"]#,"Auto Loot","Kami Loot"
+	on_settings = ["Skill Injection","Legit Vac","Auto Attack","Kami Vac"]
+	off_settings = ["bot/kanna_kami","settings/mesologout","Speedy Gonzales","MonkeySpiritsNDcheck"]#,"Auto Loot","Kami Loot"
 
 	Terminal.SetSpinBox("charm_delay",100)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",20000)
-	Terminal.SetSpinBox("FilterMeso",1000)
-	
+	Terminal.SetSpinBox("FilterMeso",1000) #42120026
+	Terminal.SetLineEdit("SISkillID","42120026")
+	Terminal.SetSpinBox("SkillInjection", 110)
 	Key.Set(0x47,1,42111003)
 	Terminal.SetSpinBox("autoattack_spin",2500)
 	Terminal.SetComboBox("AttackKey",36)
@@ -2270,6 +2263,7 @@ if KillZakumDaily and level >= 120 and not SCLib.GetVar("DoingMP") and not accou
 	print("Doing Zakum")
 	Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
 	toggle_rush_by_level(False)
+	Terminal.SetCheckBox("Kami Vac",False)
 	Terminal.SetCheckBox('filter_equip',False)
 	SCLib.UpdateVar("DoingZakum",True)
 	pos = Character.GetPos()
@@ -3126,3 +3120,12 @@ if accountData['training_done'] and GameState.GetLoginStep() == 2:
 
 if GameState.IsInGame():
 	AssignHyperStats()
+
+def ChooseLightPath():
+    choosePacket = Packet.COutPacket(0x00F5)
+    choosePacket.EncodeBuffer("1A 01 00000000")
+    Packet.SendPacket(choosePacket)
+
+if field_id == 927020000:
+    ChooseLightPath()
+    time.sleep(1)

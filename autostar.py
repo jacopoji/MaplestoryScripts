@@ -13,19 +13,19 @@ import GameState
 
 # change this to the maximum number of stars you want.
 # set it to 100 if you want to go to the maximum number of stars
-starTo = 10
+starTo = 17
 
 # change this to true if you want to use safeguard for stars 13-17
 safeguard = True
 
 # change this to true if you want to star whatever item is in equip inventory slot 1
-fIStar = False
+fIStar = True
 
 # change this to true if you want to star all items in your inventory
 aIStar = False
 
 # change this to true if you want to star all equipped items
-eStar = True
+eStar = False
 
 # add the item id for items you want to ignore, separated by a comma
 # ex: whitelist = [111111, 222222, 333333]

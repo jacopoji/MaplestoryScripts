@@ -635,7 +635,7 @@ def VJprequest():
         print("Rushing")
         Terminal.Rush(450001000)
         time.sleep(2)
-        toggle_rush_by_level(True)
+        #toggle_rush_by_level(True)
 
 def Chuchuprequest():
     toggle_rush_by_level(False)
@@ -1245,7 +1245,7 @@ def Lacheleinprequest():
         elif clocktower4 == 2 and fieldid == 450003530: 
             Terminal.Rush(450003000)
             time.sleep(5)
-            toggle_rush_by_level(True)
+            #toggle_rush_by_level(True)
 
 
 
@@ -1635,7 +1635,7 @@ def attackSI(skillid,on,delay=100,siOption = "SIRadioMelee"):
     Terminal.SetLineEdit("SISkillID",str(skillid))
     Terminal.SetSpinBox("SkillInjection",delay)
     Terminal.SetCheckBox("Melee No Delay",False)
-    Terminal.SetCheckBox("Auto Attack",False)
+    #Terminal.SetCheckBox("Auto Attack",False)
     Terminal.SetCheckBox("Skill Injection", on)
     Terminal.SetRadioButton(siOption,True)
 
@@ -1748,13 +1748,31 @@ def initAttack():
         Terminal.SetRadioButton("SIRadioMelee",True)
         Terminal.SetCheckBox("Skill Injection", True)
         #Terminal.SetCheckBox("Kami Vac",True)
+    elif job == 1112:
+        attackSI(32120055,True)
+        Terminal.SetCheckBox("Kami Vac",True)
+    elif job == 122:
+        attackSI(32120055,True)
+        Terminal.SetCheckBox("Kami Vac",True)
+    elif job == 132:
+        #if Character.GetSkillLevel(21121068) >= 1:
+        #    attackSIND("400011068;21121068",True,30)
+        #else:
+        attackSI(32120055,True)
+        Terminal.SetCheckBox("Kami Vac",True)
+    elif job == 11212:
+        attackSIND(112000003,True,350)
+        Terminal.SetCheckBox("Kami Vac",True)
+    elif job == 1412:
+        attackSI(32120055,True)
+        Terminal.SetCheckBox("Kami Vac",True)
     elif job ==4212: #4th
         print("Setting up Settings for Kanna")
         Terminal.SetSpinBox("MonkeySpiritsNDdelay",0)
         Terminal.SetCheckBox("Grenade Kami",True)
         Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
-        Terminal.SetCheckBox("MonkeySpiritsNDcheck",True)
+        Terminal.SetCheckBox("Ghost Yaksha AIO",True)
         Terminal.SetCheckBox("Kami Vac",False)
         Terminal.SetCheckBox("Auto Attack",True)
         Terminal.SetSpinBox("autoattack_spin",7500)
@@ -1820,13 +1838,7 @@ def initAttack():
         attackSI(32120055,True)
     elif job == 3612:#Xenon 4th 36121000
         print("Setting up Settings for Xenon")
-        Terminal.SetLineEdit("SISkillID","36121000")
-        Terminal.SetSpinBox("SkillInjection",80)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Skill Injection", True)
+        attackSI(32120055,True)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2412: #Phantom 4th 24121000
         print("Setting up Settings for Phantom")
@@ -1848,13 +1860,7 @@ def initAttack():
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 15512: #Ark 4th 155121007 @50
         print("Setting up Settings for Ark")
-        Terminal.SetLineEdit("SISkillID", "155001100")
-        Terminal.SetCheckBox("Auto Attack",False)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        
-        Terminal.SetSpinBox("SkillInjection",700)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        Terminal.SetCheckBox("Skill Injection", True)
+        attackSI(32120055,True,100)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 2217: #Evan 4th 22170061 SI/ND
         print("Setting up Settings for Evan")
@@ -1869,29 +1875,12 @@ def initAttack():
         Terminal.SetCheckBox("dragon_kami",False)
     elif job == 2112: #Aran 4th 21000007
         print("Setting up Settings for Aran")
-        Key.Set(attack_key,1,21001010)
-        Terminal.SetLineEdit("SISkillID","21000006")
-        
-        Terminal.SetCheckBox("Skill Injection", True)
-        Terminal.SetSpinBox("SkillInjection",75)
-        Terminal.SetCheckBox("Melee No Delay",False)
-        Terminal.SetRadioButton("SIRadioMelee",True)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", False)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackSIND("21110028;21100018",True,100)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 14212: # Kinesis 4th 142111002
         print("Setting up Settings for Kinesis")
         Key.Set(attack_key,1,142111002)
-        Terminal.SetCheckBox("Skill Injection", False)
-        #Terminal.SetSpinBox("SkillInjection",100)
-        
-        Terminal.SetCheckBox("Melee No Delay",False)
-        #Terminal.SetRadioButton("SIRadioMagic",True)
-        Terminal.SetCheckBox("Auto Attack", True)
-        Terminal.SetComboBox("AttackKey",33)
-        Terminal.SetSpinBox("autoattack_spin",100)
+        attackSI(32120055,True,100)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 6512: #AB 4th
         print("Setting up Settings for AB")
@@ -1934,7 +1923,7 @@ def initAttack():
     elif job == 572: #Jett 4th
         print("Setting up Settings for Jett")
         Terminal.SetCheckBox("Kami Vac",True)
-        Terminal.SetLineEdit("SISkillID","5710020")
+        Terminal.SetLineEdit("SISkillID","32120055;5710020")
         Terminal.SetCheckBox("Auto Attack", False)
         Terminal.SetSpinBox("SkillInjection",100)
         Terminal.SetRadioButton("SIRadioMelee",True)
@@ -1945,10 +1934,16 @@ def initAttack():
         Terminal.SetCheckBox("General FMA",True)
         Terminal.SetCheckBox("Kami Vac",False)
     elif job == WildHunterJobs[3]:
-        attackSI(400031033,True,100,"SIRadioShoot")
+        attackSI(32120055,True)
         Terminal.SetCheckBox("Kami Vac",True)
     elif job == 434: #dual blade
-        attackSIND(400040006,True,16)
+        attackSIND("4341052;400040006",True,16)
+    elif job == 1312:
+        attackSI(32120055,True)
+        Terminal.SetCheckBox("Kami Vac",True)
+    else:
+        attackSI(32120055,True)
+        Terminal.SetCheckBox("Kami Vac",True)
     if job not in KannaJobs:
         Terminal.SetCheckBox("charm_fma",False)
         Terminal.SetCheckBox("Summon Kishin",False)
@@ -2300,6 +2295,7 @@ class VJQuest:
             if Quest.CheckCompleteDemand(self.quest, self.npc):
                 if curMap != self.killmap:
                     Terminal.Rush(self.killmap)
+                    time.sleep(1)
             else:
                 if curMap != self.completemap:
                     Terminal.Rush(self.completemap)
@@ -3286,7 +3282,7 @@ if GameState.IsInGame() and not accountData['arcane_daily_done'] and not account
                     Terminal.SetCheckBox("General FMA", True)
                 if SCLib.GetVar("UsingAutoBuff"):
                     Terminal.SetCheckBox("Auto Buff", True)
-                Terminal.SetCheckBox("Rush By Level",True)
+                #Terminal.SetCheckBox("Rush By Level",True)
                 accountData['done_char'].append(Terminal.GetLineEdit("LoginChar"))
                 accountData['changing_mule'] = True
                 writeJson(accountData,accountId)

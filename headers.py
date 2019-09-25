@@ -1,19 +1,19 @@
-#headers updated for v205
-bank_header = 0x00F7
-bank_block_header = 0x06D6
-cash_item_header = 0x0566
-cash_recv_header = 0x0714
-SF_header = 0x013A
-SF_recv_header = 0x0154
-collide_header = 0x0106
-potential_header = 0x0140
-potential_recv_header = 0x0296
-stamp_header     = 0x0134
-buy_block_header = 0x06BD
-buy_header = 0x00F6
-use_expansion_header = 0x0123
-level_skill_header = 0x0151 
-dialogue_header = 0x00F3
-quest_header = 0x0168
-flame_header    = 0x012B
+#headers updated for v207
+bank_header = 0x00F8
+bank_block_header = 0x06D7
+cash_item_header = 0x0567
+cash_recv_header = 0x0715
+SF_header = 0x013B
+SF_recv_header = 0x0155
+collide_header = 0x0107
+potential_header = 0x0141
+potential_recv_header = 0x0297
+stamp_header     = 0x0135
+buy_block_header = 0x06BE
+buy_header = 0x00F7
+use_expansion_header = 0x0124
+level_skill_header = 0x0152
+dialogue_header = 0x00F6
+quest_header = 0x0169
+flame_header    = 0x012E
 interact_header = 0x042C      

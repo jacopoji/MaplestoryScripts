@@ -1104,14 +1104,19 @@ def EnterPortal(name):
         time.sleep(0.5)
         print("Teleported to portal: " + str(name)+"...")
     print("Trying to enter portal...")
-    while GameState.IsInGame() and Character.GetPos().x == portal.x:
+    count = 0
+    ToggleKami(False)
+    while GameState.IsInGame() and Character.GetPos().x == portal.x and count < 5:
         if Field.GetID() == 610050000:
             break
+
+        ToggleKami(False)
         Character.EnterPortal()
         time.sleep(0.5)
         Character.EnterPortal()
         time.sleep(0.5)
         ToggleKami(True)
+        count += 1
 
 def KillMano():
     time.sleep(2)
@@ -1950,8 +1955,10 @@ def DAFourthJobAdv():
                 ToggleAttackQuest(True)
 
 def DSFourthJobAdv():
-    TrueAwakening = 23215
+    TrueAwakening = 23219
+    TrueAwakening2 = 23215
     quest = Quest.GetQuestState(TrueAwakening)
+    quest2 = Quest.GetQuestState(TrueAwakening2)
     SCLib.UpdateVar("DoingJobAdv",True)
     if quest != 2:
         if quest == 0:
@@ -1977,6 +1984,38 @@ def DSFourthJobAdv():
                     print("Resume rush by level; ds fourth job adv")
             else:
                 if field_id == 220050300:
+                    ToggleKami(False)
+                    Character.TalkToNpc(2159331)
+                else:
+                    ToggleKami(False)
+                    time.sleep(5)
+                    #TeleportToMobs()
+                    ToggleAttackQuest(True)
+    if quest2 != 2:
+        if quest2 == 0:
+            #Terminal.SetCheckBox("Auto NPC",False)
+            #time.sleep(1)
+            Quest.StartQuest(TrueAwakening2,2151009)
+            #time.sleep(1)
+            #NoPacket = Packet.COutPacket(0x00F3)
+            #NoPacket.EncodeBuffer("[0300]")
+            #Terminal.SetCheckBox("Auto NPC",True)
+            time.sleep(1)
+            #Packet.SendPacket(NoPacket)
+        elif quest2 == 1:
+            if Quest.CheckCompleteDemand(TrueAwakening2,2151009) == 0:
+                if field_id != 310010000:
+                    Terminal.Rush(310010000)
+                    print("Rush to hide")
+                else:
+                    Quest.CompleteQuest(TrueAwakening2,2151009)
+                    ToggleRushByLevel(True)
+                    SCLib.UpdateVar("DoingJobAdv",False)
+                    time.sleep(1)
+                    print("Resume rush by level; ds fourth job adv")
+            else:
+                if field_id == 220050300:
+                    ToggleKami(False)
                     Character.TalkToNpc(2159331)
                 else:
                     ToggleKami(False)
@@ -2056,7 +2095,11 @@ def HayatoFirstJobAdv():
                     Character.EnterPortal()
     elif field_id == 807040100:
         quest = Quest.GetQuestState(57104)
-        if quest == 1:
+        if Terminal.IsRushing():
+            Terminal.StopRush()
+        if Quest.GetQuestState(16880) == 0:
+            Quest.StartQuest(16880, 0)
+        elif quest == 1:
             Quest.CompleteQuest(57104, 9130024)
             print("Returning control to rush by level")
             ToggleRushByLevel(True)
@@ -2673,6 +2716,7 @@ def CadenaFirstJobAdv():
         Inventory.UseItem(2434265)
         time.sleep(2)
     if quest1 != 2:
+        Terminal.SetCheckBox("Auto SP",False)
         if quest1 == 0:
             Quest.StartQuest(34600, 0)
             time.sleep(10)
@@ -2964,9 +3008,9 @@ def CadenaFirstJobAdv():
                     Terminal.Rush(402000000)
                 else:
                     pos = Character.GetPos()
-                    if pos.x != -1639:
+                    if pos.x != -1650:
                         ToggleKami(False)
-                        Character.Teleport(-1639, 35 - 20)
+                        Character.Teleport(-1650, 35 - 20)
                     else:
                         Quest.CompleteQuest(34618, 3001204)
                         ToggleKami(True)
@@ -2974,6 +3018,7 @@ def CadenaFirstJobAdv():
                 if field_id != 402000121:
                     Terminal.Rush(402000121)
     elif quest21 != 2:
+        print("21 "+str(quest21))
         if quest21 == 0:
             while Field.GetID() == 940200507:
                 Key.Press(0x20)
@@ -2985,9 +3030,18 @@ def CadenaFirstJobAdv():
                     ToggleKami(False)
                     Character.Teleport(-1701, 27 - 20)
                     time.sleep(3)
-                Quest.StartQuest(34619, 3001204)
-                ToggleKami(True)
+                if field_id != 402000000:
+                    Terminal.Rush(402000000)
+                else:
+                    Quest.StartQuest(34619, 3001204)
+                    ToggleKami(True)
+        elif quest21 == 1:
+            if field_id != 402000000:
+                Terminal.Rush(402000000)
+            else:
+                Quest.CompleteQuest(34619, 3001204)
     elif quest22 != 2:
+        print("22")
         if quest22 == 0:
             if field_id != 402000000:
                 Terminal.Rush(402000000)
@@ -2999,6 +3053,7 @@ def CadenaFirstJobAdv():
             else:
                 Quest.CompleteQuest(34620, 3001212)
     elif quest23 != 2:
+        print("23")
         if quest23 == 0:
             if field_id != 402000000:
                 Terminal.Rush(402000000)
@@ -3014,6 +3069,7 @@ def CadenaFirstJobAdv():
                 if field_id != 402000122:
                     Terminal.Rush(402000122)
     elif quest24 != 2:
+        print("24")
         if quest24 == 0:
             if field_id != 402000000:
                 Terminal.Rush(402000000)
@@ -3025,6 +3081,7 @@ def CadenaFirstJobAdv():
             else:
                 Quest.CompleteQuest(34622, 3001220)
     elif quest25 != 2:
+        print("25")
         if quest25 == 0:
             if field_id == 940201000:
                 time.sleep(1)
@@ -3036,6 +3093,7 @@ def CadenaFirstJobAdv():
             if field_id == 402000301:
                 Quest.CompleteQuest(34623, 3001211)
     elif quest26 != 2:
+        print("26")
         if quest26 == 0:
             if field_id != 402000001:
                 Terminal.Rush(402000001)
@@ -3047,6 +3105,7 @@ def CadenaFirstJobAdv():
             else:
                 Quest.CompleteQuest(34624, 3001200)
     elif quest27 != 2:
+        print("27")
         if quest27 == 0:
             if field_id != 402000001:
                 Terminal.Rush(402000001)
@@ -7224,8 +7283,33 @@ def ShadeFirstJobAdv():
     
     
     def RushTo(id):
+        eastMaps = [410000030,410000031,410000040,410000041,410000050,410000051]
         if Field.GetID() != id:
+            if id == 410000002:
+                if Field.GetID() != 410000000:
+                    RushTo(410000000)
+                else:
+                    EnterPortalInMap(410000000,Character.GetPos(),15,39)
+            elif id == 410000000:
+                if Field.GetID() in eastMaps:
+                    EnterPortal("west00")
+                elif Field.GetID() in [410000000,410000001,410000002,410000003]:
+                    EnterPortal("out00")
+                else:
+                    EnterPortal("east00")
+            elif id == 410000001:
+                if Field.GetID() != 410000000:
+                    RushTo(410000000)
+                else:
+                    EnterPortalInMap(410000000,Character.GetPos(),-767,-107)
+            
+            else:
+                if Field.GetID() < id:
+                    EnterPortal("east00")
+                else:
+                    EnterPortal("west00")
             Terminal.Rush(id)
+            
     '''
     if field_id == FoxPointPath:
         DungeonTeleport()
@@ -7429,6 +7513,8 @@ def ShadeFirstJobAdv():
         Character.TalkToNpc(3002008)
         Quest.CompleteQuest(38009, 3002005)
     elif q14 == 0:
+        if field_id != 410000000:
+            RushTo(410000000)
         Quest.StartQuest(38010, 3002005)
     elif q14 == 1:
         if Quest.CheckCompleteDemand(38010, 3002005):
@@ -7453,11 +7539,14 @@ def ShadeFirstJobAdv():
                 RushTo(410000000)
                 Quest.StartQuest(38013, 3002007)
             elif q17 == 1:
+                print("17")
                 if Quest.CheckCompleteDemand(38013, 3002007):
                     RushTo(410000030)
                     ToggleKillSettings(True, False)
                     time.sleep(20)
+                    ToggleKillSettings(False, False)
                     RushTo(410000031)
+                    ToggleKillSettings(True, False)
                     time.sleep(20)
                 else:
                     ToggleKillSettings(False, False)
@@ -7564,11 +7653,15 @@ def ShadeFirstJobAdv():
     elif q30 == 0:
         Quest.StartQuest(38026, 0)
     elif q30 == 1:
+        print("30")
         if Quest.CheckCompleteDemand(38026, 3002101):
+            ToggleKillSettings(False, False)
             RushTo(410000050)
             ToggleKillSettings(True, True)
             time.sleep(30)
+            ToggleKillSettings(False, False)
             RushTo(410000051)
+            ToggleKillSettings(True, False)
             time.sleep(30)
         else:
             ToggleKillSettings(False, False)
@@ -7576,9 +7669,13 @@ def ShadeFirstJobAdv():
             Quest.CompleteQuest(38026, 3002101)
     elif q31 == 0:
         print(q31)
+        if field_id != 410000002:
+            RushTo(410000002)
         Quest.StartQuest(38027, 3002101)
     elif q32 == 0:
+        print("q32 0")
         RushTo(410000000)
+        Quest.StartQuest(38028, 3002010)
     elif q32 == 1:
         Inventory.UseItem(2432316)
     elif q33 == 0:
@@ -7588,12 +7685,16 @@ def ShadeFirstJobAdv():
     elif q34 == 0:
         Quest.StartQuest(38030, 3000000)
     elif q34 == 1:
+        RushTo(400000000)
+        time.sleep(10)
         RushTo(100000000)
         Quest.CompleteQuest(38030, 3000000)
-        ToggleRushByLevel(True)
-        ToggleKami(True)
-        SCLib.UpdateVar("DoingJobAdv",False)
-        print("Resume rush by level; shade first")
+        time.sleep(10)
+        if Quest.GetQuestState(38030) == 2:
+            ToggleRushByLevel(True)
+            ToggleKami(True)
+            SCLib.UpdateVar("DoingJobAdv",False)
+            print("Resume rush by level; shade first")
 
 def ShadeThirdJobAdv():
     ToggleRushByLevel(False)
@@ -11806,8 +11907,9 @@ if GameState.IsInGame():
             ToggleAttackQuest(True)
         else:
             ToggleAttack(True)
-        if Character.GetLevel() >= 10:
+        if Character.GetLevel() >= 10 and job not in [CadenaJobs[0],6002]:
             Terminal.SetCheckBox("Auto SP",True)
+            print("On auto sp")
         else:
             Terminal.SetCheckBox("Auto SP",False)
     SetPotion()
@@ -11926,9 +12028,11 @@ if GameState.IsInGame():
         print("Resume rush by level; da/ds third start training")
     elif job == 3121 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
         ToggleRushByLevel(False)
+        print("DA fourth job")
         DAFourthJobAdv()
     elif job == 3111 and level >= 100 and not SCLib.GetVar("DoingCurbrock"):
         ToggleRushByLevel(False)
+        print("DS fourth job")
         DSFourthJobAdv()
     elif job == 2300 and level <= 13:
         quest = Quest.GetQuestState(29952)
@@ -14324,10 +14428,10 @@ def GetNextChar(current_list):
     autoChar_jett = 17
     autoChar_hayato =18
     autoChar_kanna = 19
-    autoChar_kinesis = 20
-    autoChar_cadena = 21
-    autoChar_illium = 22
-    autoChar_ark = 23
+    autoChar_kinesis = 21
+    autoChar_cadena = 22
+    autoChar_illium = 23
+    autoChar_ark = 24
     
     if "Thunder Breaker" not in current_list:
         return autoChar_cygnus
@@ -14491,7 +14595,7 @@ if level > 63 and Inventory.FindItemByID(htr).valid and not SCLib.GetVar("DoingC
             Terminal.SetCheckBox("map/maprusher/hypertelerock",useHTR)
 
 def ChooseLightPath():
-    choosePacket = Packet.COutPacket(0x00F5)
+    choosePacket = Packet.COutPacket(headers.dialogue_header)
     choosePacket.EncodeBuffer("1A 01 00000000")
     Packet.SendPacket(choosePacket)
 
