@@ -2180,6 +2180,7 @@ if (level >= 116 and level <= 149) and not SCLib.GetVar("MPDone") and not SCLib.
 	Terminal.SetCheckBox("map/maprusher/hypertelerock",True)
 	toggle_rush_by_level(False)
 	SCLib.UpdateVar("DoingZakum",False)
+	Terminal.SetCheckBox("Kami Vac",False)
 	Terminal.SetCheckBox("bot/kanna_kami",True)
 	Terminal.SetSpinBox("bot/kanna_kami_delay",5000)
 	if level_checker():
