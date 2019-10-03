@@ -1627,7 +1627,7 @@ def withdraw_mesos():
 ######Black gate
 def BossCheck():
 	print("Waiting for boss to spawn...")
-	Terminal.SetCheckBox("charm_fma",True)
+	Terminal.SetCheckBox("Kami Vac",True)
 	time.sleep(10)
 	for mob in blackgate_boss:
 		print("Checking for boss: " + str(mob) + "...")

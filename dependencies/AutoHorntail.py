@@ -1,9 +1,17 @@
 import os, sys, Terminal, Character, time, GameState, Npc, Field, Quest, Party
 
+if not any("SunCat" in s for s in sys.path):
+	sys.path.append(os.getcwd() + "\SunCat")
+
+try:
+	import SunCat, SCHotkey, SCLib
+except:
+	print("Couldn't find SunCat module")
+
 from AioAttackSettings import *
 job = Character.GetJob()
 
-#SetVariable("KillHorntail", DoHorntail)
+#SCLib.PersistVar("KillHorntail", DoHorntail)
 
 
 TheCaveOfTrialEasy1 = 240060002
@@ -34,12 +42,6 @@ ChaosHorntail4 = 8810122
 ChaosHorntailsLeftHead = 8810100
 ChaosHorntailsRightHead = 8810101
 EncryptedSlateOfTheSquad = 2083000
-
-def SetVariable(var,val):
-    Terminal.SetProperty(var,val)
-
-def GetVariable(var):
-    return Terminal.GetProperty(var,None)
 
 def ToggleKami(indicator):
     Terminal.SetCheckBox("Kami Vac",indicator)
@@ -93,20 +95,21 @@ def MoveToXLocation(xPos):
         Character.AMoveX(xPos)
 
 def ResetNowLockedFunction():
-    SetVariable("NowLockedVar", False)
+    SCLib.UpdateVar("NowLockedVar", False)
 def NowLockedFunction():
-    SetVariable("NowLockedVar", True)
+    SCLib.UpdateVar("NowLockedVar", True)
 def DidSpawn():
-    SetVariable("HasSpawned", True)
+    SCLib.UpdateVar("HasSpawned", True)
 def ResetSpawn():
-    SetVariable("HasSpawned", False)
+    SCLib.UpdateVar("HasSpawned", False)
 
 def KillHorntail(bossDifficulty):
     
-    SetVariable("HasSpawned", False)
-    SetVariable("NowLockedVar", False)
-    HasSpawned = GetVariable("HasSpawned")
-    NowLockedVar = GetVariable("NowLockedVar")
+    SCLib.PersistVar("HasSpawned", False)
+    SCLib.PersistVar("NowLockedVar", False)
+    HasSpawned = SCLib.GetVar("HasSpawned")
+    NowLockedVar = SCLib.GetVar("NowLockedVar")
+    SCLib.StartVars()
     if bossDifficulty == 0:
         HorntailEasy = True
         HorntailNormal = False
@@ -147,7 +150,7 @@ def KillHorntail(bossDifficulty):
                                 time.sleep(1)
                             else:
                                 print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                                SetVariable("KillHorntail", False)
+                                SCLib.UpdateVar("KillHorntail", False)
                                 ResetNowLockedFunction()
                     else:
                         NowLockedFunction()
@@ -198,7 +201,7 @@ def KillHorntail(bossDifficulty):
                         time.sleep(10)
                         Character.TalkToNpc(2083002)
                         time.sleep(1)
-                        SetVariable("KillHorntail", False)
+                        SCLib.UpdateVar("KillHorntail", False)
                         ToggleLoot(False)
                         ResetSpawn()
                         ResetNowLockedFunction()
@@ -229,7 +232,7 @@ def KillHorntail(bossDifficulty):
                                 time.sleep(1)
                             else:
                                 print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                                SetVariable("KillHorntail", False)
+                                SCLib.UpdateVar("KillHorntail", False)
                                 ResetNowLockedFunction()
                     else:
                         NowLockedFunction()
@@ -281,7 +284,7 @@ def KillHorntail(bossDifficulty):
                         Character.TalkToNpc(2083002)
                         time.sleep(1)
                         ToggleLoot(False)
-                        SetVariable("KillHorntail", False)
+                        SCLib.UpdateVar("KillHorntail", False)
                         ResetSpawn()
                         ResetNowLockedFunction()
                     else:
@@ -311,7 +314,7 @@ def KillHorntail(bossDifficulty):
                                 time.sleep(1)
                             else:
                                 print("Seems like you diddnt finish your last attempt and are locked. Continueing other bosses")
-                                SetVariable("KillHorntail", False)
+                                SCLib.UpdateVar("KillHorntail", False)
                                 ResetNowLockedFunction()
                     else:
                         NowLockedFunction()
@@ -380,7 +383,7 @@ def KillHorntail(bossDifficulty):
                         #time.sleep(10)
                         Character.TalkToNpc(2083002)
                         time.sleep(1)
-                        SetVariable("KillHorntail", False)
+                        SCLib.UpdateVar("KillHorntail", False)
                         ToggleLoot(False)
                         ResetSpawn()
                         ResetNowLockedFunction()

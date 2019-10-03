@@ -4,7 +4,7 @@ if not any("SunCat" in s for s in sys.path):
 	sys.path.append(os.getcwd() + "\SunCat")
 
 try:
-	import SunCat, SCHotkey, SCLib
+	import SCLib
 except:
 	print("Couldn't find SunCat module")
 
@@ -521,13 +521,11 @@ def ToggleAttack(on):
         elif level >= 160 and Character.GetSkillLevel(32121052) == 0 and useHyperExploit:
             BindSkill(32121052)
         else:
-            Terminal.SetSpinBox("charm_delay",100)
-            Terminal.SetCheckBox("charm_fma",on)
             Terminal.SetCheckBox("Summon Kishin",False)
             Terminal.SetCheckBox("MonkeySpiritsNDcheck",False)
             Terminal.SetSpinBox("autoattack_spin",7500)
             Terminal.SetComboBox("AttackKey",36)
-            Terminal.SetCheckBox("Skill Injection",False) #42111011
+            AttackSIND(42120026,on,100)
             #AttackSemiNDMagic(42111000,42001006,0.70,on)
         Terminal.SetCheckBox("Auto Attack",on)
         Terminal.SetSpinBox("autoattack_spin",7500)
