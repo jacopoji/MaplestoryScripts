@@ -131,8 +131,8 @@ class KeyType:
    Skill = 1
    Item = 2
 
-CP_UserHyperSkillUpRequest = 515 # 0x0203
-LP_ChangeSkillRecordResult = 99 # 0x0063
+CP_UserHyperSkillUpRequest = 521 # 0x0209
+LP_ChangeSkillRecordResult = 104 # 0x0068
 
 def bind_skill(skill):
     oPacket = Packet.COutPacket(CP_UserHyperSkillUpRequest)
